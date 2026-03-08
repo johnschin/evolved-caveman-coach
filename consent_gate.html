@@ -460,7 +460,7 @@
       <li>Session activity is logged for safety, compliance, and service improvement purposes</li>
       <li>In the event crisis-related language is detected, that interaction is automatically flagged and logged</li>
       <li>No personally identifying information is sold or shared with third parties</li>
-      <li>You may request deletion of your data at any time by contacting <a href="mailto:Info@GuideToSelf.com" style="color:var(--teal); font-weight:600;">Info@GuideToSelf.com</a></li>
+      <li>You may request deletion of your data at any time by contacting <a href="/cdn-cgi/l/email-protection#94ddfaf2fbd4d3e1fdf0f1c0fbc7f1f8f2baf7fbf9" style="color:var(--teal); font-weight:600;"><span class="__cf_email__" data-cfemail="672e0901082720120e0302330834020b014904080a">[email&#160;protected]</span></a></li>
     </ul>
     <p>This system complies with applicable California Consumer Privacy Act (CCPA) requirements.</p>
   </div>
@@ -515,13 +515,13 @@
   <button class="redirect-btn" onclick="proceedToCoach()">Enter the AI Coach →</button>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ============================================================
   // CONFIGURATION — Replace these with your actual values
   // ============================================================
- const SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
-const COACH_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html';
+  const SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
+  const COACH_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html'; // URL to redirect after consent
   const DISCLAIMER_VERSION = '1.0';
   const DISCLAIMER_DATE = '2026-03-07';
   // ============================================================
@@ -610,11 +610,3 @@ const COACH_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/ai_coa
     } catch (err) {
       btn.disabled = false;
       btn.classList.remove('loading');
-      btn.textContent = 'I Agree & Continue';
-      showMsg('error', 'Something went wrong saving your agreement. Please try again or contact Info@GuideToSelf.com');
-      console.error(err);
-    }
-  }
-
-  function showMsg(type, text) {
-    cons
