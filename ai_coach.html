@@ -553,7 +553,7 @@ async function initSession() {
   }
 
   // Load opening message from AI
-  await getAIResponse(null, true);
+  getAIResponse(null, true);
 }
 
 // ── CRISIS DETECTION ──
@@ -693,12 +693,13 @@ async function sendMessage() {
   conversationHistory.push({ role: 'user', content: text });
   messageCount++;
 
-  await getAIResponse(text);
+  getAIResponse(text);
   document.getElementById('sendBtn').disabled = false;
 }
 
 // ── CLAUDE API CALL ──
-async function getAIResponse(userText, isOpening = false) {
+function getAIResponse(userText, isOpening) {
+  if (isOpening === undefined) isOpening = false;
   showTyping();
 
   const messages = isOpening
@@ -706,51 +707,65 @@ async function getAIResponse(userText, isOpening = false) {
     : conversationHistory;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        system: SYSTEM_PROMPT,
-        messages: messages
-      })
-    });
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://api.anthropic.com/v1/messages', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('x-api-key', ANTHROPIC_API_KEY);
+    xhr.setRequestHeader('anthropic-version', '2023-06-01');
+    xhr.setRequestHeader('anthropic-dangerous-direct-browser-access', 'true');
 
-    const data = await response.json();
-    removeTyping();
-
-    if (data.content && data.content[0]) {
-      const aiText = data.content[0].text;
-
-      // Crisis check on AI response too
-      if (detectCrisis(aiText)) {
-        crisisTriggered = true;
-        showCrisisBanner();
-        await logCrisisEvent('ai-response');
-      }
-
-      addMessage('ai', aiText);
-
-      if (!isOpening) {
-        conversationHistory.push({ role: 'assistant', content: aiText });
-        messageCount++;
-        await updateSessionLog();
-      } else {
-        conversationHistory = [
-          { role: 'user', content: 'Begin the coaching session with your opening check-in.' },
-          { role: 'assistant', content: aiText }
-        ];
-      }
-    } else {
+    xhr.onload = function() {
       removeTyping();
-      addMessage('ai', 'Something went wrong on my end. Please refresh and try again.');
-    }
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          var data = JSON.parse(xhr.responseText);
+          if (data.content && data.content[0]) {
+            var aiText = data.content[0].text;
+            if (detectCrisis(aiText)) {
+              crisisTriggered = true;
+              showCrisisBanner();
+              logCrisisEvent('ai-response');
+            }
+            addMessage('ai', aiText);
+            if (!isOpening) {
+              conversationHistory.push({ role: 'assistant', content: aiText });
+              messageCount++;
+              updateSessionLog();
+            } else {
+              conversationHistory = [
+                { role: 'user', content: 'Begin the coaching session with your opening check-in.' },
+                { role: 'assistant', content: aiText }
+              ];
+            }
+          } else {
+            addMessage('ai', 'Something went wrong on my end. Please refresh and try again.');
+          }
+        } catch(e) {
+          addMessage('ai', 'Something went wrong parsing the response. Please refresh and try again.');
+          console.error(e);
+        }
+      } else {
+        console.error('API error:', xhr.status, xhr.responseText);
+        addMessage('ai', 'API error ' + xhr.status + '. Please refresh and try again.');
+      }
+      document.getElementById('sendBtn').disabled = false;
+    };
+
+    xhr.onerror = function() {
+      removeTyping();
+      console.error('Network error calling Anthropic API');
+      addMessage('ai', 'Network error. Please check your connection and try again.');
+      document.getElementById('sendBtn').disabled = false;
+    };
+
+    xhr.send(JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: messages
+    }));
+
+    return;
   } catch (err) {
     removeTyping();
     addMessage('ai', 'I had trouble connecting. Please check your connection and try again.');
