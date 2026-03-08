@@ -482,18 +482,18 @@
       <input type="email" id="userEmail" placeholder="you@email.com" autocomplete="email">
     </div>
 
-    <div class="checkbox-group" id="checkboxWrapper1" onclick="toggleCheck('check1','checkboxWrapper1')">
-      <input type="checkbox" id="check1" onclick="event.stopPropagation()">
+    <div class="checkbox-group" id="checkboxWrapper1">
+      <input type="checkbox" id="check1" onchange="updateSubmitState()">
       <label for="check1">I have read this agreement in full. I understand that <strong>The Evolved Caveman Inner Leadership AI is an AI system, not a human, therapist, or healthcare provider.</strong> I agree to all terms stated above.</label>
     </div>
 
-    <div class="checkbox-group" id="checkboxWrapper2" onclick="toggleCheck('check2','checkboxWrapper2')">
-      <input type="checkbox" id="check2" onclick="event.stopPropagation()">
+    <div class="checkbox-group" id="checkboxWrapper2">
+      <input type="checkbox" id="check2" onchange="updateSubmitState()">
       <label for="check2">I confirm that I am <strong>18 years of age or older</strong> and that I will not use this system as a substitute for professional mental health or medical care.</label>
     </div>
 
-    <div class="checkbox-group" id="checkboxWrapper3" onclick="toggleCheck('check3','checkboxWrapper3')">
-      <input type="checkbox" id="check3" onclick="event.stopPropagation()">
+    <div class="checkbox-group" id="checkboxWrapper3">
+      <input type="checkbox" id="check3" onchange="updateSubmitState()">
       <label for="check3">I understand that <strong>session activity is logged</strong> for safety and compliance purposes as described in Section 6.</label>
     </div>
 
@@ -526,17 +526,16 @@
   const DISCLAIMER_DATE = '2026-03-07';
   // ============================================================
 
-  function toggleCheck(checkId, wrapperId) {
-    const cb = document.getElementById(checkId);
-    cb.checked = !cb.checked;
-    document.getElementById(wrapperId).classList.toggle('checked', cb.checked);
-    updateSubmitState();
-  }
-
   function updateSubmitState() {
     const allChecked = ['check1','check2','check3'].every(id => document.getElementById(id).checked);
     const hasEmail = document.getElementById('userEmail').value.trim().length > 0;
-    document.getElementById('submitBtn').disabled = !(allChecked && hasEmail);
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = !(allChecked && hasEmail);
+    btn.style.opacity = (allChecked && hasEmail) ? '1' : '0.35';
+    ['check1','check2','check3'].forEach(id => {
+      const wrapper = document.getElementById('checkboxWrapper' + id.replace('check',''));
+      if (wrapper) wrapper.classList.toggle('checked', document.getElementById(id).checked);
+    });
   }
 
   document.getElementById('userEmail').addEventListener('input', updateSubmitState);
