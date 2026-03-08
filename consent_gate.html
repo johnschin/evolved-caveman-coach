@@ -286,6 +286,7 @@
 
   .submit-btn:hover:not(:disabled) { background: var(--teal); color: var(--dark); }
   .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .submit-btn { cursor: pointer; }
   .submit-btn.loading { background: var(--muted); color: var(--bg); }
 
   /* Status messages */
@@ -497,7 +498,7 @@
       <label for="check3">I understand that <strong>session activity is logged</strong> for safety and compliance purposes as described in Section 6.</label>
     </div>
 
-    <button class="submit-btn" id="submitBtn" disabled onclick="handleSubmit()">
+    <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
       I Agree &amp; Continue
     </button>
 
@@ -542,10 +543,15 @@
 
   async function handleSubmit() {
     const btn = document.getElementById('submitBtn');
-    const errorMsg = document.getElementById('errorMsg');
     const email = document.getElementById('userEmail').value.trim();
 
-    // Basic email validation
+    // Validate all fields on click
+    const allChecked = ['check1','check2','check3'].every(id => document.getElementById(id).checked);
+    if (!allChecked) {
+      showMsg('error', 'Please check all three boxes to continue.');
+      return;
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       document.getElementById('userEmail').classList.add('error');
       showMsg('error', 'Please enter a valid email address.');
