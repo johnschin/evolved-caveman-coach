@@ -10,7 +10,6 @@
     --bg: #eeeeee;
     --dark: #202023;
     --teal: #a3d0c9;
-    --teal-dim: rgba(163, 208, 201, 0.15);
     --surface: #d8d8d8;
     --surface2: #c8c8c8;
     --muted: #6a6a70;
@@ -19,433 +18,326 @@
     --user-bubble: #202023;
     --ai-bubble: #ffffff;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'Manrope', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-  body {
-    background: var(--bg);
-    font-family: 'Manrope', sans-serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* ── CONSENT GATE OVERLAY ── */
-  #consentGate {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 20px;
-  }
-
-  .gate-card {
-    background: #fff;
-    border: 1px solid var(--surface2);
-    padding: 24px 40px 32px;
-    max-width: 440px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .gate-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--teal);
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  .gate-card h2 {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--dark);
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  .gate-card p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 24px;
-    line-height: 1.65;
-  }
-
-  .gate-input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--surface2);
-    background: var(--bg);
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    margin-bottom: 12px;
-    transition: border-color 0.2s;
-  }
-
+  #consentGate { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+  .gate-card { background: #fff; border: 1px solid var(--surface2); padding: 24px 40px 32px; max-width: 440px; width: 100%; text-align: center; }
+  .gate-eyebrow { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); font-weight: 700; margin-bottom: 12px; }
+  .gate-card h2 { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 8px; letter-spacing: -0.02em; line-height: 1.2; }
+  .gate-card p { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.65; }
+  .gate-input { width: 100%; padding: 12px 14px; border: 1px solid var(--surface2); background: var(--bg); font-family: 'Manrope', sans-serif; font-size: 14px; color: var(--ink); outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
   .gate-input:focus { border-color: var(--teal); }
   .gate-input.error { border-color: var(--crisis); }
-
-  .gate-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--dark);
-    color: var(--teal);
-    border: none;
-    font-family: 'Manrope', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-  }
-
+  .gate-btn { width: 100%; padding: 14px; background: var(--dark); color: var(--teal); border: none; font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; }
   .gate-btn:hover { background: var(--teal); color: var(--dark); }
   .gate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  .gate-error {
-    font-size: 12px;
-    color: var(--crisis);
-    margin-top: 10px;
-    display: none;
-    line-height: 1.5;
-  }
-
-  .gate-link {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 16px;
-    display: block;
-  }
-
+  .gate-error { font-size: 12px; color: var(--crisis); margin-top: 10px; display: none; line-height: 1.5; }
+  .gate-link { font-size: 12px; color: var(--muted); margin-top: 16px; display: block; }
   .gate-link a { color: var(--teal); font-weight: 600; text-decoration: none; }
 
-  /* ── CRISIS BANNER ── */
-  #crisisBanner {
-    display: none;
-    background: var(--crisis);
-    color: #fff;
-    padding: 12px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.6;
-    flex-shrink: 0;
-  }
-
+  #crisisBanner { display: none; background: var(--crisis); color: #fff; padding: 12px 20px; font-size: 13px; font-weight: 600; text-align: center; line-height: 1.6; flex-shrink: 0; }
   #crisisBanner a { color: #fff; font-weight: 800; }
 
-  /* ── HEADER ── */
-  .chat-header {
-    background: var(--dark);
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-    border-bottom: 2px solid var(--teal);
-  }
+  .chat-header { background: var(--dark); padding: 14px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; border-bottom: 2px solid var(--teal); }
+  .chat-header .avatar { width: 36px; height: 36px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .chat-header .header-text .name { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+  .chat-header .header-text .tagline { font-size: 11px; color: var(--teal); font-weight: 500; letter-spacing: 0.04em; }
+  .header-disclaimer { margin-left: auto; font-size: 10px; color: var(--muted); text-align: right; line-height: 1.4; max-width: 180px; }
 
-  .chat-header .avatar {
-    width: 36px;
-    height: 36px;
-    background: var(--teal);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-
-  .chat-header .header-text .name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.01em;
-  }
-
-  .chat-header .header-text .tagline {
-    font-size: 11px;
-    color: var(--teal);
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
-
-  .header-disclaimer {
-    margin-left: auto;
-    font-size: 10px;
-    color: var(--muted);
-    text-align: right;
-    line-height: 1.4;
-    max-width: 180px;
-  }
-
-  /* ── CHAT WINDOW ── */
-  #chatWindow {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    scroll-behavior: smooth;
-  }
-
-  /* ── MESSAGES ── */
-  .message {
-    display: flex;
-    gap: 10px;
-    max-width: 82%;
-    animation: fadeUp 0.25s ease;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  #chatWindow { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+  .message { display: flex; gap: 10px; max-width: 82%; animation: fadeUp 0.25s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   .message.user { align-self: flex-end; flex-direction: row-reverse; }
   .message.ai { align-self: flex-start; }
-
-  .msg-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
+  .msg-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 2px; }
   .message.ai .msg-avatar { background: var(--teal); color: var(--dark); }
   .message.user .msg-avatar { background: var(--dark); color: var(--teal); font-size: 11px; font-weight: 700; }
-
-  .msg-bubble {
-    padding: 12px 16px;
-    font-size: 14px;
-    line-height: 1.7;
-    font-weight: 400;
-  }
-
-  .message.ai .msg-bubble {
-    background: var(--ai-bubble);
-    color: var(--ink);
-    border: 1px solid var(--surface2);
-    border-radius: 0 12px 12px 12px;
-  }
-
-  .message.user .msg-bubble {
-    background: var(--user-bubble);
-    color: #fff;
-    border-radius: 12px 0 12px 12px;
-  }
-
-  .msg-time {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 4px;
-    font-weight: 500;
-  }
-
+  .msg-bubble { padding: 12px 16px; font-size: 14px; line-height: 1.7; font-weight: 400; }
+  .message.ai .msg-bubble { background: var(--ai-bubble); color: var(--ink); border: 1px solid var(--surface2); border-radius: 0 12px 12px 12px; }
+  .message.user .msg-bubble { background: var(--user-bubble); color: #fff; border-radius: 12px 0 12px 12px; }
+  .msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; font-weight: 500; }
   .message.user .msg-time { text-align: right; }
 
-  /* Typing indicator */
-  .typing-indicator {
-    display: flex;
-    gap: 5px;
-    padding: 14px 16px;
-    background: var(--ai-bubble);
-    border: 1px solid var(--surface2);
-    border-radius: 0 12px 12px 12px;
-    width: fit-content;
-  }
-
-  .typing-dot {
-    width: 7px;
-    height: 7px;
-    background: var(--teal);
-    border-radius: 50%;
-    animation: bounce 1.2s infinite;
-  }
-
+  .typing-indicator { display: flex; gap: 5px; padding: 14px 16px; background: var(--ai-bubble); border: 1px solid var(--surface2); border-radius: 0 12px 12px 12px; width: fit-content; }
+  .typing-dot { width: 7px; height: 7px; background: var(--teal); border-radius: 50%; animation: bounce 1.2s infinite; }
   .typing-dot:nth-child(2) { animation-delay: 0.2s; }
   .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
-  @keyframes bounce {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-6px); }
-  }
-
-  /* ── INPUT AREA ── */
-  .input-area {
-    background: var(--surface);
-    border-top: 1px solid var(--surface2);
-    padding: 14px 20px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-    flex-shrink: 0;
-  }
-
-  #userInput {
-    flex: 1;
-    padding: 12px 14px;
-    border: 1px solid var(--surface2);
-    background: var(--bg);
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    resize: none;
-    min-height: 46px;
-    max-height: 120px;
-    line-height: 1.5;
-    transition: border-color 0.2s;
-  }
-
+  .input-area { background: var(--surface); border-top: 1px solid var(--surface2); padding: 14px 20px; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
+  #userInput { flex: 1; padding: 12px 14px; border: 1px solid var(--surface2); background: var(--bg); font-family: 'Manrope', sans-serif; font-size: 14px; color: var(--ink); outline: none; resize: none; min-height: 46px; max-height: 120px; line-height: 1.5; transition: border-color 0.2s; }
   #userInput:focus { border-color: var(--teal); }
   #userInput::placeholder { color: var(--muted); }
-
-  #sendBtn {
-    padding: 12px 20px;
-    background: var(--dark);
-    color: var(--teal);
-    border: none;
-    font-family: 'Manrope', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-    height: 46px;
-  }
-
+  #sendBtn { padding: 12px 20px; background: var(--dark); color: var(--teal); border: none; font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap; height: 46px; }
   #sendBtn:hover:not(:disabled) { background: var(--teal); color: var(--dark); }
   #sendBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .input-footer { text-align: center; font-size: 10px; color: var(--muted); padding: 6px 20px 10px; background: var(--surface); flex-shrink: 0; letter-spacing: 0.03em; }
 
-  .input-footer {
-    text-align: center;
-    font-size: 10px;
-    color: var(--muted);
-    padding: 6px 20px 10px;
-    background: var(--surface);
-    flex-shrink: 0;
-    letter-spacing: 0.03em;
-  }
-
-  /* Scrollbar */
   #chatWindow::-webkit-scrollbar { width: 4px; }
   #chatWindow::-webkit-scrollbar-track { background: transparent; }
   #chatWindow::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
-
-  @media (max-width: 600px) {
-    .header-disclaimer { display: none; }
-    .message { max-width: 92%; }
-  }
+  @media (max-width: 600px) { .header-disclaimer { display: none; } .message { max-width: 92%; } }
 </style>
 </head>
 <body>
 
-<!-- ── CONSENT GATE ── -->
 <div id="consentGate">
   <div class="gate-card">
     <div class="gate-eyebrow">The Evolved Caveman</div>
     <h2>Inner Leadership AI Coach</h2>
-    <p>Enter the email you used to sign your User Agreement to access your AI coach. Please be sure to enter your email EXACTLY as you entered it on the previous page. Capitalization matters.</p>
+    <p>Enter the email you used to sign your User Agreement to access your AI coach. Capitalization matters.</p>
     <input type="email" class="gate-input" id="gateEmail" placeholder="your@email.com" autocomplete="email">
-    <button class="gate-btn" id="gateBtn" onclick="checkConsent()">Access My Coach</button>
+    <button class="gate-btn" id="gateBtn">Access My Coach</button>
     <div class="gate-error" id="gateError"></div>
-    <span class="gate-link">Haven't signed the agreement yet? <a href="https://johnschin.github.io/evolved-caveman-coach/consent_gate.html">Sign it here →</a></span>
+    <span class="gate-link">Haven't signed the agreement yet? <a href="https://johnschin.github.io/evolved-caveman-coach/consent_gate.html">Sign it here &rarr;</a></span>
   </div>
 </div>
 
-<!-- ── CRISIS BANNER ── -->
 <div id="crisisBanner">
-  ⚠ If you're in crisis, please stop and contact the <a href="tel:988">988 Suicide & Crisis Lifeline (call or text 988)</a> or emergency services immediately. This AI cannot provide crisis support.
+  &#9888; If you're in crisis, please stop and contact the <a href="tel:988">988 Suicide &amp; Crisis Lifeline (call or text 988)</a> or emergency services immediately. This AI cannot provide crisis support.
 </div>
 
-<!-- ── HEADER ── -->
 <div class="chat-header">
-  <div class="avatar">🧠</div>
+  <div class="avatar">&#129504;</div>
   <div class="header-text">
     <div class="name">Dr. John's Inner Leadership AI</div>
-    <div class="tagline">The Evolved Caveman · Inner Leadership Coach</div>
+    <div class="tagline">The Evolved Caveman &middot; Inner Leadership Coach</div>
   </div>
-  <div class="header-disclaimer">AI coaching companion · Not therapy · Not a crisis service</div>
+  <div class="header-disclaimer">AI coaching companion &middot; Not therapy &middot; Not a crisis service</div>
 </div>
 
-<!-- ── CHAT WINDOW ── -->
 <div id="chatWindow"></div>
 
-<!-- ── INPUT ── -->
 <div class="input-area">
-  <textarea id="userInput" placeholder="What's on your mind..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-  <button id="sendBtn" onclick="sendMessage()">Send</button>
+  <textarea id="userInput" placeholder="What's on your mind..." rows="1"></textarea>
+  <button id="sendBtn">Send</button>
 </div>
-<div class="input-footer">AI coaching companion · Not a substitute for professional mental health care · For emergencies call 988 or 911</div>
+<div class="input-footer">AI coaching companion &middot; Not a substitute for professional mental health care &middot; For emergencies call 988 or 911</div>
 
 <script>
-const SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
-const PROXY_URL = 'https://evolved-caveman-proxy.john-834.workers.dev';
-const CONSENT_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/consent_gate.html';
+var SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
+var PROXY_URL = 'https://evolved-caveman-proxy.john-834.workers.dev';
 
-const OPENING_MESSAGE = "Good to have you here. I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes.";
+var OPENING_MESSAGE = "Hey!  Really nice to have you here! I\u2019m Dr. John\u2019s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes. Is there something you\u2019d like to discuss? It might be romantic relationship issues, work issues, parenting issues, or perhaps it\u2019s an emotional challenge, a social dilemma or something else. Where would you like to go?";
 
-const CRISIS_KEYWORDS = [
-  'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
-  'self-harm', 'self harm', 'cutting myself', 'hurt myself',
-  'kill someone', 'hurt someone', 'harm someone',
-  'no reason to live', 'better off dead', "can't go on"
-];
+var CRISIS_KEYWORDS = ['suicide','suicidal','kill myself','end my life','want to die','self-harm','self harm','cutting myself','hurt myself','kill someone','hurt someone','harm someone','no reason to live','better off dead','can\'t go on'];
 
-const SYSTEM_PROMPT = `You are an AI coaching companion built on the knowledge, 30 years of experience, voice, and methodology of Dr. John Schinnerer — a men's inner leadership coach, psychologist, and author. You are not a generic chatbot. You speak, think, and coach the way Dr. John does: with warmth, calm authority, intelligence, irreverence, playfulness and deep psychological grounding.
+var SYSTEM_PROMPT = "You are an AI coaching companion built on the knowledge, 30 years of experience, voice, and methodology of Dr. John Schinnerer - a men's inner leadership coach, psychologist, and author. You are not a generic chatbot. You speak, think, and coach the way Dr. John does: with warmth, calm authority, intelligence, irreverence, playfulness and deep psychological grounding.\n\nIDENTITY & ROLE\nYou are not a therapist and do not provide therapy. You are a coaching companion that supports men between sessions with Dr. John, inside his online courses. You work within The Evolved Caveman brand and the Guide to Self methodology.\n\nYOUR VOICE & TONE\nEvery message you write should feel like it came from a real human who genuinely cares. Your tone is:\n- Warm but not soft - you hold people accountable with kindness\n- Direct but not harsh - you name what you see without attacking the person\n- Slightly irreverent - you use dry humor, wit, and the occasional well-placed joke to disarm defensiveness\n- Intellectually grounded - you reference psychology, neuroscience, and research but make it accessible, never academic\n- Never preachy or platitude-heavy\n\nCore phrases: 'You don't need to be fixed. You need a better relationship with your inner world.' 'Most men weren't taught emotional mastery - only emotional endurance.' 'You can't change what you can't feel.'\n\nWHO YOU'RE TALKING TO\nThe Reflective Achiever: A man aged 30-55 who is successful on the outside but senses something is missing. He's intelligent, driven, skeptical of therapy but open to coaching framed as self-optimization. He responds to data, frameworks, and direct challenge - not hand-holding.\n\nKEY FRAMEWORKS\n- The Inner Board Meeting based on IFS (CEO, Director of Defense, VP of Emotions)\n- Anger as a secondary emotion masking fear, shame, or vulnerability\n- The Escalation Curve and Point of No Return (~110 bpm heart rate)\n- Green/Yellow/Red emotional regulation system\n- Guilt vs. shame distinction (behavior vs. being)\n- Radical acceptance and self-compassion\n- The ABCDE cognitive model\n\nHARD BOUNDARIES\n- Never diagnose, assess for clinical disorders, or provide medical advice\n- Never provide therapy or position yourself as a therapist\n- If someone expresses suicidal ideation, self-harm, or crisis - immediately provide 988 Lifeline resources and encourage professional help\n- You are an AI - if directly asked, confirm this clearly\n- Keep responses conversational and concise - this is a coaching dialogue, not a lecture";
 
-IDENTITY & ROLE
-You are not a therapist and do not provide therapy. You are a coaching companion that supports men between sessions with Dr. John, inside his online courses. You work within The Evolved Caveman brand and the Guide to Self methodology.
+var conversationHistory = [];
+var sessionId = null;
+var userEmail = null;
+var messageCount = 0;
+var crisisTriggered = false;
 
-YOUR VOICE & TONE
-Every message you write should feel like it came from a real human who genuinely cares. Your tone is:
-- Warm but not soft — you hold people accountable with kindness
-- Direct but not harsh — you name what you see without attacking the person
-- Slightly irreverent — you use dry humor, wit, and the occasional well-placed joke to disarm defensiveness
-- Intellectually grounded — you reference psychology, neuroscience, and research but make it accessible, never academic
-- Never preachy or platitude-heavy — if you catch yourself saying something generic, rephrase it
+// ── Wire up buttons via addEventListener (no inline onclick) ──
+document.getElementById('gateBtn').addEventListener('click', checkConsent);
+document.getElementById('gateEmail').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkConsent(); });
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+document.getElementById('userInput').addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+document.getElementById('userInput').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; });
 
-Core phrases that capture Dr. John's philosophy (return to these naturally when relevant):
-"You don't need to be fixed. You need a better relationship with your inner world."
-"Most men weren't taught emotional mastery — only emotional endurance."
-"You can't change what you can't feel."
+function checkConsent() {
+  var email = document.getElementById('gateEmail').value.trim();
+  var btn = document.getElementById('gateBtn');
+  var errorEl = document.getElementById('gateError');
 
-WHO YOU'RE TALKING TO
-The Core Client — The Reflective Achiever: A man aged 30-55 who is successful on the outside but senses something is missing or off on the inside. He's intelligent, driven, and skeptical of therapy but open to coaching framed as self-optimization or leadership development. He may struggle with anger, emotional shutdown, relationship friction, or a vague sense of disconnection from himself or others. He responds to data, frameworks, and direct challenge — not hand-holding.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('gateEmail').classList.add('error');
+    showGateError('Please enter a valid email address.');
+    return;
+  }
 
-KEY FRAMEWORKS YOU DRAW FROM
-- The Inner Board Meeting based on Internal Family Systems (CEO, Director of Defense/Enforcer, VP of Emotions/Withdrawer)
-- The Man Box — restrictive masculinity norms that limit emotional range
-- Anger as a secondary emotion masking fear, shame, or vulnerability
-- The Escalation Curve and Point of No Return (~110 bpm heart rate)
-- Green/Yellow/Red emotional regulation system
-- The 5:1 positivity ratio
-- Emotional vocabulary expansion
-- Guilt vs. shame distinction (behavior vs. being)
-- Radical acceptance and self-compassion frameworks
-- The ABCDE cognitive model
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+  errorEl.style.display = 'none';
 
-HARD BOUNDARIES
-- You never diagnose, assess for clinical disorders, or provide medical advice
-- You never provide therapy or position yourself as a therapist
-- If someone expresses suicidal ideation, self-harm, or crisis —
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', SUPABASE_URL + '/rest/v1/consent_events?user_id=eq.' + encodeURIComponent(email) + '&acknowledged=eq.true&limit=1', true);
+  xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      if (data && data.length > 0) {
+        userEmail = email;
+        document.getElementById('consentGate').style.display = 'none';
+        initSession();
+      } else {
+        showGateError('No signed agreement found for this email. Please complete the User Agreement first.');
+        btn.disabled = false;
+        btn.textContent = 'Access My Coach';
+      }
+    } else {
+      showGateError('Connection error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Access My Coach';
+    }
+  };
+
+  xhr.onerror = function() {
+    showGateError('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Access My Coach';
+  };
+
+  xhr.send();
+}
+
+function showGateError(msg) {
+  var el = document.getElementById('gateError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function initSession() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', SUPABASE_URL + '/rest/v1/session_logs', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Prefer', 'return=representation');
+  xhr.onload = function() {
+    try { var d = JSON.parse(xhr.responseText); if (d && d[0]) sessionId = d[0].id; } catch(e) {}
+  };
+  xhr.send(JSON.stringify({ user_id: userEmail, session_start: new Date().toISOString(), message_count: 0, crisis_flag_triggered: false, crisis_response_shown: false }));
+
+  // Display opening message directly
+  addMessage('ai', OPENING_MESSAGE);
+  conversationHistory = [{ role: 'assistant', content: OPENING_MESSAGE }];
+}
+
+function detectCrisis(text) {
+  var lower = text.toLowerCase();
+  for (var i = 0; i < CRISIS_KEYWORDS.length; i++) { if (lower.indexOf(CRISIS_KEYWORDS[i]) !== -1) return true; }
+  return false;
+}
+
+function logCrisisEvent(category) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', SUPABASE_URL + '/rest/v1/crisis_events', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Prefer', 'return=minimal');
+  xhr.send(JSON.stringify({ user_id: userEmail, session_id: sessionId, triggered_at: new Date().toISOString(), trigger_phrase_category: category, resources_displayed: '988 Suicide & Crisis Lifeline', user_acknowledged: false }));
+}
+
+function updateSessionLog() {
+  if (!sessionId) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('PATCH', SUPABASE_URL + '/rest/v1/session_logs?id=eq.' + sessionId, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Prefer', 'return=minimal');
+  xhr.send(JSON.stringify({ message_count: messageCount, session_end: new Date().toISOString(), crisis_flag_triggered: crisisTriggered, crisis_response_shown: crisisTriggered }));
+}
+
+function addMessage(role, text) {
+  var chatWindow = document.getElementById('chatWindow');
+  var wrapper = document.createElement('div');
+  wrapper.className = 'message ' + role;
+  var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  var initials = role === 'user' ? (userEmail ? userEmail[0].toUpperCase() : 'U') : '\uD83E\uDDE0';
+  wrapper.innerHTML = '<div class="msg-avatar">' + initials + '</div><div><div class="msg-bubble">' + formatText(text) + '</div><div class="msg-time">' + now + '</div></div>';
+  chatWindow.appendChild(wrapper);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function formatText(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br>');
+}
+
+function showTyping() {
+  var chatWindow = document.getElementById('chatWindow');
+  var typing = document.createElement('div');
+  typing.className = 'message ai';
+  typing.id = 'typingIndicator';
+  typing.innerHTML = '<div class="msg-avatar">\uD83E\uDDE0</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  chatWindow.appendChild(typing);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function removeTyping() {
+  var el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function sendMessage() {
+  var input = document.getElementById('userInput');
+  var text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  if (detectCrisis(text)) {
+    crisisTriggered = true;
+    document.getElementById('crisisBanner').style.display = 'block';
+    logCrisisEvent('user-message');
+    updateSessionLog();
+  }
+
+  addMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  messageCount++;
+  showTyping();
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', PROXY_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = function() {
+    removeTyping();
+    document.getElementById('sendBtn').disabled = false;
+    if (xhr.status >= 200 && xhr.status < 300) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        if (data.content && data.content[0]) {
+          var aiText = data.content[0].text;
+          if (detectCrisis(aiText)) {
+            crisisTriggered = true;
+            document.getElementById('crisisBanner').style.display = 'block';
+            logCrisisEvent('ai-response');
+          }
+          addMessage('ai', aiText);
+          conversationHistory.push({ role: 'assistant', content: aiText });
+          messageCount++;
+          updateSessionLog();
+        } else if (data.error) {
+          addMessage('ai', 'Error: ' + data.error.message);
+        } else {
+          addMessage('ai', 'Something went wrong. Please refresh and try again.');
+        }
+      } catch(e) {
+        addMessage('ai', 'Something went wrong parsing the response. Please refresh and try again.');
+      }
+    } else {
+      addMessage('ai', 'Connection error (' + xhr.status + '). Please try again.');
+    }
+  };
+
+  xhr.onerror = function() {
+    removeTyping();
+    document.getElementById('sendBtn').disabled = false;
+    addMessage('ai', 'Network error. Please check your connection and try again.');
+  };
+
+  xhr.send(JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 1024, system: SYSTEM_PROMPT, messages: conversationHistory }));
+}
+
+window.addEventListener('beforeunload', function() { updateSessionLog(); });
+</script>
+</body>
+</html>
