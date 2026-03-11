@@ -182,12 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.disabled = false;
       }
     };
-    xhr.onerror = function() {
-      errEl.textContent = 'Connection error. Please try again.';
-      errEl.style.display = 'block';
-      btn.textContent = 'Access My Coach';
-      btn.disabled = false;
-    };
+    xhr.onerror = function() { ecRemoveTyping(); document.getElementById('ec-send').disabled = false; ecAddMsg('ai', 'Network error. Please check your connection and try again.'); };
     xhr.send();
   }
 
@@ -217,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
       try { var d = JSON.parse(xhr.responseText); if (d && d[0]) EC.sessionId = d[0].id; } catch(e) {}
     };
     xhr.send(JSON.stringify({ user_id: EC.email, session_start: new Date().toISOString(), message_count: 0, crisis_flag_triggered: false, crisis_response_shown: false }));
-    ecAddMsg('ai', 'Good to have you here. I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes.');
+    ecAddMsg("ai", "Hey!  Really nice to have you here! I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes. Is there something you’d like to discuss? It might be romantic relationship issues, work issues, parenting issues, or perhaps it’s an emotional challenge, a social dilemma or something else. Where would you like to go?");
   }
 
   function ecDetectCrisis(text) {
@@ -283,10 +278,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!isOpening) { EC.history.push({role:'assistant', content:aiText}); EC.msgCount++; ecUpdateSession(); }
             else { EC.history = [{role:'user', content:'Begin the coaching session with your opening check-in. Keep it under 3 sentences.'},{role:'assistant', content:aiText}]; }
           } else if (data.error) { ecAddMsg('ai', 'Error from AI: ' + data.error.message); }
-        } catch(e) { ecAddMsg('ai', 'Good to have you here. I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes.'); }
+        } catch(e) { ecAddMsg("ai", "Hey!  Really nice to have you here! I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes. Is there something you’d like to discuss? It might be romantic relationship issues, work issues, parenting issues, or perhaps it’s an emotional challenge, a social dilemma or something else. Where would you like to go?"); }
       } else { ecAddMsg('ai', 'Connection error (' + xhr.status + '). Please try again.'); }
     };
-    xhr.onerror = function() { ecRemoveTyping(); document.getElementById('ec-send').disabled = false; ecAddMsg('ai', 'Good to have you here. I’m Dr. John’s Evolved Caveman AI Coach. Think of this as executive coaching for your inner world: sharper self-awareness, better emotional control, stronger relationships, and less unconscious nonsense running your life behind the scenes.'); };
+    xhr.onerror = function() { ecRemoveTyping(); document.getElementById('ec-send').disabled = false; ecAddMsg('ai', 'Network error. Please check your connection and try again.'); };
     xhr.send(JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 512, system: SYSTEM, messages: messages }));
   }
 
