@@ -1,0 +1,26 @@
+{
+  "name": "Evolved Caveman AI Coach",
+  "short_name": "EC Coach",
+  "description": "Dr. John's Inner Leadership AI Coach — executive coaching for your inner world.",
+  "start_url": "/ai_coach.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#202023",
+  "theme_color": "#202023",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "education"],
+  "lang": "en-US"
+}

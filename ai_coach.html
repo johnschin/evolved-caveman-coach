@@ -2,8 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Evolved Caveman Inner Leadership AI Coach</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Evolved Caveman AI Coach</title>
+
+<!-- PWA Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EC Coach">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#202023">
+<meta name="description" content="Dr. John's Inner Leadership AI Coach — executive coaching for your inner world.">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/icon-192.png">
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -19,7 +35,7 @@
     --ai-bubble: #ffffff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); font-family: 'Manrope', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  body { background: var(--bg); font-family: 'Manrope', sans-serif; height: 100vh; height: -webkit-fill-available; display: flex; flex-direction: column; overflow: hidden; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
 
   #consentGate { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
   .gate-card { background: #fff; border: 1px solid var(--surface2); padding: 24px 40px 32px; max-width: 440px; width: 100%; text-align: center; }
@@ -372,6 +388,15 @@ function sendMessage() {
 }
 
 window.addEventListener('beforeunload', function() { updateSessionLog(); });
+
+// ── Register Service Worker (PWA) ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(reg) { console.log('SW registered'); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
+}
 </script>
 </body>
 </html>
