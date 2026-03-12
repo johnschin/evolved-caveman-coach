@@ -154,6 +154,7 @@ function checkConsent() {
   btn.textContent = 'Checking...';
   errorEl.style.display = 'none';
 
+  // Step 1: Check consent
   var xhr = new XMLHttpRequest();
   xhr.open('GET', SUPABASE_URL + '/rest/v1/consent_events?user_id=eq.' + encodeURIComponent(email) + '&acknowledged=eq.true&limit=1', true);
   xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
@@ -163,13 +164,46 @@ function checkConsent() {
     if (xhr.status === 200) {
       var data = JSON.parse(xhr.responseText);
       if (data && data.length > 0) {
-        userEmail = email;
-        document.getElementById('consentGate').style.display = 'none';
-        initSession();
+        // Consent found — now check paid_access
+        checkPaidAccess(email, btn);
       } else {
         showGateError('No signed agreement found for this email. Please complete the User Agreement first.');
         btn.disabled = false;
         btn.textContent = 'Access My Coach';
+      }
+    } else {
+      showGateError('Connection error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Access My Coach';
+    }
+  };
+
+  xhr.onerror = function() {
+    showGateError('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Access My Coach';
+  };
+
+  xhr.send();
+}
+
+function checkPaidAccess(email, btn) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', SUPABASE_URL + '/rest/v1/users?email=eq.' + encodeURIComponent(email) + '&paid_access=eq.true&limit=1', true);
+  xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      if (data && data.length > 0) {
+        // Paid access confirmed — let them in
+        userEmail = email;
+        document.getElementById('consentGate').style.display = 'none';
+        initSession();
+      } else {
+        // No paid access — redirect to purchase page
+        window.location.href = 'https://guide-to-self.mykajabi.com/store/h6qGed6w';
       }
     } else {
       showGateError('Connection error. Please try again.');
