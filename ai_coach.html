@@ -31,7 +31,6 @@
     overflow: hidden;
   }
 
-  /* ── CONSENT GATE OVERLAY ── */
   #consentGate {
     position: fixed;
     inset: 0;
@@ -128,7 +127,6 @@
 
   .gate-link a { color: var(--teal); font-weight: 600; text-decoration: none; }
 
-  /* ── CRISIS BANNER ── */
   #crisisBanner {
     display: none;
     background: var(--crisis);
@@ -143,7 +141,6 @@
 
   #crisisBanner a { color: #fff; font-weight: 800; }
 
-  /* ── HEADER ── */
   .chat-header {
     background: var(--dark);
     padding: 14px 20px;
@@ -189,7 +186,6 @@
     max-width: 180px;
   }
 
-  /* ── CHAT WINDOW ── */
   #chatWindow {
     flex: 1;
     overflow-y: auto;
@@ -200,7 +196,6 @@
     scroll-behavior: smooth;
   }
 
-  /* ── MESSAGES ── */
   .message {
     display: flex;
     gap: 10px;
@@ -260,7 +255,6 @@
 
   .message.user .msg-time { text-align: right; }
 
-  /* Typing indicator */
   .typing-indicator {
     display: flex;
     gap: 5px;
@@ -287,7 +281,6 @@
     30% { transform: translateY(-6px); }
   }
 
-  /* ── INPUT AREA ── */
   .input-area {
     background: var(--surface);
     border-top: 1px solid var(--surface2);
@@ -346,7 +339,6 @@
     letter-spacing: 0.03em;
   }
 
-  /* Scrollbar */
   #chatWindow::-webkit-scrollbar { width: 4px; }
   #chatWindow::-webkit-scrollbar-track { background: transparent; }
   #chatWindow::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
@@ -359,12 +351,11 @@
 </head>
 <body>
 
-<!-- ── CONSENT GATE ── -->
 <div id="consentGate">
   <div class="gate-card">
     <div class="gate-eyebrow">The Evolved Caveman</div>
     <h2>Inner Leadership AI Coach</h2>
-    <p>Enter the email you used to sign your User Agreement to access your AI coach.Please be sure to enter your email EXACTLY as you entered it on previous page. Capitalization matters. </p>
+    <p>Enter the email you used to sign your User Agreement to access your AI coach. Please be sure to enter your email EXACTLY as you entered it on previous page. Capitalization matters.</p>
     <input type="email" class="gate-input" id="gateEmail" placeholder="your@email.com" autocomplete="email">
     <button class="gate-btn" id="gateBtn" onclick="checkConsent()">Access My Coach</button>
     <div class="gate-error" id="gateError"></div>
@@ -372,12 +363,10 @@
   </div>
 </div>
 
-<!-- ── CRISIS BANNER ── -->
 <div id="crisisBanner">
   ⚠ If you're in crisis, please stop and contact the <a href="tel:988">988 Suicide & Crisis Lifeline (call or text 988)</a> or emergency services immediately. This AI cannot provide crisis support.
 </div>
 
-<!-- ── HEADER ── -->
 <div class="chat-header">
   <div class="avatar">🧠</div>
   <div class="header-text">
@@ -387,10 +376,8 @@
   <div class="header-disclaimer">AI coaching companion · Not therapy · Not a crisis service</div>
 </div>
 
-<!-- ── CHAT WINDOW ── -->
 <div id="chatWindow"></div>
 
-<!-- ── INPUT ── -->
 <div class="input-area">
   <textarea id="userInput" placeholder="What's on your mind..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
   <button id="sendBtn" onclick="sendMessage()">Send</button>
@@ -398,16 +385,11 @@
 <div class="input-footer">AI coaching companion · Not a substitute for professional mental health care · For emergencies call 988 or 911</div>
 
 <script>
-// ============================================================
-// CONFIGURATION — Replace these with your actual values
-// ============================================================
-const SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
-const PROXY_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co/functions/v1/chat';
+// ── All Supabase calls routed through Cloudflare Worker (service role key) ──
+const WORKER_URL = 'https://evolved-caveman-proxy.john-834.workers.dev';
+const PROXY_URL  = 'https://osywbzzvsfjdvjhjalju.supabase.co/functions/v1/chat'; // Claude API edge fn
 const CONSENT_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/consent_gate.html';
-// ============================================================
 
-// Crisis keywords to detect
 const CRISIS_KEYWORDS = [
   'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
   'self-harm', 'self harm', 'cutting myself', 'hurt myself',
@@ -415,7 +397,6 @@ const CRISIS_KEYWORDS = [
   'no reason to live', 'better off dead', 'can\'t go on'
 ];
 
-// System prompt from Dr. John's knowledge base
 const SYSTEM_PROMPT = `You are an AI coaching companion built on the knowledge, voice, and methodology of Dr. John Schinnerer — a men's inner leadership coach, psychologist, and author. You are not a generic chatbot. You speak, think, and coach the way Dr. John does: with warmth, calm authority, intelligent irreverence, and deep psychological grounding.
 
 IDENTITY & ROLE
@@ -466,7 +447,7 @@ let messageCount = 0;
 let crisisTriggered = false;
 let sessionStart = null;
 
-// ── CONSENT GATE ──
+// ── CONSENT GATE — now calls Worker /check-consent ──
 async function checkConsent() {
   const email = document.getElementById('gateEmail').value.trim();
   const btn = document.getElementById('gateBtn');
@@ -484,19 +465,16 @@ async function checkConsent() {
 
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/consent_events?user_id=eq.${encodeURIComponent(email)}&acknowledged=eq.true&limit=1`,
-      {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        }
-      }
+      `${WORKER_URL}/check-consent?email=${encodeURIComponent(email)}`
     );
+
+    if (!res.ok) {
+      throw new Error(`Worker error: ${res.status}`);
+    }
 
     const data = await res.json();
 
-    if (data && data.length > 0) {
-      // Consent found — let them in
+    if (data.found) {
       userEmail = email;
       document.getElementById('consentGate').style.display = 'none';
       initSession();
@@ -519,25 +497,18 @@ function showGateError(msg) {
   el.style.display = 'block';
 }
 
-// Allow Enter key on gate
 document.getElementById('gateEmail').addEventListener('keydown', e => {
   if (e.key === 'Enter') checkConsent();
 });
 
-// ── SESSION INIT ──
+// ── SESSION INIT — calls Worker /session ──
 async function initSession() {
   sessionStart = new Date().toISOString();
 
-  // Create session log in Supabase
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/session_logs`, {
+    const res = await fetch(`${WORKER_URL}/session`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=representation'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: userEmail,
         session_start: sessionStart,
@@ -547,12 +518,11 @@ async function initSession() {
       })
     });
     const data = await res.json();
-    if (data && data[0]) sessionId = data[0].id;
+    if (data && data.id) sessionId = data.id;
   } catch (err) {
     console.error('Session log error:', err);
   }
 
-  // Load opening message from AI
   getAIResponse(null, true);
 }
 
@@ -562,17 +532,13 @@ function detectCrisis(text) {
   return CRISIS_KEYWORDS.some(kw => lower.includes(kw));
 }
 
+// ── CRISIS LOG — calls Worker /crisis ──
 async function logCrisisEvent(triggerCategory) {
   const resources = '988 Suicide & Crisis Lifeline (call or text 988), Emergency services (911)';
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/crisis_events`, {
+    await fetch(`${WORKER_URL}/crisis`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=minimal'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: userEmail,
         session_id: sessionId,
@@ -591,18 +557,13 @@ function showCrisisBanner() {
   document.getElementById('crisisBanner').style.display = 'block';
 }
 
-// ── SESSION UPDATE ──
+// ── SESSION UPDATE — calls Worker PATCH /session ──
 async function updateSessionLog() {
   if (!sessionId) return;
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/session_logs?id=eq.${sessionId}`, {
+    await fetch(`${WORKER_URL}/session?id=${sessionId}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=minimal'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message_count: messageCount,
         session_end: new Date().toISOString(),
@@ -680,7 +641,6 @@ async function sendMessage() {
   input.style.height = 'auto';
   document.getElementById('sendBtn').disabled = true;
 
-  // Crisis check
   if (detectCrisis(text)) {
     crisisTriggered = true;
     showCrisisBanner();
@@ -688,7 +648,6 @@ async function sendMessage() {
     await updateSessionLog();
   }
 
-  // Add user message to UI and history
   addMessage('user', text);
   conversationHistory.push({ role: 'user', content: text });
   messageCount++;
@@ -710,7 +669,6 @@ function getAIResponse(userText, isOpening) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', PROXY_URL, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-
 
     xhr.onload = function() {
       removeTyping();
@@ -783,7 +741,6 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-// Update session on page close
 window.addEventListener('beforeunload', () => updateSessionLog());
 </script>
 </body>

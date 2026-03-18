@@ -56,12 +56,10 @@ h1{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--dark);line-height:
   <div class="header">
     <div class="eyebrow">The Evolved Caveman</div>
     <h1>Inner Leadership AI<br>Mandatory User Agreement</h1>
-     <div class="subtitle">Read carefully before proceeding</div>
+    <div class="subtitle">Read carefully before proceeding</div>
     <div class="version-tag">Version 1.0 &nbsp;&middot;&nbsp; Effective March 7, 2026</div>
   </div>
   <div class="alert-banner"><strong>Required reading.</strong> You must read this agreement in full before using this system. Use of this system constitutes acknowledgment and agreement to all terms below. <br>Please note: You must check all 3 boxes below and enter your email address to proceed. At the next page, you will need to enter your email address again EXACTLY as you did before. Please match upper and lower case characters exactly. Thank you.</div>
-
- 
 
   <div class="section">
     <div class="section-number">Section 01</div>
@@ -182,8 +180,9 @@ h1{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--dark);line-height:
 </div>
 
 <script>
-var SURL = "https://lmlsfzhismkeyivsxmng.supabase.co";
-var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ";
+// ── All Supabase calls are now routed through the Cloudflare Worker ──
+// The Worker uses the service role key server-side. No anon key here.
+var WORKER_URL = "https://evolved-caveman-proxy.john-834.workers.dev";
 var CURL = "https://johnschin.github.io/evolved-caveman-coach/ai_coach.html";
 var VER = "1.0";
 var VDATE = "2026-03-07";
@@ -214,41 +213,12 @@ document.getElementById('submitBtn').addEventListener('click', function() {
   btn.textContent = 'Recording your agreement...';
   btn.style.opacity = '0.6';
 
-  var payload = JSON.stringify({
-    user_id: email,
-    event_type: 'initial_consent',
-    timestamp: new Date().toISOString(),
-    ip_address: 'client-side',
-    user_agent: navigator.userAgent,
-    consent_text_shown: 'Version ' + VER + ' - ' + VDATE,
-    acknowledged: true
-  });
-
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', SURL + '/rest/v1/consent_events', true);
+  xhr.open('POST', WORKER_URL + '/consent', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('apikey', SKEY);
-  xhr.setRequestHeader('Authorization', 'Bearer ' + SKEY);
-  xhr.setRequestHeader('Prefer', 'return=minimal');
 
   xhr.onload = function() {
     if (xhr.status >= 200 && xhr.status < 300) {
-      var userPayload = JSON.stringify({
-        email: email,
-        consent_version: VER,
-        consent_timestamp: new Date().toISOString(),
-        disclaimer_accepted: true,
-        disclaimer_accepted_at: new Date().toISOString(),
-        is_minor_confirmed: true
-      });
-      var xhr2 = new XMLHttpRequest();
-      xhr2.open('POST', SURL + '/rest/v1/users', true);
-      xhr2.setRequestHeader('Content-Type', 'application/json');
-      xhr2.setRequestHeader('apikey', SKEY);
-      xhr2.setRequestHeader('Authorization', 'Bearer ' + SKEY);
-      xhr2.setRequestHeader('Prefer', 'resolution=merge-duplicates,return=minimal');
-      xhr2.send(userPayload);
-
       document.getElementById('mainContent').style.display = 'none';
       document.getElementById('successScreen').style.display = 'block';
       window.scrollTo(0, 0);
@@ -267,7 +237,13 @@ document.getElementById('submitBtn').addEventListener('click', function() {
     errEl.style.display = 'block';
   };
 
-  xhr.send(payload);
+  xhr.send(JSON.stringify({
+    email: email,
+    agreedToTerms: true,
+    consentTimestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    consentVersion: 'Version ' + VER + ' - ' + VDATE
+  }));
 });
 
 document.getElementById('goBtn').addEventListener('click', function() {
