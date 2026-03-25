@@ -513,8 +513,18 @@
     const CONSENT_VERSION = '1.0';
 
     // ─── Initialize Supabase Client ───
-    const { createClient } = supabase;
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let sb;
+    try {
+      const { createClient } = supabase;
+      sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('Supabase client initialized successfully');
+    } catch (e) {
+      console.error('Failed to initialize Supabase:', e);
+      document.addEventListener('DOMContentLoaded', () => {
+        const err = document.getElementById('login-error');
+        if (err) err.textContent = 'Authentication service failed to load. Please refresh or try a different browser.';
+      });
+    }
 
     // ─── State ───
     let currentUser = null;
@@ -599,22 +609,35 @@ You are an educational coaching tool, not therapy or medical care.`;
         return;
       }
 
-      setLoading('login-btn', true);
-
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-
-      setLoading('login-btn', false);
-
-      if (error) {
-        errorEl.textContent = error.message === 'Invalid login credentials'
-          ? 'Invalid email or password. Please try again.'
-          : error.message;
+      // Check that Supabase loaded
+      if (typeof sb === 'undefined' || !sb?.auth) {
+        errorEl.textContent = 'Authentication service failed to load. Please refresh the page.';
+        console.error('Supabase client not initialized. Check script tag.');
         return;
       }
 
-      currentUser = data.user;
-      currentSession = data.session;
-      await checkConsentAndProceed();
+      setLoading('login-btn', true);
+
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+        setLoading('login-btn', false);
+
+        if (error) {
+          errorEl.textContent = error.message === 'Invalid login credentials'
+            ? 'Invalid email or password. Please try again.'
+            : error.message;
+          return;
+        }
+
+        currentUser = data.user;
+        currentSession = data.session;
+        await checkConsentAndProceed();
+      } catch (err) {
+        setLoading('login-btn', false);
+        errorEl.textContent = 'Login failed: ' + (err.message || 'Unknown error. Check console.');
+        console.error('Login error:', err);
+      }
     }
 
     async function handleReset() {
