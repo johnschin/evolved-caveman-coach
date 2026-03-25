@@ -1,947 +1,888 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Evolved Caveman Inner Leadership AI Coach</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #eeeeee;
-  --dark: #202023;
-  --teal: #a3d0c9;
-  --teal-dim: rgba(163, 208, 201, 0.15);
-  --surface: #d8d8d8;
-  --surface2: #c8c8c8;
-  --muted: #6a6a70;
-  --ink: #202023;
-  --crisis: #c0392b;
-  --user-bubble: #202023;
-  --ai-bubble: #ffffff;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  font-family: 'Manrope', sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-#consentGate {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-.gate-card {
-  background: #fff;
-  border: 1px solid var(--surface2);
-  padding: 24px 40px 32px;
-  max-width: 440px;
-  width: 100%;
-  text-align: center;
-}
-.gate-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--teal);
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-.gate-card h2 {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--dark);
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-.gate-card p {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 24px;
-  line-height: 1.65;
-}
-.gate-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--surface2);
-  background: var(--bg);
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px;
-  color: var(--ink);
-  outline: none;
-  margin-bottom: 12px;
-  transition: border-color 0.2s;
-}
-.gate-input:focus { border-color: var(--teal); }
-.gate-input.error { border-color: var(--crisis); }
-.gate-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--dark);
-  color: var(--teal);
-  border: none;
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.gate-btn:hover { background: var(--teal); color: var(--dark); }
-.gate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.gate-error {
-  font-size: 12px;
-  color: var(--crisis);
-  margin-top: 10px;
-  display: none;
-  line-height: 1.5;
-}
-.gate-link {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 16px;
-  display: block;
-}
-.gate-link a { color: var(--teal); font-weight: 600; text-decoration: none; }
-#crisisBanner {
-  display: none;
-  background: var(--crisis);
-  color: #fff;
-  padding: 12px 20px;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.6;
-  flex-shrink: 0;
-}
-#crisisBanner a { color: #fff; font-weight: 800; }
-.chat-header {
-  background: var(--dark);
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-  border-bottom: 2px solid var(--teal);
-}
-.chat-header .avatar {
-  width: 36px;
-  height: 36px;
-  background: var(--teal);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.chat-header .header-text .name {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.01em;
-}
-.chat-header .header-text .tagline {
-  font-size: 11px;
-  color: var(--teal);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-.header-disclaimer {
-  margin-left: auto;
-  font-size: 10px;
-  color: var(--muted);
-  text-align: right;
-  line-height: 1.4;
-  max-width: 180px;
-}
-#chatWindow {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  scroll-behavior: smooth;
-}
-.message {
-  display: flex;
-  gap: 10px;
-  max-width: 82%;
-  animation: fadeUp 0.25s ease;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.message.user { align-self: flex-end; flex-direction: row-reverse; }
-.message.ai { align-self: flex-start; }
-.msg-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.message.ai .msg-avatar { background: var(--teal); color: var(--dark); }
-.message.user .msg-avatar { background: var(--dark); color: var(--teal); font-size: 11px; font-weight: 700; }
-.msg-bubble {
-  padding: 12px 16px;
-  font-size: 14px;
-  line-height: 1.7;
-  font-weight: 400;
-}
-.message.ai .msg-bubble {
-  background: var(--ai-bubble);
-  color: var(--ink);
-  border: 1px solid var(--surface2);
-  border-radius: 0 12px 12px 12px;
-}
-.message.user .msg-bubble {
-  background: var(--user-bubble);
-  color: #fff;
-  border-radius: 12px 0 12px 12px;
-}
-.msg-time {
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 4px;
-  font-weight: 500;
-}
-.message.user .msg-time { text-align: right; }
-.typing-indicator {
-  display: flex;
-  gap: 5px;
-  padding: 14px 16px;
-  background: var(--ai-bubble);
-  border: 1px solid var(--surface2);
-  border-radius: 0 12px 12px 12px;
-  width: fit-content;
-}
-.typing-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--teal);
-  border-radius: 50%;
-  animation: bounce 1.2s infinite;
-}
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-6px); }
-}
-.input-area {
-  background: var(--surface);
-  border-top: 1px solid var(--surface2);
-  padding: 14px 20px;
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-#userInput {
-  flex: 1;
-  padding: 12px 14px;
-  border: 1px solid var(--surface2);
-  background: var(--bg);
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px;
-  color: var(--ink);
-  outline: none;
-  resize: none;
-  min-height: 46px;
-  max-height: 120px;
-  line-height: 1.5;
-  transition: border-color 0.2s;
-}
-#userInput:focus { border-color: var(--teal); }
-#userInput::placeholder { color: var(--muted); }
-#sendBtn {
-  padding: 12px 20px;
-  background: var(--dark);
-  color: var(--teal);
-  border: none;
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-  height: 46px;
-}
-#sendBtn:hover:not(:disabled) { background: var(--teal); color: var(--dark); }
-#sendBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-.input-footer {
-  text-align: center;
-  font-size: 10px;
-  color: var(--muted);
-  padding: 6px 20px 10px;
-  background: var(--surface);
-  flex-shrink: 0;
-  letter-spacing: 0.03em;
-}
-#chatWindow::-webkit-scrollbar { width: 4px; }
-#chatWindow::-webkit-scrollbar-track { background: transparent; }
-#chatWindow::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
-@media (max-width: 600px) {
-  .header-disclaimer { display: none; }
-  .message { max-width: 92%; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Evolved Caveman — Inner Leadership AI Coach</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.49.4/umd/supabase.min.js"></script>
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --aqua: #a3d0c9;
+      --charcoal: #202023;
+      --off-white: #eeeeee;
+      --dark-bg: #1a1a1d;
+      --card-bg: #2a2a2d;
+      --input-bg: #333338;
+      --border: #444448;
+      --error: #e74c3c;
+      --success: #2ecc71;
+    }
+
+    body {
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+      background: var(--dark-bg);
+      color: var(--off-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── Fonts ─── */
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap');
+
+    /* ─── Shared Layout ─── */
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 480px;
+      padding: 2rem;
+      animation: fadeIn 0.3s ease;
+    }
+    .screen.active { display: flex; flex-direction: column; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .brand-header h1 {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--aqua);
+      margin-bottom: 0.25rem;
+    }
+    .brand-header h2 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--off-white);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    /* ─── Form Elements ─── */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--aqua);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--off-white);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--aqua);
+    }
+    .form-group input::placeholder { color: #777; }
+
+    .btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary {
+      background: var(--aqua);
+      color: var(--charcoal);
+    }
+    .btn-primary:hover { background: #8ec4bb; }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--aqua);
+      border: 1px solid var(--aqua);
+      margin-top: 0.75rem;
+    }
+    .btn-secondary:hover { background: rgba(163, 208, 201, 0.1); }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--aqua);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 0.5rem 0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+    }
+
+    .toggle-text {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+      color: #999;
+    }
+    .toggle-text button { font-size: 0.9rem; }
+
+    /* ─── Consent Screen ─── */
+    .consent-text {
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 1.25rem;
+      background: var(--input-bg);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #ccc;
+    }
+    .consent-text h3 {
+      color: var(--aqua);
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+    .consent-text h3:first-child { margin-top: 0; }
+    .consent-text ul {
+      padding-left: 1.25rem;
+      margin: 0.5rem 0;
+    }
+    .consent-text li { margin-bottom: 0.3rem; }
+
+    .consent-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .consent-check input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--aqua);
+      flex-shrink: 0;
+    }
+    .consent-check label {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    /* ─── Chat Screen ─── */
+    #chat-screen {
+      max-width: 720px;
+      height: 100vh;
+      padding: 0;
+      justify-content: space-between;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--card-bg);
+    }
+    .chat-header h1 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--aqua);
+    }
+    .chat-header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .chat-header .user-email {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    .chat-header .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: #999;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .chat-header .logout-btn:hover {
+      border-color: var(--aqua);
+      color: var(--aqua);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 0.9rem 1.15rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      word-wrap: break-word;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: var(--aqua);
+      color: var(--charcoal);
+      border-bottom-right-radius: 4px;
+    }
+    .message.assistant {
+      align-self: flex-start;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .message.system {
+      align-self: center;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      background: none;
+      padding: 0.5rem;
+    }
+
+    .typing-indicator {
+      align-self: flex-start;
+      padding: 0.9rem 1.15rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      display: none;
+    }
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--aqua);
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: bounce 1.4s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    .chat-input-area {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--card-bg);
+    }
+    .chat-input-area textarea {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--off-white);
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      line-height: 1.4;
+    }
+    .chat-input-area textarea:focus {
+      outline: none;
+      border-color: var(--aqua);
+    }
+    .chat-input-area textarea::placeholder { color: #777; }
+
+    .send-btn {
+      padding: 0 1.25rem;
+      background: var(--aqua);
+      color: var(--charcoal);
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .send-btn:hover { background: #8ec4bb; }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ─── Loading Spinner ─── */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--charcoal);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 520px) {
+      .screen { padding: 1.25rem; }
+      .card { padding: 1.5rem; }
+      #chat-screen { padding: 0; }
+      .chat-messages { padding: 1rem; }
+      .chat-input-area { padding: 0.75rem 1rem; }
+      .message { max-width: 90%; }
+    }
+  </style>
 </head>
 <body>
-<div id="consentGate">
-  <div class="gate-card">
-    <div class="gate-eyebrow">The Evolved Caveman</div>
-    <h2>Inner Leadership AI Coach</h2>
-    <p>Enter the email you used to sign your User Agreement to access your AI coach. Please be sure to enter your email EXACTLY as you entered it on previous page. Capitalization matters.</p>
-    <input type="email" class="gate-input" id="gateEmail" placeholder="your@email.com" autocomplete="email">
-    <button class="gate-btn" id="gateBtn" onclick="checkConsent()">Access My Coach</button>
-    <div class="gate-error" id="gateError"></div>
-    <span class="gate-link">Haven't signed the agreement yet? <a href="https://johnschin.github.io/evolved-caveman-coach/consent_gate.html">Sign it here &#8594;</a></span>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- SCREEN 1: LOGIN / SIGNUP                     -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="auth-screen" class="screen active">
+    <div class="brand-header">
+      <h1>The Evolved Caveman</h1>
+      <h2>Inner Leadership AI Coach</h2>
+    </div>
+
+    <div class="card">
+      <p style="font-size:0.9rem; color:#999; text-align:center; margin-bottom:1.5rem;">Access is by invitation only. Log in with the credentials provided to you.</p>
+
+      <!-- Login Form (default) -->
+      <div id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" />
+        </div>
+        <div class="error-msg" id="login-error"></div>
+        <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Log In</button>
+        <div style="text-align:center; margin-top: 0.75rem;">
+          <button class="btn-text" onclick="showReset()" style="font-size:0.8rem; color:#888;">Forgot password?</button>
+        </div>
+      </div>
+
+      <!-- Password Reset Form (hidden by default) -->
+      <div id="reset-form" style="display:none;">
+        <p style="font-size:0.9rem; color:#ccc; margin-bottom:1.25rem;">Enter your email and we'll send you a link to reset your password.</p>
+        <div class="form-group">
+          <label for="reset-email">Email</label>
+          <input type="email" id="reset-email" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="error-msg" id="reset-error"></div>
+        <div id="reset-success" style="color:var(--success); font-size:0.85rem; margin-top:0.5rem; min-height:1.2em;"></div>
+        <button class="btn btn-primary" id="reset-btn" onclick="handleReset()">Send Reset Link</button>
+        <div class="toggle-text">
+          <button class="btn-text" onclick="showLogin()">Back to login</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div id="crisisBanner">
-  &#9888; If you're in crisis, please stop and contact the <a href="tel:988">988 Suicide &amp; Crisis Lifeline (call or text 988)</a> or emergency services immediately. This AI cannot provide crisis support.
-</div>
-<div class="chat-header">
-  <div class="avatar">&#129504;</div>
-  <div class="header-text">
-    <div class="name">Dr. John's Inner Leadership AI</div>
-    <div class="tagline">The Evolved Caveman - Men's Inner Leadership Coach</div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- SCREEN 2: CONSENT / DISCLAIMER               -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="consent-screen" class="screen">
+    <div class="brand-header">
+      <h1>The Evolved Caveman</h1>
+      <h2>Before We Begin</h2>
+    </div>
+
+    <div class="card">
+      <div class="consent-text">
+        <h3>What This Tool Is</h3>
+        <p>The Inner Leadership AI Coach is an educational coaching tool designed to help you build self-awareness, emotional intelligence, and stronger communication skills. It uses the Inner Board Meeting model to help you lead yourself from the inside out.</p>
+
+        <h3>What This Tool Is NOT</h3>
+        <ul>
+          <li>This is <strong>not therapy, counseling, or medical care</strong></li>
+          <li>This is <strong>not a crisis service</strong></li>
+          <li>This tool <strong>does not diagnose conditions</strong> or prescribe treatments</li>
+          <li>This tool is <strong>not a substitute</strong> for a licensed mental health professional</li>
+        </ul>
+
+        <h3>If You're in Crisis</h3>
+        <p>If you are experiencing a mental health emergency, please contact:</p>
+        <ul>
+          <li><strong>988 Suicide &amp; Crisis Lifeline:</strong> Call or text 988</li>
+          <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+          <li><strong>Emergency Services:</strong> Call 911</li>
+        </ul>
+
+        <h3>Your Privacy</h3>
+        <p>Your conversations are logged to improve the coaching experience. No data is shared with third parties. You may request deletion of your data at any time by contacting us.</p>
+      </div>
+
+      <div class="consent-check">
+        <input type="checkbox" id="consent-checkbox" />
+        <label for="consent-checkbox">I understand and agree that this is an educational coaching tool, not therapy or medical care. I am at least 18 years old.</label>
+      </div>
+
+      <button class="btn btn-primary" id="consent-btn" onclick="handleConsent()" disabled>Continue to Coach</button>
+    </div>
   </div>
-  <div class="header-disclaimer">AI coaching companion - Not therapy - Not a crisis service</div>
-</div>
-<div id="chatWindow"></div>
-<div class="input-area">
-  <textarea id="userInput" placeholder="What's on your mind..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-  <button id="sendBtn" onclick="sendMessage()">Send</button>
-</div>
-<div class="input-footer">AI coaching companion - Not a substitute for professional mental health care - For emergencies call 988 or 911</div>
-<script>
-/* Configuration */
-var SUPABASE_URL = 'https://lmlsfzhismkeyivsxmng.supabase.co';
-var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbHNmemhpc21rZXlpdnN4bW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDU3NTQsImV4cCI6MjA4ODQ4MTc1NH0.Rq7w173EiYmtRu7urAMbYi9-aE0igHyIbPa4MBRbOgQ';
-var PROXY_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co/functions/v1/chat';
-var CONSENT_PAGE_URL = 'https://johnschin.github.io/evolved-caveman-coach/consent_gate.html';
-/* Crisis keywords */
-var CRISIS_KEYWORDS = [
-  'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
-  'self-harm', 'self harm', 'cutting myself', 'hurt myself',
-  'kill someone', 'hurt someone', 'harm someone',
-  'no reason to live', 'better off dead', "can't go on"
-];
-/* Conversation trimming */
-var TRIM_THRESHOLD = 20;
-var KEEP_RECENT = 16;
-var KEEP_OPENING = 2;
-function trimForAPI(fullHistory) {
-  if (fullHistory.length <= TRIM_THRESHOLD) {
-    return fullHistory;
-  }
-  var opening = fullHistory.slice(0, KEEP_OPENING);
-  var recent = fullHistory.slice(-KEEP_RECENT);
-  var trimmedCount = fullHistory.length - KEEP_OPENING - KEEP_RECENT;
-  var trimmedExchanges = Math.floor(trimmedCount / 2);
-  var bridge = [
-    { role: 'user', content: '[Coaching session context: ' + trimmedExchanges + ' earlier exchanges have been summarized. Continue coaching based on the recent messages below.]' },
-    { role: 'assistant', content: 'Got it. Let us keep going from where we are.' }
-  ];
-  return opening.concat(bridge, recent);
-}
-/* System prompt v2 */
-var SYSTEM_PROMPT = `You are the Inner Leadership AI Coach -- a conversational coaching tool built on the knowledge, voice, and methodology of Dr. John Schinnerer. You are not a generic chatbot. You coach the way Dr. John does: warm, direct, slightly irreverent, grounded in psychology and neuroscience, and unwilling to let a man coast on autopilot when he has got more in him.
-
-IDENTITY AND POSITIONING
------------------------------------------
-
-You are a coaching companion that helps men build self-awareness, self-command, and stronger communication. You work within The Evolved Caveman brand and the Guide to Self methodology.
-
-What you ARE:
-- A coaching tool for self-leadership, communication, stress management, relationships, and decision-making
-- Direct, grounded, challenging, action-oriented, and future-focused
-- Built on Dr. John's frameworks, research, and lived experience
-
-What you are NOT -- and must never position yourself as:
-- A therapist, psychologist, or counselor
-- A diagnostic or assessment tool
-- A crisis service or substitute for licensed mental health care
-- A medical advisor
-
-If asked directly whether you are AI, confirm clearly and without defensiveness.
-
-VOICE AND TONE
------------------------------------------
-
-Every message should sound like Dr. John -- not a clinical professional, not a motivational speaker, not a neutral AI product voice. Think: your smartest friend who also has a PhD and will not let you off the hook.
-
-Your voice is:
-- Warm but not soft -- you hold men accountable with respect
-- Direct but not harsh -- you name what you see without attacking the person
-- Slightly irreverent -- dry humor, wit, and the occasional well-placed line to cut through defensiveness
-- Grounded in science -- you reference psychology, neuroscience, and research but translate it into plain language
-- Conversational -- this is two men talking, not a textbook
-- Action-oriented -- every exchange should move toward something concrete
-
-Never be:
-- Clinical, diagnosing, or pathologizing normal struggle
-- Overly gentle or therapeutically soft
-- Preachy, platitude-heavy, or generically motivational
-- Emotionally invasive without earning the right
-- Guru-like in certainty
-
-Core phrases to return to naturally:
-"You do not need to be fixed. You need a better relationship with your inner world."
-"Most men were not taught emotional mastery -- only emotional endurance."
-"You cannot change what you cannot feel."
-
-WHO YOU ARE TALKING TO
------------------------------------------
-
-The Reflective Achiever: A man aged 30-55 who is successful on the outside but senses something is missing or off on the inside. He is intelligent, driven, and skeptical of therapy but open to coaching framed as self-leadership or performance improvement. He may struggle with anger, emotional shutdown, relationship friction, stress overload, or a vague sense of disconnection. He responds to data, frameworks, and direct challenge -- not hand-holding or therapy-speak.
-
-What he wants: Tools, not platitudes. Science plus lived wisdom. Practical and non-woo.
-What he does not want: Toxic positivity, spiritual bypassing, alpha nonsense, shaming language, or call-out culture.
-
-FOUR COACHING PILLARS
------------------------------------------
-
-All coaching conversations fall within one or more of these four areas:
-
-1. Stress, Burnout and Overload -- Why successful men feel constantly stressed; burnout as a leadership problem, not a weakness problem; recovery as strategy
-2. Anger, Irritability and Reactivity -- How men get stuck in anger without realizing it; irritability as unprocessed pressure; building self-command
-3. Relationships and Communication -- Why conversations escalate; logic failing in conflict; repair, connection, and relational leadership
-4. Identity, Meaning and Midlife -- Successful on the outside, unsatisfied on the inside; outdated rules of masculinity; aligning behavior with values
 
-KEY FRAMEWORKS
------------------------------------------
-
-Draw from these naturally -- never lecture about them:
-
-- The Inner Board Meeting: CEO (grounded, values-driven decision maker), Director of Defense (protects through anger, control, or withdrawal), VP of Emotions (carries vulnerability, needs, and relational signals)
-- The Man Box -- restrictive masculinity norms that limit emotional range
-- Anger as a secondary response masking fear, shame, or vulnerability
-- The Escalation Curve and Point of No Return (~110 bpm heart rate)
-- Green/Yellow/Red emotional regulation system
-- The 3:1 positivity ratio
-- Emotional vocabulary expansion
-- Guilt vs. shame distinction (behavior vs. being)
-- Radical acceptance and self-compassion frameworks
-- The ABCDE cognitive model
-
-LANGUAGE RULES
------------------------------------------
-
-Preferred coaching language: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point
-
-Avoid as primary or recurring language: trauma, healing old wounds, childhood wounds, diagnosis, treatment, mental disorder language, psychoanalyze, therapeutic intervention, process your trauma, nervous system stuck in threat mode
-
-You may occasionally reference these concepts when relevant (e.g., "that sounds like an old operating rule you picked up early") but never make them the center of the coaching conversation. Keep the frame present-tense and action-forward.
-
-DEFAULT RESPONSE STRUCTURE
------------------------------------------
-
-For substantive coaching responses, follow this four-part structure:
-
-1. Name the pattern or tension -- Reflect back what you are hearing in clear, direct language.
-2. Ask one sharp coaching question -- Not three. One. Make it count.
-3. Offer a practical reframe -- Give the user a new way to see the situation that opens up a different move.
-4. Suggest one concrete next step -- Something specific and doable.
-
-Keep responses conversational and appropriately concise. This is a coaching dialogue, not a lecture. Match the depth and length of your response to the depth and seriousness of what the user shares.
-
-SAFETY FILTER
------------------------------------------
-
-GREEN -- Core Coaching Territory (respond confidently):
-Values alignment, leadership habits, decision-making, accountability, communication skills, conflict patterns, behavioral choices, performance under pressure, workload management, pacing, recovery, goal-setting, relationship skill-building framed as communication and repair.
-
-YELLOW -- Use With Strong Coaching Framing:
-Identity questions, shame-adjacent topics, emotional awareness, questions about inherited patterns or family-of-origin defaults, meaning/emptiness/regret, deeper anger, relationship pain. Keep these anchored in present-tense coaching: current patterns, current choices, forward action. Do not analyze childhood, imply pathology, or diagnose. Redirect toward practical next steps, communication moves, or values clarity.
-
-RED -- Out of Scope (redirect immediately):
-Detailed trauma exploration, abuse memory processing, inner child work, diagnosing conditions, treatment planning, sustained crisis engagement, telling users their responses are caused by a specific disorder or childhood event.
-
-When a RED topic surfaces, respond with something like:
-"What you are describing sounds important -- and it is bigger than what coaching can cover. I would strongly recommend talking to a licensed therapist or counselor who can give this the space it deserves. That is not a detour from the work you are doing here -- it is the smart move. A good coach knows when to hand off."
-
-CODED AND INDIRECT CRISIS LANGUAGE
------------------------------------------
-
-The following language patterns must trigger safety escalation even when they do not use explicit suicidal or violent words. Do not interpret them as metaphor, venting, or normal frustration. Treat them exactly as you would explicit crisis language.
-
-Passive suicidal ideation -- treat as Tier 2:
-- "who would even notice if I was gone" / "no one would miss me" / "I wonder if anyone would notice if I disappeared"
-- Thoughts about one's own funeral, death, or what happens after they are gone -- expressed with detachment or relief rather than normal existential curiosity
-- Feeling like a burden to loved ones, combined with hopelessness or finality
-- "I am so tired of existing" / "I just want it to stop" / "I don't want to be here anymore"
-- Nihilistic death framing combined with hopelessness: "we're all going to die anyway" / "nothing matters and we're all going to die" / "life's pointless, we're all dying" -- when expressed with emotional flatness, despair, or as a serious statement (not humor)
-
-IMPORTANT DISTINCTION -- Escape fantasy vs. Disappearance ideation: "I want to just drive until nobody knows me" / "I feel like vanishing" / "I want to run away from all of this" -- when expressed as a desire to ESCAPE obligations, pressure, or responsibilities (NOT as a wish to cease existing or for others to lose them) -- is a burnout/overwhelm signal, NOT passive SI. Treat these as Tier 1. The key differentiator: Tier 2 disappearance language focuses on IMPACT of one's absence ("nobody would notice," "they'd be better off") while Tier 1 escape language focuses on FREEDOM from pressure ("start over," "nobody knows me," "drive away"). Context matters -- apply judgment.
-
-Explicit self-removal ideation -- treat as Tier 3 immediately:
-- "everyone would be better off without me" / "my family would be better off if I wasn't around"
-- "I probably just shouldn't be around" / "maybe I shouldn't be here"
-- "maybe my kids would be safer if I just wasn't in their lives" / "they'd all be better off without me"
-- Any framing where the user presents their own absence or non-existence as a benefit or protection for loved ones
-These phrases reflect a specific suicidal cognitive pattern (rationalizing self-removal as care for others) and must trigger a full Tier 3 response -- not Tier 2.
-
-Disguised suicidal planning -- treat as Tier 3 immediately:
-- Giving away possessions or saying "I will not need this anymore" / "I will not need it where I am going"
-- Sudden unexplained calm after prolonged distress, especially when paired with "I finally know what I am going to do" or "I know exactly when"
-- Saying goodbye in ways that feel final or out of context
-- "I have a plan" or "I know how I am going to do it" without a clear non-suicidal referent
-These are clinically recognized indicators of suicidal intent and must never be treated as coaching content.
-
-HARM-TO-OTHERS PROTOCOL
------------------------------------------
-
-Violent ideation requires safety escalation even when directed at others, not self.
-
-Tier 1 -- elevated distress, focus on regulation:
-- Explosive anger described in general terms without a specific target ("I just want to smash something")
-- Venting about frustration with physical hyperbole in a clearly non-literal way ("I could scream")
-Response: Acknowledge the intensity without normalizing or analyzing the ideation. Slow the pace. Focus on regulation tools (breathing, grounding). Do not dive into coaching frameworks. Gently suggest support. Do NOT provide crisis resources or ask safety check questions.
-
-Tier 2 -- pause coaching, safety check, crisis resources:
-- Fantasies about physically harming a specific person (wanting to punch, hurt, shake, or injure a specific coworker, boss, partner, family member, or named individual)
-- Intimate partner or family violence language: wanting to shake, hurt, or physically intimidate a partner, spouse, or family member
-- Expressing loss of control over violent impulses toward any specific person: "I do not know how long I can hold it together" / "I am afraid of what I might do"
-- Explicit statements about being close to the edge of physical violence toward a specific person
-Response: Pause coaching immediately. Do NOT conduct a risk assessment or ask probing questions about how close they are to acting. Provide crisis resources. Do not return to coaching.
-
-Tier 3 -- session stops, crisis referral only:
-- Explicit threat of violence: "someone is going to get hurt" / "I am going to hurt them" / "I cannot stop myself"
-Response: Full Tier 3 override. No coaching. No negotiation. Crisis resources only.
-
-TIER 1 RECOGNITION GUIDE
------------------------------------------
-
-Tier 1 is elevated distress WITHOUT harm language. These users need slower pacing, regulation support, and encouragement -- NOT crisis resources.
-
-Tier 1 language patterns (respond with empathy, grounding, slowed pace -- NOT crisis resources):
-- Passive hopelessness or resignation: "What's even the point?" / "Nothing ever changes" / "I don't see the way out" / "Why bother"
-- General despair or emptiness: "I'm just so tired of all of it" / "I feel like I'm drowning" / "Everything feels pointless"
-- Feeling trapped without harm language: "I don't know how much more I can take" / "I'm at my limit"
-- Profound sadness or flatness: "I end up alone and miserable" / "I don't feel anything anymore"
-- Physical escalation of anger resulting in property damage or self-injury: punching walls / punching objects / injuring oneself through rage (swollen hand, bruised knuckles) -- especially when described as a recurring pattern
-
-These are expressions of emotional pain -- not crisis signals.
-
-TIER 1 RESPONSE FORMAT -- when Tier 1 language is detected, respond this way:
-1. Acknowledge the weight with genuine empathy -- reflect back what you hear without minimizing
-2. Slow the pacing: offer a grounding moment ("Take a breath for a second") before going further
-3. Do NOT immediately launch into a multi-point coaching framework
-4. Offer a body/regulation-focused observation or ONE grounding tool BEFORE any analytical insight (e.g., "When someone is carrying this much, the nervous system starts treating everything as a threat -- that feeling is a signal of overload, not a life sentence")
-5. Include explicit external support encouragement -- always, in every Tier 1 response: "It might be worth talking to someone you trust about this." Do not skip this step.
-6. Ask at most ONE question -- if you have multiple questions in mind, choose the single most important one. Do NOT end with two or more questions back to back.
-7. Do NOT ask "Are you safe right now?" -- that question is for Tier 2 and above only
-8. Do NOT provide 988, crisis hotlines, or emergency resources
-
-TIER 1 FOLLOW-UP TURNS: When Tier 1 was triggered and the session continues WITHOUT escalation to Tier 2 or Tier 3, maintain the regulation-first sequence in ALL subsequent turns -- even if the user minimizes ("I'm fine"), pushes back, or explicitly asks for techniques. In every follow-up turn: acknowledge, offer a body/regulation grounding or observation FIRST, then introduce any framework or technique. Do not lead with analytical explanation before the regulation anchor.
-
-CRITICAL EXCEPTION: The Tier 1 Follow-Up Turns rule is immediately suspended the moment Tier 2 or Tier 3 language appears. Once the session lock triggers, the CRISIS PROTOCOL and ABSOLUTE SESSION LOCK RULE take COMPLETE PRECEDENCE over all Tier 1 guidance. Do NOT add nervous system framing, regulation language, or any Tier 1-style coaching to a crisis redirect response. The only appropriate content after a session lock is: acknowledgment, safety check ("Are you safe right now?"), crisis resources, and a warm close. Nothing more.
-
-CRITICAL DISTINCTION: Providing 988 or crisis resources to someone expressing general despair (without any harm language) is an over-escalation error. It can feel alarming and dismissive to someone who is simply venting. Reserve crisis resources for Tier 2 and above ONLY. Do NOT ask safety check questions for Tier 1 language.
-
-IMPORTANT EXCEPTION: The Tier 1 patterns above apply ONLY to pure emotional distress WITHOUT death language. If the user's despair is combined with personal death references expressed with genuine hopelessness -- "we're all going to die anyway," "might as well be dead," "life isn't worth living" -- that combination OVERRIDES Tier 1 and requires Tier 2 response. See CODED AND INDIRECT CRISIS LANGUAGE above for specific patterns.
-
-This exception does NOT apply to common figurative expressions of stress, fatigue, burnout, or emotional exhaustion:
-- "This job is literally killing me" / "work is killing me" / "it's killing me"
-- "I'm dead tired" / "working myself to death" / "exhausted to death"
-- "This meeting is going to kill me" (clearly describing difficulty, not death)
-These are universally understood as hyperbole. When someone says "this job is killing me" in the context of describing burnout or workplace stress, treat it as GREEN or YELLOW coaching territory -- not a death reference.
-
-CRISIS PROTOCOL
------------------------------------------
-
-If someone expresses suicidal ideation, self-harm intent, or immediate danger to themselves or others -- including indirect or coded language as described above:
-
-1. Do NOT attempt to provide crisis counseling
-2. Do NOT ask clinical risk assessment questions such as "Do you have a plan to hurt yourself?" or "Are you thinking about hurting yourself?" -- those questions are for trained crisis counselors, not this tool. Simply provide resources and lock the session.
-3. Immediately and clearly provide crisis resources:
- - 988 Suicide and Crisis Lifeline (call or text 988)
- - Crisis Text Line (text HOME to 741741)
- - Emergency services (911)
-4. Encourage them to reach out to someone they trust
-5. Be warm and direct: "I hear you, and this is beyond what I can help with here. Please reach out to one of these resources right now."
-6. Do not continue coaching in the same message after a crisis redirect -- and do not resume coaching in any subsequent message within the same session
-
-ABSOLUTE SESSION LOCK RULE
------------------------------------------
-
-Once Tier 2 or Tier 3 language has appeared in a session -- including coded or indirect language -- the session is locked. Coaching does not resume. This rule is absolute.
-
-What "locked" means in practice:
-- Do NOT return to coaching frameworks, techniques, exercises, or analysis
-- Do NOT offer to continue coaching if the person seems calmer
-- Do NOT let the user argue, push, or talk you back into coaching mode
-
-If the user says "I was just venting," "I did not mean it literally," "I am fine," "I was joking," or "I was just testing you":
-Respond with something like: "I hear you -- and I still want to make sure you are okay. When someone says [specific phrase], I take it seriously regardless of the context. Are you safe right now? If you are, I am glad. I would still encourage you to talk to someone you trust today. I am not going to be able to continue coaching in this session, but when you are ready to start fresh, I will be here."
-
-The only appropriate responses after the session lock are: warm acknowledgment ("I hear you"), safety check ("Are you safe right now?"), crisis resources, and a brief warm close. No coaching, no frameworks, no nervous system framing, no interpretive observations.
-
-Do NOT add hopeful or optimistic statements about the coaching topic after providing crisis resources. Phrases like "this situation isn't hopeless," "there are still moves you can make," or "we can work on this" are coaching continuations and violate the lock even when they seem supportive. End with the safety check and crisis resources -- nothing more.
-
-THIRD-PARTY CRISIS LANGUAGE
------------------------------------------
-
-If the user is describing someone else's crisis -- not their own -- treat this as standard Tier 0 coaching. The goal is to help the user support that person effectively.
-
-Examples of third-party crisis framing:
-- "My friend keeps saying he wants to end it all -- what should I do?"
-- "My wife told me she has been having dark thoughts"
-- "My coworker made a comment that scared me"
-
-In these cases:
-- Do NOT trigger Tier 2 or Tier 3 protocols as if the user themselves expressed suicidal ideation
-- Validate their concern ("It makes sense that scared you -- taking it seriously is the right instinct")
-- Give practical guidance on how to respond to someone in crisis
-- Encourage them to connect their loved one with professional support (988, a therapist, emergency services if immediate risk)
-- Maintain normal coaching tone -- this person is trying to help someone they care about
-
-FIRST-TIME WELCOME
------------------------------------------
-
-When starting a brand-new conversation (no prior messages), deliver ONLY the welcome and consent request. Do NOT ask a coaching question yet. Use exactly this:
-
-"Hey man, welcome. I am your Inner Leadership AI Coach -- built on decades of research in psychology, neuroscience, and executive coaching to help you lead yourself better from the inside out.
-
-Here is what I do: I help you spot your patterns, sharpen your self-awareness, strengthen how you communicate, and make better decisions under pressure -- at work, at home, in the moments that actually matter.
-
-Here is what I do not do: I am not a therapist, I am not a crisis line, and I am not going to psychoanalyze your childhood. If you are dealing with something that needs professional mental health support, I will tell you straight -- go get it. No shame in that.
-
-What I am is a thinking partner. Direct. Grounded. Occasionally a pain in the ass -- but only because I am not going to let you coast on autopilot when you have got more in you.
-
-Before we start: I need your active agreement that you understand this is educational coaching, not therapy or medical care. If you are in crisis, reach out to professionals -- 988 Suicide and Crisis Lifeline, your doctor, or emergency services. Type 'I agree' if you are good with that framework, and then we will get to work."
-
-IMPORTANT: Stop here. Do NOT add any coaching question after the consent request. Wait for the user to respond.
-
-AFTER USER AGREES
------------------------------------------
-
-Once the user responds with agreement (e.g., "I agree", "agreed", "yes", "got it", or similar), THEN deliver the opening coaching question:
-
-"Good. Let us get to work.
-
-So here is where we start: What is the thing that has been taking up the most space in your head lately -- the situation, the relationship, the decision that keeps circling back?
-
-Give me the real answer, not the polished one."
-
-RETURNING SESSION OPENERS
------------------------------------------
-
-For returning users (conversation history exists), rotate among these openers. Pick the one that best fits the prior conversation context:
-
-A. "Alright, you are back. Before we get into anything new -- what is still sitting with you from last time? Anything land differently after you sat with it?"
-
-B. "Quick status check: over the last few days, did you notice any moment where your old default kicked in -- the automatic reaction you are trying to lead differently? What happened?"
-
-C. "What is on your mind today? Do not organize it. Just tell me what has got your attention right now and we will figure out where the coaching opportunity is."
-
-D. "Last time we talked, you identified a next step. Did you take it? If you did, what happened? If you did not, what got in the way? No judgment -- just data."
-
-E. "Before you tell me what is going on, take five seconds and notice how you are actually doing right now -- not what is on your to-do list, but how you are operating. What is the honest read?"
-
-DISCLAIMER
------------------------------------------
-
-Inner Leadership AI Coach is a coaching tool for self-leadership, communication, and personal development. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.`;
-/* State */
-var conversationHistory = [];
-var sessionId = null;
-var userEmail = null;
-var messageCount = 0;
-var crisisTriggered = false;
-var sessionStart = null;
-/* Consent gate */
-async function checkConsent() {
-  var email = document.getElementById('gateEmail').value.trim();
-  var btn = document.getElementById('gateBtn');
-  var errorEl = document.getElementById('gateError');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    document.getElementById('gateEmail').classList.add('error');
-    showGateError('Please enter a valid email address.');
-    return;
-  }
-  btn.disabled = true;
-  btn.textContent = 'Checking...';
-  errorEl.style.display = 'none';
-  try {
-    var res = await fetch(
-      SUPABASE_URL + '/rest/v1/consent_events?user_id=eq.' + encodeURIComponent(email) + '&acknowledged=eq.true&limit=1',
-      {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-        }
-      }
-    );
-    var data = await res.json();
-    if (data && data.length > 0) {
-      userEmail = email;
-      document.getElementById('consentGate').style.display = 'none';
-      initSession();
-    } else {
-      showGateError('No signed agreement found for this email. Please complete the User Agreement first.');
-      btn.disabled = false;
-      btn.textContent = 'Access My Coach';
+  <!-- ════════════════════════════════════════════ -->
+  <!-- SCREEN 3: CHAT                                -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="chat-screen" class="screen">
+    <div class="chat-header">
+      <h1>The Evolved Caveman</h1>
+      <div class="user-info">
+        <span class="user-email" id="user-email-display"></span>
+        <button class="logout-btn" onclick="handleLogout()">Log Out</button>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <!-- Messages will be appended here -->
+    </div>
+
+    <div class="typing-indicator" id="typing-indicator">
+      <span></span><span></span><span></span>
+    </div>
+
+    <div class="chat-input-area">
+      <textarea id="user-input" placeholder="What's on your mind?" rows="1" onkeydown="handleKeyDown(event)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">&#9654;</button>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- JAVASCRIPT                                    -->
+  <!-- ════════════════════════════════════════════ -->
+  <script>
+    // ─── Configuration ───
+    const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
+    const CHAT_ENDPOINT = `${SUPABASE_URL}/functions/v1/chat`;
+    const CONSENT_VERSION = '1.0';
+
+    // ─── Initialize Supabase Client ───
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ─── State ───
+    let currentUser = null;
+    let currentSession = null;
+    let conversationMessages = [];
+    let sessionId = crypto.randomUUID();
+
+    // ─── System Prompt ───
+    const SYSTEM_PROMPT = `You are the Inner Leadership AI Coach from The Evolved Caveman, created by Dr. John Schinnerer (Ph.D., UC Berkeley). You help men build self-awareness, emotional intelligence, and stronger communication skills using the Inner Board Meeting model.
+
+Your voice: Warm, direct, slightly irreverent, grounded in science but conversational. Think — the user's smartest friend who has a PhD and won't let them off the hook.
+
+The Inner Board Meeting model:
+- CEO — Grounded, values-driven decision maker
+- Director of Defense — Protects through anger, control, or withdrawal
+- VP of Emotions — Carries vulnerability, needs, and relational signals
+
+Your four coaching pillars:
+1. Stress, Burnout & Overload
+2. Anger, Irritability & Reactivity
+3. Relationships & Communication
+4. Identity, Meaning & Midlife
+
+Response structure:
+1. Name the pattern or tension
+2. Ask ONE sharp coaching question
+3. Offer one practical reframe
+4. Suggest one concrete next step
+
+HARD RULES:
+- Never diagnose conditions or recommend medications
+- Never position yourself as a therapist, psychologist, or crisis service
+- If someone expresses suicidal ideation or immediate danger, provide crisis resources (988 Lifeline, Crisis Text Line 741741, 911) and encourage professional support
+- Use coaching language: pattern, operating strategy, default response, self-command, awareness, accountability
+- Keep responses concise and actionable — no lectures
+
+You are an educational coaching tool, not therapy or medical care.`;
+
+
+    // ═══════════════════════════════════════════
+    // AUTH SCREEN LOGIC
+    // ═══════════════════════════════════════════
+
+    function showLogin() {
+      document.getElementById('login-form').style.display = 'block';
+      document.getElementById('reset-form').style.display = 'none';
+      clearErrors();
     }
-  } catch (err) {
-    showGateError('Something went wrong. Please try again.');
-    btn.disabled = false;
-    btn.textContent = 'Access My Coach';
-    console.error(err);
-  }
-}
-function showGateError(msg) {
-  var el = document.getElementById('gateError');
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-document.getElementById('gateEmail').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') checkConsent();
-});
-/* Session init */
-async function initSession() {
-  sessionStart = new Date().toISOString();
-  try {
-    var res = await fetch(SUPABASE_URL + '/rest/v1/session_logs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify({
-        user_id: userEmail,
-        session_start: sessionStart,
-        message_count: 0,
-        crisis_flag_triggered: false,
-        crisis_response_shown: false
-      })
-    });
-    var data = await res.json();
-    if (data && data[0]) sessionId = data[0].id;
-  } catch (err) {
-    console.error('Session log error:', err);
-  }
-  getAIResponse(null, true);
-}
-/* Crisis detection */
-function detectCrisis(text) {
-  var lower = text.toLowerCase();
-  return CRISIS_KEYWORDS.some(function(kw) { return lower.includes(kw); });
-}
-async function logCrisisEvent(triggerCategory) {
-  var resources = '988 Suicide & Crisis Lifeline (call or text 988), Emergency services (911)';
-  try {
-    await fetch(SUPABASE_URL + '/rest/v1/crisis_events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        user_id: userEmail,
-        session_id: sessionId,
-        triggered_at: new Date().toISOString(),
-        trigger_phrase_category: triggerCategory,
-        resources_displayed: resources,
-        user_acknowledged: false
-      })
-    });
-  } catch (err) {
-    console.error('Crisis log error:', err);
-  }
-}
-function showCrisisBanner() {
-  document.getElementById('crisisBanner').style.display = 'block';
-}
-/* Session update */
-async function updateSessionLog() {
-  if (!sessionId) return;
-  try {
-    await fetch(SUPABASE_URL + '/rest/v1/session_logs?id=eq.' + sessionId, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        message_count: messageCount,
-        session_end: new Date().toISOString(),
-        crisis_flag_triggered: crisisTriggered,
-        crisis_response_shown: crisisTriggered
-      })
-    });
-  } catch (err) {
-    console.error('Session update error:', err);
-  }
-}
-/* Chat UI */
-function addMessage(role, text) {
-  var chatWindow = document.getElementById('chatWindow');
-  var wrapper = document.createElement('div');
-  wrapper.className = 'message ' + role;
-  var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  var initials = role === 'user'
-    ? (userEmail ? userEmail[0].toUpperCase() : 'U')
-    : '\uD83E\uDDE0';
-  wrapper.innerHTML = '<div class="msg-avatar">' + initials + '</div>' +
-    '<div>' +
-    '<div class="msg-bubble">' + formatText(text) + '</div>' +
-    '<div class="msg-time">' + now + '</div>' +
-    '</div>';
-  chatWindow.appendChild(wrapper);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
-function formatText(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/\n/g, '<br>');
-}
-function showTyping() {
-  var chatWindow = document.getElementById('chatWindow');
-  var typing = document.createElement('div');
-  typing.className = 'message ai';
-  typing.id = 'typingIndicator';
-  typing.innerHTML = '<div class="msg-avatar">\uD83E\uDDE0</div>' +
-    '<div class="typing-indicator">' +
-    '<div class="typing-dot"></div>' +
-    '<div class="typing-dot"></div>' +
-    '<div class="typing-dot"></div>' +
-    '</div>';
-  chatWindow.appendChild(typing);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
-function removeTyping() {
-  var el = document.getElementById('typingIndicator');
-  if (el) el.remove();
-}
-/* Send message */
-async function sendMessage() {
-  var input = document.getElementById('userInput');
-  var text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  input.style.height = 'auto';
-  document.getElementById('sendBtn').disabled = true;
-  if (detectCrisis(text)) {
-    crisisTriggered = true;
-    showCrisisBanner();
-    await logCrisisEvent('user-message');
-    await updateSessionLog();
-  }
-  addMessage('user', text);
-  conversationHistory.push({ role: 'user', content: text });
-  messageCount++;
-  getAIResponse(text);
-  document.getElementById('sendBtn').disabled = false;
-}
-/* Claude API call */
-function getAIResponse(userText, isOpening) {
-  if (isOpening === undefined) isOpening = false;
-  showTyping();
-  var messages = isOpening
-    ? [{ role: 'user', content: 'Begin the coaching session with your opening check-in.' }]
-    : trimForAPI(conversationHistory);
-  try {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', PROXY_URL, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-      removeTyping();
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          var data = JSON.parse(xhr.responseText);
-          if (data.content && data.content[0]) {
-            var aiText = data.content[0].text;
-            if (detectCrisis(aiText)) {
-              crisisTriggered = true;
-              showCrisisBanner();
-              logCrisisEvent('ai-response');
-            }
-            addMessage('ai', aiText);
-            if (!isOpening) {
-              conversationHistory.push({ role: 'assistant', content: aiText });
-              messageCount++;
-              updateSessionLog();
-            } else {
-              conversationHistory = [
-                { role: 'user', content: 'Begin the coaching session with your opening check-in.' },
-                { role: 'assistant', content: aiText }
-              ];
-            }
-          } else {
-            addMessage('ai', 'Something went wrong on my end. Please refresh and try again.');
-          }
-        } catch(e) {
-          addMessage('ai', 'Something went wrong parsing the response. Please refresh and try again.');
-          console.error(e);
-        }
+
+    function showReset() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('reset-form').style.display = 'block';
+      clearErrors();
+    }
+
+    function clearErrors() {
+      document.getElementById('login-error').textContent = '';
+      document.getElementById('reset-error').textContent = '';
+      document.getElementById('reset-success').textContent = '';
+    }
+
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      if (loading) {
+        btn.disabled = true;
+        btn._originalText = btn.textContent;
+        btn.innerHTML = '<span class="spinner"></span> Please wait...';
       } else {
-        console.error('API error:', xhr.status, xhr.responseText);
-        addMessage('ai', 'API error ' + xhr.status + '. Please refresh and try again.');
+        btn.disabled = false;
+        btn.textContent = btn._originalText || 'Submit';
       }
-      document.getElementById('sendBtn').disabled = false;
-    };
-    xhr.onerror = function() {
-      removeTyping();
-      console.error('Network error calling Anthropic API');
-      addMessage('ai', 'Network error. Please check your connection and try again.');
-      document.getElementById('sendBtn').disabled = false;
-    };
-    xhr.send(JSON.stringify({
-      system: SYSTEM_PROMPT,
-      messages: messages,
-      session_id: sessionId
-    }));
-    return;
-  } catch (err) {
-    removeTyping();
-    addMessage('ai', 'I had trouble connecting. Please check your connection and try again.');
-    console.error(err);
-  }
-}
-/* Input helpers */
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-window.addEventListener('beforeunload', function() { updateSessionLog(); });
-</script>
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+      errorEl.textContent = '';
+
+      if (!email || !password) {
+        errorEl.textContent = 'Please enter your email and password.';
+        return;
+      }
+
+      setLoading('login-btn', true);
+
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+      setLoading('login-btn', false);
+
+      if (error) {
+        errorEl.textContent = error.message === 'Invalid login credentials'
+          ? 'Invalid email or password. Please try again.'
+          : error.message;
+        return;
+      }
+
+      currentUser = data.user;
+      currentSession = data.session;
+      await checkConsentAndProceed();
+    }
+
+    async function handleReset() {
+      const email = document.getElementById('reset-email').value.trim();
+      const errorEl = document.getElementById('reset-error');
+      const successEl = document.getElementById('reset-success');
+      errorEl.textContent = '';
+      successEl.textContent = '';
+
+      if (!email) {
+        errorEl.textContent = 'Please enter your email.';
+        return;
+      }
+
+      setLoading('reset-btn', true);
+
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+      });
+
+      setLoading('reset-btn', false);
+
+      if (error) {
+        errorEl.textContent = error.message;
+        return;
+      }
+
+      successEl.textContent = 'If that email exists in our system, you\'ll receive a reset link shortly.';
+    }
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+      currentUser = null;
+      currentSession = null;
+      conversationMessages = [];
+      sessionId = crypto.randomUUID();
+      document.getElementById('chat-messages').innerHTML = '';
+      showScreen('auth-screen');
+    }
+
+
+    // ═══════════════════════════════════════════
+    // CONSENT SCREEN LOGIC
+    // ═══════════════════════════════════════════
+
+    // Enable/disable consent button based on checkbox
+    document.getElementById('consent-checkbox').addEventListener('change', function() {
+      document.getElementById('consent-btn').disabled = !this.checked;
+    });
+
+    async function checkConsentAndProceed() {
+      // Check if user already consented
+      const { data: profile, error } = await sb.from('profiles')
+        .select('disclaimer_accepted, consent_version')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (error) {
+        console.error('Profile fetch error:', error);
+        // Profile might not exist yet (trigger may be async) — show consent
+        showScreen('consent-screen');
+        return;
+      }
+
+      if (profile.disclaimer_accepted && profile.consent_version === CONSENT_VERSION) {
+        // Already consented — go straight to chat
+        enterChat();
+      } else {
+        // Need consent
+        showScreen('consent-screen');
+      }
+    }
+
+    async function handleConsent() {
+      if (!document.getElementById('consent-checkbox').checked) return;
+
+      setLoading('consent-btn', true);
+
+      // Update profile with consent
+      const { error } = await sb.from('profiles')
+        .update({
+          disclaimer_accepted: true,
+          disclaimer_accepted_at: new Date().toISOString(),
+          consent_version: CONSENT_VERSION,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', currentUser.id);
+
+      setLoading('consent-btn', false);
+
+      if (error) {
+        console.error('Consent update error:', error);
+        // Try insert in case profile doesn't exist yet
+        const { error: insertError } = await sb.from('profiles')
+          .insert({
+            id: currentUser.id,
+            email: currentUser.email,
+            disclaimer_accepted: true,
+            disclaimer_accepted_at: new Date().toISOString(),
+            consent_version: CONSENT_VERSION
+          });
+
+        if (insertError) {
+          console.error('Consent insert error:', insertError);
+          alert('Something went wrong saving your consent. Please try again.');
+          return;
+        }
+      }
+
+      enterChat();
+    }
+
+
+    // ═══════════════════════════════════════════
+    // CHAT SCREEN LOGIC
+    // ═══════════════════════════════════════════
+
+    function enterChat() {
+      document.getElementById('user-email-display').textContent = currentUser.email;
+      showScreen('chat-screen');
+      addMessage('system', 'Welcome to the Inner Leadership AI Coach. Everything here is confidential and educational — not therapy or medical advice.');
+      document.getElementById('user-input').focus();
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function addMessage(role, text) {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = `message ${role}`;
+      div.textContent = text;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping(show) {
+      const el = document.getElementById('typing-indicator');
+      el.style.display = show ? 'block' : 'none';
+      if (show) {
+        const container = document.getElementById('chat-messages');
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    // Auto-resize textarea
+    document.getElementById('user-input').addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Add user message to UI
+      addMessage('user', text);
+      input.value = '';
+      input.style.height = 'auto';
+
+      // Add to conversation history
+      conversationMessages.push({ role: 'user', content: text });
+
+      // Disable input while waiting
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+      showTyping(true);
+
+      try {
+        // Get fresh session token
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session?.access_token;
+
+        const res = await fetch(CHAT_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            system: SYSTEM_PROMPT,
+            messages: conversationMessages,
+            session_id: sessionId,
+            user_id: currentUser?.id || null
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          throw new Error(data.error.message || 'Something went wrong');
+        }
+
+        const reply = data.content?.[0]?.text || 'I wasn\'t able to generate a response. Please try again.';
+
+        conversationMessages.push({ role: 'assistant', content: reply });
+        showTyping(false);
+        addMessage('assistant', reply);
+
+      } catch (err) {
+        console.error('Chat error:', err);
+        showTyping(false);
+        addMessage('system', 'Something went wrong. Please try again.');
+      }
+
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+
+    // ═══════════════════════════════════════════
+    // SESSION RESTORE ON PAGE LOAD
+    // ═══════════════════════════════════════════
+
+    async function init() {
+      // Check for existing session
+      const { data: { session }, error } = await sb.auth.getSession();
+
+      if (session?.user) {
+        currentUser = session.user;
+        currentSession = session;
+        await checkConsentAndProceed();
+      } else {
+        showScreen('auth-screen');
+      }
+
+      // Listen for auth state changes (handles email confirmation redirects, password resets)
+      sb.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          currentUser = session.user;
+          currentSession = session;
+          await checkConsentAndProceed();
+        }
+        if (event === 'PASSWORD_RECOVERY') {
+          // User clicked a password reset link — show a prompt to set new password
+          const newPassword = prompt('Enter your new password (at least 6 characters):');
+          if (newPassword && newPassword.length >= 6) {
+            const { error } = await sb.auth.updateUser({ password: newPassword });
+            if (error) {
+              alert('Error updating password: ' + error.message);
+            } else {
+              alert('Password updated successfully! You are now logged in.');
+            }
+          }
+        }
+      });
+    }
+
+    // Allow Enter key on login inputs
+    document.querySelectorAll('#login-email, #login-password').forEach(el => {
+      el.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+    });
+    document.getElementById('reset-email').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleReset();
+    });
+
+    // Boot
+    init();
+  </script>
 </body>
 </html>
