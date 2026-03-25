@@ -711,7 +711,7 @@ You are an educational coaching tool, not therapy or medical care.`;
       setLoading('reset-btn', true);
 
       const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href
+        redirectTo: 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html'
       });
 
       setLoading('reset-btn', false);
