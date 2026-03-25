@@ -928,26 +928,15 @@ You are an educational coaching tool, not therapy or medical care.`;
     // ═══════════════════════════════════════════
 
     async function init() {
-      // Check for existing session
-      const { data: { session }, error } = await sb.auth.getSession();
+      // Detect if this is a password recovery redirect (URL contains type=recovery)
+      const isRecoveryRedirect = window.location.hash.includes('type=recovery');
+      let recoveryHandled = false;
 
-      if (session?.user) {
-        currentUser = session.user;
-        currentSession = session;
-        await checkConsentAndProceed();
-      } else {
-        showScreen('auth-screen');
-      }
-
-      // Listen for auth state changes (handles email confirmation redirects, password resets)
+      // Listen for auth state changes FIRST (before getSession)
       sb.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          currentUser = session.user;
-          currentSession = session;
-          await checkConsentAndProceed();
-        }
         if (event === 'PASSWORD_RECOVERY') {
           // User clicked a password reset link — show a prompt to set new password
+          recoveryHandled = true;
           const newPassword = prompt('Enter your new password (at least 6 characters):');
           if (newPassword && newPassword.length >= 6) {
             const { error } = await sb.auth.updateUser({ password: newPassword });
@@ -955,10 +944,37 @@ You are an educational coaching tool, not therapy or medical care.`;
               alert('Error updating password: ' + error.message);
             } else {
               alert('Password updated successfully! You are now logged in.');
+              // Now proceed to consent/chat after password is set
+              currentUser = session.user;
+              currentSession = session;
+              // Clear the hash so future reloads don't re-trigger recovery
+              window.location.hash = '';
+              await checkConsentAndProceed();
             }
+          } else {
+            // User cancelled or entered too-short password — go to login
+            showScreen('auth-screen');
           }
+          return;
+        }
+        if (event === 'SIGNED_IN' && session?.user && !isRecoveryRedirect && !recoveryHandled) {
+          currentUser = session.user;
+          currentSession = session;
+          await checkConsentAndProceed();
         }
       });
+
+      // Check for existing session (but skip normal flow if this is a recovery redirect)
+      if (!isRecoveryRedirect) {
+        const { data: { session }, error } = await sb.auth.getSession();
+        if (session?.user) {
+          currentUser = session.user;
+          currentSession = session;
+          await checkConsentAndProceed();
+        } else {
+          showScreen('auth-screen');
+        }
+      }
     }
 
     // Allow Enter key on login inputs
