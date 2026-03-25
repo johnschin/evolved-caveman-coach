@@ -673,6 +673,7 @@ You are an educational coaching tool, not therapy or medical care.`;
       }
 
       setLoading('login-btn', true);
+      loginInProgress = true;
 
       try {
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
@@ -680,6 +681,7 @@ You are an educational coaching tool, not therapy or medical care.`;
         setLoading('login-btn', false);
 
         if (error) {
+          loginInProgress = false;
           errorEl.textContent = error.message === 'Invalid login credentials'
             ? 'Invalid email or password. Please try again.'
             : error.message;
@@ -689,7 +691,9 @@ You are an educational coaching tool, not therapy or medical care.`;
         currentUser = data.user;
         currentSession = data.session;
         await checkConsentAndProceed();
+        loginInProgress = false;
       } catch (err) {
+        loginInProgress = false;
         setLoading('login-btn', false);
         errorEl.textContent = 'Login failed: ' + (err.message || 'Unknown error. Check console.');
         console.error('Login error:', err);
@@ -930,53 +934,62 @@ You are an educational coaching tool, not therapy or medical care.`;
     // SESSION RESTORE ON PAGE LOAD
     // ═══════════════════════════════════════════
 
+    // Track whether login is being handled by handleLogin() to avoid conflicts
+    let loginInProgress = false;
+
     async function init() {
       // Detect if this is a password recovery redirect (URL contains type=recovery)
       const isRecoveryRedirect = window.location.hash.includes('type=recovery');
-      let recoveryHandled = false;
 
-      // Listen for auth state changes FIRST (before getSession)
+      // Listen for auth state changes — only handles recovery and session restore
       sb.auth.onAuthStateChange(async (event, session) => {
+        console.log('Auth event:', event);
+
         if (event === 'PASSWORD_RECOVERY') {
-          // User clicked a password reset link — show a prompt to set new password
-          recoveryHandled = true;
+          // User clicked a password reset link — prompt for new password
           const newPassword = prompt('Enter your new password (at least 6 characters):');
           if (newPassword && newPassword.length >= 6) {
             const { error } = await sb.auth.updateUser({ password: newPassword });
             if (error) {
               alert('Error updating password: ' + error.message);
+              showScreen('auth-screen');
             } else {
               alert('Password updated successfully! You are now logged in.');
-              // Now proceed to consent/chat after password is set
               currentUser = session.user;
               currentSession = session;
               // Clear the hash so future reloads don't re-trigger recovery
-              window.location.hash = '';
+              history.replaceState(null, '', window.location.pathname);
               await checkConsentAndProceed();
             }
           } else {
             // User cancelled or entered too-short password — go to login
+            await sb.auth.signOut();
             showScreen('auth-screen');
           }
           return;
         }
-        if (event === 'SIGNED_IN' && session?.user && !isRecoveryRedirect && !recoveryHandled) {
-          currentUser = session.user;
-          currentSession = session;
-          await checkConsentAndProceed();
+
+        // Ignore SIGNED_IN if handleLogin() is already handling the flow
+        // This prevents double-processing
+        if (event === 'SIGNED_IN' && loginInProgress) {
+          return;
         }
       });
 
-      // Check for existing session (but skip normal flow if this is a recovery redirect)
-      if (!isRecoveryRedirect) {
-        const { data: { session }, error } = await sb.auth.getSession();
-        if (session?.user) {
-          currentUser = session.user;
-          currentSession = session;
-          await checkConsentAndProceed();
-        } else {
-          showScreen('auth-screen');
-        }
+      // If this is a recovery redirect, let onAuthStateChange handle everything
+      if (isRecoveryRedirect) {
+        console.log('Recovery redirect detected — waiting for PASSWORD_RECOVERY event');
+        return;
+      }
+
+      // Normal page load — check for existing session
+      const { data: { session }, error } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        currentSession = session;
+        await checkConsentAndProceed();
+      } else {
+        showScreen('auth-screen');
       }
     }
 
