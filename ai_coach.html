@@ -820,7 +820,10 @@ You are an educational coaching tool, not therapy or medical care.`;
     // CHAT SCREEN LOGIC
     // ═══════════════════════════════════════════
 
+    let chatEntered = false;
     function enterChat() {
+      if (chatEntered) return; // Prevent duplicate entry
+      chatEntered = true;
       document.getElementById('user-email-display').textContent = currentUser.email;
       showScreen('chat-screen');
       addMessage('system', 'Welcome to the Inner Leadership AI Coach. Everything here is confidential and educational — not therapy or medical advice.');
