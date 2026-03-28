@@ -1,1223 +1,1120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Evolved Caveman — Inner Leadership AI Coach</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <style>
-    /* ─── Reset & Base ─── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --aqua: #a3d0c9;
-      --charcoal: #202023;
-      --off-white: #eeeeee;
-      --dark-bg: #1a1a1d;
-      --card-bg: #2a2a2d;
-      --input-bg: #333338;
-      --border: #444448;
-      --error: #e74c3c;
-      --success: #2ecc71;
-    }
-    body {
-      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
-      background: var(--dark-bg);
-      color: var(--off-white);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    /* ─── Fonts ─── */
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap');
-    /* ─── Shared Layout ─── */
-    .screen {
-      display: none;
-      width: 100%;
-      max-width: 480px;
-      padding: 2rem;
-      animation: fadeIn 0.3s ease;
-    }
-    .screen.active { display: flex; flex-direction: column; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .brand-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .brand-header h1 {
-      font-family: 'Manrope', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--aqua);
-      margin-bottom: 0.25rem;
-    }
-    .brand-header h2 {
-      font-size: 1.5rem;
-      font-weight: 300;
-      color: var(--off-white);
-    }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-    }
-    /* ─── Form Elements ─── */
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--aqua);
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.03em;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--off-white);
-      font-size: 1rem;
-      font-family: inherit;
-      transition: border-color 0.2s;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--aqua);
-    }
-    .form-group input::placeholder { color: #777; }
-    .btn {
-      width: 100%;
-      padding: 0.85rem;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
-    }
-    .btn-primary {
-      background: var(--aqua);
-      color: var(--charcoal);
-    }
-    .btn-primary:hover { background: #8ec4bb; }
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--aqua);
-      border: 1px solid var(--aqua);
-      margin-top: 0.75rem;
-    }
-    .btn-secondary:hover { background: rgba(163, 208, 201, 0.1); }
-    .btn-text {
-      background: none;
-      border: none;
-      color: var(--aqua);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.9rem;
-      padding: 0.5rem 0;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .error-msg {
-      color: var(--error);
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      min-height: 1.2em;
-    }
-    .toggle-text {
-      text-align: center;
-      margin-top: 1.25rem;
-      font-size: 0.9rem;
-      color: #999;
-    }
-    .toggle-text button { font-size: 0.9rem; }
-    /* ─── Consent Screen ─── */
-    .consent-text {
-      max-height: 320px;
-      overflow-y: auto;
-      padding: 1.25rem;
-      background: var(--input-bg);
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      color: #ccc;
-    }
-    .consent-text h3 {
-      color: var(--aqua);
-      font-size: 1rem;
-      margin: 1rem 0 0.5rem 0;
-    }
-    .consent-text h3:first-child { margin-top: 0; }
-    .consent-text ul {
-      padding-left: 1.25rem;
-      margin: 0.5rem 0;
-    }
-    .consent-text li { margin-bottom: 0.3rem; }
-    .consent-check {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-    .consent-check input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-      accent-color: var(--aqua);
-      flex-shrink: 0;
-    }
-    .consent-check label {
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: #ccc;
-      cursor: pointer;
-    }
-    /* ─── Chat Screen ─── */
-    #chat-screen {
-      max-width: 720px;
-      height: 100vh;
-      padding: 0;
-      justify-content: space-between;
-    }
-    .chat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--card-bg);
-    }
-    .chat-header h1 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--aqua);
-    }
-    .chat-header .user-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .chat-header .user-email {
-      font-size: 0.8rem;
-      color: #999;
-    }
-    .chat-header .logout-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: #999;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .chat-header .logout-btn:hover {
-      border-color: var(--aqua);
-      color: var(--aqua);
-    }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .message {
-      max-width: 85%;
-      padding: 0.9rem 1.15rem;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      line-height: 1.55;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-    }
-    .message.user {
-      align-self: flex-end;
-      background: var(--aqua);
-      color: var(--charcoal);
-      border-bottom-right-radius: 4px;
-    }
-    .message.assistant {
-      align-self: flex-start;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-    }
-    .message.system {
-      align-self: center;
-      text-align: center;
-      font-size: 0.85rem;
-      color: #888;
-      background: none;
-      padding: 0.5rem;
-    }
-    .typing-indicator {
-      align-self: flex-start;
-      padding: 0.9rem 1.15rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      border-bottom-left-radius: 4px;
-      display: none;
-    }
-    .typing-indicator span {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--aqua);
-      border-radius: 50%;
-      margin: 0 2px;
-      animation: bounce 1.4s infinite;
-    }
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-6px); }
-    }
-    .chat-input-area {
-      display: flex;
-      gap: 0.75rem;
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-      background: var(--card-bg);
-    }
-    .chat-input-area textarea {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--off-white);
-      font-size: 0.95rem;
-      font-family: inherit;
-      resize: none;
-      min-height: 44px;
-      max-height: 120px;
-      line-height: 1.4;
-    }
-    .chat-input-area textarea:focus {
-      outline: none;
-      border-color: var(--aqua);
-    }
-    .chat-input-area textarea::placeholder { color: #777; }
-    .send-btn {
-      padding: 0 1.25rem;
-      background: var(--aqua);
-      color: var(--charcoal);
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-    }
-    .send-btn:hover { background: #8ec4bb; }
-    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    /* ─── Loading Spinner ─── */
-    .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--charcoal);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      margin-right: 0.5rem;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    /* ─── Responsive ─── */
-    @media (max-width: 520px) {
-      .screen { padding: 1.25rem; }
-      .card { padding: 1.5rem; }
-      #chat-screen { padding: 0; }
-      .chat-messages { padding: 1rem; }
-      .chat-input-area { padding: 0.75rem 1rem; }
-      .message { max-width: 90%; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inner Leadership AI Coach — The Evolved Caveman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --aqua: #a3d0c9;
+    --charcoal: #202023;
+    --charcoal-light: #2a2a2e;
+    --charcoal-lighter: #35353a;
+    --off-white: #eeeeee;
+    --muted: #999;
+    --error: #e74c3c;
+    --success: #27ae60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--charcoal);
+    color: var(--off-white);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* --- HEADER --- */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--charcoal-light);
+    border-bottom: 1px solid var(--charcoal-lighter);
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--aqua);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-small {
+    background: transparent;
+    border: 1px solid var(--charcoal-lighter);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-small:hover {
+    border-color: var(--aqua);
+    color: var(--aqua);
+  }
+
+  /* --- AUTH SCREEN --- */
+  .auth-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 20px;
+  }
+
+  .auth-box {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .auth-box h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--aqua);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .auth-box .tagline {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 8px;
+    color: var(--off-white);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus {
+    border-color: var(--aqua);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: var(--aqua);
+    color: var(--charcoal);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+
+  .auth-link {
+    font-size: 12px;
+    color: var(--aqua);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: underline;
+  }
+
+  .auth-message {
+    font-size: 13px;
+    text-align: center;
+    margin-top: 12px;
+    min-height: 20px;
+  }
+
+  .auth-message.error { color: var(--error); }
+  .auth-message.success { color: var(--success); }
+
+  /* --- CHAT AREA --- */
+  .chat-container {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .chat-container.active {
+    display: flex;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scroll-behavior: smooth;
+  }
+
+  .message {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .message.user {
+    flex-direction: row-reverse;
+  }
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .message.assistant .message-avatar {
+    background: var(--aqua);
+    color: var(--charcoal);
+  }
+
+  .message.user .message-avatar {
+    background: var(--charcoal-lighter);
+    color: var(--muted);
+  }
+
+  .message-bubble {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 75%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .message.assistant .message-bubble {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-top-left-radius: 4px;
+  }
+
+  .message.user .message-bubble {
+    background: var(--aqua);
+    color: var(--charcoal);
+    border-top-right-radius: 4px;
+  }
+
+  .typing-indicator {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto 16px;
+    padding: 0 20px;
+  }
+
+  .typing-indicator.active { display: flex; }
+
+  .typing-indicator .dots {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    margin-left: 42px;
+  }
+
+  .typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--aqua);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite;
+    opacity: 0.4;
+  }
+
+  .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* --- INPUT AREA --- */
+  .input-area {
+    padding: 12px 20px 20px;
+    border-top: 1px solid var(--charcoal-lighter);
+    flex-shrink: 0;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: flex-end;
+  }
+
+  .input-row textarea {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    color: var(--off-white);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    max-height: 120px;
+    min-height: 44px;
+    transition: border-color 0.2s;
+  }
+
+  .input-row textarea:focus {
+    border-color: var(--aqua);
+  }
+
+  .send-btn {
+    background: var(--aqua);
+    color: var(--charcoal);
+    border: none;
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .send-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .disclaimer-bar {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 600px) {
+    .message-bubble { max-width: 88%; font-size: 13px; }
+    .auth-box { padding: 24px 20px; }
+    .header-title { font-size: 13px; }
+  }
+</style>
 </head>
 <body>
-  <!-- AUTH SCREEN (keep exactly as-is) -->
-  <div id="auth-screen" class="screen active">
-    <div class="brand-header">
-      <h1>The Evolved Caveman</h1>
-      <h2>Inner Leadership AI Coach</h2>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-box">
+    <h2>Inner Leadership AI Coach</h2>
+    <p class="tagline">The Evolved Caveman</p>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" autocomplete="email" placeholder="you@email.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Your password">
+      </div>
+      <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Sign In</button>
+      <div class="auth-links">
+        <button class="auth-link" onclick="showView('signup')">Create account</button>
+        <button class="auth-link" onclick="showView('forgot')">Forgot password?</button>
+      </div>
+      <div id="loginMessage" class="auth-message"></div>
     </div>
-    <div class="card">
-      <p style="font-size:0.9rem; color:#999; text-align:center; margin-bottom:1.5rem;">Access is by invitation only. Log in with the credentials provided to you.</p>
-      <div id="login-form">
-        <div class="form-group">
-          <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" />
-        </div>
-        <div class="form-group">
-          <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" />
-        </div>
-        <div class="error-msg" id="login-error"></div>
-        <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Log In</button>
-        <div style="text-align:center; margin-top: 0.75rem;">
-          <button class="btn-text" onclick="showReset()" style="font-size:0.8rem; color:#888;">Forgot password?</button>
-        </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" style="display:none;">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" autocomplete="email" placeholder="you@email.com">
       </div>
-      <div id="reset-form" style="display:none;">
-        <p style="font-size:0.9rem; color:#ccc; margin-bottom:1.25rem;">Enter your email and we'll send you a link to reset your password.</p>
-        <div class="form-group">
-          <label for="reset-email">Email</label>
-          <input type="email" id="reset-email" placeholder="your@email.com" autocomplete="email" />
-        </div>
-        <div class="error-msg" id="reset-error"></div>
-        <div id="reset-success" style="color:var(--success); font-size:0.85rem; margin-top:0.5rem; min-height:1.2em;"></div>
-        <button class="btn btn-primary" id="reset-btn" onclick="handleReset()">Send Reset Link</button>
-        <div class="toggle-text">
-          <button class="btn-text" onclick="showLogin()">Back to login</button>
-        </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" autocomplete="new-password" placeholder="Min 6 characters">
       </div>
+      <button class="btn-primary" id="signupBtn" onclick="handleSignup()">Create Account</button>
+      <div class="auth-links">
+        <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+      </div>
+      <div id="signupMessage" class="auth-message"></div>
+    </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div id="forgotForm" style="display:none;">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="forgotEmail" autocomplete="email" placeholder="you@email.com">
+      </div>
+      <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Link</button>
+      <div class="auth-links">
+        <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+      </div>
+      <div id="forgotMessage" class="auth-message"></div>
+    </div>
+
+    <!-- RESET PASSWORD FORM -->
+    <div id="resetForm" style="display:none;">
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="resetPassword" autocomplete="new-password" placeholder="Min 6 characters">
+      </div>
+      <button class="btn-primary" onclick="handleResetPassword()">Set New Password</button>
+      <div id="resetMessage" class="auth-message"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT SCREEN -->
+<div id="chatScreen" class="chat-container">
+  <div class="header">
+    <div>
+      <div class="header-title">Inner Leadership AI Coach</div>
+      <div class="header-subtitle">The Evolved Caveman</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-small" onclick="startNewSession()">New Session</button>
+      <button class="btn-small" onclick="handleLogout()">Sign Out</button>
     </div>
   </div>
 
-  <!-- CONSENT SCREEN (keep exactly as-is) -->
-  <div id="consent-screen" class="screen" style="max-width:720px;">
-    <div class="brand-header">
-      <h1>The Evolved Caveman</h1>
-      <h2>Mandatory User Agreement</h2>
-      <p style="font-size:0.8rem; color:#888; margin-top:0.5rem;">Version 1.0 &middot; Effective March 7, 2026</p>
-    </div>
-    <div class="card" style="padding:1.5rem;">
-      <div style="background:var(--input-bg); border-left:3px solid var(--aqua); padding:12px 16px; margin-bottom:1.5rem; font-size:0.85rem; line-height:1.6; color:#ccc;">
-        <strong style="color:var(--aqua);">Required reading.</strong> You must read this agreement in full before using this system. Use of this system constitutes acknowledgment and agreement to all terms below.
-      </div>
-      <div class="consent-text" style="max-height:400px;">
-        <h3>Section 01 — Nature of This System</h3>
-        <p>The Evolved Caveman Inner Leadership AI is an <strong>artificial intelligence system</strong> — not a human being, licensed professional, or care provider. It is an educational and informational tool designed to deliver structured leadership frameworks related to emotional awareness, communication skills, anger management education, and self-regulation training.</p>
-        <p><strong>This system is not healthcare.</strong></p>
-        <p><strong>This system is not psychotherapy.</strong></p>
-        <p><strong>This system is not counseling.</strong></p>
-        <p><strong>This system is not medical or psychiatric treatment.</strong></p>
-        <p>No provider–patient relationship, therapist–client relationship, or fiduciary relationship is created by your use of this system.</p>
-        <h3>Section 02 — No Diagnosis, Treatment, or Medical Advice</h3>
-        <p>The Evolved Caveman Inner Leadership AI:</p>
-        <ul>
-          <li>Does not diagnose medical or mental health conditions</li>
-          <li>Does not assess for clinical disorders</li>
-          <li>Does not determine whether you have depression, anxiety, PTSD, or any other condition</li>
-          <li>Does not provide medical advice</li>
-          <li>Does not provide medication recommendations</li>
-          <li>Does not interpret symptoms for clinical purposes</li>
-        </ul>
-        <p>Any health-related concerns must be directed to a licensed physician, psychiatrist, psychologist, or other qualified healthcare professional. You agree not to rely on this system for medical, psychiatric, or therapeutic decision-making.</p>
-        <h3>Section 03 — Not a Crisis Service</h3>
-        <p>This system is not designed or equipped to manage crisis situations.</p>
-        <div style="background:rgba(192,57,43,0.1); border:1px solid rgba(192,57,43,0.25); border-left:3px solid #c0392b; padding:12px 16px; margin:12px 0;">
-          <p style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:#c0392b; font-weight:700; margin-bottom:6px;">If you are experiencing any of the following, stop and seek help immediately:</p>
-          <ul>
-            <li>Thoughts of suicide or self-harm</li>
-            <li>Thoughts of harming another person</li>
-            <li>Immediate emotional or physical danger</li>
-            <li>Inability to ensure your own safety or the safety of others</li>
-          </ul>
-        </div>
-        <p>You must immediately contact:</p>
-        <ul>
-          <li>Emergency services in your jurisdiction (<strong>911</strong> in the US)</li>
-          <li>The <strong>988 Suicide & Crisis Lifeline</strong> — call or text <strong>988</strong></li>
-          <li>A licensed crisis professional</li>
-          <li>A local equivalent crisis service in your country</li>
-        </ul>
-        <p>You acknowledge that this system cannot provide real-time intervention or emergency response.</p>
-        <h3>Section 04 — Assumption of Personal Responsibility</h3>
-        <p>By using this system, you acknowledge and agree that:</p>
-        <ul>
-          <li>You are solely responsible for your actions, decisions, and behaviors</li>
-          <li>You are responsible for how you interpret and apply any information provided</li>
-          <li>You will exercise independent judgment when implementing any strategies discussed</li>
-          <li>You will seek qualified professional assistance when appropriate</li>
-        </ul>
-        <p>All application of information is undertaken at your own discretion and risk.</p>
-        <h3>Section 05 — Limitation of Scope</h3>
-        <p>This system utilizes structured educational models including the Inner Board Meeting framework, emotional regulation techniques, parts-based self-leadership education, and communication skill development tools. These models are presented for educational and leadership development purposes only and do not constitute clinical treatment.</p>
-        <h3>Section 06 — Data & Session Logging</h3>
-        <ul>
-          <li>Session activity is logged for safety, compliance, and service improvement purposes</li>
-          <li>In the event crisis-related language is detected, that interaction is automatically flagged and logged</li>
-          <li>No personally identifying information is sold or shared with third parties</li>
-          <li>You may request deletion of your data by contacting: Info [at] GuideToSelf.com</li>
-        </ul>
-        <p>This system complies with applicable California Consumer Privacy Act (CCPA) requirements.</p>
-        <h3>Section 07 — No Warranty</h3>
-        <p>This system makes no guarantees regarding outcomes, results, emotional improvement, or behavioral change. All content is provided as-is for educational purposes only.</p>
-      </div>
-      <div class="consent-check">
-        <input type="checkbox" id="consent-check-1" />
-        <label for="consent-check-1">I have read this agreement in full. I understand that <strong>The Evolved Caveman Inner Leadership AI is an AI system, not a human, therapist, or healthcare provider.</strong> I agree to all terms stated above.</label>
-      </div>
-      <div class="consent-check">
-        <input type="checkbox" id="consent-check-2" />
-        <label for="consent-check-2">I confirm that I am <strong>18 years of age or older</strong> and will not use this system as a substitute for professional mental health or medical care.</label>
-      </div>
-      <div class="consent-check">
-        <input type="checkbox" id="consent-check-3" />
-        <label for="consent-check-3">I understand that <strong>session activity is logged</strong> for safety and compliance purposes as described in Section 06.</label>
-      </div>
-      <button class="btn btn-primary" id="consent-btn" onclick="handleConsent()" disabled>I Agree & Continue</button>
+  <div class="messages" id="messages"></div>
+
+  <div class="typing-indicator" id="typingIndicator">
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
   </div>
 
-  <!-- CHAT SCREEN (keep exactly as-is) -->
-  <div id="chat-screen" class="screen">
-    <div class="chat-header">
-      <h1>The Evolved Caveman</h1>
-      <div class="user-info">
-        <span class="user-email" id="user-email-display"></span>
-        <button class="logout-btn" onclick="handleLogout()">Log Out</button>
-      </div>
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="userInput" rows="1" placeholder="What's on your mind?" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
     </div>
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="typing-indicator" id="typing-indicator">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="chat-input-area">
-      <textarea id="user-input" placeholder="What's on your mind?" rows="1" onkeydown="handleKeyDown(event)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()">&#9654;</button>
+    <div class="disclaimer-bar">
+      Inner Leadership AI Coach is an educational coaching tool — not therapy, counseling, or crisis support.
     </div>
   </div>
+</div>
 
-  <script>
-    // ─── Configuration ───
-    const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
-    const CHAT_ENDPOINT = `${SUPABASE_URL}/functions/v1/chat`;
-    const CONSENT_VERSION = '1.0';
+<script>
+// =====================================================
+// CONFIGURATION
+// =====================================================
+var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+var EDGE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/chat";
 
-    // ─── Initialize Supabase Client ───
-    let sb;
-    try {
-      const { createClient } = supabase;
-      sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      console.log('Supabase client initialized successfully');
-    } catch (e) {
-      console.error('Failed to initialize Supabase:', e);
-      document.addEventListener('DOMContentLoaded', () => {
-        const err = document.getElementById('login-error');
-        if (err) err.textContent = 'Authentication service failed to load. Please refresh or try a different browser.';
-      });
-    }
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ─── State ───
-    let currentUser = null;
-    let currentSession = null;
-    let conversationMessages = [];
-    let sessionId = crypto.randomUUID();
-    let activeVariation = null;
+// =====================================================
+// STATE
+// =====================================================
+var currentUser = null;
+var accessToken = null;
+var sessionId = null;
+var conversationHistory = [];
+var messageCount = 0;
+var isFirstMessage = true;
+var isSending = false;
+var enterChatCalled = false;
+var loginInProgress = false;
+var openingVariation = null;
+var isReturningUser = false;
+var sessionInProgress = false; // guard for New Session button
 
-    // ─── System Prompt ───
-    const SYSTEM_PROMPT = `You are the Inner Leadership AI Coach from The Evolved Caveman, created by Dr. John Schinnerer (Ph.D., UC Berkeley). You help men build self-awareness, emotional intelligence, and stronger communication skills using the Inner Board Meeting model.
+// =====================================================
+// SYSTEM PROMPT
+// =====================================================
+var SYSTEM_PROMPT = "You are the Inner Leadership AI Coach, built by Dr. John Schinnerer \u2014 a psychologist, executive coach, and expert on men's emotional intelligence with 30+ years of experience. You hold a PhD in Psychology from UC Berkeley and served as an expert consultant on Pixar's Inside Out.\n\n" +
+"VOICE:\n" +
+"Sound like John \u2014 warm, direct, slightly irreverent, grounded in science but delivered conversationally. Not a neutral product voice. Think: your smartest friend who has a PhD and won't let you off the hook. Use occasional humor but never at the user's expense. Challenge gently but persistently. You're a thinking partner, not a yes-man.\n\n" +
+"WHAT YOU ARE:\n" +
+"- A coaching tool for self-leadership, communication, stress management, relationships, and decision-making\n" +
+"- Educational, not clinical\n" +
+"- Direct, grounded, occasionally provocative \u2014 but always in service of the user's growth\n\n" +
+"WHAT YOU ARE NOT:\n" +
+"- NOT a therapist, counselor, or crisis service\n" +
+"- NOT a diagnostic tool\n" +
+"- NOT a substitute for licensed mental health care\n" +
+"- NEVER position yourself as any of the above\n\n" +
+"FOUR COACHING PILLARS:\n" +
+"1. Stress, Burnout & Overload \u2014 Why successful men feel constantly stressed; burnout as a nervous system problem\n" +
+"2. Anger, Irritability & Reactivity \u2014 How men get stuck in anger; irritability as unprocessed stress\n" +
+"3. Relationships & Communication \u2014 Why conversations escalate; logic failing in relationship conflict\n" +
+"4. Identity, Meaning & Midlife \u2014 Successful on the outside, unsatisfied on the inside\n\n" +
+"DEFAULT RESPONSE STRUCTURE:\n" +
+"1. Name the pattern or tension you see\n" +
+"2. Ask ONE sharp coaching question (not three \u2014 one)\n" +
+"3. Offer one practical reframe\n" +
+"4. Suggest one concrete next step\n\n" +
+"Keep responses concise \u2014 aim for 3-5 paragraphs max. Don't lecture. Don't give numbered lists of tips. One insight beats ten surface suggestions.\n\n" +
+"INNER BOARD MEETING FRAMEWORK:\n" +
+"When relevant, use this model to help users understand their internal dynamics:\n" +
+"- The CEO \u2014 Grounded, values-driven decision maker. The leader they're building.\n" +
+"- The Director of Defense \u2014 Protects through anger, control, or withdrawal. Often running the show when stress hits.\n" +
+"- The VP of Emotions \u2014 Carries vulnerability, needs, and relational signals. Often suppressed in men.\n" +
+"Use this framework naturally \u2014 introduce it when it fits, don't force it.\n\n" +
+"LANGUAGE RULES:\n" +
+"Preferred: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point\n" +
+"Avoid as primary language: trauma, healing old wounds, childhood wounds, diagnosis, treatment, mental disorder labels, psychoanalyze, therapeutic intervention, process your trauma, nervous system stuck in threat mode\n\n" +
+"SAFETY FILTERS:\n" +
+"GREEN (core coaching): Values, leadership patterns, accountability, communication, conflict patterns, goal alignment, performance\n" +
+"YELLOW (use with coaching framing): Identity, shame-adjacent topics, emotional awareness, inherited patterns, meaning/emptiness, anger depth, relationship pain \u2014 keep present-focused, redirect to action\n" +
+"RED (out of scope \u2014 redirect): Trauma exploration, abuse memories, inner child work, diagnosing conditions, treatment planning, sustained crisis engagement \u2014 acknowledge importance, state limits, recommend professional support\n\n" +
+"CRISIS PROTOCOL:\n" +
+"If a user expresses suicidal ideation, self-harm intent, or immediate danger:\n" +
+"1. Acknowledge what they shared with compassion\n" +
+"2. State clearly: 'This is beyond what I can help with as a coaching tool.'\n" +
+"3. Provide: 988 Suicide & Crisis Lifeline (call or text 988), Crisis Text Line (text HOME to 741741), or call 911\n" +
+"4. Do not continue coaching. Hold space and redirect to professional help.\n\n" +
+"THINKERS TO REFERENCE (when relevant):\n" +
+"John Gottman, Terry Real, Todd Kashdan, Carl Jung, Marcus Aurelius, Martin Seligman, Esther Perel, Sue Johnson (EFT), Paul Ekman, Gabor Mat\u00e9, Bessel van der Kolk, Stephen Porges (Polyvagal), CBT, IFS, REBT, Positive Psychology, Attachment Theory\n\n" +
+"NEVER REFERENCE: Jordan Peterson, manosphere/red-pill figures, Tony Robbins, far-right or far-left political ideology, organized religion\n\n" +
+"DISCLAIMER (always active): Inner Leadership AI Coach is a coaching tool for self-leadership, communication, and personal development. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n";
 
-Your voice: Warm, direct, slightly irreverent, grounded in science but conversational. Think — the user's smartest friend who has a PhD and won't let them off the hook.
+var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
+"Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
+"Hey man, welcome. I'm your Inner Leadership AI Coach \u2014 built on decades of research in psychology, neuroscience, and executive coaching to help you lead yourself better from the inside out.\n\n" +
+"Here's what I do: I help you spot your patterns, sharpen your self-awareness, strengthen how you communicate, and make better decisions under pressure \u2014 at work, at home, in the moments that actually matter.\n\n" +
+"Here's what I don't do: I'm not a therapist, I'm not a crisis line, and I'm not going to psychoanalyze your childhood. If you're dealing with something that needs professional mental health support, I'll tell you straight \u2014 go get it. No shame in that.\n\n" +
+"What I am is a thinking partner. Direct. Grounded. Occasionally a pain in the ass \u2014 but only because I'm not going to let you coast on autopilot when you've got more in you.\n\n" +
+"Before we start: I need your active agreement that you understand this is educational coaching, not therapy or medical care. If you're in crisis, reach out to professionals \u2014 988 Suicide & Crisis Lifeline, your doctor, or emergency services. Type 'I agree' if you're good with that framework, and then we'll get to work.\n\n" +
+"IMPORTANT: Stop here. Do NOT add any coaching question after the consent request. Wait for the user to respond.\n\n";
 
-The Inner Board Meeting model:
-- CEO — Grounded, values-driven decision maker
-- Director of Defense — Protects through anger, control, or withdrawal
-- VP of Emotions — Carries vulnerability, needs, and relational signals
+var OPENING_VARIATIONS = {
+  A: "AFTER USER AGREES:\nDeliver this opening question:\n\"So here's where we start: What's the thing that's been taking up the most space in your head lately \u2014 the situation, the relationship, the decision that keeps circling back? Give me the real answer, not the polished one.\"\n\n",
+  B: "AFTER USER AGREES:\nDeliver this opening question:\n\"Alright, let's get into it. If I could see a dashboard of what's draining your battery right now \u2014 work, relationship, internal noise \u2014 what would be in the red zone? Be specific.\"\n\n",
+  C: "AFTER USER AGREES:\nDeliver this opening question:\n\"Good. Here's your first coaching question: What's the pattern you keep running into \u2014 the one where you already know what you should do differently, but you keep doing the same thing anyway?\"\n\n"
+};
 
-Your four coaching pillars:
-1. Stress, Burnout & Overload
-2. Anger, Irritability & Reactivity
-3. Relationships & Communication
-4. Identity, Meaning & Midlife
+var RETURNING_USER_BLOCK = "RETURNING USER INSTRUCTIONS:\n" +
+"This user has been here before. Do NOT deliver the full welcome or consent request again. Instead, greet them warmly and naturally. Something like:\n" +
+"\"Good to see you back, man. [Brief natural reference to last session if context is provided]. What's on your mind today \u2014 want to pick up where we left off, or is there something new?\"\n" +
+"Keep it short and move into coaching.\n\n";
 
-Response structure:
-1. Name the pattern or tension
-2. Ask ONE sharp coaching question
-3. Offer one practical reframe
-4. Suggest one concrete next step
-
-HARD RULES:
-- Never diagnose conditions or recommend medications
-- Never position yourself as a therapist, psychologist, or crisis service
-- If someone expresses suicidal ideation or immediate danger, provide crisis resources (988 Lifeline, Crisis Text Line 741741, 911) and encourage professional support
-- Use coaching language: pattern, operating strategy, default response, self-command, awareness, accountability
-- Keep responses concise and actionable — no lectures
-You are an educational coaching tool, not therapy or medical care.
-
-FIRST-TIME USER — OPENING PROMPT ROUTING:
-If the conversation starts with a welcome message containing 5 numbered options, the user is new. When they respond to that message, route as follows:
-
-If the user replies "1" or mentions stress/burnout:
-Respond with: "Got it. So here's what I want to know — is this the kind of stress where you can point to a specific cause (a job, a deadline, a situation), or is it more like a low-grade hum that's always running in the background and you can't turn it off?"
-
-If the user replies "2" or mentions anger/reactivity/irritability:
-Respond with: "Alright. Here's the question that matters — when you get reactive, is there a pattern to it? Like, is it certain people, certain situations, certain times of day? Or does it feel more random — like you're fine and then suddenly you're not?"
-
-If the user replies "3" or mentions relationship/partner/communication:
-Respond with: "Okay. Tell me more — is this about a specific conversation or moment that keeps replaying? Or is it more of a slow drift — where things aren't terrible, but the connection isn't what it used to be?"
-
-If the user replies "4" or mentions feeling stuck/lost/restless/meaning:
-Respond with: "Yeah. That one's tricky because it's hard to fix something when you can't name what's broken. Let me ask this — if you woke up tomorrow and something was different, what would it be? Not the big dream answer. The honest one."
-
-If the user replies "5" or provides freeform text that doesn't clearly match options 1-4:
-Respond with: "Alright, floor's yours. What's on your mind? Give me the situation — what's happening, who's involved, and what's bugging you about it."
-
-After the user answers the follow-up question, proceed with normal coaching using your standard response structure. The numbered options and scripted follow-ups are ONLY for the first interaction.
-
-RETURNING USER FLOW:
-If the conversation starts with a personalized welcome back message (no numbered options), the user has been here before. Their session history is in your SESSION MEMORY below. When they respond to the welcome:
-- If they want to continue a previous thread, pick up naturally where you left off. Reference specific details from the session memory.
-- If they raise something new, acknowledge the shift and dive into the new topic using your standard response structure.
-- Do NOT re-introduce yourself, explain what you do, or repeat boundaries — they already know.`;
-
-    // ─── Opening Prompt Variations ───
-    const OPENING_VARIATIONS = [
-      {
-        id: 'A',
-        name: 'The Short Punch',
-        message: `Hey man. Welcome in.
-
-I'm your Inner Leadership AI Coach — a thinking partner built on real psychology and neuroscience, not motivational fluff. Direct. Grounded. Occasionally a pain in the ass — but only because I'm not going to let you coast on autopilot when you've got more in you.
-
-Quick ground rules: I'm a coaching tool, not a therapist or crisis line. If you need that level of support, I'll say so — no judgment.
-
-So let's get into it. What's most alive for you right now? Pick the one that fits best:
-
-1. I'm stressed or burned out
-2. I keep getting reactive or irritable
-3. Something's off in a relationship
-4. I feel stuck or restless — not sure why
-5. I'll just tell you what's on my mind`
-      },
-      {
-        id: 'B',
-        name: 'The Mirror',
-        message: `Hey. Most guys don't end up here because everything's going great.
-
-Something's off — maybe it's been off for a while. You're performing fine on the outside, but inside there's a gap. And you're not sure what to do with it.
-
-That's exactly what this is for. I'm your Inner Leadership AI Coach — a thinking partner built on real psychology, not motivational fluff. Not therapy. Not a crisis line. If you need that, I'll tell you straight.
-
-What I am is direct. Grounded. Occasionally a pain in the ass — but only because I'm not going to let you coast on autopilot when you've got more in you.
-
-So what's closest to where you are right now?
-
-1. I'm stressed or burned out — the pace isn't sustainable
-2. I keep getting reactive or irritable — and I don't like who I become
-3. Something's off in a relationship — we're stuck or disconnected
-4. I feel stuck or restless — not sure why — something needs to change but I can't name it
-5. I'll just tell you what's on my mind — I know what I want to talk about`
-      },
-      {
-        id: 'C',
-        name: 'The Inner Board Meeting Hook',
-        message: `Hey man. Let me tell you something most guys don't realize: you've got a boardroom running inside your head, and half the people in it are making decisions you never agreed to.
-
-Your inner CEO — the grounded, clear-headed version of you — keeps getting outvoted by the Director of Defense (the part that gets reactive or shuts down) and the VP of Emotions (the part carrying stuff you've never had language for).
-
-I'm your Inner Leadership AI Coach. My job is to help you run a better board meeting — so the right voice leads when it matters. I'm not a therapist. Not a crisis line. Think of me as the executive coach for your inner leadership team.
-
-So — what's on the agenda today? What's your board struggling with most?
-
-1. Stress or burnout — the CEO is overwhelmed and no one's taking anything off the plate
-2. Reactivity or anger — the Director of Defense keeps hijacking the meeting
-3. A relationship that's off — the board can't agree on how to show up for someone who matters
-4. Feeling stuck or lost — the CEO forgot what the mission was supposed to be
-5. I'll just tell you what's on my mind — I've got my own agenda item`
-      }
-    ];
-
-    // ─── Summary Generation Prompt ───
-    const SUMMARY_PROMPT = `You are a session summarizer for an AI coaching tool. Analyze the conversation below and produce a JSON object with these fields:
-
-{
-  "summary": "A 2-4 sentence coaching summary written in second person ('You talked about...'). Include: the core issue discussed, any patterns or insights that emerged, any commitments or next steps the user mentioned, and where the conversation left off. Write it so a coach reading this next session can pick up naturally.",
-  "pillar": "stress|anger|relationships|identity|mixed|unknown",
-  "topics": ["array", "of", "3-5", "key", "topic", "tags"]
+// =====================================================
+// AUTH FUNCTIONS
+// =====================================================
+function showView(view) {
+  document.getElementById("loginForm").style.display = view === "login" ? "block" : "none";
+  document.getElementById("signupForm").style.display = view === "signup" ? "block" : "none";
+  document.getElementById("forgotForm").style.display = view === "forgot" ? "block" : "none";
+  document.getElementById("resetForm").style.display = view === "reset" ? "block" : "none";
+  clearMessages();
 }
 
-RULES:
-- Write the summary as if briefing a coach before their next session with this client
-- Use coaching language, not clinical language
-- Be specific — include names, situations, and details the user shared
-- If multiple pillars were discussed, use "mixed"
-- Keep the summary under 100 words
-- Return ONLY the JSON object, no other text`;
+function clearMessages() {
+  var msgs = ["loginMessage", "signupMessage", "forgotMessage", "resetMessage"];
+  for (var i = 0; i < msgs.length; i++) {
+    var el = document.getElementById(msgs[i]);
+    if (el) { el.textContent = ""; el.className = "auth-message"; }
+  }
+}
 
-    // ─── Returning User Welcome Prompt ───
-    const RETURNING_WELCOME_PROMPT = `You are the Inner Leadership AI Coach from The Evolved Caveman. A returning user just logged in. Generate a short, warm, personalized welcome message based on their previous session summaries.
+function showAuthMsg(id, text, type) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.textContent = text;
+    el.className = "auth-message " + type;
+  }
+}
 
-Your voice: Warm, direct, slightly irreverent, grounded. Think — the user's smartest friend who has a PhD and remembers what they talked about last time.
+async function handleLogin() {
+  var email = document.getElementById("loginEmail").value.trim();
+  var password = document.getElementById("loginPassword").value;
+  if (!email || !password) {
+    showAuthMsg("loginMessage", "Please enter email and password.", "error");
+    return;
+  }
+  loginInProgress = true;
+  document.getElementById("loginBtn").disabled = true;
+  showAuthMsg("loginMessage", "Signing in...", "");
 
-RULES:
-- Start with "Hey man, welcome back." or a natural variation
-- Reference ONE specific thing from their most recent session — a pattern they named, a situation they described, a commitment they made, or where the conversation left off
-- Keep it to 3-5 sentences max
-- End with an open invitation: either ask how that thing went, or offer them the choice to continue or start something new
-- Do NOT list their entire history. Pick the most relevant thread.
-- Do NOT use clinical language. Use coaching language.
-- Do NOT mention that you're an AI or repeat the disclaimer — they already know.
-- Sound like you actually remember them, not like you're reading a file.
+  try {
+    var result = await sb.auth.signInWithPassword({ email: email, password: password });
+    if (result.error) throw result.error;
+    currentUser = result.data.user;
+    accessToken = result.data.session.access_token;
+    await enterChat();
+    loginInProgress = false;
+  } catch (err) {
+    showAuthMsg("loginMessage", err.message || "Login failed.", "error");
+    loginInProgress = false;
+  }
+  document.getElementById("loginBtn").disabled = false;
+}
 
-Return ONLY the welcome message text. No JSON, no labels, no formatting.`;
+async function handleSignup() {
+  var email = document.getElementById("signupEmail").value.trim();
+  var password = document.getElementById("signupPassword").value;
+  if (!email || !password) {
+    showAuthMsg("signupMessage", "Please enter email and password.", "error");
+    return;
+  }
+  if (password.length < 6) {
+    showAuthMsg("signupMessage", "Password must be at least 6 characters.", "error");
+    return;
+  }
 
-    // ─── Session Memory State ───
-    let previousSummaries = [];
+  document.getElementById("signupBtn").disabled = true;
+  showAuthMsg("signupMessage", "Creating account...", "");
 
-    // ═══════════════════════════════════════════
-    // SESSION MEMORY FUNCTIONS
-    // ═══════════════════════════════════════════
-
-    async function loadSessionSummaries() {
-      try {
-        const { data, error } = await sb
-          .from('session_summaries')
-          .select('summary, pillar, topics, created_at')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          console.error('Error loading summaries:', error);
-          return [];
-        }
-        return data || [];
-      } catch (err) {
-        console.error('Failed to load session summaries:', err);
-        return [];
-      }
+  try {
+    var result = await sb.auth.signUp({ email: email, password: password });
+    if (result.error) throw result.error;
+    if (result.data.user && !result.data.session) {
+      showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
+    } else if (result.data.session) {
+      currentUser = result.data.user;
+      accessToken = result.data.session.access_token;
+      await enterChat();
     }
+  } catch (err) {
+    showAuthMsg("signupMessage", err.message || "Signup failed.", "error");
+  }
+  document.getElementById("signupBtn").disabled = false;
+}
 
-    function buildSessionMemoryBlock(summaries) {
-      if (!summaries || summaries.length === 0) return '';
-
-      let memoryBlock = '\n\nSESSION MEMORY — PREVIOUS CONVERSATIONS WITH THIS USER:';
-
-      // Most recent 3 summaries in full
-      const recent = summaries.slice(0, 3);
-      recent.forEach((s, i) => {
-        const date = new Date(s.created_at).toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric'
-        });
-        const label = i === 0 ? 'Most recent session' : `${i + 1} sessions ago`;
-        memoryBlock += `\n\n[${label} — ${date}]`;
-        memoryBlock += `\n${s.summary}`;
-        if (s.topics && s.topics.length > 0) {
-          memoryBlock += `\nTopics: ${s.topics.join(', ')}`;
-        }
-      });
-
-      // Older summaries: one-line overview each
-      const older = summaries.slice(3);
-      if (older.length > 0) {
-        memoryBlock += '\n\nOlder sessions (brief):';
-        older.forEach(s => {
-          const date = new Date(s.created_at).toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric'
-          });
-          const topicStr = s.topics && s.topics.length > 0 ? s.topics.join(', ') : s.pillar || 'general';
-          memoryBlock += `\n- ${date}: ${topicStr}`;
-        });
-      }
-
-      memoryBlock += '\n\nUSE THIS CONTEXT NATURALLY. Reference previous sessions when relevant ("Last time you mentioned..." or "You\'ve been working on..."). Do not dump the summary back at the user. Let it inform your coaching the way a human coach\'s memory would.';
-
-      return memoryBlock;
-    }
-
-    function getSystemPromptWithMemory() {
-      const memoryBlock = buildSessionMemoryBlock(previousSummaries);
-      return SYSTEM_PROMPT + memoryBlock;
-    }
-
-    async function generateAndSaveSessionSummary() {
-      // Only generate if there was a real conversation (more than just the opening)
-      const userMessages = conversationMessages.filter(m => m.role === 'user');
-      if (userMessages.length < 2) {
-        console.log('Session too short for summary — skipping');
-        return;
-      }
-
-      try {
-        // Build a condensed version of the conversation for summarization
-        const condensed = conversationMessages
-          .filter(m => m.role === 'user' || m.role === 'assistant')
-          .map(m => `${m.role === 'user' ? 'USER' : 'COACH'}: ${m.content}`)
-          .join('\n\n');
-
-        const { data: { session } } = await sb.auth.getSession();
-        const token = session?.access_token;
-
-        const res = await fetch(CHAT_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({
-            system: SUMMARY_PROMPT,
-            messages: [{ role: 'user', content: condensed }],
-            session_id: sessionId,
-            user_id: currentUser?.id || null
-          })
-        });
-
-        const data = await res.json();
-        const rawReply = data.content?.[0]?.text || '';
-
-        // Parse the JSON response
-        let parsed;
-        try {
-          // Handle case where AI wraps JSON in markdown code block
-          const cleaned = rawReply.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-          parsed = JSON.parse(cleaned);
-        } catch (parseErr) {
-          console.error('Failed to parse summary JSON:', parseErr, rawReply);
-          // Fallback: save raw text as summary
-          parsed = {
-            summary: rawReply.substring(0, 500),
-            pillar: 'unknown',
-            topics: []
-          };
-        }
-
-        // Save to Supabase
-        const { error } = await sb.from('session_summaries').insert({
-          user_id: currentUser.id,
-          session_id: sessionId,
-          summary: parsed.summary,
-          pillar: parsed.pillar || 'unknown',
-          topics: parsed.topics || [],
-          message_count: conversationMessages.length,
-          opening_variation: activeVariation?.id || null
-        });
-
-        if (error) {
-          console.error('Error saving session summary:', error);
-        } else {
-          console.log('Session summary saved:', parsed.summary.substring(0, 80) + '...');
-        }
-      } catch (err) {
-        console.error('Failed to generate session summary:', err);
-      }
-    }
-
-    async function generateReturningWelcome(summaries) {
-      try {
-        // Build context from summaries for the welcome prompt
-        const summaryContext = summaries.slice(0, 3).map((s, i) => {
-          const date = new Date(s.created_at).toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
-          const label = i === 0 ? 'Most recent session' : `${i + 1} sessions ago`;
-          let entry = `[${label} — ${date}]\n${s.summary}`;
-          if (s.topics && s.topics.length > 0) {
-            entry += `\nTopics: ${s.topics.join(', ')}`;
-          }
-          return entry;
-        }).join('\n\n');
-
-        const { data: { session } } = await sb.auth.getSession();
-        const token = session?.access_token;
-
-        const res = await fetch(CHAT_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({
-            system: RETURNING_WELCOME_PROMPT,
-            messages: [{ role: 'user', content: `Here are this user's previous session summaries:\n\n${summaryContext}` }],
-            session_id: sessionId,
-            user_id: currentUser?.id || null
-          })
-        });
-
-        const data = await res.json();
-        const welcome = data.content?.[0]?.text || null;
-        return welcome;
-      } catch (err) {
-        console.error('Failed to generate returning welcome:', err);
-        return null;
-      }
-    }
-
-    // ═══════════════════════════════════════════
-    // AUTH SCREEN LOGIC
-    // ═══════════════════════════════════════════
-    function showLogin() {
-      document.getElementById('login-form').style.display = 'block';
-      document.getElementById('reset-form').style.display = 'none';
-      clearErrors();
-    }
-    function showReset() {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('reset-form').style.display = 'block';
-      clearErrors();
-    }
-    function clearErrors() {
-      document.getElementById('login-error').textContent = '';
-      document.getElementById('reset-error').textContent = '';
-      document.getElementById('reset-success').textContent = '';
-    }
-    function setLoading(btnId, loading) {
-      const btn = document.getElementById(btnId);
-      if (loading) {
-        btn.disabled = true;
-        btn._originalText = btn.textContent;
-        btn.innerHTML = '<span class="spinner"></span> Please wait...';
-      } else {
-        btn.disabled = false;
-        btn.textContent = btn._originalText || 'Submit';
-      }
-    }
-    async function handleLogin() {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      const errorEl = document.getElementById('login-error');
-      errorEl.textContent = '';
-      if (!email || !password) {
-        errorEl.textContent = 'Please enter your email and password.';
-        return;
-      }
-      if (typeof sb === 'undefined' || !sb?.auth) {
-        errorEl.textContent = 'Authentication service failed to load. Please refresh the page.';
-        console.error('Supabase client not initialized. Check script tag.');
-        return;
-      }
-      setLoading('login-btn', true);
-      loginInProgress = true;
-      try {
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        setLoading('login-btn', false);
-        if (error) {
-          loginInProgress = false;
-          errorEl.textContent = error.message === 'Invalid login credentials'
-            ? 'Invalid email or password. Please try again.'
-            : error.message;
-          return;
-        }
-        currentUser = data.user;
-        currentSession = data.session;
-        await checkConsentAndProceed();
-        loginInProgress = false;
-      } catch (err) {
-        loginInProgress = false;
-        setLoading('login-btn', false);
-        errorEl.textContent = 'Login failed: ' + (err.message || 'Unknown error. Check console.');
-        console.error('Login error:', err);
-      }
-    }
-    async function handleReset() {
-      const email = document.getElementById('reset-email').value.trim();
-      const errorEl = document.getElementById('reset-error');
-      const successEl = document.getElementById('reset-success');
-      errorEl.textContent = '';
-      successEl.textContent = '';
-      if (!email) {
-        errorEl.textContent = 'Please enter your email.';
-        return;
-      }
-      setLoading('reset-btn', true);
-      const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html'
-      });
-      setLoading('reset-btn', false);
-      if (error) {
-        errorEl.textContent = error.message;
-        return;
-      }
-      successEl.textContent = 'If that email exists in our system, you\'ll receive a reset link shortly.';
-    }
-    async function handleLogout() {
-      // Generate and save session summary before signing out
-      const userMsgCount = conversationMessages.filter(m => m.role === 'user').length;
-      if (userMsgCount >= 2) {
-        addMessage('system', 'Saving your session...');
-        try {
-          await generateAndSaveSessionSummary();
-        } catch (err) {
-          console.error('Summary generation failed on logout:', err);
-        }
-      }
-
-      await sb.auth.signOut();
-      currentUser = null;
-      currentSession = null;
-      conversationMessages = [];
-      sessionId = crypto.randomUUID();
-      activeVariation = null;
-      previousSummaries = [];
-      chatEntered = false;
-      document.getElementById('chat-messages').innerHTML = '';
-      showScreen('auth-screen');
-    }
-
-    // ═══════════════════════════════════════════
-    // CONSENT SCREEN LOGIC
-    // ═══════════════════════════════════════════
-    function updateConsentButton() {
-      const c1 = document.getElementById('consent-check-1').checked;
-      const c2 = document.getElementById('consent-check-2').checked;
-      const c3 = document.getElementById('consent-check-3').checked;
-      document.getElementById('consent-btn').disabled = !(c1 && c2 && c3);
-    }
-    document.getElementById('consent-check-1').addEventListener('change', updateConsentButton);
-    document.getElementById('consent-check-2').addEventListener('change', updateConsentButton);
-    document.getElementById('consent-check-3').addEventListener('change', updateConsentButton);
-    async function checkConsentAndProceed() {
-      const { data: profile, error } = await sb.from('profiles')
-        .select('disclaimer_accepted, consent_version')
-        .eq('id', currentUser.id)
-        .single();
-      if (error) {
-        console.error('Profile fetch error:', error);
-        showScreen('consent-screen');
-        return;
-      }
-      if (profile.disclaimer_accepted && profile.consent_version === CONSENT_VERSION) {
-        enterChat();
-      } else {
-        showScreen('consent-screen');
-      }
-    }
-    async function handleConsent() {
-      const c1 = document.getElementById('consent-check-1').checked;
-      const c2 = document.getElementById('consent-check-2').checked;
-      const c3 = document.getElementById('consent-check-3').checked;
-      if (!c1 || !c2 || !c3) return;
-      setLoading('consent-btn', true);
-      const { error } = await sb.from('profiles')
-        .update({
-          disclaimer_accepted: true,
-          disclaimer_accepted_at: new Date().toISOString(),
-          consent_version: CONSENT_VERSION,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', currentUser.id);
-      setLoading('consent-btn', false);
-      if (error) {
-        console.error('Consent update error:', error);
-        const { error: insertError } = await sb.from('profiles')
-          .insert({
-            id: currentUser.id,
-            email: currentUser.email,
-            disclaimer_accepted: true,
-            disclaimer_accepted_at: new Date().toISOString(),
-            consent_version: CONSENT_VERSION
-          });
-        if (insertError) {
-          console.error('Consent insert error:', insertError);
-          alert('Something went wrong saving your consent. Please try again.');
-          return;
-        }
-      }
-      enterChat();
-    }
-
-    // ═══════════════════════════════════════════
-    // CHAT SCREEN LOGIC
-    // ═══════════════════════════════════════════
-    let chatEntered = false;
-
-    async function enterChat() {
-      if (chatEntered) return;
-      chatEntered = true;
-      document.getElementById('user-email-display').textContent = currentUser.email;
-      showScreen('chat-screen');
-
-      // Show disclaimer system message
-      addMessage('system', 'Everything here is confidential and educational — not therapy or medical advice.');
-
-      // Load previous session summaries
-      previousSummaries = await loadSessionSummaries();
-      const isReturningUser = previousSummaries.length > 0;
-      console.log(`Session memory: ${previousSummaries.length} previous session(s) loaded`);
-
-      if (isReturningUser) {
-        // ── RETURNING USER FLOW ──
-        // Disable input while generating personalized welcome
-        document.getElementById('user-input').disabled = true;
-        document.getElementById('send-btn').disabled = true;
-        showTyping(true);
-        console.log('Generating personalized returning user welcome...');
-
-        const personalizedWelcome = await generateReturningWelcome(previousSummaries);
-        showTyping(false);
-        document.getElementById('user-input').disabled = false;
-        document.getElementById('send-btn').disabled = false;
-
-        if (personalizedWelcome) {
-          // Display the AI-generated personalized welcome
-          addMessage('assistant', personalizedWelcome);
-          conversationMessages.push({ role: 'assistant', content: personalizedWelcome });
-        } else {
-          // Fallback if the API call fails
-          const fallback = "Hey man, welcome back. I've got context from our previous sessions — want to pick up where we left off, or is there something new on your mind today?";
-          addMessage('assistant', fallback);
-          conversationMessages.push({ role: 'assistant', content: fallback });
-        }
-
-      } else {
-        // ── FIRST-TIME USER FLOW ──
-        // Pick a random opening variation and display it
-        const variation = OPENING_VARIATIONS[Math.floor(Math.random() * OPENING_VARIATIONS.length)];
-        activeVariation = variation;
-        console.log('Opening variation selected:', variation.id, '—', variation.name);
-
-        addMessage('assistant', variation.message);
-        conversationMessages.push({ role: 'assistant', content: variation.message });
-      }
-
-      document.getElementById('user-input').focus();
-    }
-
-    function showScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-    }
-    function addMessage(role, text) {
-      const container = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = `message ${role}`;
-      div.textContent = text;
-      container.appendChild(div);
-      container.scrollTop = container.scrollHeight;
-    }
-    function showTyping(show) {
-      const el = document.getElementById('typing-indicator');
-      el.style.display = show ? 'block' : 'none';
-      if (show) {
-        const container = document.getElementById('chat-messages');
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-    function handleKeyDown(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    }
-    document.getElementById('user-input').addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+async function handleForgotPassword() {
+  var email = document.getElementById("forgotEmail").value.trim();
+  if (!email) {
+    showAuthMsg("forgotMessage", "Please enter your email.", "error");
+    return;
+  }
+  try {
+    var result = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname
     });
-    async function sendMessage() {
-      const input = document.getElementById('user-input');
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage('user', text);
-      input.value = '';
-      input.style.height = 'auto';
-      conversationMessages.push({ role: 'user', content: text });
-      const sendBtn = document.getElementById('send-btn');
-      sendBtn.disabled = true;
-      showTyping(true);
-      try {
-        const { data: { session } } = await sb.auth.getSession();
-        const token = session?.access_token;
-        const res = await fetch(CHAT_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({
-            system: getSystemPromptWithMemory(),
-            messages: conversationMessages,
-            session_id: sessionId,
-            user_id: currentUser?.id || null
-          })
-        });
-        const data = await res.json();
-        if (data.error) {
-          throw new Error(data.error.message || 'Something went wrong');
+    if (result.error) throw result.error;
+    showAuthMsg("forgotMessage", "Check your email for a reset link.", "success");
+  } catch (err) {
+    showAuthMsg("forgotMessage", err.message || "Reset failed.", "error");
+  }
+}
+
+async function handleResetPassword() {
+  var password = document.getElementById("resetPassword").value;
+  if (!password || password.length < 6) {
+    showAuthMsg("resetMessage", "Password must be at least 6 characters.", "error");
+    return;
+  }
+  try {
+    var result = await sb.auth.updateUser({ password: password });
+    if (result.error) throw result.error;
+    showAuthMsg("resetMessage", "Password updated! Redirecting...", "success");
+    setTimeout(function() { window.location.hash = ""; window.location.reload(); }, 1500);
+  } catch (err) {
+    showAuthMsg("resetMessage", err.message || "Reset failed.", "error");
+  }
+}
+
+async function handleLogout() {
+  await saveSessionSummary();
+  await sb.auth.signOut();
+  currentUser = null;
+  accessToken = null;
+  sessionId = null;
+  enterChatCalled = false;
+  loginInProgress = false;
+  sessionInProgress = false;
+  isReturningUser = false;
+  document.getElementById("authScreen").style.display = "flex";
+  document.getElementById("chatScreen").classList.remove("active");
+  showView("login");
+}
+
+// =====================================================
+// SESSION MANAGEMENT
+// =====================================================
+function generateSessionId() {
+  return crypto.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function pickOpeningVariation() {
+  var options = ["A", "B", "C"];
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+function buildSystemPrompt(isReturningUser) {
+  var prompt = SYSTEM_PROMPT;
+  if (isReturningUser) {
+    prompt += RETURNING_USER_BLOCK;
+  } else {
+    prompt += FIRST_TIME_WELCOME_BLOCK;
+    prompt += OPENING_VARIATIONS[openingVariation] || OPENING_VARIATIONS["A"];
+  }
+  return prompt;
+}
+
+async function startNewSession() {
+  if (sessionInProgress) return;
+  sessionInProgress = true;
+
+  // Save summary of current session before starting new one
+  await saveSessionSummary();
+
+  sessionId = generateSessionId();
+  conversationHistory = [];
+  messageCount = 0;
+  isFirstMessage = true;
+  isReturningUser = false;
+  openingVariation = pickOpeningVariation();
+  document.getElementById("messages").innerHTML = "";
+
+  // Send initial message to trigger welcome
+  await sendInitialMessage();
+  sessionInProgress = false;
+}
+
+async function sendInitialMessage() {
+  // Check if this is a returning user
+  isReturningUser = false;
+  if (accessToken) {
+    try {
+      var checkRes = await fetch(EDGE_FUNCTION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify({ action: "get_last_summary" })
+      });
+      if (checkRes.ok) {
+        var checkData = await checkRes.json();
+        if (checkData.summary) {
+          isReturningUser = true;
         }
-        const reply = data.content?.[0]?.text || 'I wasn\'t able to generate a response. Please try again.';
-        conversationMessages.push({ role: 'assistant', content: reply });
-        showTyping(false);
-        addMessage('assistant', reply);
-      } catch (err) {
-        console.error('Chat error:', err);
-        showTyping(false);
-        addMessage('system', 'Something went wrong. Please try again.');
       }
-      sendBtn.disabled = false;
-      input.focus();
+    } catch (e) {
+      console.warn("Failed to check returning user status:", e);
+    }
+  }
+
+  var systemPrompt = buildSystemPrompt(isReturningUser);
+
+  // Send a trigger message to get the AI's opening
+  showTyping(true);
+  var triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
+
+  conversationHistory.push({ role: "user", content: triggerMessage });
+
+  try {
+    var res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": accessToken ? "Bearer " + accessToken : ""
+      },
+      body: JSON.stringify({
+        system: systemPrompt,
+        messages: conversationHistory,
+        session_id: sessionId,
+        is_first_message: true
+      })
+    });
+
+    if (!res.ok) {
+      throw new Error("Server returned " + res.status);
     }
 
-    // ═══════════════════════════════════════════
-    // SESSION RESTORE ON PAGE LOAD
-    // ═══════════════════════════════════════════
-    let loginInProgress = false;
-    async function init() {
-      const isRecoveryRedirect = window.location.hash.includes('type=recovery');
-      sb.auth.onAuthStateChange(async (event, session) => {
-        console.log('Auth event:', event);
-        if (event === 'PASSWORD_RECOVERY') {
-          const newPassword = prompt('Enter your new password (at least 6 characters):');
-          if (newPassword && newPassword.length >= 6) {
-            const { error } = await sb.auth.updateUser({ password: newPassword });
-            if (error) {
-              alert('Error updating password: ' + error.message);
-              showScreen('auth-screen');
-            } else {
-              alert('Password updated successfully! You are now logged in.');
-              currentUser = session.user;
-              currentSession = session;
-              history.replaceState(null, '', window.location.pathname);
-              await checkConsentAndProceed();
-            }
-          } else {
-            await sb.auth.signOut();
-            showScreen('auth-screen');
-          }
-          return;
-        }
-        if (event === 'SIGNED_IN' && loginInProgress) {
-          return;
-        }
-      });
-      if (isRecoveryRedirect) {
-        console.log('Recovery redirect detected — waiting for PASSWORD_RECOVERY event');
-        return;
-      }
-      const { data: { session }, error } = await sb.auth.getSession();
-      if (session?.user) {
-        currentUser = session.user;
-        currentSession = session;
-        await checkConsentAndProceed();
-      } else {
-        showScreen('auth-screen');
-      }
+    var data;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      throw new Error("Invalid response from server");
     }
-    document.querySelectorAll('#login-email, #login-password').forEach(el => {
-      el.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+
+    showTyping(false);
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      var reply = data.content[0].text;
+      conversationHistory.push({ role: "assistant", content: reply });
+      appendMessage("assistant", reply);
+      messageCount++;
+      isFirstMessage = false;
+    } else {
+      appendMessage("assistant", "Having trouble connecting. Please try refreshing the page.");
+    }
+  } catch (err) {
+    showTyping(false);
+    appendMessage("assistant", "Something went wrong connecting to the coach. Please try refreshing the page.");
+    console.error("Initial message error:", err);
+  }
+}
+
+// =====================================================
+// SESSION SUMMARY
+// =====================================================
+async function saveSessionSummary() {
+  if (!accessToken || !sessionId || messageCount < 4) return;
+
+  try {
+    var res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + accessToken
+      },
+      body: JSON.stringify({
+        action: "summarize",
+        session_id: sessionId,
+        opening_variation: openingVariation
+      })
     });
-    document.getElementById('reset-email').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleReset();
+    var data = await res.json();
+    if (data.success) {
+      console.log("Session summary saved successfully");
+    }
+  } catch (e) {
+    console.warn("Failed to save session summary:", e);
+  }
+}
+
+// Save summary when user leaves the page
+window.addEventListener("beforeunload", function() {
+  if (!accessToken || !sessionId || messageCount < 4) return;
+
+  // sendBeacon can't set headers, so include token in body
+  // Edge function checks body.access_token as fallback auth
+  var payload = JSON.stringify({
+    action: "summarize",
+    session_id: sessionId,
+    opening_variation: openingVariation,
+    access_token: accessToken
+  });
+
+  if (navigator.sendBeacon) {
+    var blob = new Blob([payload], { type: "application/json" });
+    navigator.sendBeacon(EDGE_FUNCTION_URL, blob);
+  }
+});
+
+// =====================================================
+// CHAT FUNCTIONS
+// =====================================================
+function appendMessage(role, text) {
+  var container = document.getElementById("messages");
+  var div = document.createElement("div");
+  div.className = "message " + role;
+
+  var avatar = document.createElement("div");
+  avatar.className = "message-avatar";
+  avatar.textContent = role === "assistant" ? "EC" : "U";
+
+  var bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  bubble.textContent = text;
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping(show) {
+  var el = document.getElementById("typingIndicator");
+  if (show) {
+    el.classList.add("active");
+  } else {
+    el.classList.remove("active");
+  }
+  var msgs = document.getElementById("messages");
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function trimConversationHistory() {
+  // Keep conversation history manageable - trim to last 20 exchanges (40 messages)
+  // Always keep the first exchange (welcome + consent)
+  var maxMessages = 40;
+  if (conversationHistory.length > maxMessages) {
+    var firstPair = conversationHistory.slice(0, 2);
+    var recent = conversationHistory.slice(-1 * (maxMessages - 2));
+    conversationHistory = firstPair.concat(recent);
+  }
+}
+
+async function sendMessage() {
+  var input = document.getElementById("userInput");
+  var text = input.value.trim();
+  if (!text || isSending) return;
+
+  isSending = true;
+  document.getElementById("sendBtn").disabled = true;
+  input.value = "";
+  input.style.height = "auto";
+
+  appendMessage("user", text);
+  showTyping(true);
+
+  conversationHistory.push({ role: "user", content: text });
+  trimConversationHistory();
+
+  // For new users: keep full prompt (with opening variation instructions) through the
+  // first 3 exchanges to cover: welcome → "I agree" → opening question → first coaching.
+  // For returning users: only need the full prompt on the initial message (handled by sendInitialMessage).
+  // After that, base prompt saves ~1500 tokens per message.
+  var systemPrompt;
+  if (!isReturningUser && messageCount < 3) {
+    systemPrompt = buildSystemPrompt(false);
+  } else {
+    systemPrompt = SYSTEM_PROMPT;
+  }
+
+  try {
+    var res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": accessToken ? "Bearer " + accessToken : ""
+      },
+      body: JSON.stringify({
+        system: systemPrompt,
+        messages: conversationHistory,
+        session_id: sessionId,
+        is_first_message: false
+      })
     });
-    init();
-  </script>
+
+    if (!res.ok) {
+      throw new Error("Server returned " + res.status);
+    }
+
+    var data;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      throw new Error("Invalid response from server");
+    }
+
+    showTyping(false);
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      var reply = data.content[0].text;
+      conversationHistory.push({ role: "assistant", content: reply });
+      appendMessage("assistant", reply);
+      messageCount++;
+    } else if (data.error) {
+      appendMessage("assistant", "I hit a snag \u2014 " + (data.error.message || "something went wrong") + ". Try again?");
+      conversationHistory.pop();
+    } else {
+      appendMessage("assistant", "Got an unexpected response. Try sending that again?");
+      conversationHistory.pop();
+    }
+  } catch (err) {
+    showTyping(false);
+    appendMessage("assistant", "Connection issue. Check your internet and try again.");
+    conversationHistory.pop();
+    console.error("Send error:", err);
+  }
+
+  isSending = false;
+  document.getElementById("sendBtn").disabled = false;
+  input.focus();
+}
+
+function handleKeyDown(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 120) + "px";
+}
+
+// =====================================================
+// ENTER CHAT
+// =====================================================
+async function enterChat() {
+  if (enterChatCalled) return;
+  enterChatCalled = true;
+
+  document.getElementById("authScreen").style.display = "none";
+  document.getElementById("chatScreen").classList.add("active");
+
+  // Ensure profile exists
+  try {
+    var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+    if (profileResult.error && profileResult.error.code === "PGRST116") {
+      // Profile doesn't exist, create one
+      await sb.from("profiles").insert({
+        id: currentUser.id,
+        email: currentUser.email,
+        disclaimer_accepted: false
+      });
+    }
+  } catch (e) {
+    console.warn("Profile check error:", e);
+  }
+
+  // Start a new session
+  sessionId = generateSessionId();
+  conversationHistory = [];
+  messageCount = 0;
+  isFirstMessage = true;
+  openingVariation = pickOpeningVariation();
+
+  await sendInitialMessage();
+  document.getElementById("userInput").focus();
+}
+
+// =====================================================
+// INITIALIZATION
+// =====================================================
+async function init() {
+  // Check for password recovery redirect
+  var hash = window.location.hash;
+  if (hash && (hash.includes("type=recovery") || hash.includes("type=signup"))) {
+    if (hash.includes("type=recovery")) {
+      showView("reset");
+    }
+    // Let onAuthStateChange handle the token exchange
+    return;
+  }
+
+  // Check for existing session
+  var sessionResult = await sb.auth.getSession();
+  if (sessionResult.data.session) {
+    currentUser = sessionResult.data.session.user;
+    accessToken = sessionResult.data.session.access_token;
+    await enterChat();
+  }
+}
+
+// Listen for auth state changes (handles recovery, token refresh, etc.)
+sb.auth.onAuthStateChange(async function(event, session) {
+  // Keep access token fresh on automatic refresh
+  if (event === "TOKEN_REFRESHED" && session) {
+    accessToken = session.access_token;
+    console.log("Access token refreshed");
+    return;
+  }
+
+  if (loginInProgress) return; // Don't interfere with manual login flow
+
+  if (event === "PASSWORD_RECOVERY") {
+    showView("reset");
+    return;
+  }
+
+  if (event === "SIGNED_IN" && session && !enterChatCalled) {
+    currentUser = session.user;
+    accessToken = session.access_token;
+    // Clean up the URL hash
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    await enterChat();
+  }
+});
+
+// Handle Enter on login fields
+document.getElementById("loginEmail").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("loginPassword").focus(); }
+});
+document.getElementById("loginPassword").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); handleLogin(); }
+});
+document.getElementById("signupEmail").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupPassword").focus(); }
+});
+document.getElementById("signupPassword").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); handleSignup(); }
+});
+
+// Initialize
+init();
+</script>
 </body>
 </html>
