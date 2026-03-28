@@ -641,6 +641,163 @@ So — what's on the agenda today? What's your board struggling with most?
       }
     ];
 
+    // ─── Summary Generation Prompt ───
+    const SUMMARY_PROMPT = `You are a session summarizer for an AI coaching tool. Analyze the conversation below and produce a JSON object with these fields:
+
+{
+  "summary": "A 2-4 sentence coaching summary written in second person ('You talked about...'). Include: the core issue discussed, any patterns or insights that emerged, any commitments or next steps the user mentioned, and where the conversation left off. Write it so a coach reading this next session can pick up naturally.",
+  "pillar": "stress|anger|relationships|identity|mixed|unknown",
+  "topics": ["array", "of", "3-5", "key", "topic", "tags"]
+}
+
+RULES:
+- Write the summary as if briefing a coach before their next session with this client
+- Use coaching language, not clinical language
+- Be specific — include names, situations, and details the user shared
+- If multiple pillars were discussed, use "mixed"
+- Keep the summary under 100 words
+- Return ONLY the JSON object, no other text`;
+
+    // ─── Session Memory State ───
+    let previousSummaries = [];
+
+    // ═══════════════════════════════════════════
+    // SESSION MEMORY FUNCTIONS
+    // ═══════════════════════════════════════════
+
+    async function loadSessionSummaries() {
+      try {
+        const { data, error } = await sb
+          .from('session_summaries')
+          .select('summary, pillar, topics, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error loading summaries:', error);
+          return [];
+        }
+        return data || [];
+      } catch (err) {
+        console.error('Failed to load session summaries:', err);
+        return [];
+      }
+    }
+
+    function buildSessionMemoryBlock(summaries) {
+      if (!summaries || summaries.length === 0) return '';
+
+      let memoryBlock = '\n\nSESSION MEMORY — PREVIOUS CONVERSATIONS WITH THIS USER:';
+
+      // Most recent 3 summaries in full
+      const recent = summaries.slice(0, 3);
+      recent.forEach((s, i) => {
+        const date = new Date(s.created_at).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        });
+        const label = i === 0 ? 'Most recent session' : `${i + 1} sessions ago`;
+        memoryBlock += `\n\n[${label} — ${date}]`;
+        memoryBlock += `\n${s.summary}`;
+        if (s.topics && s.topics.length > 0) {
+          memoryBlock += `\nTopics: ${s.topics.join(', ')}`;
+        }
+      });
+
+      // Older summaries: one-line overview each
+      const older = summaries.slice(3);
+      if (older.length > 0) {
+        memoryBlock += '\n\nOlder sessions (brief):';
+        older.forEach(s => {
+          const date = new Date(s.created_at).toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric'
+          });
+          const topicStr = s.topics && s.topics.length > 0 ? s.topics.join(', ') : s.pillar || 'general';
+          memoryBlock += `\n- ${date}: ${topicStr}`;
+        });
+      }
+
+      memoryBlock += '\n\nUSE THIS CONTEXT NATURALLY. Reference previous sessions when relevant ("Last time you mentioned..." or "You\'ve been working on..."). Do not dump the summary back at the user. Let it inform your coaching the way a human coach\'s memory would.';
+
+      return memoryBlock;
+    }
+
+    function getSystemPromptWithMemory() {
+      const memoryBlock = buildSessionMemoryBlock(previousSummaries);
+      return SYSTEM_PROMPT + memoryBlock;
+    }
+
+    async function generateAndSaveSessionSummary() {
+      // Only generate if there was a real conversation (more than just the opening)
+      const userMessages = conversationMessages.filter(m => m.role === 'user');
+      if (userMessages.length < 2) {
+        console.log('Session too short for summary — skipping');
+        return;
+      }
+
+      try {
+        // Build a condensed version of the conversation for summarization
+        const condensed = conversationMessages
+          .filter(m => m.role === 'user' || m.role === 'assistant')
+          .map(m => `${m.role === 'user' ? 'USER' : 'COACH'}: ${m.content}`)
+          .join('\n\n');
+
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session?.access_token;
+
+        const res = await fetch(CHAT_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            system: SUMMARY_PROMPT,
+            messages: [{ role: 'user', content: condensed }],
+            session_id: sessionId,
+            user_id: currentUser?.id || null
+          })
+        });
+
+        const data = await res.json();
+        const rawReply = data.content?.[0]?.text || '';
+
+        // Parse the JSON response
+        let parsed;
+        try {
+          // Handle case where AI wraps JSON in markdown code block
+          const cleaned = rawReply.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+          parsed = JSON.parse(cleaned);
+        } catch (parseErr) {
+          console.error('Failed to parse summary JSON:', parseErr, rawReply);
+          // Fallback: save raw text as summary
+          parsed = {
+            summary: rawReply.substring(0, 500),
+            pillar: 'unknown',
+            topics: []
+          };
+        }
+
+        // Save to Supabase
+        const { error } = await sb.from('session_summaries').insert({
+          user_id: currentUser.id,
+          session_id: sessionId,
+          summary: parsed.summary,
+          pillar: parsed.pillar || 'unknown',
+          topics: parsed.topics || [],
+          message_count: conversationMessages.length,
+          opening_variation: activeVariation?.id || null
+        });
+
+        if (error) {
+          console.error('Error saving session summary:', error);
+        } else {
+          console.log('Session summary saved:', parsed.summary.substring(0, 80) + '...');
+        }
+      } catch (err) {
+        console.error('Failed to generate session summary:', err);
+      }
+    }
+
     // ═══════════════════════════════════════════
     // AUTH SCREEN LOGIC
     // ═══════════════════════════════════════════
@@ -729,12 +886,25 @@ So — what's on the agenda today? What's your board struggling with most?
       successEl.textContent = 'If that email exists in our system, you\'ll receive a reset link shortly.';
     }
     async function handleLogout() {
+      // Generate and save session summary before signing out
+      const userMsgCount = conversationMessages.filter(m => m.role === 'user').length;
+      if (userMsgCount >= 2) {
+        addMessage('system', 'Saving your session...');
+        try {
+          await generateAndSaveSessionSummary();
+        } catch (err) {
+          console.error('Summary generation failed on logout:', err);
+        }
+      }
+
       await sb.auth.signOut();
       currentUser = null;
       currentSession = null;
       conversationMessages = [];
       sessionId = crypto.randomUUID();
       activeVariation = null;
+      previousSummaries = [];
+      chatEntered = false;
       document.getElementById('chat-messages').innerHTML = '';
       showScreen('auth-screen');
     }
@@ -806,7 +976,7 @@ So — what's on the agenda today? What's your board struggling with most?
     // ═══════════════════════════════════════════
     let chatEntered = false;
 
-    function enterChat() {
+    async function enterChat() {
       if (chatEntered) return;
       chatEntered = true;
       document.getElementById('user-email-display').textContent = currentUser.email;
@@ -815,16 +985,27 @@ So — what's on the agenda today? What's your board struggling with most?
       // Show disclaimer system message
       addMessage('system', 'Welcome to the Inner Leadership AI Coach. Everything here is confidential and educational — not therapy or medical advice.');
 
+      // Load previous session summaries
+      previousSummaries = await loadSessionSummaries();
+      const isReturningUser = previousSummaries.length > 0;
+      console.log(`Session memory: ${previousSummaries.length} previous session(s) loaded`);
+
       // Pick a random opening variation and display it
       const variation = OPENING_VARIATIONS[Math.floor(Math.random() * OPENING_VARIATIONS.length)];
       activeVariation = variation;
       console.log('Opening variation selected:', variation.id, '—', variation.name);
 
+      // For returning users, append a continuity note to the opening message
+      let openingMessage = variation.message;
+      if (isReturningUser) {
+        openingMessage += "\n\nGood to have you back. I've got context from our previous sessions — so feel free to pick up where we left off, or start something new.";
+      }
+
       // Display the opening prompt as an assistant message
-      addMessage('assistant', variation.message);
+      addMessage('assistant', openingMessage);
 
       // Add to conversation history so the AI has context
-      conversationMessages.push({ role: 'assistant', content: variation.message });
+      conversationMessages.push({ role: 'assistant', content: openingMessage });
 
       document.getElementById('user-input').focus();
     }
@@ -880,7 +1061,7 @@ So — what's on the agenda today? What's your board struggling with most?
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})
           },
           body: JSON.stringify({
-            system: SYSTEM_PROMPT,
+            system: getSystemPromptWithMemory(),
             messages: conversationMessages,
             session_id: sessionId,
             user_id: currentUser?.id || null
