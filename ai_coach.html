@@ -564,8 +564,8 @@ HARD RULES:
 - Keep responses concise and actionable — no lectures
 You are an educational coaching tool, not therapy or medical care.
 
-OPENING PROMPT ROUTING:
-Your first message to the user was a welcome message with 5 numbered options. When the user responds to that welcome message, route as follows:
+FIRST-TIME USER — OPENING PROMPT ROUTING:
+If the conversation starts with a welcome message containing 5 numbered options, the user is new. When they respond to that message, route as follows:
 
 If the user replies "1" or mentions stress/burnout:
 Respond with: "Got it. So here's what I want to know — is this the kind of stress where you can point to a specific cause (a job, a deadline, a situation), or is it more like a low-grade hum that's always running in the background and you can't turn it off?"
@@ -582,7 +582,13 @@ Respond with: "Yeah. That one's tricky because it's hard to fix something when y
 If the user replies "5" or provides freeform text that doesn't clearly match options 1-4:
 Respond with: "Alright, floor's yours. What's on your mind? Give me the situation — what's happening, who's involved, and what's bugging you about it."
 
-IMPORTANT: After the user answers the follow-up question, proceed with normal coaching using your standard response structure. The numbered options and scripted follow-ups are ONLY for the first interaction. Everything after that is natural coaching conversation.`;
+After the user answers the follow-up question, proceed with normal coaching using your standard response structure. The numbered options and scripted follow-ups are ONLY for the first interaction.
+
+RETURNING USER FLOW:
+If the conversation starts with a personalized welcome back message (no numbered options), the user has been here before. Their session history is in your SESSION MEMORY below. When they respond to the welcome:
+- If they want to continue a previous thread, pick up naturally where you left off. Reference specific details from the session memory.
+- If they raise something new, acknowledge the shift and dive into the new topic using your standard response structure.
+- Do NOT re-introduce yourself, explain what you do, or repeat boundaries — they already know.`;
 
     // ─── Opening Prompt Variations ───
     const OPENING_VARIATIONS = [
@@ -657,6 +663,23 @@ RULES:
 - If multiple pillars were discussed, use "mixed"
 - Keep the summary under 100 words
 - Return ONLY the JSON object, no other text`;
+
+    // ─── Returning User Welcome Prompt ───
+    const RETURNING_WELCOME_PROMPT = `You are the Inner Leadership AI Coach from The Evolved Caveman. A returning user just logged in. Generate a short, warm, personalized welcome message based on their previous session summaries.
+
+Your voice: Warm, direct, slightly irreverent, grounded. Think — the user's smartest friend who has a PhD and remembers what they talked about last time.
+
+RULES:
+- Start with "Hey man, welcome back." or a natural variation
+- Reference ONE specific thing from their most recent session — a pattern they named, a situation they described, a commitment they made, or where the conversation left off
+- Keep it to 3-5 sentences max
+- End with an open invitation: either ask how that thing went, or offer them the choice to continue or start something new
+- Do NOT list their entire history. Pick the most relevant thread.
+- Do NOT use clinical language. Use coaching language.
+- Do NOT mention that you're an AI or repeat the disclaimer — they already know.
+- Sound like you actually remember them, not like you're reading a file.
+
+Return ONLY the welcome message text. No JSON, no labels, no formatting.`;
 
     // ─── Session Memory State ───
     let previousSummaries = [];
@@ -795,6 +818,47 @@ RULES:
         }
       } catch (err) {
         console.error('Failed to generate session summary:', err);
+      }
+    }
+
+    async function generateReturningWelcome(summaries) {
+      try {
+        // Build context from summaries for the welcome prompt
+        const summaryContext = summaries.slice(0, 3).map((s, i) => {
+          const date = new Date(s.created_at).toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+          const label = i === 0 ? 'Most recent session' : `${i + 1} sessions ago`;
+          let entry = `[${label} — ${date}]\n${s.summary}`;
+          if (s.topics && s.topics.length > 0) {
+            entry += `\nTopics: ${s.topics.join(', ')}`;
+          }
+          return entry;
+        }).join('\n\n');
+
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session?.access_token;
+
+        const res = await fetch(CHAT_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            system: RETURNING_WELCOME_PROMPT,
+            messages: [{ role: 'user', content: `Here are this user's previous session summaries:\n\n${summaryContext}` }],
+            session_id: sessionId,
+            user_id: currentUser?.id || null
+          })
+        });
+
+        const data = await res.json();
+        const welcome = data.content?.[0]?.text || null;
+        return welcome;
+      } catch (err) {
+        console.error('Failed to generate returning welcome:', err);
+        return null;
       }
     }
 
@@ -983,29 +1047,47 @@ RULES:
       showScreen('chat-screen');
 
       // Show disclaimer system message
-      addMessage('system', 'Welcome to the Inner Leadership AI Coach. Everything here is confidential and educational — not therapy or medical advice.');
+      addMessage('system', 'Everything here is confidential and educational — not therapy or medical advice.');
 
       // Load previous session summaries
       previousSummaries = await loadSessionSummaries();
       const isReturningUser = previousSummaries.length > 0;
       console.log(`Session memory: ${previousSummaries.length} previous session(s) loaded`);
 
-      // Pick a random opening variation and display it
-      const variation = OPENING_VARIATIONS[Math.floor(Math.random() * OPENING_VARIATIONS.length)];
-      activeVariation = variation;
-      console.log('Opening variation selected:', variation.id, '—', variation.name);
-
-      // For returning users, append a continuity note to the opening message
-      let openingMessage = variation.message;
       if (isReturningUser) {
-        openingMessage += "\n\nGood to have you back. I've got context from our previous sessions — so feel free to pick up where we left off, or start something new.";
+        // ── RETURNING USER FLOW ──
+        // Disable input while generating personalized welcome
+        document.getElementById('user-input').disabled = true;
+        document.getElementById('send-btn').disabled = true;
+        showTyping(true);
+        console.log('Generating personalized returning user welcome...');
+
+        const personalizedWelcome = await generateReturningWelcome(previousSummaries);
+        showTyping(false);
+        document.getElementById('user-input').disabled = false;
+        document.getElementById('send-btn').disabled = false;
+
+        if (personalizedWelcome) {
+          // Display the AI-generated personalized welcome
+          addMessage('assistant', personalizedWelcome);
+          conversationMessages.push({ role: 'assistant', content: personalizedWelcome });
+        } else {
+          // Fallback if the API call fails
+          const fallback = "Hey man, welcome back. I've got context from our previous sessions — want to pick up where we left off, or is there something new on your mind today?";
+          addMessage('assistant', fallback);
+          conversationMessages.push({ role: 'assistant', content: fallback });
+        }
+
+      } else {
+        // ── FIRST-TIME USER FLOW ──
+        // Pick a random opening variation and display it
+        const variation = OPENING_VARIATIONS[Math.floor(Math.random() * OPENING_VARIATIONS.length)];
+        activeVariation = variation;
+        console.log('Opening variation selected:', variation.id, '—', variation.name);
+
+        addMessage('assistant', variation.message);
+        conversationMessages.push({ role: 'assistant', content: variation.message });
       }
-
-      // Display the opening prompt as an assistant message
-      addMessage('assistant', openingMessage);
-
-      // Add to conversation history so the AI has context
-      conversationMessages.push({ role: 'assistant', content: openingMessage });
 
       document.getElementById('user-input').focus();
     }
