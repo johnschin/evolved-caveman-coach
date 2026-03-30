@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Trial — The Evolved Caveman Inner Leadership AI Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Gyst';
+      src: local('Gyst');
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #202023;
+      color: #eeeeee;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    /* ---- Brand header ---- */
+    .brand {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .brand-name {
+      font-family: 'Gyst', Georgia, 'Times New Roman', serif;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #a3d0c9;
+      margin-bottom: 4px;
+    }
+    .brand-title {
+      font-family: 'Gyst', Georgia, 'Times New Roman', serif;
+      font-size: 32px;
+      line-height: 1.2;
+      color: #eeeeee;
+      margin-bottom: 6px;
+    }
+    .brand-subtitle {
+      font-size: 15px;
+      color: #a3d0c9;
+      font-weight: 500;
+    }
+
+    /* ---- Card ---- */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(163,208,201,0.2);
+      border-radius: 16px;
+      padding: 40px 32px;
+    }
+
+    /* ---- Trial info ---- */
+    .trial-info {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .trial-info h2 {
+      font-family: 'Gyst', Georgia, 'Times New Roman', serif;
+      font-size: 24px;
+      color: #eeeeee;
+      margin-bottom: 12px;
+    }
+    .trial-info p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cccccc;
+      margin-bottom: 16px;
+    }
+
+    /* ---- What you get ---- */
+    .features {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .feature {
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    .feature-number {
+      font-family: 'Gyst', Georgia, 'Times New Roman', serif;
+      font-size: 36px;
+      color: #a3d0c9;
+      line-height: 1;
+    }
+    .feature-label {
+      font-size: 13px;
+      color: #999999;
+      margin-top: 4px;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(163,208,201,0.15);
+      margin: 24px 0;
+    }
+
+    /* ---- Form ---- */
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group.full {
+      width: 100%;
+      margin-bottom: 14px;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #a3d0c9;
+      margin-bottom: 6px;
+    }
+    input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(163,208,201,0.25);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: 'Manrope', sans-serif;
+      color: #eeeeee;
+      transition: border-color 0.2s;
+    }
+    input::placeholder {
+      color: #666666;
+    }
+    input:focus {
+      outline: none;
+      border-color: #a3d0c9;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* ---- Button ---- */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #a3d0c9;
+      color: #202023;
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      background: #b8ddd7;
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ---- Disclaimer ---- */
+    .disclaimer {
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+    .disclaimer a {
+      color: #a3d0c9;
+      text-decoration: none;
+    }
+
+    /* ---- Error ---- */
+    .error-msg {
+      background: rgba(220,80,80,0.15);
+      border: 1px solid rgba(220,80,80,0.3);
+      color: #ee9999;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    /* ---- Success state ---- */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .success-state .checkmark {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .success-state h2 {
+      font-family: 'Gyst', Georgia, 'Times New Roman', serif;
+      font-size: 24px;
+      color: #a3d0c9;
+      margin-bottom: 12px;
+    }
+    .success-state p {
+      font-size: 15px;
+      color: #cccccc;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px; }
+      .brand-title { font-size: 26px; }
+      .form-row { flex-direction: column; gap: 14px; }
+      .features { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="brand">
+    <div class="brand-name">The Evolved Caveman</div>
+    <div class="brand-title">Inner Leadership AI Coach</div>
+    <div class="brand-subtitle">Free Trial Access</div>
+  </div>
+
+  <div class="card">
+    <!-- FORM STATE -->
+    <div id="formState">
+      <div class="trial-info">
+        <h2>Try It — On the House</h2>
+        <p>Get a real taste of AI-powered coaching built on 30+ years of psychology, neuroscience, and real-world work with men. No credit card. No commitment. Just you and a coach that won't let you off the hook.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-number">3</div>
+          <div class="feature-label">Sessions</div>
+        </div>
+        <div class="feature">
+          <div class="feature-number">20</div>
+          <div class="feature-label">Messages each</div>
+        </div>
+        <div class="feature">
+          <div class="feature-number">60</div>
+          <div class="feature-label">Total exchanges</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <form id="trialForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">Start My Free Trial</button>
+      </form>
+
+      <div class="disclaimer">
+        By signing up you agree to receive occasional emails from The Evolved Caveman.<br>
+        This is a coaching tool — <a href="#">not therapy, counseling, or crisis support</a>.
+      </div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="successState" class="success-state">
+      <div class="checkmark">&#10003;</div>
+      <h2>You're In, Brother</h2>
+      <p>Your free trial is ready. You'll have 3 sessions with 20 messages each — enough to get a real feel for the coach. Take your time. Come back when you need it.</p>
+      <p style="font-size:13px; color:#999;">Redirecting you to the coach in <span id="countdown">5</span> seconds...</p>
+      <button class="btn" id="goNowBtn" onclick="redirectToCoach()">Go Now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- Config ----
+  const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
+  const COACH_URL = 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html';
+
+  // Read source from URL param (default: business_card)
+  const urlParams = new URLSearchParams(window.location.search);
+  const source = urlParams.get('src') || 'business_card';
+
+  let trialToken = null;
+
+  // ---- Generate token ----
+  function generateToken() {
+    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let token = 'trial_';
+    for (let i = 0; i < 16; i++) {
+      token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token;
+  }
+
+  // ---- Show error ----
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function hideError() {
+    document.getElementById('errorMsg').style.display = 'none';
+  }
+
+  // ---- Form submit ----
+  async function handleSubmit(e) {
+    e.preventDefault();
+    hideError();
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Setting up your trial...';
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    if (!firstName || !lastName || !email) {
+      showError('Please fill in all fields.');
+      btn.disabled = false;
+      btn.textContent = 'Start My Free Trial';
+      return;
+    }
+
+    try {
+      // Check if email already has a trial
+      const checkResp = await fetch(
+        `${SUPABASE_URL}/rest/v1/trial_tokens?email=eq.${encodeURIComponent(email)}&select=token,is_active,messages_used,max_sessions,messages_per_session`,
+        {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        }
+      );
+      const existing = await checkResp.json();
+
+      if (existing && existing.length > 0) {
+        const trial = existing[0];
+        const maxMessages = trial.max_sessions * trial.messages_per_session;
+        if (trial.is_active && trial.messages_used < maxMessages) {
+          // They already have an active trial — just redirect them
+          trialToken = trial.token;
+          showSuccess();
+          return;
+        } else {
+          showError('It looks like you\'ve already used your free trial. Reach out to john@guidetoself.com if you have questions.');
+          btn.disabled = false;
+          btn.textContent = 'Start My Free Trial';
+          return;
+        }
+      }
+
+      // Create new trial token
+      trialToken = generateToken();
+      const insertResp = await fetch(`${SUPABASE_URL}/rest/v1/trial_tokens`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          token: trialToken,
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          source: source,
+          sessions_used: 0,
+          messages_used: 0,
+          current_session_messages: 0,
+          messages_per_session: 20,
+          max_sessions: 3,
+          is_active: true
+        })
+      });
+
+      if (!insertResp.ok) {
+        const errData = await insertResp.json();
+        throw new Error(errData.message || 'Failed to create trial');
+      }
+
+      showSuccess();
+
+    } catch (err) {
+      console.error('Trial signup error:', err);
+      showError('Something went wrong. Please try again or email john@guidetoself.com.');
+      btn.disabled = false;
+      btn.textContent = 'Start My Free Trial';
+    }
+  }
+
+  // ---- Success + countdown ----
+  function showSuccess() {
+    document.getElementById('formState').style.display = 'none';
+    document.getElementById('successState').style.display = 'block';
+
+    let seconds = 5;
+    const countdownEl = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      seconds--;
+      countdownEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        redirectToCoach();
+      }
+    }, 1000);
+  }
+
+  // ---- Redirect ----
+  function redirectToCoach() {
+    window.location.href = `${COACH_URL}?trial=${encodeURIComponent(trialToken)}`;
+  }
+</script>
+
+</body>
+</html>
