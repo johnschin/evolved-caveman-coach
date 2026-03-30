@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inner Leadership AI Coach — Free Trial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --aqua: #a3d0c9;
+    --charcoal: #202023;
+    --charcoal-light: #2a2a2e;
+    --charcoal-lighter: #35353a;
+    --off-white: #eeeeee;
+    --muted: #999;
+    --error: #e74c3c;
+    --success: #27ae60;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--charcoal);
+    color: var(--off-white);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  /* --- HEADER --- */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--charcoal-light);
+    border-bottom: 1px solid var(--charcoal-lighter);
+    flex-shrink: 0;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--aqua);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .header-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .trial-badge {
+    background: rgba(163,208,201,0.15);
+    color: var(--aqua);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .msg-counter {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .msg-counter strong {
+    color: var(--aqua);
+  }
+  /* --- CHAT AREA --- */
+  .chat-container {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+  .chat-container.active {
+    display: flex;
+  }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scroll-behavior: smooth;
+  }
+  .message {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .message.user {
+    flex-direction: row-reverse;
+  }
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .message.assistant .message-avatar {
+    background: var(--aqua);
+    color: var(--charcoal);
+  }
+  .message.user .message-avatar {
+    background: var(--charcoal-lighter);
+    color: var(--muted);
+  }
+  .message-bubble {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 75%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .message.assistant .message-bubble {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-top-left-radius: 4px;
+  }
+  .message.user .message-bubble {
+    background: var(--aqua);
+    color: var(--charcoal);
+    border-top-right-radius: 4px;
+  }
+  .typing-indicator {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto 16px;
+    padding: 0 20px;
+  }
+  .typing-indicator.active { display: flex; }
+  .typing-indicator .dots {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    margin-left: 42px;
+  }
+  .typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--aqua);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite;
+    opacity: 0.4;
+  }
+  .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+  /* --- INPUT AREA --- */
+  .input-area {
+    padding: 12px 20px 20px;
+    border-top: 1px solid var(--charcoal-lighter);
+    flex-shrink: 0;
+  }
+  .input-row {
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: flex-end;
+  }
+  .input-row textarea {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    color: var(--off-white);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    max-height: 120px;
+    min-height: 44px;
+    transition: border-color 0.2s;
+  }
+  .input-row textarea:focus {
+    border-color: var(--aqua);
+  }
+  .input-row textarea:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .send-btn {
+    background: var(--aqua);
+    color: var(--charcoal);
+    border: none;
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .send-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .disclaimer-bar {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* --- OVERLAY SCREENS --- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(32,32,35,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 100;
+  }
+  .overlay.visible { display: flex; }
+  .overlay-card {
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    padding: 36px 32px;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 16px;
+  }
+  .overlay-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--aqua);
+    margin-bottom: 10px;
+  }
+  .overlay-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .overlay-card .btn-primary {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--aqua);
+    color: var(--charcoal);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    margin: 6px;
+  }
+  .overlay-card .btn-primary:hover { opacity: 0.9; }
+  .overlay-card .btn-secondary {
+    display: inline-block;
+    padding: 12px 28px;
+    background: transparent;
+    border: 1px solid var(--charcoal-lighter);
+    color: var(--aqua);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin: 6px;
+  }
+  .overlay-card .btn-secondary:hover { border-color: var(--aqua); }
+  .consent-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    text-align: left;
+    margin-bottom: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--charcoal);
+    border-radius: 10px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 8px;
+    color: var(--off-white);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus {
+    border-color: var(--aqua);
+  }
+  .form-group input::placeholder { color: #666; }
+  .overlay-error {
+    color: var(--error);
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: none;
+  }
+  /* --- RESPONSIVE --- */
+  @media (max-width: 600px) {
+    .message-bubble { max-width: 88%; font-size: 13px; }
+    .header { flex-wrap: wrap; gap: 8px; }
+    .header-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CONSENT OVERLAY -->
+<div class="overlay visible" id="consentOverlay">
+  <div class="overlay-card">
+    <h2>Inner Leadership AI Coach</h2>
+    <p>Welcome, <strong id="userName">friend</strong>. Before we start, a quick note.</p>
+    <div class="consent-text">
+      <strong>Inner Leadership AI Coach</strong> is a coaching tool for self-leadership, communication, and personal development built by Dr. John Schinnerer, Ph.D. — psychologist, executive coach, and expert consultant on Pixar's <em>Inside Out</em>.<br><br>
+      <strong>This tool IS:</strong> Coaching for self-awareness, emotional intelligence, communication skills, stress management, and decision-making.<br><br>
+      <strong>This tool IS NOT:</strong> Therapy, counseling, diagnosis, treatment, crisis support, or a substitute for a licensed mental health professional.<br><br>
+      If you are in crisis or experiencing a mental health emergency, please contact the <strong>988 Suicide & Crisis Lifeline</strong> (call or text 988) or go to your nearest emergency room.<br><br>
+      By continuing, you understand and agree to these terms.
+    </div>
+    <button class="btn-primary" onclick="acceptConsent()">I Understand — Let's Go</button>
+  </div>
+</div>
+
+<!-- SESSION COMPLETE OVERLAY -->
+<div class="overlay" id="sessionCompleteOverlay">
+  <div class="overlay-card">
+    <h2>Session Complete</h2>
+    <p id="sessionCompleteMsg">Nice work. You've used all 20 messages in this session.</p>
+    <button class="btn-primary" onclick="startNewSession()">Start Next Session</button>
+    <br>
+    <a href="https://guidetoself.com" class="btn-secondary" target="_blank">Learn About Full Access</a>
+  </div>
+</div>
+
+<!-- TRIAL EXPIRED OVERLAY -->
+<div class="overlay" id="trialExpiredOverlay">
+  <div class="overlay-card">
+    <h2>Trial Complete</h2>
+    <p>You've used all 3 free sessions. If this felt useful — and I hope it did — imagine having this in your corner 24/7.</p>
+    <a href="https://guidetoself.com" class="btn-primary" target="_blank">Get Full Access</a>
+    <br>
+    <a href="https://theevolvedcaveman.com" class="btn-secondary" target="_blank">Explore The Evolved Caveman</a>
+  </div>
+</div>
+
+<!-- INVALID TOKEN OVERLAY -->
+<div class="overlay" id="invalidOverlay">
+  <div class="overlay-card">
+    <h2>Hmm, Something's Off</h2>
+    <p>This trial link doesn't seem to be valid. If you think that's wrong, reach out to john@guidetoself.com.</p>
+    <a href="https://theevolvedcaveman.com" class="btn-primary" target="_blank">Visit The Evolved Caveman</a>
+  </div>
+</div>
+
+<!-- RESUME TRIAL OVERLAY -->
+<div class="overlay" id="resumeOverlay">
+  <div class="overlay-card">
+    <h2>Welcome Back</h2>
+    <p>Enter the email you used to sign up and we'll pick up where you left off.</p>
+    <div class="form-group">
+      <input type="email" id="resumeEmail" placeholder="you@email.com" autocomplete="email">
+    </div>
+    <div class="overlay-error" id="resumeError"></div>
+    <button class="btn-primary" onclick="resumeTrial()">Resume My Trial</button>
+  </div>
+</div>
+
+<!-- CHAT SCREEN -->
+<div id="chatScreen" class="chat-container">
+  <div class="header">
+    <div class="header-left">
+      <div>
+        <div class="header-title">Inner Leadership AI Coach</div>
+        <div class="header-subtitle">The Evolved Caveman</div>
+      </div>
+      <span class="trial-badge">Free Trial</span>
+    </div>
+    <div class="header-right">
+      <div class="msg-counter" id="msgCounter">Loading...</div>
+    </div>
+  </div>
+  <div class="messages" id="messages"></div>
+  <div class="typing-indicator" id="typingIndicator">
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="userInput" rows="1" placeholder="What's on your mind?" disabled onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" disabled onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="disclaimer-bar">
+      Inner Leadership AI Coach is an educational coaching tool — not therapy, counseling, or crisis support.
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// CONFIGURATION
+// =====================================================
+var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+var EDGE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/chat";
+
+// =====================================================
+// STATE
+// =====================================================
+var trialToken = null;
+var firstName = "";
+var trialStatus = null;
+var sessionId = null;
+var conversationHistory = [];
+var messageCount = 0;
+var isSending = false;
+var openingVariation = null;
+
+// =====================================================
+// SYSTEM PROMPT (exact production prompt)
+// =====================================================
+var SYSTEM_PROMPT = "You are the Inner Leadership AI Coach, built by Dr. John Schinnerer \u2014 a psychologist, executive coach, and expert on men's emotional intelligence with 30+ years of experience. You hold a PhD in Psychology from UC Berkeley and served as an expert consultant on Pixar's Inside Out.\n\n" +
+"VOICE:\n" +
+"Sound like John \u2014 warm, direct, slightly irreverent, grounded in science but delivered conversationally. Not a neutral product voice. Think: your smartest friend who has a PhD and won't let you off the hook. Use occasional humor but never at the user's expense. Challenge gently but persistently. You're a thinking partner, not a yes-man.\n\n" +
+"WHAT YOU ARE:\n" +
+"- A coaching tool for self-leadership, communication, stress management, relationships, and decision-making\n" +
+"- Educational, not clinical\n" +
+"- Direct, grounded, occasionally provocative \u2014 but always in service of the user's growth\n\n" +
+"WHAT YOU ARE NOT:\n" +
+"- NOT a therapist, counselor, or crisis service\n" +
+"- NOT a diagnostic tool\n" +
+"- NOT a substitute for licensed mental health care\n" +
+"- NEVER position yourself as any of the above\n\n" +
+"FOUR COACHING PILLARS:\n" +
+"1. Stress, Burnout & Overload \u2014 Why successful men feel constantly stressed; burnout as a nervous system problem\n" +
+"2. Anger, Irritability & Reactivity \u2014 How men get stuck in anger; irritability as unprocessed stress\n" +
+"3. Relationships & Communication \u2014 Why conversations escalate; logic failing in relationship conflict\n" +
+"4. Identity, Meaning & Midlife \u2014 Successful on the outside, unsatisfied on the inside\n\n" +
+"DEFAULT RESPONSE STRUCTURE:\n" +
+"1. Name the pattern or tension you see\n" +
+"2. Ask ONE sharp coaching question (not three \u2014 one)\n" +
+"3. Offer one practical reframe\n" +
+"4. Suggest one concrete next step\n\n" +
+"Keep responses concise \u2014 aim for 3-5 paragraphs max. Don't lecture. Don't give numbered lists of tips. One insight beats ten surface suggestions.\n\n" +
+"INNER BOARD MEETING FRAMEWORK:\n" +
+"When relevant, use this model to help users understand their internal dynamics:\n" +
+"- The CEO \u2014 Grounded, values-driven decision maker. The leader they're building.\n" +
+"- The Director of Defense \u2014 Protects through anger, control, or withdrawal. Often running the show when stress hits.\n" +
+"- The VP of Emotions \u2014 Carries vulnerability, needs, and relational signals. Often suppressed in men.\n" +
+"Use this framework naturally \u2014 introduce it when it fits, don't force it.\n\n" +
+"LANGUAGE RULES:\n" +
+"Preferred: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point\n" +
+"Avoid as primary language: trauma, healing old wounds, childhood wounds, diagnosis, treatment, mental disorder labels, psychoanalyze, therapeutic intervention, process your trauma, nervous system stuck in threat mode\n\n" +
+"SAFETY FILTERS:\n" +
+"GREEN (core coaching): Values, leadership patterns, accountability, communication, conflict patterns, goal alignment, performance\n" +
+"YELLOW (use with coaching framing): Identity, shame-adjacent topics, emotional awareness, inherited patterns, meaning/emptiness, anger depth, relationship pain \u2014 keep present-focused, redirect to action\n" +
+"RED (out of scope \u2014 redirect): Trauma exploration, abuse memories, inner child work, diagnosing conditions, treatment planning, sustained crisis engagement \u2014 acknowledge importance, state limits, recommend professional support\n\n" +
+"CRISIS PROTOCOL:\n" +
+"If a user expresses suicidal ideation, self-harm intent, or immediate danger:\n" +
+"1. Acknowledge what they shared with compassion\n" +
+"2. State clearly: 'This is beyond what I can help with as a coaching tool.'\n" +
+"3. Provide: 988 Suicide & Crisis Lifeline (call or text 988), Crisis Text Line (text HOME to 741741), or call 911\n" +
+"4. Do not continue coaching. Hold space and redirect to professional help.\n\n" +
+"THINKERS TO REFERENCE (when relevant):\n" +
+"John Gottman, Terry Real, Todd Kashdan, Carl Jung, Marcus Aurelius, Martin Seligman, Esther Perel, Sue Johnson (EFT), Paul Ekman, Gabor Mat\u00e9, Bessel van der Kolk, Stephen Porges (Polyvagal), CBT, IFS, REBT, Positive Psychology, Attachment Theory\n\n" +
+"NEVER REFERENCE: Jordan Peterson, manosphere/red-pill figures, Tony Robbins, far-right or far-left political ideology, organized religion\n\n" +
+"DISCLAIMER (always active): Inner Leadership AI Coach is a coaching tool for self-leadership, communication, and personal development. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n" +
+"TRIAL CONTEXT: This is a FREE TRIAL user. They have limited messages. Be impactful and efficient \u2014 make every response count. Don't waste messages on filler. Deliver real value from message one.\n\n";
+
+var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
+"Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
+"Hey man, welcome. I'm your Inner Leadership AI Coach \u2014 built on decades of research in psychology, neuroscience, and executive coaching to help you lead yourself better from the inside out.\n\n" +
+"Here's what I do: I help you spot your patterns, sharpen your self-awareness, strengthen how you communicate, and make better decisions under pressure \u2014 at work, at home, in the moments that actually matter.\n\n" +
+"Here's what I don't do: I'm not a therapist, I'm not a crisis line, and I'm not going to psychoanalyze your childhood. If you're dealing with something that needs professional mental health support, I'll tell you straight \u2014 go get it. No shame in that.\n\n" +
+"What I am is a thinking partner. Direct. Grounded. Occasionally a pain in the ass \u2014 but only because I'm not going to let you coast on autopilot when you've got more in you.\n\n" +
+"You've got 20 messages in this session \u2014 so let's make them count. What's been taking up the most space in your head lately? Give me the real answer, not the polished one.\n\n" +
+"IMPORTANT: Stop here. Do NOT add any coaching question after this. Wait for the user to respond.\n\n";
+
+var RETURNING_SESSION_BLOCK = "RETURNING SESSION INSTRUCTIONS:\n" +
+"This user is starting a new trial session. Do NOT deliver the full welcome again. Greet them warmly and briefly:\n" +
+"\"Good to see you back, man. You've got 20 messages in this session. What's on your mind \u2014 want to pick up where we left off, or is there something new?\"\n" +
+"Keep it short and move into coaching.\n\n";
+
+var OPENING_VARIATIONS = {
+  A: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"So here's where we start: What's the thing that's been taking up the most space in your head lately \u2014 the situation, the relationship, the decision that keeps circling back? Give me the real answer, not the polished one.\"\n\n",
+  B: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"Alright, let's get into it. If I could see a dashboard of what's draining your battery right now \u2014 work, relationship, internal noise \u2014 what would be in the red zone? Be specific.\"\n\n",
+  C: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"Good. Here's your first coaching question: What's the pattern you keep running into \u2014 the one where you already know what you should do differently, but you keep doing the same thing anyway?\"\n\n"
+};
+
+// =====================================================
+// FUNCTIONS
+// =====================================================
+
+function generateSessionId() {
+  // Must be a valid UUID — conversations.session_id column is UUID type
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function pickOpeningVariation() {
+  var options = ["A", "B", "C"];
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+function buildSystemPrompt(isNewSession) {
+  var prompt = SYSTEM_PROMPT;
+  if (isNewSession && messageCount === 0) {
+    var sessNum = (trialStatus.sessions_used || 0) + 1;
+    if (sessNum <= 1) {
+      prompt += FIRST_TIME_WELCOME_BLOCK;
+    } else {
+      prompt += RETURNING_SESSION_BLOCK;
+    }
+  }
+  if (messageCount < 3 && openingVariation) {
+    prompt += OPENING_VARIATIONS[openingVariation] || "";
+  }
+  return prompt;
+}
+
+function trimConversationHistory() {
+  var maxMessages = 40;
+  if (conversationHistory.length > maxMessages) {
+    var firstPair = conversationHistory.slice(0, 2);
+    var recent = conversationHistory.slice(-1 * (maxMessages - 2));
+    conversationHistory = firstPair.concat(recent);
+  }
+}
+
+// --- UI Helpers ---
+function appendMessage(role, text) {
+  var container = document.getElementById("messages");
+  var div = document.createElement("div");
+  div.className = "message " + role;
+
+  var avatar = document.createElement("div");
+  avatar.className = "message-avatar";
+  avatar.textContent = role === "assistant" ? "EC" : "U";
+
+  var bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  bubble.textContent = text;
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping(show) {
+  var el = document.getElementById("typingIndicator");
+  if (show) { el.classList.add("active"); } else { el.classList.remove("active"); }
+  var msgs = document.getElementById("messages");
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function updateCounter() {
+  var el = document.getElementById("msgCounter");
+  if (!trialStatus) return;
+  var sessMsg = trialStatus.session_messages_remaining != null ? trialStatus.session_messages_remaining : 20;
+  var sessNum = (trialStatus.sessions_used || 0) + 1;
+  var maxSess = trialStatus.max_sessions || 3;
+  el.innerHTML = "Session " + Math.min(sessNum, maxSess) + " of " + maxSess + " &middot; <strong>" + sessMsg + "</strong> messages left";
+}
+
+function enableInput() {
+  document.getElementById("userInput").disabled = false;
+  document.getElementById("sendBtn").disabled = false;
+  document.getElementById("userInput").focus();
+}
+
+function disableInput() {
+  document.getElementById("userInput").disabled = true;
+  document.getElementById("sendBtn").disabled = true;
+}
+
+function handleKeyDown(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 120) + "px";
+}
+
+// --- Trial Status ---
+async function checkTrialStatus() {
+  try {
+    var resp = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ trial_token: trialToken, action: "check_trial" })
+    });
+    trialStatus = await resp.json();
+
+    if (trialStatus.status === "invalid") {
+      document.getElementById("consentOverlay").classList.remove("visible");
+      document.getElementById("invalidOverlay").classList.add("visible");
+      return;
+    }
+    if (trialStatus.status === "trial_expired") {
+      document.getElementById("consentOverlay").classList.remove("visible");
+      document.getElementById("trialExpiredOverlay").classList.add("visible");
+      return;
+    }
+    if (trialStatus.status === "session_complete") {
+      document.getElementById("consentOverlay").classList.remove("visible");
+      var sessLeft = trialStatus.sessions_remaining || 0;
+      document.getElementById("sessionCompleteMsg").textContent =
+        "You finished your last session. You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
+      document.getElementById("sessionCompleteOverlay").classList.add("visible");
+      return;
+    }
+
+    // Active
+    firstName = trialStatus.first_name || "friend";
+    document.getElementById("userName").textContent = firstName;
+    updateCounter();
+  } catch (err) {
+    console.error("Trial check failed:", err);
+    document.getElementById("consentOverlay").classList.remove("visible");
+    document.getElementById("invalidOverlay").classList.add("visible");
+  }
+}
+
+// --- Resume Trial ---
+async function resumeTrial() {
+  var email = document.getElementById("resumeEmail").value.trim();
+  var errorEl = document.getElementById("resumeError");
+  errorEl.style.display = "none";
+
+  if (!email) {
+    errorEl.textContent = "Please enter your email.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  try {
+    var resp = await fetch(
+      SUPABASE_URL + "/rest/v1/trial_tokens?email=eq." + encodeURIComponent(email) + "&select=token,first_name,is_active,messages_used,max_sessions,messages_per_session",
+      { headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY } }
+    );
+    var results = await resp.json();
+
+    if (!results || results.length === 0) {
+      errorEl.textContent = "No trial found for that email. Double-check or sign up for a new trial.";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    var trial = results[0];
+    var maxMessages = trial.max_sessions * trial.messages_per_session;
+
+    if (!trial.is_active || trial.messages_used >= maxMessages) {
+      errorEl.textContent = "Your trial has been fully used. Visit guidetoself.com for full access.";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    trialToken = trial.token;
+    var newUrl = window.location.pathname + "?trial=" + encodeURIComponent(trialToken);
+    window.history.replaceState({}, "", newUrl);
+
+    document.getElementById("resumeOverlay").classList.remove("visible");
+    await checkTrialStatus();
+    // After successful resume, show consent overlay so user can enter chat
+    if (trialStatus && trialStatus.status === "active") {
+      document.getElementById("consentOverlay").classList.add("visible");
+    }
+  } catch (err) {
+    errorEl.textContent = "Something went wrong. Please try again.";
+    errorEl.style.display = "block";
+  }
+}
+
+// --- Accept Consent & Enter Chat ---
+async function acceptConsent() {
+  document.getElementById("consentOverlay").classList.remove("visible");
+  document.getElementById("chatScreen").classList.add("active");
+
+  sessionId = generateSessionId();
+  conversationHistory = [];
+  messageCount = 0;
+  openingVariation = pickOpeningVariation();
+
+  // Send initial trigger to get the AI's welcome
+  await sendInitialMessage();
+  enableInput();
+}
+
+async function sendInitialMessage() {
+  showTyping(true);
+
+  var sessNum = (trialStatus.sessions_used || 0) + 1;
+  var systemPrompt = buildSystemPrompt(true);
+  var triggerMessage = sessNum <= 1 ? "Hello" : "I'm back for another session.";
+
+  conversationHistory.push({ role: "user", content: triggerMessage });
+
+  try {
+    var res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        trial_token: trialToken,
+        system: systemPrompt,
+        messages: conversationHistory,
+        session_id: sessionId,
+        is_first_message: true
+      })
+    });
+
+    if (!res.ok) throw new Error("Server returned " + res.status);
+
+    var data = await res.json();
+    showTyping(false);
+
+    if (data.trial_status === "trial_expired" || data.trial_status === "session_complete") {
+      // Edge case: ran out during welcome
+      handleTrialStatusResponse(data);
+      return;
+    }
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      var reply = data.content[0].text;
+      conversationHistory.push({ role: "assistant", content: reply });
+      appendMessage("assistant", reply);
+      messageCount++;
+
+      // Update counter from response
+      if (data.session_messages_remaining !== undefined) {
+        trialStatus.session_messages_remaining = data.session_messages_remaining;
+        trialStatus.messages_remaining = data.messages_remaining;
+        trialStatus.sessions_remaining = data.sessions_remaining;
+        updateCounter();
+      }
+    } else {
+      appendMessage("assistant", "Having trouble connecting. Please try refreshing the page.");
+    }
+  } catch (err) {
+    showTyping(false);
+    appendMessage("assistant", "Something went wrong connecting to the coach. Please try refreshing the page.");
+    console.error("Initial message error:", err);
+  }
+}
+
+// --- Handle trial status in responses ---
+function handleTrialStatusResponse(data) {
+  if (data.trial_status === "trial_expired") {
+    document.getElementById("trialExpiredOverlay").classList.add("visible");
+    disableInput();
+    return true;
+  }
+  if (data.trial_status === "session_complete") {
+    var sessLeft = data.sessions_remaining || 0;
+    document.getElementById("sessionCompleteMsg").textContent =
+      "Session complete! You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
+    document.getElementById("sessionCompleteOverlay").classList.add("visible");
+    disableInput();
+    return true;
+  }
+  return false;
+}
+
+// --- Send Message ---
+async function sendMessage() {
+  var input = document.getElementById("userInput");
+  var text = input.value.trim();
+  if (!text || isSending) return;
+
+  isSending = true;
+  disableInput();
+  input.value = "";
+  input.style.height = "auto";
+
+  appendMessage("user", text);
+  showTyping(true);
+
+  conversationHistory.push({ role: "user", content: text });
+  trimConversationHistory();
+
+  var systemPrompt = messageCount < 3 ? buildSystemPrompt(false) : SYSTEM_PROMPT;
+
+  try {
+    var res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        trial_token: trialToken,
+        system: systemPrompt,
+        messages: conversationHistory,
+        session_id: sessionId,
+        is_first_message: false
+      })
+    });
+
+    if (!res.ok) throw new Error("Server returned " + res.status);
+
+    var data;
+    try { data = await res.json(); } catch (e) { throw new Error("Invalid response"); }
+
+    showTyping(false);
+
+    // Check if trial hit a limit
+    if (handleTrialStatusResponse(data)) {
+      isSending = false;
+      return;
+    }
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      var reply = data.content[0].text;
+      conversationHistory.push({ role: "assistant", content: reply });
+      appendMessage("assistant", reply);
+      messageCount++;
+
+      if (data.session_messages_remaining !== undefined) {
+        trialStatus.session_messages_remaining = data.session_messages_remaining;
+        trialStatus.messages_remaining = data.messages_remaining;
+        trialStatus.sessions_remaining = data.sessions_remaining;
+        updateCounter();
+      }
+    } else if (data.error) {
+      appendMessage("assistant", "I hit a snag \u2014 " + (data.error.message || "something went wrong") + ". Try again?");
+      conversationHistory.pop();
+    } else {
+      appendMessage("assistant", "Got an unexpected response. Try sending that again?");
+      conversationHistory.pop();
+    }
+  } catch (err) {
+    showTyping(false);
+    appendMessage("assistant", "Connection issue. Check your internet and try again.");
+    conversationHistory.pop();
+    console.error("Send error:", err);
+  }
+
+  isSending = false;
+  enableInput();
+}
+
+// --- Start New Session ---
+async function startNewSession() {
+  try {
+    var resp = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ trial_token: trialToken, action: "start_new_session" })
+    });
+    var result = await resp.json();
+
+    if (result.status === "trial_expired") {
+      document.getElementById("sessionCompleteOverlay").classList.remove("visible");
+      document.getElementById("trialExpiredOverlay").classList.add("visible");
+      return;
+    }
+
+    // Reset UI
+    document.getElementById("sessionCompleteOverlay").classList.remove("visible");
+    document.getElementById("messages").innerHTML = "";
+    conversationHistory = [];
+    messageCount = 0;
+    sessionId = generateSessionId();
+    openingVariation = pickOpeningVariation();
+
+    // Refresh status
+    await checkTrialStatus();
+    updateCounter();
+
+    // Send new welcome
+    await sendInitialMessage();
+    enableInput();
+
+  } catch (err) {
+    console.error("Start new session failed:", err);
+  }
+}
+
+// =====================================================
+// INITIALIZATION
+// =====================================================
+async function init() {
+  var params = new URLSearchParams(window.location.search);
+  trialToken = params.get("trial");
+
+  if (!trialToken) {
+    document.getElementById("consentOverlay").classList.remove("visible");
+    document.getElementById("resumeOverlay").classList.add("visible");
+    return;
+  }
+
+  await checkTrialStatus();
+}
+
+// Enter key on resume email
+document.getElementById("resumeEmail").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); resumeTrial(); }
+});
+
+init();
+</script>
+</body>
+</html>
