@@ -66,8 +66,29 @@
 
     /* ---- Trial info ---- */
     .trial-info {
-      text-align: center;
+      text-align: left;
       margin-bottom: 32px;
+    }
+    .trial-info ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+    .trial-info ul li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cccccc;
+    }
+    .trial-info ul li::before {
+      content: '\2022';
+      position: absolute;
+      left: 0;
+      color: #a3d0c9;
+      font-size: 18px;
+      line-height: 1.5;
     }
     .trial-info h2 {
       font-family: 'Gyst', Georgia, 'Times New Roman', serif;
@@ -255,8 +276,16 @@
       <div class="trial-info">
         <h2>Try It — On the House</h2>
         <p>Try AI-powered coaching built on 30+ years of psychology, neuroscience, and real-world work with men. No credit card. No commitment. No coddling. Just sharp, honest coaching that helps you grow.</p>
-        <p>Build confidence. Communicate clearly. Lead with grounded strength.</p>
-        <p>Strengthen your relationships. <br>Increase your value at work. <br>Understand yourself more deeply. <br>Handle hard conversations without losing your center. Lead from the inside out.</p>
+        <ul>
+          <li>Build confidence.</li>
+          <li>Communicate clearly.</li>
+          <li>Lead with grounded strength.</li>
+          <li>Strengthen your relationships.</li>
+          <li>Increase your value at work.</li>
+          <li>Understand yourself more deeply.</li>
+          <li>Handle hard conversations without losing your center.</li>
+          <li>Lead from the inside out.</li>
+        </ul>
         <p>At the end of the trial, if you want more, you'll have the option to join as a monthly member.</p>
       </div>
 
