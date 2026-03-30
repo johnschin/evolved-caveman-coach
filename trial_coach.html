@@ -368,18 +368,19 @@
   <div class="overlay-card">
     <h2>Session Complete</h2>
     <p id="sessionCompleteMsg">Nice work. You've used all 20 messages in this session.</p>
-    <button class="btn-primary" onclick="startNewSession()">Start Next Session</button>
+    <button class="btn-primary" id="sessionCompleteAction" onclick="startNewSession()">Start Next Session</button>
     <br>
-    <a href="https://guidetoself.com" class="btn-secondary" target="_blank">Learn About Full Access</a>
+    <a href="#" class="btn-secondary" onclick="goToUpgrade()">See Membership Options</a>
   </div>
 </div>
 
 <!-- TRIAL EXPIRED OVERLAY -->
 <div class="overlay" id="trialExpiredOverlay">
   <div class="overlay-card">
-    <h2>Trial Complete</h2>
-    <p>You've used all 3 free sessions. If this felt useful — and I hope it did — imagine having this in your corner 24/7.</p>
-    <a href="https://guidetoself.com" class="btn-primary" target="_blank">Get Full Access</a>
+    <h2>You Did the Hard Part — You Showed Up</h2>
+    <p>You've used all 3 free sessions. Most men never get this far. If this felt useful — and I hope it did — imagine having this in your corner 24/7.</p>
+    <p style="font-size:13px; color:#999; margin-bottom:16px;">Taking you to membership options in <span id="expiredCountdown">8</span> seconds...</p>
+    <a href="#" class="btn-primary" onclick="goToUpgrade()">See Membership Options</a>
     <br>
     <a href="https://theevolvedcaveman.com" class="btn-secondary" target="_blank">Explore The Evolved Caveman</a>
   </div>
@@ -653,6 +654,7 @@ async function checkTrialStatus() {
     if (trialStatus.status === "trial_expired") {
       document.getElementById("consentOverlay").classList.remove("visible");
       document.getElementById("trialExpiredOverlay").classList.add("visible");
+      startExpiredCountdown();
       return;
     }
     if (trialStatus.status === "session_complete") {
@@ -704,8 +706,8 @@ async function resumeTrial() {
     var maxMessages = trial.max_sessions * trial.messages_per_session;
 
     if (!trial.is_active || trial.messages_used >= maxMessages) {
-      errorEl.textContent = "Your trial has been fully used. Visit guidetoself.com for full access.";
-      errorEl.style.display = "block";
+      // Trial fully used — redirect to upgrade page
+      window.location.href = buildUpgradeUrl(trial.email || email);
       return;
     }
 
@@ -799,15 +801,30 @@ async function sendInitialMessage() {
 // --- Handle trial status in responses ---
 function handleTrialStatusResponse(data) {
   if (data.trial_status === "trial_expired") {
-    document.getElementById("trialExpiredOverlay").classList.add("visible");
+    // Show in-chat message first
+    appendMessage("assistant", "That's a wrap on your free trial, brother. You showed up, you did the work, and that takes guts. If you want to keep this going — unlimited sessions, anytime you need it — I'll be here. Taking you to your options now.");
+    // Then show the overlay with countdown after a short delay
+    setTimeout(function() {
+      document.getElementById("trialExpiredOverlay").classList.add("visible");
+      startExpiredCountdown();
+    }, 3000);
     disableInput();
     return true;
   }
   if (data.trial_status === "session_complete") {
     var sessLeft = data.sessions_remaining || 0;
-    document.getElementById("sessionCompleteMsg").textContent =
-      "Session complete! You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
-    document.getElementById("sessionCompleteOverlay").classList.add("visible");
+    if (sessLeft <= 0) {
+      // Last session done — show in-chat message then redirect to upgrade
+      appendMessage("assistant", "That's a wrap on your free trial, brother. You showed up, you did the work, and that takes guts. If you want to keep this going — unlimited sessions, anytime you need it — I'll be here. Taking you to your options now.");
+      setTimeout(function() {
+        document.getElementById("trialExpiredOverlay").classList.add("visible");
+        startExpiredCountdown();
+      }, 3000);
+    } else {
+      document.getElementById("sessionCompleteMsg").textContent =
+        "Session complete! You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
+      document.getElementById("sessionCompleteOverlay").classList.add("visible");
+    }
     disableInput();
     return true;
   }
@@ -902,6 +919,7 @@ async function startNewSession() {
     if (result.status === "trial_expired") {
       document.getElementById("sessionCompleteOverlay").classList.remove("visible");
       document.getElementById("trialExpiredOverlay").classList.add("visible");
+      startExpiredCountdown();
       return;
     }
 
@@ -924,6 +942,38 @@ async function startNewSession() {
   } catch (err) {
     console.error("Start new session failed:", err);
   }
+}
+
+// =====================================================
+// UPGRADE REDIRECT
+// =====================================================
+var UPGRADE_URL = "https://johnschin.github.io/evolved-caveman-coach/upgrade.html";
+var expiredCountdownInterval = null;
+
+function buildUpgradeUrl(email) {
+  var url = UPGRADE_URL;
+  if (trialToken) url += "?trial=" + encodeURIComponent(trialToken);
+  if (email) url += (url.includes("?") ? "&" : "?") + "email=" + encodeURIComponent(email);
+  return url;
+}
+
+function goToUpgrade() {
+  var email = trialStatus && trialStatus.email ? trialStatus.email : "";
+  window.location.href = buildUpgradeUrl(email);
+}
+
+function startExpiredCountdown() {
+  var seconds = 8;
+  var el = document.getElementById("expiredCountdown");
+  if (!el) return;
+  expiredCountdownInterval = setInterval(function() {
+    seconds--;
+    el.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(expiredCountdownInterval);
+      goToUpgrade();
+    }
+  }, 1000);
 }
 
 // =====================================================
