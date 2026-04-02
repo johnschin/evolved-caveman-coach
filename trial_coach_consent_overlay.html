@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Leadership AI Coach - Consent Overlay (Copy-Paste Ready)</title>
+    <style>
+        /* COPY THIS CSS INTO YOUR EXISTING trial_coach.html STYLE SECTION */
+
+        :root {
+            --aqua: #a3d0c9;
+            --charcoal: #202023;
+            --charcoal-light: #2a2a2e;
+            --charcoal-lighter: #35353a;
+            --off-white: #eeeeee;
+            --muted: #999;
+        }
+
+        #consentOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(32, 32, 35, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        #consentOverlay.hidden {
+            display: none;
+        }
+
+        .consent-modal {
+            background: var(--charcoal-light);
+            border: 1px solid var(--charcoal-lighter);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .consent-modal h1 {
+            font-family: 'Gyst', serif;
+            font-size: 28px;
+            color: var(--off-white);
+            margin: 0 0 24px 0;
+            line-height: 1.2;
+        }
+
+        .consent-summary {
+            background: var(--charcoal-lighter);
+            border-left: 4px solid var(--aqua);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--off-white);
+        }
+
+        .consent-summary strong {
+            color: var(--aqua);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .document-links {
+            margin-bottom: 28px;
+        }
+
+        .document-links p {
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            color: var(--muted);
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .document-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .document-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--aqua);
+            text-decoration: none;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .document-link:hover {
+            color: #fff;
+        }
+
+        .document-link::before {
+            content: "→";
+            display: inline-block;
+        }
+
+        .consent-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--aqua);
+        }
+
+        .checkbox-wrapper label {
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            color: var(--off-white);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .consent-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #consentButton {
+            background: var(--aqua);
+            color: var(--charcoal);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #consentButton:hover:not(:disabled) {
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(163, 208, 201, 0.3);
+        }
+
+        #consentButton:disabled {
+            background: var(--charcoal-lighter);
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .consent-footer {
+            font-family: 'Manrope', sans-serif;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 16px;
+            border-top: 1px solid var(--charcoal-lighter);
+            padding-top: 16px;
+        }
+
+        .consent-footer a {
+            color: var(--aqua);
+            text-decoration: none;
+        }
+
+        .consent-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .consent-modal {
+                padding: 24px;
+            }
+
+            .consent-modal h1 {
+                font-size: 22px;
+            }
+
+            .consent-summary {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body style="background: #202023; margin: 0; padding: 0;">
+
+    <!-- ====================================================================
+         IMPORTANT: COPY EVERYTHING BELOW THIS LINE
+         Replace the existing consent overlay div in trial_coach.html with this
+         ==================================================================== -->
+
+    <div id="consentOverlay">
+        <div class="consent-modal">
+            <h1>Inner Leadership AI Coach</h1>
+
+            <div class="consent-summary">
+                <strong>Important: You're interacting with AI</strong>
+                The Evolved Caveman Inner Leadership AI Coach is an AI system powered by Anthropic's Claude — not a human, therapist, or healthcare provider. It is an educational coaching tool for self-leadership, communication, and personal development. Session activity is logged for safety and compliance. If you are in crisis, call 988 or 911 immediately.
+            </div>
+
+            <div class="document-links">
+                <p>Legal &amp; Disclosure Documents</p>
+                <div class="document-list">
+                    <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" class="document-link">
+                        Terms of Service
+                    </a>
+                    <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" class="document-link">
+                        Privacy Policy
+                    </a>
+                    <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" class="document-link">
+                        AI Disclosure and Informed Use Notice
+                    </a>
+                </div>
+            </div>
+
+            <div class="consent-checkboxes">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="consentCheck1" />
+                    <label for="consentCheck1">
+                        I have read and agree to the Terms of Service, Privacy Policy, and AI Disclosure and Informed Use Notice.
+                    </label>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="consentCheck2" />
+                    <label for="consentCheck2">
+                        I confirm that I am 18 years of age or older and understand that this is an educational coaching tool, not therapy, counseling, or medical care.
+                    </label>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="consentCheck3" />
+                    <label for="consentCheck3">
+                        I understand that session activity is logged for safety and compliance purposes as described in the Privacy Policy.
+                    </label>
+                </div>
+            </div>
+
+            <div class="consent-actions">
+                <button id="consentButton" disabled>
+                    I Understand — Let's Go
+                </button>
+            </div>
+
+            <div class="consent-footer">
+                Questions? Contact <a href="mailto:John@GuideToSelf.com">John@GuideToSelf.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         END OF CONSENT OVERLAY (Copy everything above to your trial_coach.html)
+         ==================================================================== -->
+
+    <script>
+        /* COPY THIS JAVASCRIPT INTO YOUR EXISTING trial_coach.html SCRIPT SECTION */
+
+        function initConsentOverlay() {
+            const checkbox1 = document.getElementById('consentCheck1');
+            const checkbox2 = document.getElementById('consentCheck2');
+            const checkbox3 = document.getElementById('consentCheck3');
+            const consentButton = document.getElementById('consentButton');
+            const consentOverlay = document.getElementById('consentOverlay');
+
+            function updateButtonState() {
+                const allChecked = checkbox1.checked && checkbox2.checked && checkbox3.checked;
+                consentButton.disabled = !allChecked;
+            }
+
+            checkbox1.addEventListener('change', updateButtonState);
+            checkbox2.addEventListener('change', updateButtonState);
+            checkbox3.addEventListener('change', updateButtonState);
+
+            consentButton.addEventListener('click', function() {
+                // Mark consent as given (store in localStorage)
+                localStorage.setItem('consentGiven', 'true');
+                localStorage.setItem('consentDate', new Date().toISOString());
+
+                // Hide the overlay
+                consentOverlay.classList.add('hidden');
+
+                // Enable chat (assuming you have a chat input element)
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            });
+
+            // Check if consent was previously given
+            if (localStorage.getItem('consentGiven') === 'true') {
+                consentOverlay.classList.add('hidden');
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initConsentOverlay);
+        } else {
+            initConsentOverlay();
+        }
+    </script>
+
+</body>
+</html>

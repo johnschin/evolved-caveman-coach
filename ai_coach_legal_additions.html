@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Coach Legal Additions Patch — The Evolved Caveman</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            background: #202023;
+            color: #eeeeee;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Gyst', serif;
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #a3d0c9;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: #2a2a2e;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #a3d0c9;
+        }
+
+        .section h2 {
+            font-family: 'Gyst', serif;
+            font-size: 20px;
+            color: #a3d0c9;
+            margin-bottom: 15px;
+        }
+
+        .subsection {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #35353a;
+        }
+
+        .subsection:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .subsection h3 {
+            font-size: 15px;
+            color: #a3d0c9;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .placement {
+            background: #35353a;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 12px;
+            color: #999;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block {
+            background: #151517;
+            border: 1px solid #35353a;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            color: #a3d0c9;
+            display: block;
+            white-space: pre;
+        }
+
+        .comment {
+            color: #5a9d95;
+        }
+
+        .string {
+            color: #d4a574;
+        }
+
+        .tag {
+            color: #a3d0c9;
+        }
+
+        .important {
+            background: #3a2f2f;
+            border-left: 3px solid #ff6b6b;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #ffb3b3;
+            font-size: 13px;
+        }
+
+        .note {
+            background: #2f3a35;
+            border-left: 3px solid #a3d0c9;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #d0e8e4;
+            font-size: 13px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #a3d0c9;
+            font-weight: bold;
+        }
+
+        .reference {
+            background: #2a3a35;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: #b8d8d3;
+        }
+
+        .reference strong {
+            color: #a3d0c9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        th {
+            background: #35353a;
+            color: #a3d0c9;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #35353a;
+        }
+
+        tr:hover {
+            background: #35353a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Coach Legal Additions Patch</h1>
+        <p class="subtitle">The Evolved Caveman Inner Leadership AI Coach — Compliance Update</p>
+
+        <div class="section">
+            <h2>Overview</h2>
+            <p>This patch adds two legal compliance features to <code>ai_coach.html</code>:</p>
+            <ol style="margin-left: 20px; margin-top: 12px;">
+                <li><strong>TOS Acceptance on Signup</strong> — Checkbox accepting Terms of Service, Privacy Policy, and AI Disclosure with linked documents</li>
+                <li><strong>Per-Session AI Disclosure Banner</strong> — Auto-dismissing banner reminding users they're interacting with AI (SB 243 compliance)</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>ADDITION 1: Terms of Service Acceptance (Signup Form)</h2>
+
+            <div class="subsection">
+                <h3>Placement in Current Code</h3>
+                <p>This addition goes in the signup form section, specifically:</p>
+                <div class="placement">
+                    &lt;!-- ADD THIS AFTER the signup password input field --&gt;<br>
+                    &lt;!-- ADD THIS BEFORE the "Create Account" button --&gt;
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Current Code Reference</h3>
+                <p>Find this section in your signup form:</p>
+                <div class="code-block"><code><span class="tag">&lt;input</span> <span class="comment">type</span>=<span class="string">"password"</span> <span class="comment">id</span>=<span class="string">"signupPassword"</span> <span class="comment">placeholder</span>=<span class="string">"Password"</span> <span class="comment">required</span> <span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="comment">id</span>=<span class="string">"createAccountBtn"</span> <span class="tag">&gt;</span>Create Account<span class="tag">&lt;/button&gt;</span></code></div>
+                <p>The checkbox and agreement section goes between these two elements.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>HTML to Add</h3>
+                <div class="code-block"><code><span class="comment">&lt;!-- TOS ACCEPTANCE CHECKBOX --&gt;</span>
+<span class="tag">&lt;div</span> <span class="comment">id</span>=<span class="string">"tosAgreementContainer"</span> <span class="comment">class</span>=<span class="string">"tos-agreement"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label</span> <span class="comment">for</span>=<span class="string">"tosCheckbox"</span> <span class="comment">class</span>=<span class="string">"tos-checkbox-label"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;input</span>
+      <span class="comment">type</span>=<span class="string">"checkbox"</span>
+      <span class="comment">id</span>=<span class="string">"tosCheckbox"</span>
+      <span class="comment">class</span>=<span class="string">"tos-checkbox"</span>
+      <span class="comment">aria-required</span>=<span class="string">"true"</span>
+    <span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="comment">class</span>=<span class="string">"tos-label-text"</span><span class="tag">&gt;</span>
+      I agree to the
+      <span class="tag">&lt;a</span>
+        <span class="comment">href</span>=<span class="string">"https://johnschin.github.io/evolved-caveman-coach/terms.html"</span>
+        <span class="comment">target</span>=<span class="string">"_blank"</span>
+        <span class="comment">rel</span>=<span class="string">"noopener noreferrer"</span>
+        <span class="comment">class</span>=<span class="string">"tos-link"</span>
+      <span class="tag">&gt;</span>Terms of Service<span class="tag">&lt;/a&gt;</span>,
+      <span class="tag">&lt;a</span>
+        <span class="comment">href</span>=<span class="string">"https://johnschin.github.io/evolved-caveman-coach/privacy.html"</span>
+        <span class="comment">target</span>=<span class="string">"_blank"</span>
+        <span class="comment">rel</span>=<span class="string">"noopener noreferrer"</span>
+        <span class="comment">class</span>=<span class="string">"tos-link"</span>
+      <span class="tag">&gt;</span>Privacy Policy<span class="tag">&lt;/a&gt;</span>, and
+      <span class="tag">&lt;a</span>
+        <span class="comment">href</span>=<span class="string">"https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html"</span>
+        <span class="comment">target</span>=<span class="string">"_blank"</span>
+        <span class="comment">rel</span>=<span class="string">"noopener noreferrer"</span>
+        <span class="comment">class</span>=<span class="string">"tos-link"</span>
+      <span class="tag">&gt;</span>AI Disclosure and Informed Use Notice<span class="tag">&lt;/a&gt;</span>.
+    <span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></div>
+            </div>
+
+            <div class="subsection">
+                <h3>CSS to Add (Design System Styles)</h3>
+                <div class="code-block"><code><span class="comment">/* TOS AGREEMENT CHECKBOX STYLES */</span>
+.tos-agreement {
+  margin: 16px 0 20px 0;
+  padding: 0;
+}
+
+.tos-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 13px;
+  color: #eeeeee;
+  gap: 10px;
+}
+
+.tos-checkbox-label:hover {
+  color: #a3d0c9;
+}
+
+.tos-checkbox {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #a3d0c9;
+  border-radius: 3px;
+}
+
+.tos-checkbox:focus {
+  outline: 2px solid #a3d0c9;
+  outline-offset: 2px;
+}
+
+.tos-label-text {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.tos-link {
+  color: #a3d0c9;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.tos-link:hover {
+  border-bottom-color: #a3d0c9;
+}
+
+.tos-link:focus {
+  outline: 2px solid #a3d0c9;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+<span class="comment">/* DISABLED STATE FOR CREATE ACCOUNT BUTTON */</span>
+#createAccountBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}</code></div>
+            </div>
+
+            <div class="subsection">
+                <h3>JavaScript to Add (Enable/Disable Button)</h3>
+                <div class="code-block"><code><span class="comment">// TOS CHECKBOX LOGIC</span>
+const tosCheckbox = document.getElementById(<span class="string">'tosCheckbox'</span>);
+const createAccountBtn = document.getElementById(<span class="string">'createAccountBtn'</span>);
+
+<span class="comment">// Initialize button as disabled</span>
+createAccountBtn.disabled = true;
+
+<span class="comment">// Toggle button state when checkbox changes</span>
+tosCheckbox.addEventListener(<span class="string">'change'</span>, function() {
+  createAccountBtn.disabled = !this.checked;
+});
+
+<span class="comment">// IMPORTANT: Add this validation to your existing signup handler</span>
+<span class="comment">// (update your existing createAccount() or signup submit handler)</span>
+
+<span class="comment">// Before processing signup, verify checkbox:</span>
+if (!tosCheckbox.checked) {
+  console.error(<span class="string">'User must accept TOS before signup'</span>);
+  alert(<span class="string">'Please accept the Terms of Service, Privacy Policy, and AI Disclosure to continue.'</span>);
+  return false;
+}</code></div>
+            </div>
+
+            <div class="note">
+                <strong>Integration Note:</strong> Find your existing signup form submit handler (likely in a function like <code>createAccount()</code> or form submit event). Add the checkbox validation check above before calling your API/signup function. This ensures the agreement is accepted before account creation is processed.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>ADDITION 2: Per-Session AI Disclosure Banner</h2>
+
+            <div class="subsection">
+                <h3>Placement in Current Code</h3>
+                <p>This addition is a new DOM element that appears in the chat area. Specifically:</p>
+                <div class="placement">
+                    &lt;!-- ADD THIS AT THE TOP OF THE CHAT CONTAINER --&gt;<br>
+                    &lt;!-- Just after opening the chat messages area, before any existing chat content --&gt;
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Current Code Reference</h3>
+                <p>Find your chat container section (likely looks like this):</p>
+                <div class="code-block"><code><span class="tag">&lt;div</span> <span class="comment">id</span>=<span class="string">"chatContainer"</span> <span class="comment">class</span>=<span class="string">"chat-container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="comment">id</span>=<span class="string">"chatHeader"</span> <span class="tag">&gt;...&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="comment">id</span>=<span class="string">"messages"</span> <span class="comment">class</span>=<span class="string">"messages"</span><span class="tag">&gt;</span>
+    <span class="comment">&lt;!-- messages go here --&gt;</span>
+  <span class="tag">&lt;/div&gt;</span></code></div>
+                <p>The banner element goes either right after the chatHeader or at the top of the messages div.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>HTML to Add (Banner Element)</h3>
+                <div class="code-block"><code><span class="comment">&lt;!-- AI DISCLOSURE BANNER (Dismissible) --&gt;</span>
+<span class="tag">&lt;div</span>
+  <span class="comment">id</span>=<span class="string">"aiDisclosureBanner"</span>
+  <span class="comment">class</span>=<span class="string">"ai-disclosure-banner"</span>
+  <span class="comment">role</span>=<span class="string">"status"</span>
+  <span class="comment">aria-live</span>=<span class="string">"polite"</span>
+  <span class="comment">aria-label</span>=<span class="string">"AI disclosure notification"</span>
+<span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="comment">class</span>=<span class="string">"banner-content"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="comment">class</span>=<span class="string">"banner-text"</span><span class="tag">&gt;</span>
+      Reminder: You are interacting with an AI system, not a human. This is an
+      educational coaching tool — not therapy, counseling, or crisis support.
+      <span class="tag">&lt;a</span>
+        <span class="comment">href</span>=<span class="string">"https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html"</span>
+        <span class="comment">target</span>=<span class="string">"_blank"</span>
+        <span class="comment">rel</span>=<span class="string">"noopener noreferrer"</span>
+        <span class="comment">class</span>=<span class="string">"banner-link"</span>
+      <span class="tag">&gt;</span>View our AI Disclosure<span class="tag">&lt;/a&gt;</span> for full details.
+    <span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;button</span>
+    <span class="comment">type</span>=<span class="string">"button"</span>
+    <span class="comment">id</span>=<span class="string">"dismissBannerBtn"</span>
+    <span class="comment">class</span>=<span class="string">"banner-dismiss-btn"</span>
+    <span class="comment">aria-label</span>=<span class="string">"Dismiss AI disclosure banner"</span>
+  <span class="tag">&gt;</span>×<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></div>
+            </div>
+
+            <div class="subsection">
+                <h3>CSS to Add (Banner Styles)</h3>
+                <div class="code-block"><code><span class="comment">/* AI DISCLOSURE BANNER STYLES */</span>
+.ai-disclosure-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background-color: #2a2a2e;
+  border-left: 4px solid #a3d0c9;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #999;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.banner-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.banner-text {
+  line-height: 1.5;
+}
+
+.banner-link {
+  color: #a3d0c9;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+  margin-left: 3px;
+}
+
+.banner-link:hover {
+  border-bottom-color: #a3d0c9;
+}
+
+.banner-link:focus {
+  outline: 2px solid #a3d0c9;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.banner-dismiss-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.banner-dismiss-btn:hover {
+  color: #a3d0c9;
+  background-color: #35353a;
+}
+
+.banner-dismiss-btn:focus {
+  outline: 2px solid #a3d0c9;
+  outline-offset: 2px;
+}
+
+<span class="comment">/* HIDDEN STATE (after dismissal) */</span>
+.ai-disclosure-banner.hidden {
+  display: none;
+}</code></div>
+            </div>
+
+            <div class="subsection">
+                <h3>JavaScript to Add (Banner Logic)</h3>
+                <div class="code-block"><code><span class="comment">// AI DISCLOSURE BANNER LOGIC</span>
+
+<span class="comment">// Function to show and auto-dismiss the banner</span>
+function showAIDisclosureBanner() {
+  const banner = document.getElementById(<span class="string">'aiDisclosureBanner'</span>);
+  const dismissBtn = document.getElementById(<span class="string">'dismissBannerBtn'</span>);
+
+  <span class="comment">// Ensure banner is visible</span>
+  banner.classList.remove(<span class="string">'hidden'</span>);
+
+  <span class="comment">// Auto-dismiss after 10 seconds (10000 ms)</span>
+  const autoDismissTimer = setTimeout(() => {
+    banner.classList.add(<span class="string">'hidden'</span>);
+  }, 10000);
+
+  <span class="comment">// Manual dismiss button handler</span>
+  dismissBtn.addEventListener(<span class="string">'click'</span>, function() {
+    clearTimeout(autoDismissTimer);
+    banner.classList.add(<span class="string">'hidden'</span>);
+  });
+}
+
+<span class="comment">// IMPORTANT: Call this function when user enters chat</span>
+<span class="comment">// Find your enterChat() function and add this line:</span>
+<span class="comment">// showAIDisclosureBanner();</span>
+
+<span class="comment">// Example: if your function is called when entering chat:</span>
+<span class="comment">// function enterChat() {</span>
+<span class="comment">//   ... existing code ...</span>
+<span class="comment">//   showAIDisclosureBanner(); // ADD THIS LINE</span>
+<span class="comment">// }</span></code></div>
+            </div>
+
+            <div class="important">
+                <strong>Critical Integration Point:</strong> The banner must be shown each time a new session starts. Find your <code>enterChat()</code> function or equivalent (the function that transitions from login to chat view). Add <code>showAIDisclosureBanner();</code> to display the banner when chat begins.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Integration Checklist</h2>
+            <ul class="checklist">
+                <li>Add HTML for TOS checkbox in signup form (between password field and Create Account button)</li>
+                <li>Add CSS for TOS checkbox styling and disabled button state</li>
+                <li>Add checkbox event listener to enable/disable Create Account button</li>
+                <li>Update signup form submit handler to validate checkbox before processing</li>
+                <li>Add HTML for AI disclosure banner (top of chat area)</li>
+                <li>Add CSS for banner styles, animations, and dismiss button</li>
+                <li>Add banner show/dismiss JavaScript logic</li>
+                <li>Call <code>showAIDisclosureBanner()</code> in your <code>enterChat()</code> function</li>
+                <li>Test signup flow with and without TOS checkbox</li>
+                <li>Test banner auto-dismiss after 10 seconds</li>
+                <li>Test manual banner dismiss button</li>
+                <li>Verify all three legal links (Terms, Privacy, AI Disclosure) open correctly</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Legal Document URLs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Terms of Service</td>
+                        <td><code>https://johnschin.github.io/evolved-caveman-coach/terms.html</code></td>
+                    </tr>
+                    <tr>
+                        <td>Privacy Policy</td>
+                        <td><code>https://johnschin.github.io/evolved-caveman-coach/privacy.html</code></td>
+                    </tr>
+                    <tr>
+                        <td>AI Disclosure</td>
+                        <td><code>https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Contact & Support</h2>
+            <p>
+                For questions about these legal additions, contact:
+                <br><strong>Email:</strong> <a href="mailto:John@GuideToSelf.com" style="color: #a3d0c9;">John@GuideToSelf.com</a>
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Summary</h2>
+            <div class="reference">
+                <p><strong>ADDITION 1 — TOS Acceptance:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Checkbox in signup form with three linked legal documents</li>
+                    <li>Create Account button disabled until checkbox is checked</li>
+                    <li>Validation on signup form submit</li>
+                </ul>
+            </div>
+            <div class="reference">
+                <p><strong>ADDITION 2 — AI Disclosure Banner:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Appears at top of chat when user enters chat session</li>
+                    <li>Auto-dismisses after 10 seconds</li>
+                    <li>User can manually dismiss with × button</li>
+                    <li>Links to full AI Disclosure document (SB 243 compliance)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
