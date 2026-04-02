@@ -1,1003 +1,841 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inner Leadership AI Coach — Free Trial</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --aqua: #a3d0c9;
-    --charcoal: #202023;
-    --charcoal-light: #2a2a2e;
-    --charcoal-lighter: #35353a;
-    --off-white: #eeeeee;
-    --muted: #999;
-    --error: #e74c3c;
-    --success: #27ae60;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--charcoal);
-    color: var(--off-white);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  /* --- HEADER --- */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    background: var(--charcoal-light);
-    border-bottom: 1px solid var(--charcoal-lighter);
-    flex-shrink: 0;
-  }
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .header-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--aqua);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-  .header-subtitle {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-  .trial-badge {
-    background: rgba(163,208,201,0.15);
-    color: var(--aqua);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 12px;
-  }
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .msg-counter {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .msg-counter strong {
-    color: var(--aqua);
-  }
-  /* --- CHAT AREA --- */
-  .chat-container {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-  }
-  .chat-container.active {
-    display: flex;
-  }
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    scroll-behavior: smooth;
-  }
-  .message {
-    margin-bottom: 16px;
-    display: flex;
-    gap: 10px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .message.user {
-    flex-direction: row-reverse;
-  }
-  .message-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .message.assistant .message-avatar {
-    background: var(--aqua);
-    color: var(--charcoal);
-  }
-  .message.user .message-avatar {
-    background: var(--charcoal-lighter);
-    color: var(--muted);
-  }
-  .message-bubble {
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-size: 14px;
-    line-height: 1.6;
-    max-width: 75%;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-  .message.assistant .message-bubble {
-    background: var(--charcoal-light);
-    border: 1px solid var(--charcoal-lighter);
-    border-top-left-radius: 4px;
-  }
-  .message.user .message-bubble {
-    background: var(--aqua);
-    color: var(--charcoal);
-    border-top-right-radius: 4px;
-  }
-  .typing-indicator {
-    display: none;
-    max-width: 800px;
-    margin: 0 auto 16px;
-    padding: 0 20px;
-  }
-  .typing-indicator.active { display: flex; }
-  .typing-indicator .dots {
-    display: flex;
-    gap: 4px;
-    padding: 12px 16px;
-    background: var(--charcoal-light);
-    border: 1px solid var(--charcoal-lighter);
-    border-radius: 12px;
-    margin-left: 42px;
-  }
-  .typing-indicator .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--aqua);
-    border-radius: 50%;
-    animation: bounce 1.4s infinite;
-    opacity: 0.4;
-  }
-  .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes bounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-    30% { transform: translateY(-6px); opacity: 1; }
-  }
-  /* --- INPUT AREA --- */
-  .input-area {
-    padding: 12px 20px 20px;
-    border-top: 1px solid var(--charcoal-lighter);
-    flex-shrink: 0;
-  }
-  .input-row {
-    display: flex;
-    gap: 10px;
-    max-width: 800px;
-    margin: 0 auto;
-    align-items: flex-end;
-  }
-  .input-row textarea {
-    flex: 1;
-    padding: 12px 16px;
-    background: var(--charcoal-light);
-    border: 1px solid var(--charcoal-lighter);
-    border-radius: 12px;
-    color: var(--off-white);
-    font-family: inherit;
-    font-size: 14px;
-    line-height: 1.5;
-    resize: none;
-    outline: none;
-    max-height: 120px;
-    min-height: 44px;
-    transition: border-color 0.2s;
-  }
-  .input-row textarea:focus {
-    border-color: var(--aqua);
-  }
-  .input-row textarea:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .send-btn {
-    background: var(--aqua);
-    color: var(--charcoal);
-    border: none;
-    border-radius: 10px;
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: opacity 0.2s;
-  }
-  .send-btn:hover { opacity: 0.85; }
-  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .send-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-  .disclaimer-bar {
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    margin-top: 8px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  /* --- OVERLAY SCREENS --- */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(32,32,35,0.95);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    z-index: 100;
-  }
-  .overlay.visible { display: flex; }
-  .overlay-card {
-    max-width: 460px;
-    width: 100%;
-    text-align: center;
-    padding: 36px 32px;
-    background: var(--charcoal-light);
-    border: 1px solid var(--charcoal-lighter);
-    border-radius: 16px;
-  }
-  .overlay-card h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--aqua);
-    margin-bottom: 10px;
-  }
-  .overlay-card p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  .overlay-card .btn-primary {
-    display: inline-block;
-    padding: 12px 28px;
-    background: var(--aqua);
-    color: var(--charcoal);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: opacity 0.2s;
-    margin: 6px;
-  }
-  .overlay-card .btn-primary:hover { opacity: 0.9; }
-  .overlay-card .btn-secondary {
-    display: inline-block;
-    padding: 12px 28px;
-    background: transparent;
-    border: 1px solid var(--charcoal-lighter);
-    color: var(--aqua);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    margin: 6px;
-  }
-  .overlay-card .btn-secondary:hover { border-color: var(--aqua); }
-  .consent-text {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-    text-align: left;
-    margin-bottom: 20px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 16px;
-    background: var(--charcoal);
-    border-radius: 10px;
-  }
-  .form-group {
-    margin-bottom: 16px;
-  }
-  .form-group input {
-    width: 100%;
-    padding: 10px 14px;
-    background: var(--charcoal);
-    border: 1px solid var(--charcoal-lighter);
-    border-radius: 8px;
-    color: var(--off-white);
-    font-family: inherit;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-group input:focus {
-    border-color: var(--aqua);
-  }
-  .form-group input::placeholder { color: #666; }
-  .overlay-error {
-    color: var(--error);
-    font-size: 13px;
-    margin-bottom: 12px;
-    display: none;
-  }
-  /* --- RESPONSIVE --- */
-  @media (max-width: 600px) {
-    .message-bubble { max-width: 88%; font-size: 13px; }
-    .header { flex-wrap: wrap; gap: 8px; }
-    .header-title { font-size: 13px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evolved Caveman — Inner Leadership AI Coach</title>
+    <style>
+        :root {
+            --aqua: #a3d0c9;
+            --charcoal: #202023;
+            --charcoal-light: #2a2a2e;
+            --off-white: #eeeeee;
+            --muted: #a8a8a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--charcoal);
+            color: var(--off-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        /* OVERLAY STYLES */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        .overlay-content {
+            background: var(--charcoal-light);
+            border: 1px solid var(--aqua);
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 480px;
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .overlay-content h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--aqua);
+        }
+
+        .overlay-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .consent-text {
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        /* ADDED: Consent checkboxes */
+        .consent-checkbox-group {
+            margin: 16px 0;
+            text-align: left;
+        }
+
+        .consent-checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .consent-checkbox-item:hover {
+            color: var(--off-white);
+        }
+
+        .consent-checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--aqua);
+        }
+
+        .consent-link {
+            color: var(--aqua);
+            text-decoration: none;
+        }
+
+        .consent-link:hover {
+            text-decoration: underline;
+        }
+
+        .overlay button {
+            background: var(--aqua);
+            color: var(--charcoal);
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s, background 0.2s;
+            margin-top: 12px;
+        }
+
+        .overlay button:hover:not(:disabled) {
+            background: #8fc4be;
+        }
+
+        .overlay button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* CHAT CONTAINER */
+        .chat-container {
+            width: 100%;
+            max-width: 700px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--charcoal);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-container.hidden {
+            display: none;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--charcoal-light) 0%, var(--charcoal) 100%);
+            border-bottom: 1px solid var(--aqua);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--aqua);
+        }
+
+        .chat-header p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 8px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.ai {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.ai .message-bubble {
+            background: var(--charcoal-light);
+            color: var(--off-white);
+            border-left: 2px solid var(--aqua);
+        }
+
+        .message.user .message-bubble {
+            background: var(--aqua);
+            color: var(--charcoal);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--aqua);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                opacity: 0.5;
+                transform: translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+        }
+
+        .input-area {
+            border-top: 1px solid var(--aqua);
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: var(--charcoal-light);
+            border: 1px solid var(--aqua);
+            color: var(--off-white);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .input-area input::placeholder {
+            color: var(--muted);
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #8fc4be;
+            background: var(--charcoal);
+        }
+
+        .input-area button {
+            background: var(--aqua);
+            color: var(--charcoal);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        .input-area button:hover:not(:disabled) {
+            background: #8fc4be;
+        }
+
+        .input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .disclaimer-bar {
+            background: var(--charcoal-light);
+            border-top: 1px solid var(--aqua);
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .disclaimer-bar a {
+            color: var(--aqua);
+            text-decoration: none;
+        }
+
+        .disclaimer-bar a:hover {
+            text-decoration: underline;
+        }
+
+        /* ADDED: Per-session AI disclosure banner (SB 243) */
+        .ai-disclosure-banner {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            background: var(--charcoal-light);
+            border-left: 3px solid var(--aqua);
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: bannerSlideIn 0.3s ease-out;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .ai-disclosure-banner.dismissing {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .ai-disclosure-banner.hidden {
+            display: none;
+        }
+
+        @keyframes bannerSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .banner-icon {
+            color: var(--aqua);
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .banner-text {
+            flex: 1;
+        }
+
+        .banner-link {
+            color: var(--aqua);
+            text-decoration: none;
+        }
+
+        .banner-link:hover {
+            text-decoration: underline;
+        }
+
+        .banner-dismiss {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .banner-dismiss:hover {
+            color: var(--off-white);
+        }
+
+        /* SCROLLBAR */
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: var(--aqua);
+            border-radius: 3px;
+        }
+
+        #messages::-webkit-scrollbar-thumb:hover {
+            background: #8fc4be;
+        }
+    </style>
 </head>
 <body>
+    <!-- CONSENT OVERLAY -->
+    <div id="consentOverlay" class="overlay">
+        <div class="overlay-content">
+            <h2>Welcome to Inner Leadership</h2>
+            <p>Before we begin, please review our legal terms.</p>
 
-<!-- CONSENT OVERLAY -->
-<div class="overlay visible" id="consentOverlay">
-  <div class="overlay-card">
-    <h2>Inner Leadership AI Coach</h2>
-    <p>Welcome, <strong id="userName">friend</strong>. Before we start, a quick note.</p>
-    <div class="consent-text">
-      <strong>Inner Leadership AI Coach</strong> is a coaching tool for self-leadership, communication, and personal development built by Dr. John Schinnerer, Ph.D. — psychologist, executive coach, and expert consultant on Pixar's <em>Inside Out</em>.<br><br>
-      <strong>This tool IS:</strong> Coaching for self-awareness, emotional intelligence, communication skills, stress management, and decision-making.<br><br>
-      <strong>This tool IS NOT:</strong> Therapy, counseling, diagnosis, treatment, crisis support, or a substitute for a licensed mental health professional.<br><br>
-      If you are in crisis or experiencing a mental health emergency, please contact the <strong>988 Suicide & Crisis Lifeline</strong> (call or text 988) or go to your nearest emergency room.<br><br>
-      By continuing, you understand and agree to these terms.
+            <div class="consent-text">
+                <p>By using this tool, you acknowledge:</p>
+            </div>
+
+            <div class="consent-checkbox-group">
+                <label class="consent-checkbox-item">
+                    <input type="checkbox" id="consentCheck1">
+                    <span>I have read and agree to the <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer" class="consent-link">Terms of Service</a>, <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer" class="consent-link">Privacy Policy</a>, and <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="consent-link">AI Disclosure</a></span>
+                </label>
+                <label class="consent-checkbox-item">
+                    <input type="checkbox" id="consentCheck2">
+                    <span>I understand this is an AI coaching tool — not therapy, counseling, or crisis support</span>
+                </label>
+                <label class="consent-checkbox-item">
+                    <input type="checkbox" id="consentCheck3">
+                    <span>I am at least 18 years old</span>
+                </label>
+            </div>
+
+            <button id="consentAcceptBtn" onclick="acceptConsent()" disabled>I Understand — Let's Go</button>
+        </div>
     </div>
-    <button class="btn-primary" onclick="acceptConsent()">I Understand — Let's Go</button>
-  </div>
-</div>
 
-<!-- SESSION COMPLETE OVERLAY -->
-<div class="overlay" id="sessionCompleteOverlay">
-  <div class="overlay-card">
-    <h2>Session Complete</h2>
-    <p id="sessionCompleteMsg">Nice work. You've used all 20 messages in this session.</p>
-    <button class="btn-primary" id="sessionCompleteAction" onclick="startNewSession()">Start Next Session</button>
-    <br>
-    <a href="#" class="btn-secondary" onclick="goToUpgrade()">See Membership Options</a>
-  </div>
-</div>
-
-<!-- TRIAL EXPIRED OVERLAY -->
-<div class="overlay" id="trialExpiredOverlay">
-  <div class="overlay-card">
-    <h2>You Did the Hard Part — You Showed Up</h2>
-    <p>You've used all 3 free sessions. Most men never get this far. If this felt useful — and I hope it did — imagine having this in your corner 24/7.</p>
-    <p style="font-size:13px; color:#999; margin-bottom:16px;">Taking you to membership options in <span id="expiredCountdown">8</span> seconds...</p>
-    <a href="#" class="btn-primary" onclick="goToUpgrade()">See Membership Options</a>
-    <br>
-    <a href="https://theevolvedcaveman.com" class="btn-secondary" target="_blank">Explore The Evolved Caveman</a>
-  </div>
-</div>
-
-<!-- INVALID TOKEN OVERLAY -->
-<div class="overlay" id="invalidOverlay">
-  <div class="overlay-card">
-    <h2>Hmm, Something's Off</h2>
-    <p>This trial link doesn't seem to be valid. If you think that's wrong, reach out to john@guidetoself.com.</p>
-    <a href="https://theevolvedcaveman.com" class="btn-primary" target="_blank">Visit The Evolved Caveman</a>
-  </div>
-</div>
-
-<!-- RESUME TRIAL OVERLAY -->
-<div class="overlay" id="resumeOverlay">
-  <div class="overlay-card">
-    <h2>Welcome Back</h2>
-    <p>Enter the email you used to sign up and we'll pick up where you left off.</p>
-    <div class="form-group">
-      <input type="email" id="resumeEmail" placeholder="you@email.com" autocomplete="email">
+    <!-- SESSION COMPLETE OVERLAY -->
+    <div id="sessionCompleteOverlay" class="overlay hidden">
+        <div class="overlay-content">
+            <h2>Your Trial Session Complete</h2>
+            <p>You've experienced the Inner Leadership AI Coach. Ready to go deeper?</p>
+            <button onclick="upgradeRedirect()">Upgrade to Full Access</button>
+        </div>
     </div>
-    <div class="overlay-error" id="resumeError"></div>
-    <button class="btn-primary" onclick="resumeTrial()">Resume My Trial</button>
-  </div>
-</div>
 
-<!-- CHAT SCREEN -->
-<div id="chatScreen" class="chat-container">
-  <div class="header">
-    <div class="header-left">
-      <div>
-        <div class="header-title">Inner Leadership AI Coach</div>
-        <div class="header-subtitle">The Evolved Caveman</div>
-      </div>
-      <span class="trial-badge">Free Trial</span>
+    <!-- TRIAL EXPIRED OVERLAY -->
+    <div id="trialExpiredOverlay" class="overlay hidden">
+        <div class="overlay-content">
+            <h2>Trial Period Expired</h2>
+            <p>Your 7-day trial has ended. Upgrade to continue coaching.</p>
+            <button onclick="upgradeRedirect()">Upgrade Now</button>
+        </div>
     </div>
-    <div class="header-right">
-      <div class="msg-counter" id="msgCounter">Loading...</div>
+
+    <!-- INVALID TOKEN OVERLAY -->
+    <div id="invalidTokenOverlay" class="overlay hidden">
+        <div class="overlay-content">
+            <h2>Invalid or Expired Token</h2>
+            <p>This trial link is no longer valid. Start a new trial to begin.</p>
+            <button onclick="location.href='https://theevolvedcaveman.com'">Return Home</button>
+        </div>
     </div>
-  </div>
-  <div class="messages" id="messages"></div>
-  <div class="typing-indicator" id="typingIndicator">
-    <div class="dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+
+    <!-- RESUME TRIAL OVERLAY -->
+    <div id="resumeTrialOverlay" class="overlay hidden">
+        <div class="overlay-content">
+            <h2>Welcome Back</h2>
+            <p id="resumeMessage"></p>
+            <button onclick="resumeTrial()">Resume Your Trial</button>
+            <button onclick="startNewSession()" style="margin-top: 8px; background: var(--charcoal-light); color: var(--aqua); border: 1px solid var(--aqua);">Start Fresh</button>
+        </div>
     </div>
-  </div>
-  <div class="input-area">
-    <div class="input-row">
-      <textarea id="userInput" rows="1" placeholder="What's on your mind?" disabled onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="sendBtn" disabled onclick="sendMessage()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
+
+    <!-- CHAT CONTAINER -->
+    <div id="chatContainer" class="chat-container hidden">
+        <div class="chat-header">
+            <h1>Inner Leadership AI Coach</h1>
+            <p>A coaching tool for self-leadership, communication, and personal development</p>
+        </div>
+
+        <div id="messages"></div>
+
+        <div class="input-area">
+            <input id="userInput" type="text" placeholder="Type your response..." onkeypress="if(event.key==='Enter')sendMessage()">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <div class="disclaimer-bar">
+            Inner Leadership AI Coach is an educational coaching tool — not therapy, counseling, or crisis support. View our <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer">Terms</a>, <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>, and <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a>.
+        </div>
     </div>
-    <div class="disclaimer-bar">
-      Inner Leadership AI Coach is an educational coaching tool — not therapy, counseling, or crisis support.
-    </div>
-  </div>
-</div>
-
-<script>
-// =====================================================
-// CONFIGURATION
-// =====================================================
-var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
-var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
-var EDGE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/chat";
-
-// =====================================================
-// STATE
-// =====================================================
-var trialToken = null;
-var firstName = "";
-var trialStatus = null;
-var sessionId = null;
-var conversationHistory = [];
-var messageCount = 0;
-var isSending = false;
-var openingVariation = null;
-
-// =====================================================
-// SYSTEM PROMPT (exact production prompt)
-// =====================================================
-var SYSTEM_PROMPT = "You are the Inner Leadership AI Coach, built by Dr. John Schinnerer \u2014 a psychologist, executive coach, and expert on men's emotional intelligence with 30+ years of experience. You hold a PhD in Psychology from UC Berkeley and served as an expert consultant on Pixar's Inside Out.\n\n" +
-"VOICE:\n" +
-"Sound like John \u2014 warm, direct, slightly irreverent, grounded in science but delivered conversationally. Not a neutral product voice. Think: your smartest friend who has a PhD and won't let you off the hook. Use occasional humor but never at the user's expense. Challenge gently but persistently. You're a thinking partner, not a yes-man.\n\n" +
-"WHAT YOU ARE:\n" +
-"- A coaching tool for self-leadership, communication, stress management, relationships, and decision-making\n" +
-"- Educational, not clinical\n" +
-"- Direct, grounded, occasionally provocative \u2014 but always in service of the user's growth\n\n" +
-"WHAT YOU ARE NOT:\n" +
-"- NOT a therapist, counselor, or crisis service\n" +
-"- NOT a diagnostic tool\n" +
-"- NOT a substitute for licensed mental health care\n" +
-"- NEVER position yourself as any of the above\n\n" +
-"FOUR COACHING PILLARS:\n" +
-"1. Stress, Burnout & Overload \u2014 Why successful men feel constantly stressed; burnout as a nervous system problem\n" +
-"2. Anger, Irritability & Reactivity \u2014 How men get stuck in anger; irritability as unprocessed stress\n" +
-"3. Relationships & Communication \u2014 Why conversations escalate; logic failing in relationship conflict\n" +
-"4. Identity, Meaning & Midlife \u2014 Successful on the outside, unsatisfied on the inside\n\n" +
-"DEFAULT RESPONSE STRUCTURE:\n" +
-"1. Name the pattern or tension you see\n" +
-"2. Ask ONE sharp coaching question (not three \u2014 one)\n" +
-"3. Offer one practical reframe\n" +
-"4. Suggest one concrete next step\n\n" +
-"Keep responses concise \u2014 aim for 3-5 paragraphs max. Don't lecture. Don't give numbered lists of tips. One insight beats ten surface suggestions.\n\n" +
-"INNER BOARD MEETING FRAMEWORK:\n" +
-"When relevant, use this model to help users understand their internal dynamics:\n" +
-"- The CEO \u2014 Grounded, values-driven decision maker. The leader they're building.\n" +
-"- The Director of Defense \u2014 Protects through anger, control, or withdrawal. Often running the show when stress hits.\n" +
-"- The VP of Emotions \u2014 Carries vulnerability, needs, and relational signals. Often suppressed in men.\n" +
-"Use this framework naturally \u2014 introduce it when it fits, don't force it.\n\n" +
-"LANGUAGE RULES:\n" +
-"Preferred: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point\n" +
-"Avoid as primary language: trauma, healing old wounds, childhood wounds, diagnosis, treatment, mental disorder labels, psychoanalyze, therapeutic intervention, process your trauma, nervous system stuck in threat mode\n\n" +
-"SAFETY FILTERS:\n" +
-"GREEN (core coaching): Values, leadership patterns, accountability, communication, conflict patterns, goal alignment, performance\n" +
-"YELLOW (use with coaching framing): Identity, shame-adjacent topics, emotional awareness, inherited patterns, meaning/emptiness, anger depth, relationship pain \u2014 keep present-focused, redirect to action\n" +
-"RED (out of scope \u2014 redirect): Trauma exploration, abuse memories, inner child work, diagnosing conditions, treatment planning, sustained crisis engagement \u2014 acknowledge importance, state limits, recommend professional support\n\n" +
-"CRISIS PROTOCOL:\n" +
-"If a user expresses suicidal ideation, self-harm intent, or immediate danger:\n" +
-"1. Acknowledge what they shared with compassion\n" +
-"2. State clearly: 'This is beyond what I can help with as a coaching tool.'\n" +
-"3. Provide: 988 Suicide & Crisis Lifeline (call or text 988), Crisis Text Line (text HOME to 741741), or call 911\n" +
-"4. Do not continue coaching. Hold space and redirect to professional help.\n\n" +
-"THINKERS TO REFERENCE (when relevant):\n" +
-"John Gottman, Terry Real, Todd Kashdan, Carl Jung, Marcus Aurelius, Martin Seligman, Esther Perel, Sue Johnson (EFT), Paul Ekman, Gabor Mat\u00e9, Bessel van der Kolk, Stephen Porges (Polyvagal), CBT, IFS, REBT, Positive Psychology, Attachment Theory\n\n" +
-"NEVER REFERENCE: Jordan Peterson, manosphere/red-pill figures, Tony Robbins, far-right or far-left political ideology, organized religion\n\n" +
-"DISCLAIMER (always active): Inner Leadership AI Coach is a coaching tool for self-leadership, communication, and personal development. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n" +
-"TRIAL CONTEXT: This is a FREE TRIAL user. They have limited messages. Be impactful and efficient \u2014 make every response count. Don't waste messages on filler. Deliver real value from message one.\n\n";
-
-var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
-"Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
-"Hey man, welcome. I'm your Inner Leadership AI Coach \u2014 built on decades of research in psychology, neuroscience, and executive coaching to help you lead yourself better from the inside out.\n\n" +
-"Here's what I do: I help you spot your patterns, sharpen your self-awareness, strengthen how you communicate, and make better decisions under pressure \u2014 at work, at home, in the moments that actually matter.\n\n" +
-"Here's what I don't do: I'm not a therapist, I'm not a crisis line, and I'm not going to psychoanalyze your childhood. If you're dealing with something that needs professional mental health support, I'll tell you straight \u2014 go get it. No shame in that.\n\n" +
-"What I am is a thinking partner. Direct. Grounded. Occasionally a pain in the ass \u2014 but only because I'm not going to let you coast on autopilot when you've got more in you.\n\n" +
-"You've got 20 messages in this session \u2014 so let's make them count. What's been taking up the most space in your head lately? Give me the real answer, not the polished one.\n\n" +
-"IMPORTANT: Stop here. Do NOT add any coaching question after this. Wait for the user to respond.\n\n";
-
-var RETURNING_SESSION_BLOCK = "RETURNING SESSION INSTRUCTIONS:\n" +
-"This user is starting a new trial session. Do NOT deliver the full welcome again. Greet them warmly and briefly:\n" +
-"\"Good to see you back, man. You've got 20 messages in this session. What's on your mind \u2014 want to pick up where we left off, or is there something new?\"\n" +
-"Keep it short and move into coaching.\n\n";
-
-var OPENING_VARIATIONS = {
-  A: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"So here's where we start: What's the thing that's been taking up the most space in your head lately \u2014 the situation, the relationship, the decision that keeps circling back? Give me the real answer, not the polished one.\"\n\n",
-  B: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"Alright, let's get into it. If I could see a dashboard of what's draining your battery right now \u2014 work, relationship, internal noise \u2014 what would be in the red zone? Be specific.\"\n\n",
-  C: "AFTER USER RESPONDS:\nDeliver this opening question:\n\"Good. Here's your first coaching question: What's the pattern you keep running into \u2014 the one where you already know what you should do differently, but you keep doing the same thing anyway?\"\n\n"
-};
-
-// =====================================================
-// FUNCTIONS
-// =====================================================
-
-function generateSessionId() {
-  // Must be a valid UUID — conversations.session_id column is UUID type
-  if (crypto.randomUUID) return crypto.randomUUID();
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0;
-    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
-  });
-}
-
-function pickOpeningVariation() {
-  var options = ["A", "B", "C"];
-  return options[Math.floor(Math.random() * options.length)];
-}
-
-function buildSystemPrompt(isNewSession) {
-  var prompt = SYSTEM_PROMPT;
-  if (isNewSession && messageCount === 0) {
-    var sessNum = (trialStatus.sessions_used || 0) + 1;
-    if (sessNum <= 1) {
-      prompt += FIRST_TIME_WELCOME_BLOCK;
-    } else {
-      prompt += RETURNING_SESSION_BLOCK;
-    }
-  }
-  if (messageCount < 3 && openingVariation) {
-    prompt += OPENING_VARIATIONS[openingVariation] || "";
-  }
-  return prompt;
-}
-
-function trimConversationHistory() {
-  var maxMessages = 40;
-  if (conversationHistory.length > maxMessages) {
-    var firstPair = conversationHistory.slice(0, 2);
-    var recent = conversationHistory.slice(-1 * (maxMessages - 2));
-    conversationHistory = firstPair.concat(recent);
-  }
-}
-
-// --- UI Helpers ---
-function appendMessage(role, text) {
-  var container = document.getElementById("messages");
-  var div = document.createElement("div");
-  div.className = "message " + role;
-
-  var avatar = document.createElement("div");
-  avatar.className = "message-avatar";
-  avatar.textContent = role === "assistant" ? "EC" : "U";
-
-  var bubble = document.createElement("div");
-  bubble.className = "message-bubble";
-  bubble.textContent = text;
-
-  div.appendChild(avatar);
-  div.appendChild(bubble);
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function showTyping(show) {
-  var el = document.getElementById("typingIndicator");
-  if (show) { el.classList.add("active"); } else { el.classList.remove("active"); }
-  var msgs = document.getElementById("messages");
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function updateCounter() {
-  var el = document.getElementById("msgCounter");
-  if (!trialStatus) return;
-  var sessMsg = trialStatus.session_messages_remaining != null ? trialStatus.session_messages_remaining : 20;
-  var sessNum = (trialStatus.sessions_used || 0) + 1;
-  var maxSess = trialStatus.max_sessions || 3;
-  el.innerHTML = "Session " + Math.min(sessNum, maxSess) + " of " + maxSess + " &middot; <strong>" + sessMsg + "</strong> messages left";
-}
-
-function enableInput() {
-  document.getElementById("userInput").disabled = false;
-  document.getElementById("sendBtn").disabled = false;
-  document.getElementById("userInput").focus();
-}
-
-function disableInput() {
-  document.getElementById("userInput").disabled = true;
-  document.getElementById("sendBtn").disabled = true;
-}
-
-function handleKeyDown(e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function autoResize(el) {
-  el.style.height = "auto";
-  el.style.height = Math.min(el.scrollHeight, 120) + "px";
-}
-
-// --- Trial Status ---
-async function checkTrialStatus() {
-  try {
-    var resp = await fetch(EDGE_FUNCTION_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ trial_token: trialToken, action: "check_trial" })
-    });
-    trialStatus = await resp.json();
-
-    if (trialStatus.status === "invalid") {
-      document.getElementById("consentOverlay").classList.remove("visible");
-      document.getElementById("invalidOverlay").classList.add("visible");
-      return;
-    }
-    if (trialStatus.status === "trial_expired") {
-      document.getElementById("consentOverlay").classList.remove("visible");
-      document.getElementById("trialExpiredOverlay").classList.add("visible");
-      startExpiredCountdown();
-      return;
-    }
-    if (trialStatus.status === "session_complete") {
-      document.getElementById("consentOverlay").classList.remove("visible");
-      var sessLeft = trialStatus.sessions_remaining || 0;
-      document.getElementById("sessionCompleteMsg").textContent =
-        "You finished your last session. You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
-      document.getElementById("sessionCompleteOverlay").classList.add("visible");
-      return;
-    }
-
-    // Active
-    firstName = trialStatus.first_name || "friend";
-    document.getElementById("userName").textContent = firstName;
-    updateCounter();
-  } catch (err) {
-    console.error("Trial check failed:", err);
-    document.getElementById("consentOverlay").classList.remove("visible");
-    document.getElementById("invalidOverlay").classList.add("visible");
-  }
-}
-
-// --- Resume Trial ---
-async function resumeTrial() {
-  var email = document.getElementById("resumeEmail").value.trim();
-  var errorEl = document.getElementById("resumeError");
-  errorEl.style.display = "none";
-
-  if (!email) {
-    errorEl.textContent = "Please enter your email.";
-    errorEl.style.display = "block";
-    return;
-  }
-
-  try {
-    var resp = await fetch(
-      SUPABASE_URL + "/rest/v1/trial_tokens?email=eq." + encodeURIComponent(email) + "&select=token,first_name,is_active,messages_used,max_sessions,messages_per_session",
-      { headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY } }
-    );
-    var results = await resp.json();
-
-    if (!results || results.length === 0) {
-      errorEl.textContent = "No trial found for that email. Double-check or sign up for a new trial.";
-      errorEl.style.display = "block";
-      return;
-    }
-
-    var trial = results[0];
-    var maxMessages = trial.max_sessions * trial.messages_per_session;
-
-    if (!trial.is_active || trial.messages_used >= maxMessages) {
-      // Trial fully used — redirect to upgrade page
-      window.location.href = buildUpgradeUrl(trial.email || email);
-      return;
-    }
-
-    trialToken = trial.token;
-    var newUrl = window.location.pathname + "?trial=" + encodeURIComponent(trialToken);
-    window.history.replaceState({}, "", newUrl);
-
-    document.getElementById("resumeOverlay").classList.remove("visible");
-    await checkTrialStatus();
-    // After successful resume, show consent overlay so user can enter chat
-    if (trialStatus && trialStatus.status === "active") {
-      document.getElementById("consentOverlay").classList.add("visible");
-    }
-  } catch (err) {
-    errorEl.textContent = "Something went wrong. Please try again.";
-    errorEl.style.display = "block";
-  }
-}
-
-// --- Accept Consent & Enter Chat ---
-async function acceptConsent() {
-  document.getElementById("consentOverlay").classList.remove("visible");
-  document.getElementById("chatScreen").classList.add("active");
-
-  sessionId = generateSessionId();
-  conversationHistory = [];
-  messageCount = 0;
-  openingVariation = pickOpeningVariation();
-
-  // Send initial trigger to get the AI's welcome
-  await sendInitialMessage();
-  enableInput();
-}
-
-async function sendInitialMessage() {
-  showTyping(true);
-
-  var sessNum = (trialStatus.sessions_used || 0) + 1;
-  var systemPrompt = buildSystemPrompt(true);
-  var triggerMessage = sessNum <= 1 ? "Hello" : "I'm back for another session.";
-
-  conversationHistory.push({ role: "user", content: triggerMessage });
-
-  try {
-    var res = await fetch(EDGE_FUNCTION_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        trial_token: trialToken,
-        system: systemPrompt,
-        messages: conversationHistory,
-        session_id: sessionId,
-        is_first_message: true
-      })
-    });
-
-    if (!res.ok) throw new Error("Server returned " + res.status);
-
-    var data = await res.json();
-    showTyping(false);
-
-    if (data.trial_status === "trial_expired" || data.trial_status === "session_complete") {
-      // Edge case: ran out during welcome
-      handleTrialStatusResponse(data);
-      return;
-    }
-
-    if (data.content && data.content[0] && data.content[0].text) {
-      var reply = data.content[0].text;
-      conversationHistory.push({ role: "assistant", content: reply });
-      appendMessage("assistant", reply);
-      messageCount++;
-
-      // Update counter from response
-      if (data.session_messages_remaining !== undefined) {
-        trialStatus.session_messages_remaining = data.session_messages_remaining;
-        trialStatus.messages_remaining = data.messages_remaining;
-        trialStatus.sessions_remaining = data.sessions_remaining;
-        updateCounter();
-      }
-    } else {
-      appendMessage("assistant", "Having trouble connecting. Please try refreshing the page.");
-    }
-  } catch (err) {
-    showTyping(false);
-    appendMessage("assistant", "Something went wrong connecting to the coach. Please try refreshing the page.");
-    console.error("Initial message error:", err);
-  }
-}
-
-// --- Handle trial status in responses ---
-function handleTrialStatusResponse(data) {
-  if (data.trial_status === "trial_expired") {
-    // Show in-chat message first
-    appendMessage("assistant", "That's a wrap on your free trial, brother. You showed up, you did the work, and that takes guts. If you want to keep this going — unlimited sessions, anytime you need it — I'll be here. Taking you to your options now.");
-    // Then show the overlay with countdown after a short delay
-    setTimeout(function() {
-      document.getElementById("trialExpiredOverlay").classList.add("visible");
-      startExpiredCountdown();
-    }, 3000);
-    disableInput();
-    return true;
-  }
-  if (data.trial_status === "session_complete") {
-    var sessLeft = data.sessions_remaining || 0;
-    if (sessLeft <= 0) {
-      // Last session done — show in-chat message then redirect to upgrade
-      appendMessage("assistant", "That's a wrap on your free trial, brother. You showed up, you did the work, and that takes guts. If you want to keep this going — unlimited sessions, anytime you need it — I'll be here. Taking you to your options now.");
-      setTimeout(function() {
-        document.getElementById("trialExpiredOverlay").classList.add("visible");
-        startExpiredCountdown();
-      }, 3000);
-    } else {
-      document.getElementById("sessionCompleteMsg").textContent =
-        "Session complete! You have " + sessLeft + " session" + (sessLeft === 1 ? "" : "s") + " remaining.";
-      document.getElementById("sessionCompleteOverlay").classList.add("visible");
-    }
-    disableInput();
-    return true;
-  }
-  return false;
-}
-
-// --- Send Message ---
-async function sendMessage() {
-  var input = document.getElementById("userInput");
-  var text = input.value.trim();
-  if (!text || isSending) return;
-
-  isSending = true;
-  disableInput();
-  input.value = "";
-  input.style.height = "auto";
-
-  appendMessage("user", text);
-  showTyping(true);
-
-  conversationHistory.push({ role: "user", content: text });
-  trimConversationHistory();
-
-  var systemPrompt = messageCount < 3 ? buildSystemPrompt(false) : SYSTEM_PROMPT;
-
-  try {
-    var res = await fetch(EDGE_FUNCTION_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        trial_token: trialToken,
-        system: systemPrompt,
-        messages: conversationHistory,
-        session_id: sessionId,
-        is_first_message: false
-      })
-    });
-
-    if (!res.ok) throw new Error("Server returned " + res.status);
-
-    var data;
-    try { data = await res.json(); } catch (e) { throw new Error("Invalid response"); }
-
-    showTyping(false);
-
-    // Check if trial hit a limit
-    if (handleTrialStatusResponse(data)) {
-      isSending = false;
-      return;
-    }
-
-    if (data.content && data.content[0] && data.content[0].text) {
-      var reply = data.content[0].text;
-      conversationHistory.push({ role: "assistant", content: reply });
-      appendMessage("assistant", reply);
-      messageCount++;
-
-      if (data.session_messages_remaining !== undefined) {
-        trialStatus.session_messages_remaining = data.session_messages_remaining;
-        trialStatus.messages_remaining = data.messages_remaining;
-        trialStatus.sessions_remaining = data.sessions_remaining;
-        updateCounter();
-      }
-    } else if (data.error) {
-      appendMessage("assistant", "I hit a snag \u2014 " + (data.error.message || "something went wrong") + ". Try again?");
-      conversationHistory.pop();
-    } else {
-      appendMessage("assistant", "Got an unexpected response. Try sending that again?");
-      conversationHistory.pop();
-    }
-  } catch (err) {
-    showTyping(false);
-    appendMessage("assistant", "Connection issue. Check your internet and try again.");
-    conversationHistory.pop();
-    console.error("Send error:", err);
-  }
-
-  isSending = false;
-  enableInput();
-}
-
-// --- Start New Session ---
-async function startNewSession() {
-  try {
-    var resp = await fetch(EDGE_FUNCTION_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ trial_token: trialToken, action: "start_new_session" })
-    });
-    var result = await resp.json();
-
-    if (result.status === "trial_expired") {
-      document.getElementById("sessionCompleteOverlay").classList.remove("visible");
-      document.getElementById("trialExpiredOverlay").classList.add("visible");
-      startExpiredCountdown();
-      return;
-    }
-
-    // Reset UI
-    document.getElementById("sessionCompleteOverlay").classList.remove("visible");
-    document.getElementById("messages").innerHTML = "";
-    conversationHistory = [];
-    messageCount = 0;
-    sessionId = generateSessionId();
-    openingVariation = pickOpeningVariation();
-
-    // Refresh status
-    await checkTrialStatus();
-    updateCounter();
-
-    // Send new welcome
-    await sendInitialMessage();
-    enableInput();
-
-  } catch (err) {
-    console.error("Start new session failed:", err);
-  }
-}
-
-// =====================================================
-// UPGRADE REDIRECT
-// =====================================================
-var UPGRADE_URL = "https://johnschin.github.io/evolved-caveman-coach/upgrade.html";
-var expiredCountdownInterval = null;
-
-function buildUpgradeUrl(email) {
-  var url = UPGRADE_URL;
-  if (trialToken) url += "?trial=" + encodeURIComponent(trialToken);
-  if (email) url += (url.includes("?") ? "&" : "?") + "email=" + encodeURIComponent(email);
-  return url;
-}
-
-function goToUpgrade() {
-  var email = trialStatus && trialStatus.email ? trialStatus.email : "";
-  window.location.href = buildUpgradeUrl(email);
-}
-
-function startExpiredCountdown() {
-  var seconds = 8;
-  var el = document.getElementById("expiredCountdown");
-  if (!el) return;
-  expiredCountdownInterval = setInterval(function() {
-    seconds--;
-    el.textContent = seconds;
-    if (seconds <= 0) {
-      clearInterval(expiredCountdownInterval);
-      goToUpgrade();
-    }
-  }, 1000);
-}
-
-// =====================================================
-// INITIALIZATION
-// =====================================================
-async function init() {
-  var params = new URLSearchParams(window.location.search);
-  trialToken = params.get("trial");
-
-  if (!trialToken) {
-    document.getElementById("consentOverlay").classList.remove("visible");
-    document.getElementById("resumeOverlay").classList.add("visible");
-    return;
-  }
-
-  await checkTrialStatus();
-}
-
-// Enter key on resume email
-document.getElementById("resumeEmail").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") { e.preventDefault(); resumeTrial(); }
-});
-
-init();
-</script>
+
+    <script>
+        // ===== CONFIG =====
+        const SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+        const CHAT_ENDPOINT = SUPABASE_URL + "/functions/v1/chat";
+
+        // ===== STATE =====
+        var state = {
+            token: null,
+            sessionId: null,
+            conversationHistory: [],
+            trialStartTime: null,
+            trialEndTime: null,
+            messagesCount: 0,
+            isWaitingForResponse: false
+        };
+        var bannerTimer = null; // ADDED: for AI disclosure banner
+
+        // ===== SYSTEM PROMPT =====
+        const SYSTEM_PROMPT = `You are the Inner Leadership AI Coach, a conversational coaching tool built by Dr. John Schinnerer.
+
+Your role: Help men build self-awareness, self-command, and stronger communication through the lens of emotional intelligence and nervous system mastery.
+
+Your voice: Warm, direct, slightly irreverent, grounded in science but conversational. Think of yourself as the user's smartest friend with a PhD—someone who won't let them off the hook but genuinely cares about their growth.
+
+Your four pillars of coaching:
+1. Stress, Burnout & Overload — help men understand why they're perpetually stressed and what to do about it
+2. Anger, Irritability & Reactivity — explore patterns of getting stuck in anger and automatic escalation
+3. Relationships & Communication — help men understand why conversations fail and how to turn toward their partner instead of away
+4. Identity, Meaning & Midlife — support men who are successful on the outside but unsatisfied on the inside
+
+Your frameworks (use naturally, don't name-drop): CBT, IFS (Internal Family Systems), attachment theory, polyvagal theory, positive psychology, and the Inner Board Meeting model (CEO, Director of Defense, VP of Emotions).
+
+Your coaching approach (default response structure):
+1. Name the pattern or tension in what they shared
+2. Ask ONE sharp coaching question (not three—one)
+3. Offer ONE practical reframe
+4. Suggest ONE concrete next step
+
+Coaching language you prefer: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point.
+
+Safety & scope (CRITICAL):
+- You are NOT a therapist, counselor, or crisis service.
+- You do NOT diagnose, prescribe, or provide medical or psychiatric treatment.
+- You do NOT explore trauma, abuse, or deep childhood wounds.
+- You DO redirect toward professional help when someone is in crisis, expressing suicidal ideation, or describing abuse.
+- Keep conversations present-focused and action-oriented.
+- If someone discloses significant trauma, abuse, or crisis content, acknowledge it, state your limits, and recommend professional support.
+
+Your opening: You will receive opening variations—use them to begin conversations naturally based on the user's entry point.
+
+Remember: Your job is to help men lead themselves from the inside out. Be real, be direct, be wise.`;
+
+        // ===== OPENING VARIATIONS =====
+        const OPENING_VARIATIONS = [
+            "What brings you here today? What's going on in your world right now?",
+            "So what's on your mind? What made you want to explore this?",
+            "Alright, let's dig in. What's the thing that's been sitting with you lately?",
+            "I'm all ears. What's been weighing on you, or what are you hoping to figure out?",
+            "What made you decide to show up today? What's the real question underneath?",
+            "Let's start here: If you could solve one thing about your inner world or your relationships, what would it be?"
+        ];
+
+        // ===== UI HELPERS =====
+        function hideAllOverlays() {
+            document.getElementById("consentOverlay").classList.add("hidden");
+            document.getElementById("sessionCompleteOverlay").classList.add("hidden");
+            document.getElementById("trialExpiredOverlay").classList.add("hidden");
+            document.getElementById("invalidTokenOverlay").classList.add("hidden");
+            document.getElementById("resumeTrialOverlay").classList.add("hidden");
+        }
+
+        function showChat() {
+            hideAllOverlays();
+            document.getElementById("chatContainer").classList.remove("hidden");
+        }
+
+        function addMessage(text, isAI) {
+            var messagesEl = document.getElementById("messages");
+            var messageDiv = document.createElement("div");
+            messageDiv.className = "message " + (isAI ? "ai" : "user");
+
+            var bubble = document.createElement("div");
+            bubble.className = "message-bubble";
+            bubble.textContent = text;
+
+            messageDiv.appendChild(bubble);
+            messagesEl.appendChild(messageDiv);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            var messagesEl = document.getElementById("messages");
+            var typingDiv = document.createElement("div");
+            typingDiv.className = "message ai";
+            typingDiv.id = "typingIndicator";
+
+            var indicator = document.createElement("div");
+            indicator.className = "typing-indicator";
+            indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+            typingDiv.appendChild(indicator);
+            messagesEl.appendChild(typingDiv);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            var indicator = document.getElementById("typingIndicator");
+            if (indicator) indicator.remove();
+        }
+
+        // ===== TRIAL STATUS =====
+        function checkTrialStatus() {
+            var params = new URLSearchParams(window.location.search);
+            var token = params.get("token");
+
+            if (!token) {
+                document.getElementById("invalidTokenOverlay").classList.remove("hidden");
+                return;
+            }
+
+            fetch(SUPABASE_URL + "/functions/v1/trial-status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ token: token })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (!data.valid) {
+                    document.getElementById("invalidTokenOverlay").classList.remove("hidden");
+                    return;
+                }
+
+                state.token = token;
+                state.sessionId = data.sessionId;
+                state.trialStartTime = new Date(data.trialStartTime);
+                state.trialEndTime = new Date(data.trialEndTime);
+                state.messagesCount = data.messagesCount || 0;
+                state.conversationHistory = data.conversationHistory || [];
+
+                if (data.completed) {
+                    document.getElementById("sessionCompleteOverlay").classList.remove("hidden");
+                } else if (new Date() > state.trialEndTime) {
+                    document.getElementById("trialExpiredOverlay").classList.remove("hidden");
+                } else if (state.messagesCount > 0) {
+                    var timeRemaining = Math.ceil((state.trialEndTime - new Date()) / (1000 * 60));
+                    document.getElementById("resumeMessage").textContent =
+                        "You have " + timeRemaining + " minutes left in your trial. Would you like to continue your conversation?";
+                    document.getElementById("resumeTrialOverlay").classList.remove("hidden");
+                } else {
+                    document.getElementById("consentOverlay").classList.remove("hidden");
+                }
+            })
+            .catch(function(error) {
+                console.error("Trial status error:", error);
+                document.getElementById("invalidTokenOverlay").classList.remove("hidden");
+            });
+        }
+
+        // ===== RESUME TRIAL =====
+        function resumeTrial() {
+            hideAllOverlays();
+            showChat();
+            document.getElementById("userInput").focus();
+            showAIDisclosureBanner();
+        }
+
+        // ===== ACCEPT CONSENT =====
+        function acceptConsent() {
+            showChat();
+            startNewSession();
+            showAIDisclosureBanner();
+        }
+
+        // ===== SEND MESSAGE =====
+        function sendMessage() {
+            var input = document.getElementById("userInput");
+            var text = input.value.trim();
+
+            if (!text || state.isWaitingForResponse) return;
+
+            addMessage(text, false);
+            state.conversationHistory.push({ role: "user", content: text });
+            state.messagesCount += 1;
+            input.value = "";
+            state.isWaitingForResponse = true;
+            showTypingIndicator();
+
+            var payload = {
+                token: state.token,
+                sessionId: state.sessionId,
+                message: text,
+                conversationHistory: state.conversationHistory,
+                systemPrompt: SYSTEM_PROMPT
+            };
+
+            fetch(CHAT_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                removeTypingIndicator();
+
+                if (data.completed) {
+                    state.conversationHistory.push({ role: "assistant", content: data.reply });
+                    addMessage(data.reply, true);
+                    setTimeout(function() {
+                        document.getElementById("sessionCompleteOverlay").classList.remove("hidden");
+                    }, 800);
+                } else if (data.error) {
+                    removeTypingIndicator();
+                    addMessage("Something went wrong. Please try again.", true);
+                } else {
+                    state.conversationHistory.push({ role: "assistant", content: data.reply });
+                    addMessage(data.reply, true);
+                }
+
+                state.isWaitingForResponse = false;
+                input.focus();
+            })
+            .catch(function(error) {
+                console.error("Send message error:", error);
+                removeTypingIndicator();
+                addMessage("Connection error. Please try again.", true);
+                state.isWaitingForResponse = false;
+                input.focus();
+            });
+        }
+
+        // ===== START NEW SESSION =====
+        function startNewSession() {
+            state.conversationHistory = [];
+            state.messagesCount = 0;
+            document.getElementById("messages").innerHTML = "";
+
+            // ADDED: Re-insert the banner HTML (since innerHTML cleared it)
+            var messagesEl = document.getElementById("messages");
+            var bannerDiv = document.createElement("div");
+            bannerDiv.className = "ai-disclosure-banner hidden";
+            bannerDiv.id = "aiDisclosureBanner";
+            bannerDiv.innerHTML = '<span class="banner-icon">&#9432;</span>' +
+                '<span class="banner-text">' +
+                'Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. ' +
+                '<a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
+                '</span>' +
+                '<button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>';
+            messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
+            showAIDisclosureBanner();
+
+            var opening = OPENING_VARIATIONS[Math.floor(Math.random() * OPENING_VARIATIONS.length)];
+            setTimeout(function() {
+                addMessage(opening, true);
+                state.conversationHistory.push({ role: "assistant", content: opening });
+                document.getElementById("userInput").focus();
+            }, 300);
+        }
+
+        // ===== UPGRADE REDIRECT =====
+        function upgradeRedirect() {
+            window.location.href = "https://guidetoself.com";
+        }
+
+        // ===== ADDED: AI DISCLOSURE BANNER (SB 243 per-session) =====
+        function showAIDisclosureBanner() {
+            var banner = document.getElementById("aiDisclosureBanner");
+            if (!banner) return;
+            if (bannerTimer) clearTimeout(bannerTimer);
+            banner.classList.remove("hidden", "dismissing");
+            bannerTimer = setTimeout(function() { dismissBanner(); }, 10000);
+        }
+
+        function dismissBanner() {
+            var banner = document.getElementById("aiDisclosureBanner");
+            if (!banner || banner.classList.contains("hidden")) return;
+            if (bannerTimer) clearTimeout(bannerTimer);
+            banner.classList.add("dismissing");
+            setTimeout(function() {
+                banner.classList.add("hidden");
+                banner.classList.remove("dismissing");
+            }, 300);
+        }
+
+        // ===== ADDED: Consent checkboxes control the accept button =====
+        function checkConsentBoxes() {
+            var cb1 = document.getElementById("consentCheck1");
+            var cb2 = document.getElementById("consentCheck2");
+            var cb3 = document.getElementById("consentCheck3");
+            var btn = document.getElementById("consentAcceptBtn");
+            if (cb1 && cb2 && cb3 && btn) {
+                btn.disabled = !(cb1.checked && cb2.checked && cb3.checked);
+            }
+        }
+
+        // Attach change listeners to checkboxes
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("consentCheck1").addEventListener("change", checkConsentBoxes);
+            document.getElementById("consentCheck2").addEventListener("change", checkConsentBoxes);
+            document.getElementById("consentCheck3").addEventListener("change", checkConsentBoxes);
+        });
+
+        // ===== INIT =====
+        function init() {
+            checkTrialStatus();
+        }
+
+        init();
+    </script>
 </body>
 </html>
