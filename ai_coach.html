@@ -469,6 +469,18 @@
 
             <!-- SIGNUP FORM -->
             <div id="signupForm" style="display:none;">
+                <div id="kajabiWelcome" style="display:none; text-align:center; margin-bottom:16px; padding:12px; background:rgba(163,208,201,0.1); border-radius:8px; border:1px solid rgba(163,208,201,0.2);">
+                    <div style="font-size:14px; font-weight:600; color:var(--aqua); margin-bottom:4px;">Payment received — welcome aboard.</div>
+                    <div style="font-size:12px; color:var(--muted);">Create your login to get started.</div>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="signupFirstName" autocomplete="given-name" placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="signupLastName" autocomplete="family-name" placeholder="Doe">
+                </div>
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" id="signupEmail" autocomplete="email" placeholder="you@email.com">
@@ -587,7 +599,14 @@
     var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
     var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
     var EDGE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/chat";
+    var SIGNUP_PAID_URL = SUPABASE_URL + "/functions/v1/signup-paid";
     var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Read Kajabi redirect params (?plan=monthly&key=caveman2026paid)
+    var urlParams = new URLSearchParams(window.location.search);
+    var kajabiPlan = urlParams.get("plan");   // "monthly" or "annual"
+    var kajabiKey = urlParams.get("key");     // signup key
+    var isKajabiRedirect = !!(kajabiPlan && kajabiKey);
 
     // =====================================================
     // STATE
@@ -725,6 +744,8 @@
     }
 
     async function handleSignup() {
+        var firstName = document.getElementById("signupFirstName").value.trim();
+        var lastName = document.getElementById("signupLastName").value.trim();
         var email = document.getElementById("signupEmail").value.trim();
         var password = document.getElementById("signupPassword").value;
 
@@ -736,7 +757,7 @@
             showAuthMsg("signupMessage", "Password must be at least 6 characters.", "error");
             return;
         }
-        // ADDED: Validate TOS checkbox before signup
+        // Validate TOS checkbox before signup
         if (!document.getElementById("tosCheckbox").checked) {
             showAuthMsg("signupMessage", "Please accept the Terms of Service, Privacy Policy, and AI Disclosure to continue.", "error");
             return;
@@ -744,20 +765,71 @@
 
         document.getElementById("signupBtn").disabled = true;
         showAuthMsg("signupMessage", "Creating account...", "");
+
         try {
-            var result = await sb.auth.signUp({ email: email, password: password });
-            if (result.error) throw result.error;
-            if (result.data.user && !result.data.session) {
-                showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
-            } else if (result.data.session) {
-                currentUser = result.data.user;
-                accessToken = result.data.session.access_token;
+            if (isKajabiRedirect) {
+                // PAID SIGNUP: Call edge function for instant account (no email confirmation)
+                var response = await fetch(SIGNUP_PAID_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        password: password,
+                        plan_type: kajabiPlan,
+                        signup_key: kajabiKey
+                    })
+                });
+                var data = await response.json();
+                if (!response.ok) {
+                    if (data.code === "EMAIL_EXISTS") {
+                        // Account already exists — switch to login view so they use their existing password
+                        showAuthMsg("signupMessage", "An account with this email already exists. Switching to sign in...", "error");
+                        document.getElementById("loginEmail").value = email;
+                        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
+                        setTimeout(function() { showView("login"); document.getElementById("loginPassword").focus(); }, 1500);
+                        return;
+                    } else {
+                        throw new Error(data.error || "Signup failed");
+                    }
+                }
+                // Auto-sign in after account creation
+                loginInProgress = true;
+                var loginResult = await sb.auth.signInWithPassword({ email: email, password: password });
+                if (loginResult.error) { loginInProgress = false; throw loginResult.error; }
+                currentUser = loginResult.data.user;
+                accessToken = loginResult.data.session.access_token;
+                // Clear URL params so refresh doesn't re-trigger Kajabi flow
+                history.replaceState(null, "", window.location.pathname);
                 await enterChat();
+                loginInProgress = false;
+            } else {
+                // STANDARD SIGNUP: Uses Supabase native signUp (sends confirmation email)
+                var result = await sb.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            display_name: [firstName, lastName].filter(Boolean).join(" ")
+                        }
+                    }
+                });
+                if (result.error) throw result.error;
+                if (result.data.user && !result.data.session) {
+                    showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
+                } else if (result.data.session) {
+                    currentUser = result.data.user;
+                    accessToken = result.data.session.access_token;
+                    await enterChat();
+                }
             }
         } catch (err) {
             showAuthMsg("signupMessage", err.message || "Signup failed.", "error");
         }
-        // ADDED: Re-enable based on checkbox state (not just always)
+        // Re-enable based on checkbox state
         document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
     }
 
@@ -1117,6 +1189,10 @@
             currentUser = sessionResult.data.session.user;
             accessToken = sessionResult.data.session.access_token;
             await enterChat();
+        } else if (isKajabiRedirect) {
+            // Coming from Kajabi after payment — show signup form with welcome banner
+            showView("signup");
+            document.getElementById("kajabiWelcome").style.display = "block";
         }
     }
 
@@ -1150,6 +1226,12 @@
     });
     document.getElementById("loginPassword").addEventListener("keydown", function(e) {
         if (e.key === "Enter") { e.preventDefault(); handleLogin(); }
+    });
+    document.getElementById("signupFirstName").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupLastName").focus(); }
+    });
+    document.getElementById("signupLastName").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupEmail").focus(); }
     });
     document.getElementById("signupEmail").addEventListener("keydown", function(e) {
         if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupPassword").focus(); }
