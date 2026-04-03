@@ -993,7 +993,7 @@ HARD BOUNDARIES:
       if (!banner) return;
       if (bannerTimer) clearTimeout(bannerTimer);
       banner.classList.remove('hidden', 'dismissing');
-      bannerTimer = setTimeout(() => { dismissBanner(); }, 20000);
+      bannerTimer = setTimeout(() => { dismissBanner(); }, 30000);
     }
 
     function dismissBanner() {
