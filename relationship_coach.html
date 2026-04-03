@@ -3,801 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Isn't Enough - Relationship Coach</title>
-    <link href="https://fonts.googleapis.com/css2?family=Georgia:ital@0;1&display=swap" rel="stylesheet">
+    <title>Relationship Coaching Companion — Love Isn't Enough</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --plum: #4e4a55;
+            --plum-light: #5e5a65;
+            --teal: #afc9cf;
+            --sage: #bfdcdc;
+            --mauve: #998193;
+            --sand: #ded3cc;
+            --cream: #f0ebe2;
+            --cream-dark: #e5dfd5;
+            --text: #4e4a55;
+            --muted: #8a8590;
+            --error: #d32f2f;
+            --success: #2e7d32;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f0ebe2;
-            color: #4e4a55;
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--plum);
+            color: var(--text);
+            height: 100vh;
             overflow: hidden;
         }
-
-        /* Color variables */
-        :root {
-            --dark-plum: #4e4a55;
-            --soft-teal: #afc9cf;
-            --light-sage: #bfdcdc;
-            --muted-mauve: #998193;
-            --warm-sand: #ded3cc;
-            --cream: #f0ebe2;
+        h1, h2, h3, .brand-serif {
+            font-family: 'Orpheus Pro', Georgia, 'Times New Roman', serif;
         }
 
-        /* Typography */
-        h1, h2, h3, .brand-name {
+        /* === AUTH SCREEN === */
+        .auth-screen {
+            display: flex; align-items: center; justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--sand) 100%);
+        }
+        .auth-box {
+            background: #fff; border-radius: 14px; padding: 40px 36px;
+            max-width: 420px; width: 92%;
+            box-shadow: 0 12px 48px rgba(78,74,85,0.12);
+        }
+        .auth-box h2 {
+            font-size: 22px; color: var(--plum); margin-bottom: 4px;
             font-family: 'Orpheus Pro', Georgia, serif;
         }
-
-        /* Screens - visibility management */
-        .screen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* ============ DISCLAIMER SCREEN ============ */
-        #disclaimerScreen {
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f0ebe2 0%, #ded3cc 100%);
-        }
-
-        .disclaimer-container {
-            background: white;
-            border-radius: 12px;
-            padding: 48px;
-            max-width: 600px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-
-        .disclaimer-title {
-            font-size: 28px;
-            margin-bottom: 24px;
-            color: var(--dark-plum);
-        }
-
-        .disclaimer-text {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 32px;
-        }
-
-        .disclaimer-button {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--dark-plum);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .disclaimer-button:hover {
-            background-color: #3a3640;
-        }
-
-        /* ============ AUTH SCREEN ============ */
-        #authScreen {
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f0ebe2 0%, #ded3cc 100%);
-        }
-
-        .auth-container {
-            background: white;
-            border-radius: 12px;
-            padding: 48px;
-            max-width: 420px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .auth-brand {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--dark-plum);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .auth-tagline {
-            font-size: 13px;
-            color: var(--soft-teal);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 28px;
-            border-bottom: 1px solid #e0dbd0;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            color: #999;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            color: var(--dark-plum);
-            border-bottom-color: var(--dark-plum);
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .auth-field {
-            margin-bottom: 16px;
-        }
-
-        .auth-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--dark-plum);
-        }
-
-        .auth-input {
-            width: 100%;
-            padding: 11px 14px;
-            border: 1px solid var(--warm-sand);
-            border-radius: 6px;
-            font-size: 14px;
-            background-color: #fafaf8;
-            transition: border-color 0.3s ease;
-        }
-
-        .auth-input:focus {
-            outline: none;
-            border-color: var(--soft-teal);
-            background-color: white;
-        }
-
-        .auth-select {
-            width: 100%;
-            padding: 11px 14px;
-            border: 1px solid var(--warm-sand);
-            border-radius: 6px;
-            font-size: 14px;
-            background-color: #fafaf8;
-            cursor: pointer;
-        }
-
-        .auth-select:focus {
-            outline: none;
-            border-color: var(--soft-teal);
-        }
-
-        .auth-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .auth-row-full {
-            grid-column: 1 / -1;
-        }
-
-        .auth-error {
-            color: #d32f2f;
-            font-size: 13px;
-            margin-top: 6px;
-            margin-bottom: 10px;
-        }
-
-        .auth-submit {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--dark-plum);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 8px;
-        }
-
-        .auth-submit:hover {
-            background-color: #3a3640;
-        }
-
-        .auth-submit:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .couples-fields {
-            display: none;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #e0dbd0;
-        }
-
-        .couples-fields.active {
-            display: block;
-        }
-
-        /* ============ CHAT SCREEN ============ */
-        #chatScreen {
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-        }
-
-        .chat-header {
-            background-color: white;
-            border-bottom: 1px solid #e0dbd0;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        .chat-header-left {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .chat-brand {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-brand-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--dark-plum);
-            letter-spacing: -0.5px;
-        }
-
-        .chat-brand-tagline {
-            font-size: 11px;
-            color: var(--soft-teal);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .mode-toggle {
-            display: flex;
-            background-color: #f0ebe2;
-            border-radius: 20px;
-            padding: 4px;
-            gap: 0;
-        }
-
-        .mode-button {
-            padding: 8px 16px;
-            border: none;
-            background-color: transparent;
-            color: #999;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .mode-button.active {
-            background-color: white;
-            color: var(--dark-plum);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .chat-header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-button {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background-color: #f0ebe2;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
-            color: var(--dark-plum);
-        }
-
-        .header-button:hover {
-            background-color: #e0dbd0;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .message {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.assistant {
-            justify-content: flex-start;
-        }
-
-        .message-bubble {
-            max-width: 70%;
-            padding: 16px;
-            border-radius: 12px;
-            word-wrap: break-word;
-            line-height: 1.6;
-        }
-
-        .message.user .message-bubble {
-            background-color: var(--dark-plum);
-            color: white;
-        }
-
-        .message.assistant .message-bubble {
-            background-color: white;
-            border: 1px solid #e0dbd0;
-        }
-
-        .voice-section {
-            margin-bottom: 12px;
-            padding-left: 16px;
-            border-left: 3px solid transparent;
-            position: relative;
-        }
-
-        .voice-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .voice-section.john {
-            border-left-color: var(--dark-plum);
-        }
-
-        .voice-section.joree {
-            border-left-color: var(--soft-teal);
-        }
-
-        .voice-label {
-            font-weight: 700;
-            font-size: 13px;
-            margin-bottom: 6px;
-            opacity: 0.8;
-        }
-
-        .voice-content {
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-            padding: 16px;
-            background-color: white;
-            border: 1px solid #e0dbd0;
-            border-radius: 12px;
-            width: fit-content;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--muted-mauve);
-            animation: typingBounce 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .chat-input-area {
-            background-color: white;
-            border-top: 1px solid #e0dbd0;
-            padding: 16px 24px;
-            display: flex;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-input-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            background-color: #f0ebe2;
-            border-radius: 24px;
-            padding: 0 16px;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input-wrapper:focus-within {
-            border-color: var(--soft-teal);
-            background-color: white;
-        }
-
+        .auth-box .tagline {
+            font-size: 12px; color: var(--teal); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 28px; font-weight: 600;
+        }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--plum); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 13px; border: 1px solid var(--sand);
+            border-radius: 7px; font-size: 14px; font-family: inherit;
+            background: #fafaf8; transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--teal); background: #fff; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-primary {
+            width: 100%; padding: 12px; background: var(--plum); color: #fff;
+            border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
+            font-family: inherit; cursor: pointer; margin-top: 8px; transition: opacity 0.2s;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+        .auth-toggle { text-align: center; margin-top: 18px; font-size: 13px; color: var(--muted); }
+        .auth-toggle a { color: var(--teal); cursor: pointer; font-weight: 600; text-decoration: none; }
+        .auth-toggle a:hover { text-decoration: underline; }
+        .auth-message { font-size: 13px; margin-top: 8px; min-height: 18px; }
+        .auth-message.error { color: var(--error); }
+        .auth-message.success { color: var(--success); }
+
+        /* TOS checkbox */
+        .tos-agreement { margin: 16px 0 4px 0; }
+        .tos-checkbox-label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: var(--muted); line-height: 1.5; }
+        .tos-checkbox { margin-top: 2px; accent-color: var(--plum); }
+        .tos-link { color: var(--teal); text-decoration: none; }
+        .tos-link:hover { text-decoration: underline; }
+
+        /* Couples fields */
+        .couples-fields { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--sand); }
+        .couples-fields.active { display: block; }
+
+        /* === CHAT SCREEN === */
+        .chat-container { display: none; flex-direction: column; height: 100vh; background: var(--cream); }
+        .chat-container.active { display: flex; }
+
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px; background: #fff;
+            border-bottom: 1px solid var(--sand); flex-shrink: 0;
+        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .header-brand { display: flex; flex-direction: column; }
+        .header-title {
+            font-family: 'Orpheus Pro', Georgia, serif;
+            font-size: 17px; font-weight: 700; color: var(--plum); letter-spacing: -0.3px;
+        }
+        .header-subtitle { font-size: 11px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+        .header-divider { width: 1px; height: 26px; background: var(--sand); }
+        .mode-toggle { display: flex; background: var(--cream); border-radius: 20px; padding: 3px; }
+        .mode-btn {
+            padding: 6px 14px; border: none; background: transparent;
+            color: var(--muted); font-size: 12px; font-weight: 700;
+            cursor: pointer; border-radius: 17px; transition: all 0.2s; font-family: inherit;
+        }
+        .mode-btn.active { background: #fff; color: var(--plum); box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .header-actions { display: flex; gap: 8px; }
+        .btn-small {
+            padding: 7px 14px; font-size: 12px; font-weight: 700;
+            border: 1px solid var(--sand); border-radius: 7px;
+            background: #fff; color: var(--plum); cursor: pointer;
+            font-family: inherit; transition: all 0.2s;
+        }
+        .btn-small:hover { border-color: var(--teal); background: var(--cream); }
+
+        /* AI Disclosure Banner (SB 243) */
+        .ai-disclosure-banner {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 10px; background: var(--cream-dark); border: 1px solid var(--sand);
+            border-radius: 10px; padding: 12px 16px; font-size: 13px;
+            color: var(--muted); line-height: 1.5; max-width: 700px;
+            margin: 12px auto; animation: bannerSlideIn 0.3s ease-out;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .ai-disclosure-banner.dismissing { opacity: 0; transform: translateY(-8px); }
+        .ai-disclosure-banner.hidden { display: none; }
+        @keyframes bannerSlideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+        .banner-text { flex: 1; }
+        .banner-link { color: var(--teal); text-decoration: none; }
+        .banner-link:hover { text-decoration: underline; }
+        .banner-dismiss { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 0; line-height: 1; flex-shrink: 0; }
+        .banner-dismiss:hover { color: var(--plum); }
+
+        /* Messages */
+        .messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+        .message { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { justify-content: flex-end; }
+        .message.assistant { justify-content: flex-start; }
+        .message-bubble { max-width: 72%; padding: 14px 16px; border-radius: 14px; line-height: 1.65; font-size: 14px; word-wrap: break-word; }
+        .message.user .message-bubble { background: var(--plum); color: #fff; border-bottom-right-radius: 4px; }
+        .message.assistant .message-bubble { background: #fff; color: var(--text); border: 1px solid var(--sand); border-bottom-left-radius: 4px; }
+
+        /* Dual-voice rendering */
+        .voice-section { margin-bottom: 12px; padding-left: 14px; border-left: 3px solid transparent; }
+        .voice-section:last-child { margin-bottom: 0; }
+        .voice-section.john { border-left-color: var(--plum); }
+        .voice-section.joree { border-left-color: var(--teal); }
+        .voice-label { font-weight: 700; font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .voice-section.john .voice-label { color: var(--plum); }
+        .voice-section.joree .voice-label { color: var(--teal); }
+        .voice-content { font-size: 14px; line-height: 1.65; }
+
+        /* Typing indicator */
+        .typing-indicator { display: flex; gap: 5px; align-items: center; padding: 14px 16px; background: #fff; border: 1px solid var(--sand); border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
+        .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mauve); animation: bounce 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
+
+        /* Input area */
+        .input-area { padding: 12px 16px; background: #fff; border-top: 1px solid var(--sand); flex-shrink: 0; }
+        .input-row { display: flex; gap: 10px; align-items: flex-end; max-width: 760px; margin: 0 auto; }
+        .input-wrapper {
+            flex: 1; display: flex; align-items: center;
+            background: var(--cream); border-radius: 24px; padding: 0 16px;
+            border: 1px solid transparent; transition: all 0.2s;
+        }
+        .input-wrapper:focus-within { border-color: var(--teal); background: #fff; }
         .chat-input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 12px 0;
-            font-size: 14px;
-            color: var(--dark-plum);
-            outline: none;
-            font-family: inherit;
-            max-height: 100px;
-            resize: none;
+            flex: 1; border: none; background: transparent; padding: 11px 0;
+            font-size: 14px; color: var(--text); outline: none; font-family: inherit;
+            resize: none; max-height: 100px;
+        }
+        .chat-input::placeholder { color: var(--muted); }
+        .send-btn {
+            width: 38px; height: 38px; border: none; background: var(--teal);
+            border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s;
+        }
+        .send-btn:hover { opacity: 0.85; }
+        .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .send-btn svg { width: 18px; height: 18px; }
+        .disclaimer-bar {
+            font-size: 10px; color: var(--muted); text-align: center;
+            padding: 8px 16px; line-height: 1.5; max-width: 700px;
+            margin-left: auto; margin-right: auto;
+        }
+        .disclaimer-bar a { color: var(--teal); text-decoration: none; }
+        .disclaimer-bar a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .message-bubble { max-width: 88%; font-size: 13px; }
+            .auth-box { padding: 28px 22px; }
+            .header-title { font-size: 14px; }
+            .header { padding: 10px 14px; }
+            .header-divider, .mode-toggle { display: none; }
+            .ai-disclosure-banner { font-size: 12px; padding: 10px 12px; }
+            .form-row { grid-template-columns: 1fr; }
         }
 
-        .chat-input::placeholder {
-            color: #999;
-        }
-
-        .send-button {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background-color: var(--soft-teal);
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 8px;
-        }
-
-        .send-button:hover {
-            background-color: var(--light-sage);
-        }
-
-        .send-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* ============ SETTINGS MODAL ============ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 32px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--dark-plum);
-        }
-
-        .modal-close {
-            border: none;
-            background: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close:hover {
-            color: var(--dark-plum);
-        }
-
-        .settings-section {
-            margin-bottom: 28px;
-        }
-
-        .settings-label {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--muted-mauve);
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .settings-value {
-            font-size: 15px;
-            color: var(--dark-plum);
-            margin-bottom: 8px;
-        }
-
-        .modal-button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--warm-sand);
-            background-color: #fafaf8;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark-plum);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .modal-button:hover {
-            background-color: #f0ebe2;
-            border-color: var(--soft-teal);
-        }
-
-        .modal-button.primary {
-            background-color: var(--dark-plum);
-            color: white;
-            border-color: var(--dark-plum);
-            margin-bottom: 24px;
-        }
-
-        .modal-button.primary:hover {
-            background-color: #3a3640;
-        }
-
-        .modal-button.logout {
-            background-color: #fff5f5;
-            color: #d32f2f;
-            border-color: #ffcdd2;
-        }
-
-        .modal-button.logout:hover {
-            background-color: #ffebee;
-        }
-
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 768px) {
-            .message-bubble {
-                max-width: 85%;
-            }
-
-            .disclaimer-container,
-            .auth-container {
-                padding: 32px 24px;
-                margin: 16px;
-            }
-
-            .chat-header {
-                padding: 12px 16px;
-            }
-
-            .chat-header-left {
-                gap: 12px;
-            }
-
-            .chat-brand-name {
-                font-size: 16px;
-            }
-
-            .mode-toggle {
-                display: none;
-            }
-
-            .chat-input-area {
-                padding: 12px 16px;
-            }
-
-            .chat-messages {
-                padding: 16px;
-                gap: 12px;
-            }
-
-            .modal-content {
-                padding: 24px;
-            }
-
-            .auth-row {
-                grid-template-columns: 1fr;
-            }
-
-            .auth-row-full {
-                grid-column: auto;
-            }
-        }
-
-        /* ============ SCROLLBAR STYLING ============ */
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--warm-sand);
-            border-radius: 3px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: var(--muted-mauve);
-        }
+        /* Scrollbar */
+        .messages::-webkit-scrollbar { width: 5px; }
+        .messages::-webkit-scrollbar-track { background: transparent; }
+        .messages::-webkit-scrollbar-thumb { background: var(--sand); border-radius: 3px; }
+        .messages::-webkit-scrollbar-thumb:hover { background: var(--mauve); }
     </style>
 </head>
 <body>
-    <!-- DISCLAIMER SCREEN -->
-    <div id="disclaimerScreen" class="screen active">
-        <div class="disclaimer-container">
-            <h1 class="disclaimer-title">Important Information Before You Begin</h1>
-            <p class="disclaimer-text">
-                The Love Isn't Enough Relationship Coach is a coaching tool for relational intelligence, communication, and personal development within partnership. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional. If you or your partner are experiencing domestic violence, suicidal thoughts, or a mental health emergency, please contact appropriate crisis services immediately.
-            </p>
-            <button class="disclaimer-button" onclick="acceptDisclaimer()">I Understand & Accept</button>
-        </div>
-    </div>
 
     <!-- AUTH SCREEN -->
-    <div id="authScreen" class="screen">
-        <div class="auth-container">
-            <div class="auth-header">
-                <div class="auth-brand">LOVE ISN'T ENOUGH</div>
-                <div class="auth-tagline">Relationship Coach</div>
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-box">
+            <h2>Relationship Coaching Companion</h2>
+            <p class="tagline">Love Isn't Enough</p>
+
+            <!-- LOGIN FORM -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" autocomplete="current-password">
+                </div>
+                <div id="loginMessage" class="auth-message"></div>
+                <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+                <div class="auth-toggle">Don't have an account? <a onclick="showView('signup')">Sign Up</a></div>
             </div>
 
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</div>
-                <div class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</div>
-            </div>
-
-            <!-- SIGN IN FORM -->
-            <form class="auth-form active" id="signinForm" onsubmit="handleSignIn(event)">
-                <div class="auth-field">
-                    <label class="auth-label">Email</label>
-                    <input type="email" class="auth-input" id="signinEmail" required>
-                </div>
-                <div class="auth-field">
-                    <label class="auth-label">Password</label>
-                    <input type="password" class="auth-input" id="signinPassword" required>
-                </div>
-                <div id="signinError" class="auth-error"></div>
-                <button type="submit" class="auth-submit">Sign In</button>
-            </form>
-
-            <!-- SIGN UP FORM -->
-            <form class="auth-form" id="signupForm" onsubmit="handleSignUp(event)">
-                <div class="auth-row">
-                    <div class="auth-field">
-                        <label class="auth-label">First Name</label>
-                        <input type="text" class="auth-input" id="signupFirstName" required>
+            <!-- SIGNUP FORM -->
+            <div id="signupForm" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="signupFirst" autocomplete="given-name">
                     </div>
-                    <div class="auth-field">
-                        <label class="auth-label">Last Name</label>
-                        <input type="text" class="auth-input" id="signupLastName" required>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="signupLast" autocomplete="family-name">
                     </div>
                 </div>
-
-                <div class="auth-field auth-row-full">
-                    <label class="auth-label">Email</label>
-                    <input type="email" class="auth-input" id="signupEmail" required>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" autocomplete="email">
                 </div>
-
-                <div class="auth-field auth-row-full">
-                    <label class="auth-label">Password</label>
-                    <input type="password" class="auth-input" id="signupPassword" required>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" autocomplete="new-password">
                 </div>
-
-                <div class="auth-row">
-                    <div class="auth-field">
-                        <label class="auth-label">Plan Type</label>
-                        <select class="auth-select" id="signupPlan" required>
-                            <option value="">Select Plan</option>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Plan</label>
+                        <select id="signupPlan">
                             <option value="monthly">Monthly</option>
                             <option value="annual">Annual</option>
                         </select>
                     </div>
-                    <div class="auth-field">
-                        <label class="auth-label">Coaching Mode</label>
-                        <select class="auth-select" id="signupMode" onchange="toggleCouplesFields()" required>
-                            <option value="">Select Mode</option>
+                    <div class="form-group">
+                        <label>Coaching Mode</label>
+                        <select id="signupMode" onchange="toggleCouplesFields()">
                             <option value="solo">Solo</option>
                             <option value="couples">Couples</option>
                         </select>
@@ -805,565 +277,602 @@
                 </div>
 
                 <div class="couples-fields" id="couplesFields">
-                    <div class="auth-field">
-                        <label class="auth-label">Partner's First Name (Optional)</label>
-                        <input type="text" class="auth-input" id="partnerFirstName">
+                    <div class="form-group">
+                        <label>Partner's Name (Optional)</label>
+                        <input type="text" id="partnerName">
                     </div>
-                    <div class="auth-field">
-                        <label class="auth-label">Partner's Email (Optional)</label>
-                        <input type="email" class="auth-input" id="partnerEmail">
+                    <div class="form-group">
+                        <label>Partner's Email (Optional)</label>
+                        <input type="email" id="partnerEmail">
                     </div>
                 </div>
 
-                <div id="signupError" class="auth-error"></div>
-                <button type="submit" class="auth-submit">Create Account</button>
-            </form>
+                <div class="tos-agreement">
+                    <label class="tos-checkbox-label">
+                        <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
+                        <span class="tos-label-text">
+                            I agree to the
+                            <a href="https://loveisntenough.net/terms" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+                            <a href="https://loveisntenough.net/privacy" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+                            <a href="https://loveisntenough.net/ai-disclosure" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+                        </span>
+                    </label>
+                </div>
+
+                <div id="signupMessage" class="auth-message"></div>
+                <button class="btn-primary" id="signupBtn" onclick="handleSignup()" disabled>Create Account</button>
+                <div class="auth-toggle">Already have an account? <a onclick="showView('login')">Sign In</a></div>
+            </div>
         </div>
     </div>
 
     <!-- CHAT SCREEN -->
-    <div id="chatScreen" class="screen">
-        <!-- Header -->
-        <div class="chat-header">
-            <div class="chat-header-left">
-                <div class="chat-brand">
-                    <div class="chat-brand-name">LOVE ISN'T ENOUGH</div>
-                    <div class="chat-brand-tagline">Relationship Coach</div>
+    <div id="chatScreen" class="chat-container">
+        <div class="header">
+            <div class="header-left">
+                <div class="header-brand">
+                    <div class="header-title">Relationship Coaching Companion</div>
+                    <div class="header-subtitle">Love Isn't Enough</div>
                 </div>
+                <div class="header-divider"></div>
                 <div class="mode-toggle">
-                    <button class="mode-button active" onclick="switchMode('solo')">Solo</button>
-                    <button class="mode-button" onclick="switchMode('couples')">Couples</button>
+                    <button class="mode-btn active" id="modeSolo" onclick="switchMode('solo')">Solo</button>
+                    <button class="mode-btn" id="modeCouples" onclick="switchMode('couples')">Couples</button>
                 </div>
             </div>
-            <div class="chat-header-right">
-                <button class="header-button" id="settingsBtn" onclick="openSettings()" title="Settings">⚙️</button>
+            <div class="header-actions">
+                <button class="btn-small" onclick="startNewSession()">New Session</button>
+                <button class="btn-small" onclick="handleLogout()">Sign Out</button>
             </div>
         </div>
 
-        <!-- Messages Area -->
-        <div class="chat-messages" id="chatMessages"></div>
-
-        <!-- Input Area -->
-        <div class="chat-input-area">
-            <div class="chat-input-wrapper">
-                <input
-                    type="text"
-                    class="chat-input"
-                    id="chatInput"
-                    placeholder="Share what's on your mind..."
-                    onkeypress="handleInputKeypress(event)"
-                >
+        <div class="messages" id="messages">
+            <!-- AI Disclosure Banner (SB 243) -->
+            <div class="ai-disclosure-banner hidden" id="aiDisclosureBanner">
+                <span class="banner-icon">&#9432;</span>
+                <span class="banner-text">
+                    Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support.
+                    <a href="https://loveisntenough.net/ai-disclosure" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.
+                </span>
+                <button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>
             </div>
-            <button class="send-button" id="sendBtn" onclick="sendMessage()" title="Send">→</button>
         </div>
-    </div>
 
-    <!-- SETTINGS MODAL -->
-    <div id="settingsModal" class="modal-overlay" onclick="closeSettings(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h2 class="modal-title">Settings</h2>
-                <button class="modal-close" onclick="closeSettings()">×</button>
+        <div class="input-area">
+            <div class="input-row">
+                <div class="input-wrapper">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Share what's on your mind..." onkeydown="handleKeydown(event)">
+                </div>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
             </div>
-
-            <div class="settings-section">
-                <div class="settings-label">Account</div>
-                <div class="settings-value" id="accountEmail">—</div>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-label">Session</div>
-                <div class="settings-value" id="sessionCount">Messages: —</div>
-            </div>
-
-            <div class="settings-section">
-                <button class="modal-button primary" onclick="startNewSession()">+ New Session</button>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-label">Upgrade Plan</div>
-                <a href="https://buy.stripe.com/PLACEHOLDER_MONTHLY" class="modal-button" target="_blank">Upgrade to Monthly</a>
-                <a href="https://buy.stripe.com/PLACEHOLDER_ANNUAL" class="modal-button" target="_blank">Upgrade to Annual</a>
-            </div>
-
-            <div class="settings-section">
-                <a href="https://www.paypal.com/checkoutnow?token=PLACEHOLDER" class="modal-button" target="_blank">Pay via PayPal</a>
-            </div>
-
-            <div class="settings-section">
-                <a href="https://loveisntenough.net" class="modal-button" target="_blank">Visit loveisntenough.net</a>
-            </div>
-
-            <div class="settings-section">
-                <button class="modal-button logout" onclick="handleLogout()">Log Out</button>
+            <div class="disclaimer-bar">
+                Love Isn't Enough Relationship Coaching Companion is an educational coaching tool — not therapy, counseling, or crisis support. View our
+                <a href="https://loveisntenough.net/terms" target="_blank" rel="noopener noreferrer">Terms</a>,
+                <a href="https://loveisntenough.net/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>, and
+                <a href="https://loveisntenough.net/ai-disclosure" target="_blank" rel="noopener noreferrer">AI Disclosure</a>.
             </div>
         </div>
     </div>
-
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // ============ CONFIG ============
-        const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
-        const CHAT_FUNCTION = 'chat';
-        const SIGNUP_FUNCTION = 'signup-couples';
+    // =====================================================
+    // CONFIG
+    // =====================================================
+    var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+    var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+    var SIGNUP_KEY = "loveisnt2026couples";
 
-        // Initialize Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-        // ============ STATE ============
-        let appState = {
-            currentScreen: 'disclaimer',
-            isAuthenticated: false,
-            user: null,
-            sessionId: null,
-            conversationHistory: [],
-            currentMode: 'solo',
-            isLoading: false,
-            messageCount: 0
-        };
+    // =====================================================
+    // STATE
+    // =====================================================
+    var currentUser = null;
+    var sessionId = null;
+    var conversationHistory = [];
+    var messageCount = 0;
+    var currentMode = "solo";
+    var isLoading = false;
+    var isFirstMessage = true;
+    var bannerTimer = null;
+    var enterChatCalled = false;
 
-        // ============ INITIALIZATION ============
-        document.addEventListener('DOMContentLoaded', () => {
-            checkDisclaimer();
-            checkAuthentication();
+    // =====================================================
+    // SYSTEM PROMPT
+    // =====================================================
+    var SYSTEM_PROMPT = "You are the Love Isn't Enough Relationship Coaching Companion — built by Dr. John Schinnerer (Ph.D., UC Berkeley) and Joree Rose (MA, LMFT). You help individuals and couples build stronger, more connected relationships through greater self-awareness, emotional intelligence, and practical communication skills.\n\n" +
+    "VOICE — TWO COACHES IN ONE:\n" +
+    "You speak as both John and Joree, each in their own voice, labeled clearly.\n\n" +
+    "**John:** Direct, warm, slightly irreverent. Grounded in science and frameworks. Uses metaphors and humor. Challenges with care.\n" +
+    "**Joree:** Warm, nurturing, mindfulness-forward. Creates emotional safety. Invites spaciousness and self-compassion. Gently names what's underneath.\n\n" +
+    "Alternate between these voices naturally. Sometimes John leads, sometimes Joree leads, sometimes both speak. Use your judgment — the interplay IS the coaching experience.\n\n" +
+    "WHAT YOU ARE:\n" +
+    "- A coaching tool for relational intelligence, communication, emotional awareness, conflict navigation, intimacy, attachment patterns, self-leadership within partnership\n" +
+    "- Educational, not clinical\n\n" +
+    "WHAT YOU ARE NOT:\n" +
+    "- Not a therapist, psychologist, counselor, diagnostic tool, or crisis service\n" +
+    "- Not a substitute for licensed mental health care\n" +
+    "- Not a referee — never take sides in a couple dynamic\n\n" +
+    "FRAMEWORKS IN USE:\n" +
+    "Attachment Theory (Bowlby, Sue Johnson's EFT), Gottman Method (Four Horsemen, repair attempts, 5:1 ratio), Polyvagal Theory (Porges), IFS, Inner Board Meeting (Dr. John's proprietary — CEO, Director of Defense, VP of Emotions), NVC, The AWARE Method, CBT/REBT, Positive Psychology, Mindfulness\n\n" +
+    "COACHING PILLARS:\n" +
+    "1. Communication & Conflict\n2. Intimacy & Connection\n3. Attachment & Patterns\n4. Identity & Growth Within Partnership\n\n" +
+    "DEFAULT RESPONSE STRUCTURE:\n" +
+    "1. Acknowledge what's here (Joree often leads)\n" +
+    "2. Name the pattern or dynamic (John often leads)\n" +
+    "3. Ask one sharp coaching question — one, not three\n" +
+    "4. Offer one practical reframe or tool\n" +
+    "5. Suggest one concrete next step\n\n" +
+    "SAFETY:\n" +
+    "- GREEN (engage fully): Communication patterns, conflict styles, attachment awareness, intimacy, values, co-parenting, repair skills\n" +
+    "- YELLOW (coach with care, keep present-focused): Infidelity (past), trust rebuilding, shame, sexual disconnection, power imbalances\n" +
+    "- RED (acknowledge, state limits, redirect immediately): Active domestic violence, suicidal ideation, substance abuse, active trauma, child abuse\n" +
+    "  If RED: Acknowledge courage, state 'This is beyond what coaching can safely hold,' and provide:\n" +
+    "  988 Suicide & Crisis Lifeline (call or text 988), National DV Hotline (1-800-799-7233), SAMHSA (1-800-662-4357), or call 911.\n" +
+    "  Do NOT continue coaching. Hold space and redirect.\n\n" +
+    "LANGUAGE RULES:\n" +
+    "- Preferred: pattern, dynamic, cycle, relational strategy, emotional leadership, turning toward, repair attempt, co-regulation, attachment signal, secure functioning\n" +
+    "- Avoid as primary language: trauma, healing old wounds, inner child, diagnosis, treatment\n" +
+    "- NEVER: Label a partner as narcissist/toxic/abuser, take sides, recommend divorce, diagnose, discuss medications, use religious exclamations, reference Jordan Peterson/manosphere/Tony Robbins/red-pill ideology\n\n" +
+    "THINKERS TO REFERENCE (when relevant):\n" +
+    "John Gottman, Terry Real, Sue Johnson, Esther Perel, Stephen Porges, Carl Jung, Martin Seligman, Gabor Maté, Bessel van der Kolk, Todd Kashdan\n\n" +
+    "DISCLAIMER (always active): Love Isn't Enough Relationship Coaching Companion is a coaching tool for relational intelligence, communication, and personal development within partnership. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n";
+
+    var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
+    "Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
+    "**John:** Welcome to Love Isn't Enough — glad you're here. The fact that you're showing up for your relationship says something important. I'm John — psychologist, executive coach, and the guy who's been studying why smart people struggle in love for over 30 years.\n\n" +
+    "**Joree:** And I'm Joree — therapist, mindfulness teacher, and someone who believes that awareness is the starting point for every meaningful change. Between the two of us, you're getting both the science and the heart.\n\n" +
+    "**John:** Here's what we do: We help you see the patterns running your relationship — the cycles you keep repeating, the communication traps, the attachment signals you're missing. We draw on Gottman, attachment theory, polyvagal science, and decades of real-world coaching. And we keep it practical — not theoretical.\n\n" +
+    "Here's what we don't do: We're not therapists in this context, we're not a crisis line, and we're not going to tell you who's right. If something comes up that needs professional support, we'll say so directly.\n\n" +
+    "Before we start: We need your agreement that you understand this is educational coaching, not therapy or medical care. If you or your partner are in crisis, reach out to professionals — 988 Suicide & Crisis Lifeline, your doctor, or emergency services. Type 'I agree' if you're good with that, and we'll get to work.\n\n" +
+    "IMPORTANT: Stop here. Do NOT add any coaching question after the consent request. Wait for the user to respond.\n\n";
+
+    var OPENING_VARIATIONS = {
+        A: "AFTER USER AGREES:\nDeliver this opening:\n\"**John:** So here's where we start: What's the thing in your relationship that keeps showing up and won't resolve itself? The pattern, the conversation, the tension that circles back no matter what you try. Give me the real version, not the polished one.\"\n\n",
+        B: "AFTER USER AGREES:\nDeliver this opening:\n\"**Joree:** Take a breath for a moment. Check in with yourself. When you think about your relationship right now — not how it looks from the outside, but how it actually feels on the inside — what comes up? What's the honest answer?\"\n\n",
+        C: "AFTER USER AGREES:\nDeliver this opening:\n\"**John:** Alright, you're here — which means something's either shifted or something's stuck. Which is it? And more importantly — what would be different if we could actually make headway on it today?\"\n\n"
+    };
+
+    var RETURNING_USER_BLOCK = "RETURNING USER INSTRUCTIONS:\n" +
+    "This user has been here before. Do NOT deliver the full welcome or consent request again. Instead, greet them warmly and naturally with both voices. Something like:\n" +
+    "\"**John:** Good to see you back. [Brief natural reference to last session if context is provided]. What's on your mind today — want to pick up where we left off, or is there something new?\n\n" +
+    "**Joree:** And before we dive in — just take a breath. Notice how you're arriving today. That awareness matters.\"\n" +
+    "Keep it short and move into coaching.\n\n";
+
+    // Mode-specific instructions appended dynamically
+    var MODE_SOLO = "\nMODE: SOLO — One partner working individually.\n" +
+    "- Focus on the user's patterns, not their partner's behavior\n" +
+    "- Help them see their part in the cycle\n" +
+    "- Build individual relational skills they can bring back to the partnership\n" +
+    "- Never diagnose or label the absent partner\n" +
+    "- Use: 'your side of the dynamic,' 'your default pattern,' 'what you bring to this moment'\n";
+
+    var MODE_COUPLES = "\nMODE: COUPLES — Both partners present together.\n" +
+    "- Address both partners by name when known\n" +
+    "- Validate both perspectives before reframing\n" +
+    "- Name the cycle/pattern between them, not individual blame\n" +
+    "- Use 'the dynamic between you' and 'the pattern you co-create'\n" +
+    "- Offer structured exercises they can do together\n" +
+    "- When one partner dominates, gently invite the other in\n" +
+    "- Never side with one partner against the other\n";
+
+    // =====================================================
+    // AUTH
+    // =====================================================
+    function showView(view) {
+        document.getElementById("loginForm").style.display = view === "login" ? "block" : "none";
+        document.getElementById("signupForm").style.display = view === "signup" ? "block" : "none";
+        document.getElementById("loginMessage").textContent = "";
+        document.getElementById("signupMessage").textContent = "";
+    }
+
+    function toggleCouplesFields() {
+        var mode = document.getElementById("signupMode").value;
+        var fields = document.getElementById("couplesFields");
+        fields.classList.toggle("active", mode === "couples");
+    }
+
+    // TOS checkbox enables signup button
+    document.addEventListener("DOMContentLoaded", function() {
+        var tosBox = document.getElementById("tosCheckbox");
+        var signupBtn = document.getElementById("signupBtn");
+        if (tosBox && signupBtn) {
+            tosBox.addEventListener("change", function() { signupBtn.disabled = !tosBox.checked; });
+        }
+        // Check for existing session
+        checkAuth();
+        // Enable send button on input
+        var chatInput = document.getElementById("chatInput");
+        if (chatInput) {
+            chatInput.addEventListener("input", function() {
+                document.getElementById("sendBtn").disabled = !chatInput.value.trim();
+            });
+        }
+    });
+
+    async function checkAuth() {
+        var result = await sb.auth.getSession();
+        if (result.data.session) {
+            currentUser = result.data.session.user;
+            enterChat();
+        }
+    }
+
+    async function handleLogin() {
+        var email = document.getElementById("loginEmail").value.trim();
+        var pw = document.getElementById("loginPassword").value;
+        var msg = document.getElementById("loginMessage");
+        msg.textContent = "";
+        msg.className = "auth-message";
+
+        if (!email || !pw) { msg.textContent = "Please enter email and password."; msg.className = "auth-message error"; return; }
+
+        var result = await sb.auth.signInWithPassword({ email: email, password: pw });
+        if (result.error) { msg.textContent = result.error.message; msg.className = "auth-message error"; return; }
+
+        currentUser = result.data.user;
+        enterChat();
+    }
+
+    async function handleSignup() {
+        var first = document.getElementById("signupFirst").value.trim();
+        var last = document.getElementById("signupLast").value.trim();
+        var email = document.getElementById("signupEmail").value.trim();
+        var pw = document.getElementById("signupPassword").value;
+        var plan = document.getElementById("signupPlan").value;
+        var mode = document.getElementById("signupMode").value;
+        var partnerName = document.getElementById("partnerName").value.trim();
+        var partnerEmail = document.getElementById("partnerEmail").value.trim();
+        var msg = document.getElementById("signupMessage");
+        msg.textContent = "";
+        msg.className = "auth-message";
+
+        if (!first || !email || !pw) { msg.textContent = "Please fill in required fields."; msg.className = "auth-message error"; return; }
+        if (pw.length < 6) { msg.textContent = "Password must be at least 6 characters."; msg.className = "auth-message error"; return; }
+
+        try {
+            var res = await fetch(SUPABASE_URL + "/functions/v1/signup-couples", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    first_name: first, last_name: last, email: email, password: pw,
+                    plan_type: plan, mode: mode, signup_key: SIGNUP_KEY,
+                    partner_name: partnerName, partner_email: partnerEmail
+                })
+            });
+            var data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Signup failed");
+
+            // Auto-login after signup
+            var loginResult = await sb.auth.signInWithPassword({ email: email, password: pw });
+            if (loginResult.error) throw loginResult.error;
+
+            currentUser = loginResult.data.user;
+            enterChat();
+        } catch (err) {
+            msg.textContent = err.message || "Signup failed.";
+            msg.className = "auth-message error";
+        }
+    }
+
+    // =====================================================
+    // ENTER CHAT
+    // =====================================================
+    async function enterChat() {
+        if (enterChatCalled) return;
+        enterChatCalled = true;
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("chatScreen").classList.add("active");
+
+        showAIDisclosureBanner();
+
+        // Ensure profile exists
+        try {
+            var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+            if (profileResult.error && profileResult.error.code === "PGRST116") {
+                await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false, product: "couples" });
+            }
+        } catch (e) { console.warn("Profile check error:", e); }
+
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+
+        await sendInitialMessage();
+    }
+
+    // =====================================================
+    // AI DISCLOSURE BANNER (SB 243)
+    // =====================================================
+    function showAIDisclosureBanner() {
+        var banner = document.getElementById("aiDisclosureBanner");
+        if (!banner) return;
+        if (bannerTimer) clearTimeout(bannerTimer);
+        banner.classList.remove("hidden", "dismissing");
+        bannerTimer = setTimeout(function() { dismissBanner(); }, 30000);
+    }
+
+    function dismissBanner() {
+        var banner = document.getElementById("aiDisclosureBanner");
+        if (!banner || banner.classList.contains("hidden")) return;
+        if (bannerTimer) { clearTimeout(bannerTimer); bannerTimer = null; }
+        banner.classList.add("dismissing");
+        setTimeout(function() { banner.classList.add("hidden"); banner.classList.remove("dismissing"); }, 300);
+    }
+
+    // =====================================================
+    // CHAT
+    // =====================================================
+    function handleKeydown(e) {
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    function getSystemPrompt(isFirst, returningContext) {
+        var modeBlock = currentMode === "couples" ? MODE_COUPLES : MODE_SOLO;
+        var prompt = SYSTEM_PROMPT + modeBlock;
+
+        if (isFirst) {
+            if (returningContext) {
+                prompt += RETURNING_USER_BLOCK;
+                prompt += "\nPREVIOUS SESSION CONTEXT:\n" + returningContext + "\n";
+            } else {
+                var variations = ["A", "B", "C"];
+                var pick = variations[Math.floor(Math.random() * variations.length)];
+                prompt += FIRST_TIME_WELCOME_BLOCK + OPENING_VARIATIONS[pick];
+            }
+        }
+        return prompt;
+    }
+
+    async function sendInitialMessage() {
+        // Check for returning user context
+        var returningContext = null;
+        try {
+            var token = (await sb.auth.getSession()).data.session?.access_token;
+            if (token) {
+                var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({ action: "get_last_summary", coach: "couples" })
+                });
+                var data = await res.json();
+                if (data.summary) {
+                    returningContext = data.summary.summary + "\nPillar: " + data.summary.pillar + "\nTopics: " + (data.summary.topics || []).join(", ");
+                }
+            }
+        } catch (e) { console.warn("Failed to fetch last summary:", e); }
+
+        // Build initial system prompt and send a blank "start" message
+        var systemPrompt = getSystemPrompt(true, returningContext);
+
+        conversationHistory.push({ role: "user", content: "Hello" });
+        showTypingIndicator();
+
+        try {
+            var token = (await sb.auth.getSession()).data.session?.access_token || "";
+            var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                body: JSON.stringify({
+                    system: systemPrompt,
+                    messages: conversationHistory,
+                    session_id: sessionId,
+                    coach: "couples",
+                    is_first_message: true
+                })
+            });
+            var data = await res.json();
+            var text = data.content && data.content[0] ? data.content[0].text : "Welcome! How can I help you today?";
+
+            conversationHistory.push({ role: "assistant", content: text });
+            removeTypingIndicator();
+            addMessage("assistant", text);
+            messageCount++;
+            isFirstMessage = false;
+        } catch (err) {
+            removeTypingIndicator();
+            addMessage("assistant", "Welcome to Love Isn't Enough. I'm having trouble connecting — please try refreshing the page.");
+            console.error("Initial message error:", err);
+        }
+    }
+
+    async function sendMessage() {
+        var input = document.getElementById("chatInput");
+        var text = input.value.trim();
+        if (!text || isLoading) return;
+
+        input.value = "";
+        document.getElementById("sendBtn").disabled = true;
+        addMessage("user", text);
+        conversationHistory.push({ role: "user", content: text });
+        messageCount++;
+        isLoading = true;
+        showTypingIndicator();
+
+        try {
+            var systemPrompt = getSystemPrompt(false, null);
+            var token = (await sb.auth.getSession()).data.session?.access_token || "";
+
+            var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                body: JSON.stringify({
+                    system: systemPrompt,
+                    messages: conversationHistory,
+                    session_id: sessionId,
+                    coach: "couples",
+                    is_first_message: false
+                })
+            });
+
+            var data = await res.json();
+            var reply = data.content && data.content[0] ? data.content[0].text : "";
+
+            if (!reply) throw new Error("Empty response");
+
+            conversationHistory.push({ role: "assistant", content: reply });
+            removeTypingIndicator();
+            addMessage("assistant", reply);
+        } catch (err) {
+            removeTypingIndicator();
+            addMessage("assistant", "Sorry, something went wrong. Please try again.");
+            console.error("Chat error:", err);
+        }
+
+        isLoading = false;
+    }
+
+    // =====================================================
+    // MESSAGE RENDERING (Dual-Voice)
+    // =====================================================
+    function addMessage(role, content) {
+        var container = document.getElementById("messages");
+        var div = document.createElement("div");
+        div.className = "message " + role;
+
+        var bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+
+        if (role === "assistant") {
+            bubble.innerHTML = parseVoices(content);
+        } else {
+            bubble.textContent = content;
+        }
+
+        div.appendChild(bubble);
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function parseVoices(text) {
+        if (!text) return "";
+        var lines = text.split("\n");
+        var html = "";
+        var currentVoice = null;
+        var currentContent = [];
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var johnMatch = line.match(/^\*\*John:\*\*\s*(.*)/);
+            var joreeMatch = line.match(/^\*\*Joree:\*\*\s*(.*)/);
+
+            if (johnMatch || joreeMatch) {
+                if (currentContent.length > 0) {
+                    html += renderVoiceSection(currentVoice, currentContent.join("\n"));
+                    currentContent = [];
+                }
+                currentVoice = johnMatch ? "john" : "joree";
+                currentContent.push(johnMatch ? johnMatch[1] : joreeMatch[1]);
+            } else if (line.trim()) {
+                currentContent.push(line);
+            }
+        }
+        if (currentContent.length > 0) {
+            html += renderVoiceSection(currentVoice, currentContent.join("\n"));
+        }
+        return html || escapeHtml(text);
+    }
+
+    function renderVoiceSection(voice, content) {
+        if (!voice) return "<div>" + escapeHtml(content).replace(/\n/g, "<br>") + "</div>";
+        var label = voice === "john" ? "John" : "Joree";
+        return '<div class="voice-section ' + voice + '">' +
+            '<div class="voice-label">' + label + '</div>' +
+            '<div class="voice-content">' + escapeHtml(content).replace(/\n/g, "<br>") + '</div>' +
+            '</div>';
+    }
+
+    function escapeHtml(text) {
+        var div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showTypingIndicator() {
+        var container = document.getElementById("messages");
+        var div = document.createElement("div");
+        div.className = "message assistant";
+        div.id = "typingIndicator";
+        div.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        var el = document.getElementById("typingIndicator");
+        if (el) el.remove();
+    }
+
+    // =====================================================
+    // MODE SWITCHING
+    // =====================================================
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById("modeSolo").classList.toggle("active", mode === "solo");
+        document.getElementById("modeCouples").classList.toggle("active", mode === "couples");
+    }
+
+    // =====================================================
+    // SESSION MANAGEMENT
+    // =====================================================
+    async function startNewSession() {
+        // Summarize current session if enough messages
+        if (messageCount >= 4) {
+            try {
+                var token = (await sb.auth.getSession()).data.session?.access_token || "";
+                await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({ action: "summarize", session_id: sessionId, coach: "couples" })
+                });
+            } catch (e) { console.warn("Summary error:", e); }
+        }
+
+        // Clear and restart
+        document.getElementById("messages").innerHTML = "";
+        var messagesEl = document.getElementById("messages");
+        var bannerDiv = document.createElement("div");
+        bannerDiv.className = "ai-disclosure-banner hidden";
+        bannerDiv.id = "aiDisclosureBanner";
+        bannerDiv.innerHTML = '<span class="banner-icon">&#9432;</span>' +
+            '<span class="banner-text">' +
+            'Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. ' +
+            '<a href="https://loveisntenough.net/ai-disclosure" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
+            '</span>' +
+            '<button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>';
+        messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
+
+        showAIDisclosureBanner();
+
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+
+        await sendInitialMessage();
+    }
+
+    async function handleLogout() {
+        await sb.auth.signOut();
+        currentUser = null;
+        enterChatCalled = false;
+        document.getElementById("chatScreen").classList.remove("active");
+        document.getElementById("authScreen").style.display = "flex";
+        showView("login");
+    }
+
+    // =====================================================
+    // UTILITIES
+    // =====================================================
+    function generateSessionId() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0;
+            return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
         });
-
-        // ============ DISCLAIMER FLOW ============
-        function checkDisclaimer() {
-            const disclaimerAccepted = localStorage.getItem('disclaimerAccepted');
-            if (!disclaimerAccepted) {
-                showScreen('disclaimer');
-            } else {
-                checkAuthentication();
-            }
-        }
-
-        function acceptDisclaimer() {
-            localStorage.setItem('disclaimerAccepted', 'true');
-            checkAuthentication();
-        }
-
-        // ============ AUTH FLOW ============
-        function checkAuthentication() {
-            supabase.auth.getSession().then(({ data: { session } }) => {
-                if (session) {
-                    appState.user = session.user;
-                    appState.isAuthenticated = true;
-                    initializeChat();
-                    showScreen('chat');
-                } else {
-                    showScreen('auth');
-                }
-            });
-        }
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-
-            event.target.classList.add('active');
-            document.getElementById(tab + 'Form').classList.add('active');
-
-            // Clear errors
-            document.getElementById('signinError').textContent = '';
-            document.getElementById('signupError').textContent = '';
-        }
-
-        function toggleCouplesFields() {
-            const mode = document.getElementById('signupMode').value;
-            const coupleFi = document.getElementById('couplesFields');
-            if (mode === 'couples') {
-                coupleFi.classList.add('active');
-            } else {
-                coupleFi.classList.remove('active');
-            }
-        }
-
-        async function handleSignIn(e) {
-            e.preventDefault();
-            const email = document.getElementById('signinEmail').value;
-            const password = document.getElementById('signinPassword').value;
-
-            try {
-                const { error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) throw error;
-
-                checkAuthentication();
-            } catch (err) {
-                document.getElementById('signinError').textContent = err.message || 'Sign in failed';
-            }
-        }
-
-        async function handleSignUp(e) {
-            e.preventDefault();
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const firstName = document.getElementById('signupFirstName').value;
-            const lastName = document.getElementById('signupLastName').value;
-            const plan = document.getElementById('signupPlan').value;
-            const mode = document.getElementById('signupMode').value;
-            const partnerName = document.getElementById('partnerFirstName').value;
-            const partnerEmail = document.getElementById('partnerEmail').value;
-
-            try {
-                // Sign up via Supabase
-                const { data, error: signupError } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            last_name: lastName,
-                            plan: plan,
-                            mode: mode,
-                            partner_name: partnerName,
-                            partner_email: partnerEmail
-                        }
-                    }
-                });
-
-                if (signupError) throw signupError;
-
-                // Call signup edge function
-                const authToken = data.session?.access_token;
-                await fetch(`${SUPABASE_URL}/functions/v1/${SIGNUP_FUNCTION}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({
-                        email,
-                        first_name: firstName,
-                        last_name: lastName,
-                        plan,
-                        mode,
-                        partner_name: partnerName,
-                        partner_email: partnerEmail,
-                        signup_key: 'loveisnt2026couples'
-                    })
-                });
-
-                checkAuthentication();
-            } catch (err) {
-                document.getElementById('signupError').textContent = err.message || 'Sign up failed';
-            }
-        }
-
-        // ============ SCREEN MANAGEMENT ============
-        function showScreen(screen) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screen + 'Screen').classList.add('active');
-            appState.currentScreen = screen;
-        }
-
-        // ============ CHAT INITIALIZATION ============
-        function initializeChat() {
-            // Generate session ID
-            appState.sessionId = generateUUID();
-            appState.conversationHistory = [];
-            appState.messageCount = 0;
-
-            // Clear chat area
-            document.getElementById('chatMessages').innerHTML = '';
-            document.getElementById('chatInput').value = '';
-
-            // Update settings modal
-            document.getElementById('accountEmail').textContent = appState.user.email;
-            updateSessionCount();
-        }
-
-        // ============ CHAT OPERATIONS ============
-        function handleInputKeypress(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-
-            if (!message || appState.isLoading) return;
-
-            // Add user message to UI
-            addMessageToUI('user', message);
-            input.value = '';
-            appState.messageCount++;
-
-            // Show typing indicator
-            showTypingIndicator();
-
-            try {
-                // Build conversation history
-                appState.conversationHistory.push({
-                    role: 'user',
-                    content: message
-                });
-
-                // Build system prompt
-                const systemPrompt = buildSystemPrompt();
-
-                // Prepare messages for API
-                const messages = appState.conversationHistory.map(msg => ({
-                    role: msg.role,
-                    content: msg.content
-                }));
-
-                // Call chat edge function
-                const response = await fetch(`${SUPABASE_URL}/functions/v1/${CHAT_FUNCTION}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.user.session?.access_token || ''}`
-                    },
-                    body: JSON.stringify({
-                        messages,
-                        system: systemPrompt,
-                        session_id: appState.sessionId,
-                        coach: 'couples',
-                        is_first_message: appState.messageCount === 1
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                const assistantMessage = data.response || data.content || '';
-
-                // Add assistant message to history and UI
-                appState.conversationHistory.push({
-                    role: 'assistant',
-                    content: assistantMessage
-                });
-
-                removeTypingIndicator();
-                addMessageToUI('assistant', assistantMessage);
-                updateSessionCount();
-
-                // Check if summary needed
-                if (appState.messageCount >= 8) {
-                    triggerSessionSummary();
-                }
-            } catch (err) {
-                removeTypingIndicator();
-                console.error('Chat error:', err);
-                addMessageToUI('assistant', `Sorry, I encountered an error. Please try again. (${err.message})`);
-            }
-        }
-
-        function addMessageToUI(role, content) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.className = 'message-bubble';
-
-            if (role === 'assistant') {
-                bubbleDiv.innerHTML = parseVoices(content);
-            } else {
-                bubbleDiv.textContent = content;
-            }
-
-            messageDiv.appendChild(bubbleDiv);
-            messagesContainer.appendChild(messageDiv);
-
-            // Scroll to bottom
-            setTimeout(() => {
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 0);
-        }
-
-        function parseVoices(text) {
-            // Parse **John:** and **Joree:** labels
-            const lines = text.split('\n');
-            let html = '';
-            let currentVoice = null;
-            let currentContent = [];
-
-            lines.forEach((line, idx) => {
-                const johnMatch = line.match(/^\*\*John:\*\*\s*(.*)/);
-                const joreeMatch = line.match(/^\*\*Joree:\*\*\s*(.*)/);
-
-                if (johnMatch || joreeMatch) {
-                    // Save previous section
-                    if (currentContent.length > 0) {
-                        html += renderVoiceSection(currentVoice, currentContent.join('\n'));
-                        currentContent = [];
-                    }
-
-                    currentVoice = johnMatch ? 'john' : 'joree';
-                    currentContent.push(johnMatch ? johnMatch[1] : joreeMatch[1]);
-                } else if (line.trim()) {
-                    currentContent.push(line);
-                }
-            });
-
-            // Final section
-            if (currentContent.length > 0) {
-                html += renderVoiceSection(currentVoice, currentContent.join('\n'));
-            }
-
-            return html || text;
-        }
-
-        function renderVoiceSection(voice, content) {
-            if (!voice) return `<div>${escapeHtml(content)}</div>`;
-
-            const voiceLabel = voice === 'john' ? 'John' : 'Joree';
-            return `
-                <div class="voice-section ${voice}">
-                    <div class="voice-label">${voiceLabel}:</div>
-                    <div class="voice-content">${escapeHtml(content).replace(/\n/g, '<br>')}</div>
-                </div>
-            `;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function showTypingIndicator() {
-            const messagesContainer = document.getElementById('chatMessages');
-            const indicatorDiv = document.createElement('div');
-            indicatorDiv.className = 'message assistant';
-            indicatorDiv.id = 'typingIndicator';
-            indicatorDiv.innerHTML = `
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
-            messagesContainer.appendChild(indicatorDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function removeTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
-
-        // ============ MODE SWITCHING ============
-        function switchMode(mode) {
-            appState.currentMode = mode;
-            document.querySelectorAll('.mode-button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        // ============ SYSTEM PROMPT BUILDER ============
-        function buildSystemPrompt() {
-            const modeInstructions = appState.currentMode === 'solo'
-                ? `SOLO MODE — One partner working individually.
-- Focus on the user's patterns, not their partner's behavior
-- Help them see their part in the cycle
-- Build individual relational skills
-- Never diagnose or label the absent partner
-- Use: "your side of the dynamic," "your default pattern," "what you bring to this moment"`
-                : `COUPLES MODE — Both partners present together.
-- Address both partners by name when known
-- Validate both perspectives before reframing
-- Name the cycle/pattern between them, not individual blame
-- Use "the dynamic between you" and "the pattern you co-create"
-- Offer structured exercises they can do together
-- When one partner dominates, gently invite the other in
-- Never side with one partner against the other`;
-
-            return `You are the Love Isn't Enough Relationship Coach — a coaching tool created by Dr. John Schinnerer (Ph.D., UC Berkeley) and Joree Rose (MA, LMFT). You help individuals and couples build stronger, more connected relationships through greater self-awareness, emotional intelligence, and practical communication skills.
-
-You are two coaches in one. You speak as both John and Joree, each in their own voice, labeled clearly:
-
-**John:** [Direct, warm, slightly irreverent. Grounded in science and frameworks. Uses metaphors and humor. Challenges with care.]
-
-**Joree:** [Warm, nurturing, mindfulness-forward. Creates emotional safety. Invites spaciousness and self-compassion. Gently names what's underneath.]
-
-You alternate between these voices naturally based on what the moment calls for. Sometimes John leads (when the user needs a direct reframe or a framework). Sometimes Joree leads (when the user needs to be met with softness, permission, or somatic awareness). Sometimes both speak in the same response.
-
-HARD POSITIONING BOUNDARIES:
-- IS: Coaching for relational intelligence, communication, emotional awareness, conflict navigation, intimacy, attachment patterns, self-leadership within partnership.
-- IS NOT: Therapy, counseling, diagnosis, treatment, crisis support, or a substitute for licensed mental health care.
-- NEVER positions itself as a therapist, psychologist, counselor, diagnostic tool, or crisis service.
-
-FRAMEWORKS IN USE: Attachment Theory (Bowlby, Sue Johnson's EFT), Gottman Method, Polyvagal Theory, IFS, Inner Board Meeting (Dr. John's proprietary — CEO, Director of Defense, VP of Emotions), NVC, The AWARE Method, CBT/REBT, Positive Psychology, Mindfulness.
-
-COACHING PILLARS:
-1. Communication & Conflict
-2. Intimacy & Connection
-3. Attachment & Patterns
-4. Identity & Growth Within Partnership
-
-DEFAULT RESPONSE STRUCTURE:
-1. Acknowledge what's here (Joree often leads)
-2. Name the pattern or dynamic (John often leads)
-3. Ask one sharp coaching question — one, not three
-4. Offer one practical reframe or tool
-5. Suggest one concrete next step
-
-SAFETY FILTERS:
-- GREEN (engage fully): Communication patterns, conflict styles, attachment awareness, intimacy, values, co-parenting, repair skills
-- YELLOW (coach with care, keep present-focused): Infidelity (past), trust rebuilding, shame, sexual disconnection, power imbalances
-- RED (acknowledge, state limits, redirect): Active domestic violence, suicidal ideation, substance abuse, active trauma, child abuse. Provide: National DV Hotline 1-800-799-7233, 988 Suicide & Crisis Lifeline, SAMHSA 1-800-662-4357
-
-LANGUAGE RULES:
-- Preferred: pattern, dynamic, cycle, relational strategy, emotional leadership, turning toward, repair attempt, co-regulation, attachment signal, secure functioning
-- Avoid: trauma, healing old wounds, inner child, diagnosis, treatment
-- NEVER: Label a partner as narcissist/toxic/abuser, take sides, recommend divorce, diagnose, discuss medications, reference Jordan Peterson/manosphere/Tony Robbins/red-pill ideology, use religious language
-
-MODE: ${appState.currentMode.toUpperCase()}
-${modeInstructions}`;
-        }
-
-        // ============ SETTINGS & SESSION ============
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings(e) {
-            if (e && e.target !== e.currentTarget) return;
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function updateSessionCount() {
-            document.getElementById('sessionCount').textContent = `Messages: ${appState.messageCount}`;
-        }
-
-        function startNewSession() {
-            if (appState.messageCount > 0 && appState.conversationHistory.length > 0) {
-                triggerSessionSummary();
-            }
-            initializeChat();
-            closeSettings();
-        }
-
-        function triggerSessionSummary() {
-            // Session summary would be called here if needed
-            // For now, just clear for new session
-        }
-
-        async function handleLogout() {
-            await supabase.auth.signOut();
-            appState.isAuthenticated = false;
-            appState.user = null;
-            checkAuthentication();
-        }
-
-        // ============ UTILITIES ============
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0;
-                const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
+    }
     </script>
 </body>
 </html>
