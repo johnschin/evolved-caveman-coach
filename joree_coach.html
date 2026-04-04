@@ -524,6 +524,29 @@
       margin-top: 8px;
     }
 
+    .copy-chat-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .copy-chat-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 11px;
+      font-family: inherit;
+      padding: 5px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .copy-chat-btn:hover { color: var(--plum); border-color: var(--plum); }
+    .copy-chat-btn svg { width: 13px; height: 13px; }
+    .copy-chat-btn.copied { color: var(--plum); border-color: var(--plum); }
+
     .trial-info {
       text-align: center;
       font-size: 12px;
@@ -730,6 +753,12 @@
       <div class="chat-input-row">
         <textarea id="chat-input" placeholder="What's on your heart today?" rows="1" onkeydown="handleInputKeydown(event)"></textarea>
         <button class="btn-send" id="btn-send" onclick="sendMessage()">&#8593;</button>
+      </div>
+      <div class="copy-chat-row">
+        <button class="copy-chat-btn" id="copyChatBtn" onclick="copyConversation()" title="Copy entire conversation to clipboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copyChatLabel">Copy conversation</span>
+        </button>
       </div>
       <div class="chat-footer-note">
         Journey Forward AI Coaching Companion — not therapy or crisis support.<br>
@@ -1068,6 +1097,36 @@ HARD BOUNDARIES:
         e.preventDefault();
         sendMessage();
       }
+    }
+
+    function copyConversation() {
+      if (!conversationHistory || conversationHistory.length === 0) return;
+      var text = conversationHistory.map(function(msg) {
+        var label = msg.role === 'user' ? 'You' : 'Coach';
+        return label + ':\n' + msg.content;
+      }).join('\n\n---\n\n');
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('copyChatBtn');
+        var label = document.getElementById('copyChatLabel');
+        btn.classList.add('copied');
+        label.textContent = 'Copied!';
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          label.textContent = 'Copy conversation';
+        }, 2000);
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        var label = document.getElementById('copyChatLabel');
+        label.textContent = 'Copied!';
+        setTimeout(function() { label.textContent = 'Copy conversation'; }, 2000);
+      });
     }
 
     async function sendMessage() {
