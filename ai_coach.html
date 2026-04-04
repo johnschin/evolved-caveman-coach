@@ -416,6 +416,31 @@
         .send-btn:hover { opacity: 0.85; }
         .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .send-btn svg { width: 20px; height: 20px; }
+        .copy-chat-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 6px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .copy-chat-btn {
+            background: transparent;
+            border: 1px solid var(--charcoal-lighter);
+            color: var(--muted);
+            font-size: 11px;
+            font-family: inherit;
+            padding: 5px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .copy-chat-btn:hover { color: var(--aqua); border-color: var(--aqua); }
+        .copy-chat-btn svg { width: 13px; height: 13px; }
+        .copy-chat-btn.copied { color: var(--aqua); border-color: var(--aqua); }
         .disclaimer-bar {
             font-size: 10px;
             color: var(--muted);
@@ -580,6 +605,12 @@
                 <textarea id="userInput" rows="1" placeholder="What's on your mind?" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+            <div class="copy-chat-row">
+                <button class="copy-chat-btn" id="copyChatBtn" onclick="copyConversation()" title="Copy entire conversation to clipboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span id="copyChatLabel">Copy conversation</span>
                 </button>
             </div>
             <!-- UPDATED: disclaimer bar now links to legal docs -->
@@ -1145,6 +1176,40 @@
     function autoResize(el) {
         el.style.height = "auto";
         el.style.height = Math.min(el.scrollHeight, 120) + "px";
+    }
+
+    // =====================================================
+    // COPY CONVERSATION
+    // =====================================================
+    function copyConversation() {
+        if (!conversationHistory || conversationHistory.length === 0) return;
+        var text = conversationHistory.map(function(msg) {
+            var label = msg.role === "user" ? "You" : "Coach";
+            return label + ":\n" + msg.content;
+        }).join("\n\n---\n\n");
+        navigator.clipboard.writeText(text).then(function() {
+            var btn = document.getElementById("copyChatBtn");
+            var label = document.getElementById("copyChatLabel");
+            btn.classList.add("copied");
+            label.textContent = "Copied!";
+            setTimeout(function() {
+                btn.classList.remove("copied");
+                label.textContent = "Copy conversation";
+            }, 2000);
+        }).catch(function() {
+            // Fallback for older browsers
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            var label = document.getElementById("copyChatLabel");
+            label.textContent = "Copied!";
+            setTimeout(function() { label.textContent = "Copy conversation"; }, 2000);
+        });
     }
 
     // =====================================================
