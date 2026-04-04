@@ -154,10 +154,10 @@
         .voice-section { margin-bottom: 12px; padding-left: 14px; border-left: 3px solid transparent; }
         .voice-section:last-child { margin-bottom: 0; }
         .voice-section.john { border-left-color: var(--plum); }
-        .voice-section.joree { border-left-color: var(--teal); }
+        .voice-section.joree { border-left-color: #7c6186; }
         .voice-label { font-weight: 700; font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         .voice-section.john .voice-label { color: var(--plum); }
-        .voice-section.joree .voice-label { color: var(--teal); }
+        .voice-section.joree .voice-label { color: #7c6186; }
         .voice-content { font-size: 14px; line-height: 1.65; }
 
         /* Typing indicator */
@@ -592,7 +592,7 @@
         if (!banner) return;
         if (bannerTimer) clearTimeout(bannerTimer);
         banner.classList.remove("hidden", "dismissing");
-        bannerTimer = setTimeout(function() { dismissBanner(); }, 30000);
+        bannerTimer = setTimeout(function() { dismissBanner(); }, 10000);
     }
 
     function dismissBanner() {
