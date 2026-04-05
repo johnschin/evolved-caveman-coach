@@ -12,11 +12,11 @@
         :root {
             --aqua: #a3d0c9;
             --charcoal: #202023;
-            --charcoal-light: #2a2a2e;
-            --charcoal-lighter: #35353a;
+            --charcoal-light: #f5f5f5;
+            --charcoal-lighter: #d5d5d5;
             --off-white: #eeeeee;
-            --muted: #999;
-            --error: #e74c3c;
+            --muted: #6b6b70;
+            --error: #c0392b;
             --success: #27ae60;
         }
 
@@ -24,8 +24,8 @@
 
         body {
             font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--charcoal);
-            color: var(--off-white);
+            background: var(--off-white);
+            color: var(--charcoal);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -38,14 +38,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 20px;
-            background: var(--charcoal-light);
+            background: #ffffff;
             border-bottom: 1px solid var(--charcoal-lighter);
             flex-shrink: 0;
         }
         .header-title {
             font-size: 16px;
             font-weight: 700;
-            color: var(--aqua);
+            color: var(--charcoal);
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
@@ -85,17 +85,18 @@
             padding: 20px;
         }
         .auth-box {
-            background: var(--charcoal-light);
+            background: #ffffff;
             border: 1px solid var(--charcoal-lighter);
             border-radius: 12px;
             padding: 36px 32px;
             width: 100%;
             max-width: 400px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         }
         .auth-box h2 {
             font-size: 22px;
             font-weight: 700;
-            color: var(--aqua);
+            color: var(--charcoal);
             margin-bottom: 6px;
             text-align: center;
         }
@@ -120,10 +121,10 @@
         .form-group input {
             width: 100%;
             padding: 10px 14px;
-            background: var(--charcoal);
+            background: var(--off-white);
             border: 1px solid var(--charcoal-lighter);
             border-radius: 8px;
-            color: var(--off-white);
+            color: var(--charcoal);
             font-family: inherit;
             font-size: 14px;
             outline: none;
@@ -158,7 +159,7 @@
         }
         .auth-link {
             font-size: 12px;
-            color: var(--aqua);
+            color: #6bada3;
             background: none;
             border: none;
             cursor: pointer;
@@ -190,7 +191,7 @@
             line-height: 1.5;
         }
         .tos-checkbox-label:hover {
-            color: var(--off-white);
+            color: var(--charcoal);
         }
         .tos-checkbox {
             width: 16px;
@@ -202,7 +203,7 @@
         }
         .tos-label-text { flex: 1; }
         .tos-link {
-            color: var(--aqua);
+            color: #6bada3;
             text-decoration: none;
         }
         .tos-link:hover {
@@ -234,7 +235,7 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
-            background: var(--charcoal-light);
+            background: #ffffff;
             border-left: 3px solid var(--aqua);
             padding: 12px 14px;
             margin-bottom: 16px;
@@ -267,7 +268,7 @@
         }
         .banner-text { flex: 1; }
         .banner-link {
-            color: var(--aqua);
+            color: #6bada3;
             text-decoration: none;
             font-weight: 600;
         }
@@ -287,6 +288,7 @@
         .banner-dismiss:hover {
             color: var(--aqua);
             background: var(--charcoal-lighter);
+            border-radius: 4px;
         }
 
         .message {
@@ -315,8 +317,8 @@
             color: var(--charcoal);
         }
         .message.user .message-avatar {
-            background: var(--charcoal-lighter);
-            color: var(--muted);
+            background: var(--charcoal);
+            color: var(--off-white);
         }
         .message-bubble {
             padding: 12px 16px;
@@ -328,9 +330,10 @@
             word-wrap: break-word;
         }
         .message.assistant .message-bubble {
-            background: var(--charcoal-light);
+            background: #ffffff;
             border: 1px solid var(--charcoal-lighter);
             border-top-left-radius: 4px;
+            color: var(--charcoal);
         }
         .message.user .message-bubble {
             background: var(--aqua);
@@ -349,7 +352,7 @@
             display: flex;
             gap: 4px;
             padding: 12px 16px;
-            background: var(--charcoal-light);
+            background: #ffffff;
             border: 1px solid var(--charcoal-lighter);
             border-radius: 12px;
             margin-left: 42px;
@@ -385,10 +388,10 @@
         .input-row textarea {
             flex: 1;
             padding: 12px 16px;
-            background: var(--charcoal-light);
+            background: #ffffff;
             border: 1px solid var(--charcoal-lighter);
             border-radius: 12px;
-            color: var(--off-white);
+            color: var(--charcoal);
             font-family: inherit;
             font-size: 14px;
             line-height: 1.5;
@@ -452,7 +455,7 @@
         }
         /* ADDED: links in disclaimer bar */
         .disclaimer-bar a {
-            color: var(--aqua);
+            color: #6bada3;
             text-decoration: none;
         }
         .disclaimer-bar a:hover { text-decoration: underline; }
