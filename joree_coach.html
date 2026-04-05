@@ -592,6 +592,118 @@
       margin: 0 8px;
     }
 
+    /* ===== SIDEBAR / CHAT HISTORY ===== */
+    .hamburger-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-right: 10px;
+    }
+    .hamburger-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 90;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: -300px;
+      width: 280px;
+      height: 100%;
+      background: var(--warm-white);
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: left 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 12px var(--shadow);
+    }
+    .sidebar.open { left: 0; }
+
+    .sidebar-header {
+      padding: 18px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--plum);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-light);
+      padding: 0 4px;
+    }
+    .sidebar-close:hover { color: var(--plum); }
+
+    .sidebar-sessions {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .sidebar-session-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .sidebar-session-item:hover { background: var(--sage-light); }
+    .sidebar-session-item.active-session { background: var(--sage-light); border-left: 3px solid var(--plum); }
+
+    .sidebar-session-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-session-meta {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    .sidebar-empty {
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .sidebar-loading {
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 600px) {
       .auth-card, .disclaimer-card { padding: 32px 24px; }
@@ -605,9 +717,24 @@
   </style>
 </head>
 <body>
+  <!-- ===== SIDEBAR ===== -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span>Past Sessions</span>
+      <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+    </div>
+    <div class="sidebar-sessions" id="sidebarSessions">
+      <div class="sidebar-empty">No past sessions yet.</div>
+    </div>
+  </div>
+
   <!-- ===== HEADER ===== -->
   <div class="header">
     <div class="header-brand">
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" title="Chat history" style="display:none;">
+        <span></span><span></span><span></span>
+      </button>
       <div>
         <div class="header-logo">Journey Forward with Joree Rose</div>
         <div class="header-subtitle">AI Coaching Companion</div>
@@ -970,6 +1097,7 @@ HARD BOUNDARIES:
           trialToken = token;
           showScreen('screen-chat');
           document.getElementById('btn-new-session').style.display = 'inline-block';
+          document.getElementById('hamburgerBtn').style.display = 'flex';
           updateTrialInfo(data);
           showOpeningMessage(data.first_name || null);
         } else if (data.status === 'session_complete') {
@@ -998,6 +1126,8 @@ HARD BOUNDARIES:
       document.getElementById('chat-messages').innerHTML = '<div class="typing-indicator" id="typing-indicator"><span></span><span></span><span></span></div>';
       document.getElementById('btn-logout').style.display = 'none';
       document.getElementById('btn-new-session').style.display = 'none';
+      document.getElementById('hamburgerBtn').style.display = 'none';
+      closeSidebar();
       showScreen('screen-auth');
     }
 
@@ -1009,6 +1139,7 @@ HARD BOUNDARIES:
         showScreen('screen-chat');
         document.getElementById('btn-logout').style.display = 'inline-block';
         document.getElementById('btn-new-session').style.display = 'inline-block';
+        document.getElementById('hamburgerBtn').style.display = 'flex';
         showAIDisclosureBanner();
         showOpeningMessage(profile.display_name || null);
       } else {
@@ -1026,6 +1157,7 @@ HARD BOUNDARIES:
       showScreen('screen-chat');
       document.getElementById('btn-logout').style.display = 'inline-block';
       document.getElementById('btn-new-session').style.display = 'inline-block';
+      document.getElementById('hamburgerBtn').style.display = 'flex';
       showAIDisclosureBanner();
 
       const { data: profile } = await supabaseClient.from('profiles').select('display_name').eq('id', currentUser.id).single();
@@ -1199,6 +1331,7 @@ HARD BOUNDARIES:
     function showTrialSessionComplete(data) {
       showScreen('screen-chat');
       document.getElementById('btn-new-session').style.display = 'inline-block';
+      document.getElementById('hamburgerBtn').style.display = 'flex';
       const sessions = data.sessions_remaining || 0;
       if (sessions > 0) {
         addSystemMessage(`Your previous session is complete. You have ${sessions} session${sessions === 1 ? '' : 's'} remaining. Click "New Session" to begin.`);
@@ -1281,6 +1414,155 @@ HARD BOUNDARIES:
     window.addEventListener('beforeunload', () => {
       triggerSessionSummary();
     });
+
+    // ===== SIDEBAR / CHAT HISTORY =====
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = sidebar.classList.contains('open');
+      if (isOpen) {
+        closeSidebar();
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        loadSessionHistory();
+      }
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    }
+
+    async function loadSessionHistory() {
+      const container = document.getElementById('sidebarSessions');
+      if (!currentUser) {
+        container.innerHTML = '<div class="sidebar-empty">Sign in to see past sessions.</div>';
+        return;
+      }
+
+      container.innerHTML = '<div class="sidebar-loading">Loading sessions...</div>';
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session?.access_token;
+        if (!token) {
+          container.innerHTML = '<div class="sidebar-empty">Unable to load sessions.</div>';
+          return;
+        }
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'get_session_history',
+            access_token: token,
+            coach: COACH
+          })
+        });
+
+        const data = await res.json();
+        if (!data.sessions || data.sessions.length === 0) {
+          container.innerHTML = '<div class="sidebar-empty">No past sessions yet.</div>';
+          return;
+        }
+
+        // Filter to only this coach's sessions (already sorted by created_at desc from API)
+        const sessions = data.sessions
+          .filter(s => !s.product || s.product === COACH);
+
+        if (sessions.length === 0) {
+          container.innerHTML = '<div class="sidebar-empty">No past sessions yet.</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        sessions.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'sidebar-session-item' + (s.session_id === sessionId ? ' active-session' : '');
+
+          const title = s.title || 'Untitled session';
+          const date = new Date(s.created_at);
+          const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+          item.innerHTML = '<div class="sidebar-session-title">' + escapeHtml(title) + '</div>'
+            + '<div class="sidebar-session-meta">' + dateStr + (s.pillar ? ' &middot; ' + escapeHtml(s.pillar) : '') + '</div>';
+
+          item.onclick = function() { resumeSession(s.session_id); };
+          container.appendChild(item);
+        });
+      } catch (err) {
+        console.error('[Sidebar] Failed to load history:', err);
+        container.innerHTML = '<div class="sidebar-empty">Could not load sessions.</div>';
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function resumeSession(oldSessionId) {
+      if (oldSessionId === sessionId) {
+        closeSidebar();
+        return;
+      }
+
+      closeSidebar();
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+
+        // Summarize current session before switching
+        triggerSessionSummary();
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'get_conversation',
+            session_id: oldSessionId,
+            access_token: token,
+            coach: COACH
+          })
+        });
+
+        const data = await res.json();
+        if (!data.messages || data.messages.length === 0) {
+          addSystemMessage('Could not load that session.');
+          return;
+        }
+
+        // Switch to the old session
+        sessionId = oldSessionId;
+        conversationHistory = [];
+        isFirstMessage = false;
+        const messagesEl = document.getElementById('chat-messages');
+        messagesEl.innerHTML = '<div class="typing-indicator" id="typing-indicator"><span></span><span></span><span></span></div>';
+
+        // Replay messages into the UI
+        // Each row has user_message and assistant_message fields
+        data.messages.forEach(msg => {
+          if (msg.user_message) {
+            addMessage('user', msg.user_message);
+            conversationHistory.push({ role: 'user', content: msg.user_message });
+          }
+          if (msg.assistant_message) {
+            addMessage('assistant', msg.assistant_message);
+            conversationHistory.push({ role: 'assistant', content: msg.assistant_message });
+          }
+        });
+      } catch (err) {
+        console.error('[Sidebar] Failed to resume session:', err);
+        addSystemMessage('Could not load that session.');
+      }
+    }
 
     // ===== COPY CONVERSATION =====
     function copyConversation() {
