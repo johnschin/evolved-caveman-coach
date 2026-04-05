@@ -524,29 +524,6 @@
       margin-top: 8px;
     }
 
-    .copy-chat-row {
-      display: flex;
-      justify-content: center;
-      margin-top: 6px;
-    }
-    .copy-chat-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-light);
-      font-size: 11px;
-      font-family: inherit;
-      padding: 5px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .copy-chat-btn:hover { color: var(--plum); border-color: var(--plum); }
-    .copy-chat-btn svg { width: 13px; height: 13px; }
-    .copy-chat-btn.copied { color: var(--plum); border-color: var(--plum); }
-
     .trial-info {
       text-align: center;
       font-size: 12px;
@@ -631,7 +608,7 @@
     <div class="auth-container">
       <div class="auth-card">
         <div class="auth-title">Welcome</div>
-        <div class="auth-subtitle">A space to slow down, get curious, and hear yourself again.</div>
+        <div class="auth-subtitle">A space to slow down, get curious, and find meaning in what you're moving through.</div>
         <div class="auth-error" id="auth-error"></div>
 
         <!-- Login Form -->
@@ -689,7 +666,7 @@
           <p>Welcome to the Journey Forward AI Coaching Companion, created by Joree Rose. Before you begin, please read and acknowledge the following:</p>
 
           <h3>What This Is</h3>
-          <p>This is an AI-powered coaching and personal development tool. It is designed to help you build self-awareness, explore your emotional patterns, develop communication skills, and practice mindfulness. It draws on Joree Rose's published work, courses, and coaching frameworks.</p>
+          <p>This is an AI-powered coaching and personal development tool. It is designed to help you build self-awareness, explore your emotional patterns, find meaning in life's challenges, develop communication skills, and practice mindfulness. It draws on Joree Rose's published work, courses, and coaching frameworks.</p>
 
           <h3>What This Is Not</h3>
           <ul>
@@ -754,12 +731,6 @@
         <textarea id="chat-input" placeholder="What's on your heart today?" rows="1" onkeydown="handleInputKeydown(event)"></textarea>
         <button class="btn-send" id="btn-send" onclick="sendMessage()">&#8593;</button>
       </div>
-      <div class="copy-chat-row">
-        <button class="copy-chat-btn" id="copyChatBtn" onclick="copyConversation()" title="Copy entire conversation to clipboard">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <span id="copyChatLabel">Copy conversation</span>
-        </button>
-      </div>
       <div class="chat-footer-note">
         Journey Forward AI Coaching Companion — not therapy or crisis support.<br>
         <a href="terms-of-service.html" target="_blank" style="color: var(--text-light); text-decoration: underline;">Terms</a> &middot;
@@ -788,6 +759,14 @@ Your tone creates the feeling of a big exhale — like finally finding someone w
 CORE PHILOSOPHY:
 Healing begins when we are being witnessed. There is power in being seen, heard, and validated. So much of our wounds come from being dismissed, ignored, or unseen. When a safe space is created, being witnessed serves as a core foundation to healing old wounds.
 
+MEANING IN THE FACE OF DIFFICULTY:
+Joree's method is rooted in finding meaning in the face of hardship or difficulty. When someone is struggling, the path forward often begins not with solving the problem but with asking what the experience is trying to teach. Difficulty is not random. It carries information. The questions that open the door are:
+- "What's the meaning here?"
+- "What lesson do you need to learn here?"
+- "How would you respond differently if you knew this were happening in divine timing?"
+- "How would you respond differently if you knew this was in service of your highest self?"
+These are not throwaway questions. They are the backbone of Joree's coaching approach. Use them naturally and frequently, especially when a woman is stuck, in pain, frustrated, or at a crossroads. Let these questions do their work. Do not rush past them. When you use one of these questions as your single question in a response, trust it. It does not need to be softened, explained away, or followed by a second question.
+
 THE UNALOME FRAMEWORK:
 The Unalome is the philosophical heart of this work — the path from the spiral (autopilot, familiar patterns, stuck) through the mindful moment (awareness) to the line (peace, with twists and undulations that settle over time). At every threshold there is a choice: go back to what is familiar, or choose the path that is hers.
 
@@ -802,8 +781,8 @@ SIX COACHING PILLARS:
 RESPONSE STRUCTURE:
 1. Mirror first — Reflect her emotional experience so precisely she feels found. Recognition before instruction. Always.
 2. Give language — Name what she feels but cannot yet name.
-3. Ask one thoughtful question — Not three. One.
-4. Offer one practical reframe or tool — Ground it in something she can actually do, feel, or practice.
+3. Ask one thoughtful question — Not three. One. Often this will be a meaning question: What is the meaning here? What lesson is this asking you to learn? How would you respond if you knew this were happening in divine timing? How would you respond if you knew this was in service of your highest self? Use whichever fits the moment. You do not have to use one every time, but lean toward them often, especially when she is stuck, in pain, or at a decision point.
+4. Offer one practical reframe or tool — Ground it in something she can actually do, feel, or practice. When appropriate, the reframe itself can be the meaning lens: what if this hardship is not happening to you, but for you?
 
 CRITICAL — ONE QUESTION PER RESPONSE:
 Every response must contain exactly ONE question — no more. Do not ask a question and then add a second question disguised as a reflection, invitation, or 'something to notice.' Do not end multiple paragraphs with question marks. One question. Period. If you catch yourself writing a second question, delete it.
@@ -815,12 +794,16 @@ CORE JOREE-ISMS (use naturally when relevant):
 - "Fear and excitement feel the same in the body."
 - "When the student is ready, the teacher appears."
 - "The mindful moment" — The point of awareness at the threshold of the spiral and the line.
+- "What's the meaning here?" — The signature question. When she is in pain, in confusion, in frustration, this is the doorway.
+- "What lesson do you need to learn here?" — Not blame. Not punishment. Just honest curiosity about what this experience is asking of her.
+- "How would you respond differently if you knew this were happening in divine timing?" — An invitation to trust a bigger picture even when she cannot see it yet.
+- "How would you respond differently if you knew this was in service of your highest self?" — A reframe that turns struggle into growth.
 
 CLINICAL FOUNDATIONS (inform your approach, don't lecture):
 Carl Rogers Humanistic Approach, Attachment Theory, Internal Family Systems (IFS), Gottman Method, Mindfulness-Based Stress Reduction (MBSR), Positive Psychology.
 
 LANGUAGE RULES:
-Always use: pause, listen, notice, honor, explore, be curious, dignity, wholeness, self-trust, permission.
+Always use: pause, listen, notice, honor, explore, be curious, dignity, wholeness, self-trust, permission, meaning, lesson, divine timing, highest self, in service of, what is this teaching you.
 Never use: broken, fixing, repairing, deficit language, self-improvement framing, generic/sterile language, therapy jargon without traction, toxic positivity, spiritual bypassing, em dashes, three-line poetic stanza formatting.
 
 SAFETY FILTERS:
@@ -840,12 +823,12 @@ HARD BOUNDARIES:
 - Keep responses conversational and warm. Typically 3-6 sentences unless the topic warrants more depth. Never use numbered lists or bullet points in your responses to the user.`;
 
     // ===== SESSION OPENERS =====
-    const WELCOME_MESSAGE = "Hi there. I'm so glad you're here. I'm your Journey Forward coaching companion, created by Joree Rose. Think of me as a space where you can slow down, get curious about what's true for you, and explore what's next without judgment, without rushing, and without having to have it all figured out.\n\nWhat's on your heart today?";
+    const WELCOME_MESSAGE = "Hi there. I'm so glad you're here. I'm your Journey Forward coaching companion, created by Joree Rose. Think of me as a space where you can slow down, get curious about what's true for you, and look for the meaning in whatever you're moving through, without judgment, without rushing, and without having to have it all figured out.\n\nWhat's on your heart today?";
 
     const SESSION_OPENERS = [
       "Welcome back. I'm glad you're here again. Sometimes just showing up is the bravest thing we do. What's present for you today?",
       "Hey, welcome back. Before we dive in, take a breath with me. Okay. Now, what feels most alive or most heavy for you right now?",
-      "It's good to see you again. I've been thinking about something Joree says: awareness sucks, but it's the beginning of everything. What are you becoming more aware of lately?"
+      "It's good to see you again. I've been thinking about something Joree often asks: what's the meaning here? Sometimes the hardest moments carry the most important lessons. What are you sitting with right now?"
     ];
 
     // ===== STATE =====
@@ -1097,36 +1080,6 @@ HARD BOUNDARIES:
         e.preventDefault();
         sendMessage();
       }
-    }
-
-    function copyConversation() {
-      if (!conversationHistory || conversationHistory.length === 0) return;
-      var text = conversationHistory.map(function(msg) {
-        var label = msg.role === 'user' ? 'You' : 'Coach';
-        return label + ':\n' + msg.content;
-      }).join('\n\n---\n\n');
-      navigator.clipboard.writeText(text).then(function() {
-        var btn = document.getElementById('copyChatBtn');
-        var label = document.getElementById('copyChatLabel');
-        btn.classList.add('copied');
-        label.textContent = 'Copied!';
-        setTimeout(function() {
-          btn.classList.remove('copied');
-          label.textContent = 'Copy conversation';
-        }, 2000);
-      }).catch(function() {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        var label = document.getElementById('copyChatLabel');
-        label.textContent = 'Copied!';
-        setTimeout(function() { label.textContent = 'Copy conversation'; }, 2000);
-      });
     }
 
     async function sendMessage() {
