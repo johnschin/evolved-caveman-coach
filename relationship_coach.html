@@ -960,8 +960,15 @@
                 return;
             }
 
+            // Filter to only couples sessions
+            var filtered = data.sessions.filter(function(s) { return !s.product || s.product === "couples"; });
+            if (filtered.length === 0) {
+                sessionsEl.innerHTML = '<div class="sidebar-empty">No past sessions yet.</div>';
+                return;
+            }
+
             sessionsEl.innerHTML = "";
-            data.sessions.forEach(function(session) {
+            filtered.forEach(function(session) {
                 var item = document.createElement("div");
                 item.className = "sidebar-session-item" + (session.session_id === sessionId ? " active-session" : "");
                 item.onclick = function() { resumeSession(session.session_id); closeSidebar(); };
@@ -983,6 +990,17 @@
             console.error("Error loading session history:", e);
             sessionsEl.innerHTML = '<div class="sidebar-empty">Error loading sessions.</div>';
         }
+    }
+
+    function escapeHtml(str) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return str.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
 
     async function resumeSession(oldSessionId) {
