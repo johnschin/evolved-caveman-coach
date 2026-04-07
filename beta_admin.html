@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EC Beta Admin — Create Beta Accounts</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg: #1a1a1d;
+  --surface: #222226;
+  --surface2: #2e2e33;
+  --border: #3a3a40;
+  --teal: #a3d0c9;
+  --teal-dim: rgba(163, 208, 201, 0.15);
+  --white: #e8e8e8;
+  --muted: #888;
+  --error: #e74c3c;
+  --success: #27ae60;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+.admin-lock {
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  margin-top: 80px;
+}
+.admin-lock h1 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  margin-bottom: 24px;
+}
+.admin-container {
+  max-width: 520px;
+  width: 100%;
+  display: none;
+}
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.header .eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.header p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.card h2 {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--teal);
+  margin-bottom: 20px;
+}
+.field { margin-bottom: 14px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus, .field select:focus { border-color: var(--teal); }
+.field select { cursor: pointer; appearance: none; -webkit-appearance: none; }
+.row { display: flex; gap: 12px; }
+.row .field { flex: 1; }
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--teal);
+  color: var(--bg);
+  border: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  margin-top: 12px;
+}
+.btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+.msg {
+  padding: 14px;
+  font-size: 13px;
+  margin-top: 16px;
+  line-height: 1.6;
+  display: none;
+}
+.msg.error { background: rgba(231, 76, 60, 0.12); border: 1px solid var(--error); color: var(--error); }
+.msg.success { background: rgba(39, 174, 96, 0.12); border: 1px solid var(--success); color: var(--success); }
+.result-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 14px;
+  margin-top: 16px;
+  display: none;
+}
+.result-box .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.result-box .link {
+  font-size: 13px;
+  color: var(--teal);
+  word-break: break-all;
+  cursor: pointer;
+  user-select: all;
+}
+.copy-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1px solid var(--teal);
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+.copy-btn:hover { background: var(--teal); color: var(--bg); }
+.recent-list {
+  margin-top: 8px;
+}
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-item .name { color: var(--white); font-weight: 600; }
+.recent-item .email { color: var(--muted); font-size: 12px; }
+.recent-item .coach-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 20px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Admin password lock -->
+<div class="admin-lock" id="lockScreen">
+  <h1>Beta Admin</h1>
+  <div class="field">
+    <input type="password" id="adminPass" placeholder="Enter admin password" autofocus>
+  </div>
+  <button class="btn" onclick="unlock()" style="margin-top:14px;">Unlock</button>
+  <div class="msg error" id="lockError"></div>
+</div>
+
+<!-- Main admin panel -->
+<div class="admin-container" id="adminPanel">
+  <div class="header">
+    <div class="eyebrow">The Evolved Caveman</div>
+    <h1>Beta Account Admin</h1>
+    <p>Create free beta accounts for testers across all three coaches.</p>
+  </div>
+
+  <div class="card">
+    <h2>Create Beta Account</h2>
+    <div class="row">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="betaFirst" placeholder="Alex">
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" id="betaLast" placeholder="Yap">
+      </div>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="betaEmail" placeholder="alex@example.com">
+    </div>
+    <div class="field">
+      <label>Coach</label>
+      <select id="betaCoach">
+        <option value="john">John — Inner Leadership (Men)</option>
+        <option value="joree">Joree — Journey Forward (Women)</option>
+        <option value="couples">Couples — Love Isn't Enough</option>
+      </select>
+    </div>
+    <button class="btn" id="createBtn" onclick="createBetaAccount()">Create Account</button>
+    <div class="msg error" id="createError"></div>
+    <div class="msg success" id="createSuccess"></div>
+    <div class="result-box" id="resultBox">
+      <div class="label">Send this link to the tester:</div>
+      <div class="link" id="resultLink"></div>
+      <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recently Created</h2>
+    <div class="recent-list" id="recentList">
+      <div class="empty-state">No accounts created this session yet.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Config */
+var ADMIN_SECRET = 'EvolvedCaveman2026!';
+var RAG_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
+var RAG_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
+var ADMIN_ENDPOINT = RAG_URL + '/functions/v1/admin-create-user';
+
+/* Coach URLs */
+var COACH_URLS = {
+  john: 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html',
+  joree: 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html',  /* Update when Joree's page exists */
+  couples: 'https://johnschin.github.io/evolved-caveman-coach/ai_coach.html'  /* Update when couples page exists */
+};
+
+var recentAccounts = [];
+var lastLink = '';
+
+/* Admin lock */
+function unlock() {
+  var pass = document.getElementById('adminPass').value;
+  if (pass === ADMIN_SECRET) {
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+  } else {
+    var el = document.getElementById('lockError');
+    el.textContent = 'Wrong password.';
+    el.style.display = 'block';
+  }
+}
+document.getElementById('adminPass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') unlock();
+});
+
+/* Generate a random password */
+function generatePassword() {
+  var chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789!@#$';
+  var pass = '';
+  for (var i = 0; i < 12; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return pass;
+}
+
+/* Create beta account */
+async function createBetaAccount() {
+  var firstName = document.getElementById('betaFirst').value.trim();
+  var lastName = document.getElementById('betaLast').value.trim();
+  var email = document.getElementById('betaEmail').value.trim();
+  var coach = document.getElementById('betaCoach').value;
+  var btn = document.getElementById('createBtn');
+  var errEl = document.getElementById('createError');
+  var successEl = document.getElementById('createSuccess');
+  var resultEl = document.getElementById('resultBox');
+
+  /* Reset */
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+  resultEl.style.display = 'none';
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  var tempPassword = generatePassword();
+
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+
+  try {
+    var res = await fetch(ADMIN_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + ADMIN_SECRET
+      },
+      body: JSON.stringify({
+        email: email,
+        password: tempPassword,
+        first_name: firstName,
+        last_name: lastName,
+        coach: coach,
+        plan_type: 'beta'
+      })
+    });
+
+    var data = await res.json();
+
+    if (!res.ok || data.error) {
+      errEl.textContent = data.error || 'Failed to create account.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+      return;
+    }
+
+    /* Update profile with name and coach/product if provided */
+    if (data.success && data.user) {
+      try {
+        var sb = supabase.createClient(RAG_URL, RAG_ANON_KEY);
+        /* Sign in as admin-ish to update profile — use service role via edge function instead */
+        /* For now, the profile was created by the trigger with defaults. */
+        /* We'll update via direct REST with anon key (RLS allows owner updates, but we're not the owner). */
+        /* Better approach: update the admin-create-user function to accept name + coach params. */
+        /* For now, log it and note the limitation. */
+      } catch(e) {
+        console.log('Profile update note:', e);
+      }
+    }
+
+    /* Build the login link */
+    var coachUrl = COACH_URLS[coach] || COACH_URLS.john;
+    /* The link sends them to the coach page — they'll use "Sign in with password" */
+    lastLink = coachUrl;
+
+    /* Show success */
+    var displayName = [firstName, lastName].filter(Boolean).join(' ') || email;
+    successEl.innerHTML = '<strong>' + displayName + '</strong> account created.<br>Temp password: <strong style="font-family:monospace;letter-spacing:0.05em;">' + tempPassword + '</strong>';
+    successEl.style.display = 'block';
+
+    document.getElementById('resultLink').textContent = lastLink;
+    resultEl.style.display = 'block';
+
+    /* Add to recent list */
+    recentAccounts.unshift({
+      name: displayName,
+      email: email,
+      coach: coach,
+      password: tempPassword
+    });
+    renderRecent();
+
+    /* Clear form */
+    document.getElementById('betaFirst').value = '';
+    document.getElementById('betaLast').value = '';
+    document.getElementById('betaEmail').value = '';
+
+  } catch (err) {
+    errEl.textContent = 'Network error. Please try again.';
+    errEl.style.display = 'block';
+    console.error(err);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Create Account';
+}
+
+/* Copy link */
+function copyLink() {
+  if (!lastLink) return;
+  navigator.clipboard.writeText(lastLink).then(function() {
+    var btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
+  });
+}
+
+/* Render recent accounts */
+function renderRecent() {
+  var el = document.getElementById('recentList');
+  if (recentAccounts.length === 0) {
+    el.innerHTML = '<div class="empty-state">No accounts created this session yet.</div>';
+    return;
+  }
+  var coachLabels = { john: 'John', joree: 'Joree', couples: 'Couples' };
+  var html = '';
+  recentAccounts.forEach(function(a) {
+    html += '<div class="recent-item">' +
+      '<div><div class="name">' + a.name + '</div><div class="email">' + a.email + ' · pw: <span style="font-family:monospace">' + a.password + '</span></div></div>' +
+      '<div class="coach-tag">' + (coachLabels[a.coach] || a.coach) + '</div>' +
+      '</div>';
+  });
+  el.innerHTML = html;
+}
+
+/* Enter key on email field */
+document.getElementById('betaEmail').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') createBetaAccount();
+});
+</script>
+</body>
+</html>
