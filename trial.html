@@ -1,338 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Trial — The Evolved Caveman Inner Leadership AI Coach</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        @font-face { font-family: 'Gyst'; src: local('Gyst'); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Manrope', sans-serif;
-            background: #202023;
-            color: #eeeeee;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .container { max-width: 520px; width: 100%; }
-        .brand { text-align: center; margin-bottom: 36px; }
-        .brand-name { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: #a3d0c9; margin-bottom: 4px; }
-        .brand-title { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; color: #eeeeee; margin-bottom: 6px; }
-        .brand-subtitle { font-size: 15px; color: #a3d0c9; font-weight: 500; }
-        .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(163,208,201,0.2); border-radius: 16px; padding: 40px 32px; }
-        .trial-info { text-align: left; margin-bottom: 32px; }
-        .trial-info ul { list-style: none; padding: 0; margin: 0 0 16px 0; }
-        .trial-info ul li { position: relative; padding-left: 20px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #cccccc; }
-        .trial-info ul li::before { content: '\2022'; position: absolute; left: 0; color: #a3d0c9; font-size: 18px; line-height: 1.5; }
-        .trial-info h2 { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 24px; color: #eeeeee; margin-bottom: 12px; }
-        .trial-info p { font-size: 15px; line-height: 1.6; color: #cccccc; margin-bottom: 16px; }
-        .features { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
-        .feature { text-align: center; flex: 1; min-width: 120px; }
-        .feature-number { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 36px; color: #a3d0c9; line-height: 1; }
-        .feature-label { font-size: 13px; color: #999999; margin-top: 4px; }
-        .divider { height: 1px; background: rgba(163,208,201,0.15); margin: 24px 0; }
-        .form-row { display: flex; gap: 12px; margin-bottom: 14px; }
-        .form-group { flex: 1; display: flex; flex-direction: column; }
-        .form-group.full { width: 100%; margin-bottom: 14px; }
-        label { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #a3d0c9; margin-bottom: 6px; }
-        input { background: rgba(255,255,255,0.06); border: 1px solid rgba(163,208,201,0.25); border-radius: 8px; padding: 12px 14px; font-size: 15px; font-family: 'Manrope', sans-serif; color: #eeeeee; transition: border-color 0.2s; }
-        input::placeholder { color: #666666; }
-        input:focus { outline: none; border-color: #a3d0c9; background: rgba(255,255,255,0.08); }
-        .btn { width: 100%; padding: 14px; background: #a3d0c9; color: #202023; font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
-        .btn:hover { background: #b8ddd7; transform: translateY(-1px); }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        /* ADDED: TOS Agreement Checkbox */
-        .tos-agreement {
-            margin: 16px 0 8px 0;
-        }
-        .tos-checkbox-label {
-            display: flex;
-            align-items: flex-start;
-            cursor: pointer;
-            font-size: 12px;
-            color: #999999;
-            gap: 8px;
-            line-height: 1.5;
-        }
-        .tos-checkbox-label:hover {
-            color: #eeeeee;
-        }
-        .tos-checkbox {
-            width: 16px;
-            height: 16px;
-            min-width: 16px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: #a3d0c9;
-        }
-        .tos-label-text {
-            flex: 1;
-        }
-        .tos-link {
-            color: #a3d0c9;
-            text-decoration: none;
-        }
-        .tos-link:hover {
-            text-decoration: underline;
-        }
-
-        .disclaimer { text-align: center; font-size: 11px; color: #666666; margin-top: 12px; line-height: 1.5; }
-        .disclaimer a { color: #a3d0c9; text-decoration: none; }
-        .disclaimer a:hover { text-decoration: underline; }
-        .error-msg { background: rgba(220,80,80,0.15); border: 1px solid rgba(220,80,80,0.3); color: #ee9999; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
-        .success-state { display: none; text-align: center; padding: 20px 0; }
-        .success-state .checkmark { font-size: 48px; margin-bottom: 16px; }
-        .success-state h2 { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 24px; color: #a3d0c9; margin-bottom: 12px; }
-        .success-state p { font-size: 15px; color: #cccccc; line-height: 1.6; margin-bottom: 20px; }
-        @media (max-width: 480px) {
-            .card { padding: 28px 20px; }
-            .brand-title { font-size: 26px; }
-            .form-row { flex-direction: column; gap: 14px; }
-            .features { gap: 12px; }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Free Trial — The Evolved Caveman Inner Leadership AI Coach</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+ @font-face { font-family: 'Gyst'; src: local('Gyst'); }
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body {
+ font-family: 'Manrope', sans-serif;
+ background: #eeeeee;
+ color: #202023;
+ min-height: 100vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 24px;
+ }
+ .container { max-width: 520px; width: 100%; }
+ .brand { text-align: center; margin-bottom: 36px; }
+ .brand-name { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: #a3d0c9; margin-bottom: 4px; }
+ .brand-title { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; color: #202023; margin-bottom: 6px; }
+ .brand-subtitle { font-size: 15px; color: #5a8a84; font-weight: 500; }
+ .card { background: #ffffff; border: 1px solid #d5d5d5; border-radius: 16px; padding: 40px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+ .trial-info { text-align: left; margin-bottom: 32px; }
+ .trial-info ul { list-style: none; padding: 0; margin: 0 0 16px 0; }
+ .trial-info ul li { position: relative; padding-left: 20px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #555555; }
+ .trial-info ul li::before { content: '\u2022'; position: absolute; left: 0; color: #a3d0c9; font-size: 18px; line-height: 1.5; }
+ .trial-info h2 { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 24px; color: #202023; margin-bottom: 12px; }
+ .trial-info p { font-size: 15px; line-height: 1.6; color: #555555; margin-bottom: 16px; }
+ .features { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+ .feature { text-align: center; flex: 1; min-width: 120px; }
+ .feature-number { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 36px; color: #a3d0c9; line-height: 1; }
+ .feature-label { font-size: 13px; color: #6b6b70; margin-top: 4px; }
+ .divider { height: 1px; background: #d5d5d5; margin: 24px 0; }
+ .form-row { display: flex; gap: 12px; margin-bottom: 14px; }
+ .form-group { flex: 1; display: flex; flex-direction: column; }
+ .form-group.full { width: 100%; margin-bottom: 14px; }
+ label { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #5a8a84; margin-bottom: 6px; }
+ input { background: #ffffff; border: 1px solid #d5d5d5; border-radius: 8px; padding: 12px 14px; font-size: 15px; font-family: 'Manrope', sans-serif; color: #202023; transition: border-color 0.2s; }
+ input::placeholder { color: #999999; }
+ input:focus { outline: none; border-color: #a3d0c9; background: #f5f5f5; }
+ .btn { width: 100%; padding: 14px; background: #a3d0c9; color: #202023; font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+ .btn:hover { background: #8ec3ba; transform: translateY(-1px); }
+ .btn:active { transform: translateY(0); }
+ .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+ /* TOS Agreement Checkbox */
+ .tos-agreement {
+ margin: 16px 0 8px 0;
+ }
+ .tos-checkbox-label {
+ display: flex;
+ align-items: flex-start;
+ cursor: pointer;
+ font-size: 12px;
+ color: #6b6b70;
+ gap: 8px;
+ line-height: 1.5;
+ }
+ .tos-checkbox-label:hover {
+ color: #202023;
+ }
+ .tos-checkbox {
+ width: 16px;
+ height: 16px;
+ min-width: 16px;
+ margin-top: 2px;
+ cursor: pointer;
+ accent-color: #a3d0c9;
+ }
+ .tos-label-text {
+ flex: 1;
+ }
+ .tos-link {
+ color: #5a8a84;
+ text-decoration: none;
+ }
+ .tos-link:hover {
+ text-decoration: underline;
+ }
+ .disclaimer { text-align: center; font-size: 11px; color: #6b6b70; margin-top: 12px; line-height: 1.5; }
+ .disclaimer a { color: #5a8a84; text-decoration: none; }
+ .disclaimer a:hover { text-decoration: underline; }
+ .error-msg { background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.3); color: #c0392b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+ .success-state { display: none; text-align: center; padding: 20px 0; }
+ .success-state .checkmark { font-size: 48px; margin-bottom: 16px; }
+ .success-state h2 { font-family: 'Gyst', Georgia, 'Times New Roman', serif; font-size: 24px; color: #a3d0c9; margin-bottom: 12px; }
+ .success-state p { font-size: 15px; color: #555555; line-height: 1.6; margin-bottom: 20px; }
+ @media (max-width: 480px) {
+ .card { padding: 28px 20px; }
+ .brand-title { font-size: 26px; }
+ .form-row { flex-direction: column; gap: 14px; }
+ .features { gap: 12px; }
+ }
+ </style>
 </head>
 <body>
-    <div class="container">
-        <div class="brand">
-            <div class="brand-name">The Evolved Caveman</div>
-            <div class="brand-title">Inner Leadership AI Coach</div>
-            <div class="brand-subtitle">Free Trial Access</div>
-        </div>
+ <div class="container">
+ <div class="brand">
+ <div class="brand-name">The Evolved Caveman</div>
+ <div class="brand-title">Inner Leadership AI Coach</div>
+ <div class="brand-subtitle">Free Trial Access</div>
+ </div>
 
-        <div class="card">
-            <!-- FORM STATE -->
-            <div id="formState">
-                <div class="trial-info">
-                    <h2>Try It — On the House</h2>
-                    <p>Try AI-powered coaching built on 30+ years of psychology, neuroscience, and real-world work with men. No credit card. No commitment. No coddling. Just sharp, honest coaching that helps you grow.</p>
-                    <ul>
-                        <li>Build confidence.</li>
-                        <li>Communicate clearly.</li>
-                        <li>Lead with grounded strength.</li>
-                        <li>Strengthen your relationships.</li>
-                        <li>Increase your value at work.</li>
-                        <li>Understand yourself more deeply.</li>
-                        <li>Handle hard conversations without losing your center.</li>
-                        <li>Lead from the inside out.</li>
-                    </ul>
-                    <p>At the end of the trial, if you want more, you'll have the option to join as a monthly member.</p>
-                </div>
+ <div class="card">
+ <!-- FORM STATE -->
+ <div id="formState">
+ <div class="trial-info">
+ <h2>Try It — On the House</h2>
+ <p>Try AI-powered coaching built on 30+ years of psychology, neuroscience, and real-world work with men. No credit card. No commitment. No coddling. Just sharp, honest coaching that helps you grow.</p>
+ <ul>
+ <li>Build confidence.</li>
+ <li>Communicate clearly.</li>
+ <li>Lead with grounded strength.</li>
+ <li>Strengthen your relationships.</li>
+ <li>Increase your value at work.</li>
+ <li>Understand yourself more deeply.</li>
+ <li>Handle hard conversations without losing your center.</li>
+ <li>Lead from the inside out.</li>
+ </ul>
+ <p>At the end of the trial, if you want more, you'll have the option to join as a monthly member.</p>
+ </div>
 
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-number">3</div>
-                        <div class="feature-label">Sessions</div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-number">20</div>
-                        <div class="feature-label">Messages each</div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-number">60</div>
-                        <div class="feature-label">Total exchanges</div>
-                    </div>
-                </div>
+ <div class="features">
+ <div class="feature">
+ <div class="feature-number">3</div>
+ <div class="feature-label">Sessions</div>
+ </div>
+ <div class="feature">
+ <div class="feature-number">20</div>
+ <div class="feature-label">Messages each</div>
+ </div>
+ <div class="feature">
+ <div class="feature-number">60</div>
+ <div class="feature-label">Total exchanges</div>
+ </div>
+ </div>
 
-                <div class="divider"></div>
+ <div class="divider"></div>
 
-                <div class="error-msg" id="errorMsg"></div>
+ <div class="error-msg" id="errorMsg"></div>
 
-                <form id="trialForm" onsubmit="handleSubmit(event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
-                        </div>
-                    </div>
-                    <div class="form-group full">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                    </div>
+ <form id="trialForm" onsubmit="handleSubmit(event)">
+ <div class="form-row">
+ <div class="form-group">
+ <label for="firstName">First Name</label>
+ <input type="text" id="firstName" name="firstName" placeholder="John" required>
+ </div>
+ <div class="form-group">
+ <label for="lastName">Last Name</label>
+ <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+ </div>
+ </div>
+ <div class="form-group full">
+ <label for="email">Email</label>
+ <input type="email" id="email" name="email" placeholder="you@example.com" required>
+ </div>
 
-                    <!-- ADDED: TOS/Age agreement checkbox -->
-                    <div class="tos-agreement">
-                        <label class="tos-checkbox-label">
-                            <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
-                            <span class="tos-label-text">
-                                I am at least 18 years old and agree to the
-                                <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
-                                <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
-                                <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
-                            </span>
-                        </label>
-                    </div>
+ <!-- TOS/Age agreement checkbox -->
+ <div class="tos-agreement">
+ <label class="tos-checkbox-label">
+ <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
+ <span class="tos-label-text">
+ I am at least 18 years old and agree to the
+ <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+ <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+ <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+ </span>
+ </label>
+ </div>
 
-                    <!-- ADDED: Submit button starts disabled until TOS checked -->
-                    <button type="submit" class="btn" id="submitBtn" disabled>Start My Free Trial</button>
-                </form>
+ <!-- Submit button starts disabled until TOS checked -->
+ <button type="submit" class="btn" id="submitBtn" disabled>Start My Free Trial</button>
+ </form>
 
-                <!-- UPDATED: Disclaimer now links to AI Disclosure -->
-                <div class="disclaimer">
-                    This is a coaching tool — not therapy, counseling, or crisis support. View our
-                    <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a> for details.
-                </div>
-            </div>
+ <!-- Disclaimer links to AI Disclosure -->
+ <div class="disclaimer">
+ This is a coaching tool — not therapy, counseling, or crisis support. View our
+ <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a> for details.
+ </div>
+ </div>
 
-            <!-- SUCCESS STATE -->
-            <div id="successState" class="success-state">
-                <div class="checkmark">&#10003;</div>
-                <h2>You're In, Brother</h2>
-                <p>Your free trial is ready. You'll have 3 sessions with 20 messages each — enough to get a real feel for the coach. Take your time. Come back when you need it.</p>
-                <p style="font-size:13px; color:#999;">Redirecting you to the coach in <span id="countdown">5</span> seconds...</p>
-                <button class="btn" id="goNowBtn" onclick="redirectToCoach()">Go Now</button>
-            </div>
-        </div>
-    </div>
+ <!-- SUCCESS STATE -->
+ <div id="successState" class="success-state">
+ <div class="checkmark">&#10003;</div>
+ <h2>You're In, Brother</h2>
+ <p>Your free trial is ready. You'll have 3 sessions with 20 messages each — enough to get a real feel for the coach. Take your time. Come back when you need it.</p>
+ <p style="font-size:13px; color:#6b6b70;">Redirecting you to the coach in <span id="countdown">5</span> seconds...</p>
+ <button class="btn" id="goNowBtn" onclick="redirectToCoach()">Go Now</button>
+ </div>
+ </div>
+ </div>
 
-    <script>
-    // ---- Config ----
-    const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
-    const COACH_URL = 'https://johnschin.github.io/evolved-caveman-coach/trial_coach.html';
+ <script>
+ // ---- Config ----
+ const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
+ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
+ const COACH_URL = 'https://johnschin.github.io/evolved-caveman-coach/trial_coach.html';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const source = urlParams.get('src') || 'business_card';
-    let trialToken = null;
+ const urlParams = new URLSearchParams(window.location.search);
+ const source = urlParams.get('src') || 'business_card';
+ let trialToken = null;
 
-    function generateToken() {
-        const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-        let token = 'trial_';
-        for (let i = 0; i < 16; i++) {
-            token += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return token;
-    }
+ function generateToken() {
+ const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+ let token = 'trial_';
+ for (let i = 0; i < 16; i++) {
+ token += chars.charAt(Math.floor(Math.random() * chars.length));
+ }
+ return token;
+ }
 
-    function showError(msg) {
-        const el = document.getElementById('errorMsg');
-        el.textContent = msg;
-        el.style.display = 'block';
-    }
-    function hideError() {
-        document.getElementById('errorMsg').style.display = 'none';
-    }
+ function showError(msg) {
+ const el = document.getElementById('errorMsg');
+ el.textContent = msg;
+ el.style.display = 'block';
+ }
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        hideError();
+ function hideError() {
+ document.getElementById('errorMsg').style.display = 'none';
+ }
 
-        // ADDED: Validate TOS checkbox
-        if (!document.getElementById('tosCheckbox').checked) {
-            showError('Please agree to the Terms of Service, Privacy Policy, and AI Disclosure to continue.');
-            return;
-        }
+ async function handleSubmit(e) {
+ e.preventDefault();
+ hideError();
 
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.textContent = 'Setting up your trial...';
+ // Validate TOS checkbox
+ if (!document.getElementById('tosCheckbox').checked) {
+ showError('Please agree to the Terms of Service, Privacy Policy, and AI Disclosure to continue.');
+ return;
+ }
 
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
+ const btn = document.getElementById('submitBtn');
+ btn.disabled = true;
+ btn.textContent = 'Setting up your trial...';
 
-        if (!firstName || !lastName || !email) {
-            showError('Please fill in all fields.');
-            btn.disabled = false;
-            btn.textContent = 'Start My Free Trial';
-            return;
-        }
+ const firstName = document.getElementById('firstName').value.trim();
+ const lastName = document.getElementById('lastName').value.trim();
+ const email = document.getElementById('email').value.trim();
 
-        try {
-            const checkResp = await fetch(
-                `${SUPABASE_URL}/rest/v1/trial_tokens?email=eq.${encodeURIComponent(email)}&select=token,is_active,messages_used,max_sessions,messages_per_session`,
-                { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
-            );
-            const existing = await checkResp.json();
+ if (!firstName || !lastName || !email) {
+ showError('Please fill in all fields.');
+ btn.disabled = false;
+ btn.textContent = 'Start My Free Trial';
+ return;
+ }
 
-            if (existing && existing.length > 0) {
-                const trial = existing[0];
-                const maxMessages = trial.max_sessions * trial.messages_per_session;
-                if (trial.is_active && trial.messages_used < maxMessages) {
-                    trialToken = trial.token;
-                    showSuccess();
-                    return;
-                } else {
-                    showError('It looks like you\'ve already used your free trial. Reach out to john@guidetoself.com if you have questions.');
-                    btn.disabled = false;
-                    btn.textContent = 'Start My Free Trial';
-                    return;
-                }
-            }
+ try {
+ const checkResp = await fetch(
+ `${SUPABASE_URL}/rest/v1/trial_tokens?email=eq.${encodeURIComponent(email)}&select=token,is_active,messages_used,max_sessions,messages_per_session`,
+ { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+ );
+ const existing = await checkResp.json();
 
-            trialToken = generateToken();
-            const insertResp = await fetch(`${SUPABASE_URL}/rest/v1/trial_tokens`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=representation'
-                },
-                body: JSON.stringify({
-                    token: trialToken,
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    source: source,
-                    sessions_used: 0,
-                    messages_used: 0,
-                    current_session_messages: 0,
-                    messages_per_session: 20,
-                    max_sessions: 3,
-                    is_active: true
-                })
-            });
+ if (existing && existing.length > 0) {
+ const trial = existing[0];
+ const maxMessages = trial.max_sessions * trial.messages_per_session;
+ if (trial.is_active && trial.messages_used < maxMessages) {
+ trialToken = trial.token;
+ showSuccess();
+ return;
+ } else {
+ showError('It looks like you\'ve already used your free trial. Reach out to john@guidetoself.com if you have questions.');
+ btn.disabled = false;
+ btn.textContent = 'Start My Free Trial';
+ return;
+ }
+ }
 
-            if (!insertResp.ok) {
-                const errData = await insertResp.json();
-                throw new Error(errData.message || 'Failed to create trial');
-            }
+ trialToken = generateToken();
+ const insertResp = await fetch(`${SUPABASE_URL}/rest/v1/trial_tokens`, {
+ method: 'POST',
+ headers: {
+ 'apikey': SUPABASE_ANON_KEY,
+ 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+ 'Content-Type': 'application/json',
+ 'Prefer': 'return=representation'
+ },
+ body: JSON.stringify({
+ token: trialToken,
+ first_name: firstName,
+ last_name: lastName,
+ email: email,
+ source: source,
+ sessions_used: 0,
+ messages_used: 0,
+ current_session_messages: 0,
+ messages_per_session: 20,
+ max_sessions: 3,
+ is_active: true
+ })
+ });
 
-            showSuccess();
-        } catch (err) {
-            console.error('Trial signup error:', err);
-            showError('Something went wrong. Please try again or email john@guidetoself.com.');
-            btn.disabled = false;
-            btn.textContent = 'Start My Free Trial';
-        }
-    }
+ if (!insertResp.ok) {
+ const errData = await insertResp.json();
+ throw new Error(errData.message || 'Failed to create trial');
+ }
 
-    function showSuccess() {
-        document.getElementById('formState').style.display = 'none';
-        document.getElementById('successState').style.display = 'block';
+ showSuccess();
+ } catch (err) {
+ console.error('Trial signup error:', err);
+ showError('Something went wrong. Please try again or email john@guidetoself.com.');
+ btn.disabled = false;
+ btn.textContent = 'Start My Free Trial';
+ }
+ }
 
-        let seconds = 5;
-        const countdownEl = document.getElementById('countdown');
-        const interval = setInterval(() => {
-            seconds--;
-            countdownEl.textContent = seconds;
-            if (seconds <= 0) {
-                clearInterval(interval);
-                redirectToCoach();
-            }
-        }, 1000);
-    }
+ function showSuccess() {
+ document.getElementById('formState').style.display = 'none';
+ document.getElementById('successState').style.display = 'block';
 
-    function redirectToCoach() {
-        window.location.href = `${COACH_URL}?trial=${encodeURIComponent(trialToken)}`;
-    }
+ let seconds = 5;
+ const countdownEl = document.getElementById('countdown');
+ const interval = setInterval(() => {
+ seconds--;
+ countdownEl.textContent = seconds;
+ if (seconds <= 0) {
+ clearInterval(interval);
+ redirectToCoach();
+ }
+ }, 1000);
+ }
 
-    // ADDED: TOS checkbox controls submit button
-    document.getElementById('tosCheckbox').addEventListener('change', function() {
-        document.getElementById('submitBtn').disabled = !this.checked;
-    });
-    </script>
+ function redirectToCoach() {
+ window.location.href = `${COACH_URL}?trial=${encodeURIComponent(trialToken)}`;
+ }
+
+ // TOS checkbox controls submit button
+ document.getElementById('tosCheckbox').addEventListener('change', function() {
+ document.getElementById('submitBtn').disabled = !this.checked;
+ });
+ </script>
 </body>
 </html>
