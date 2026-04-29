@@ -8,5 +8,8 @@
 /proxi-she        /proxi-she.html        200
 /proxi-we         /proxi-we.html         200
 
+# Bundle hub (all three coaches)
+/proxi-all        /proxi-all.html        200
+
 # Root fallback
 /                 /proxi-he.html         200

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Coaches — Proximity Coaching</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"
+          integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD"
+          crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #202023;
+      color: #eeeeee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2e2e32;
+    }
+    .header-logo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #a3d0c9;
+    }
+    .header-user {
+      font-size: 12px;
+      color: #888;
+    }
+    .signout-btn {
+      background: none;
+      border: 1px solid #444;
+      color: #aaa;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .signout-btn:hover { border-color: #a3d0c9; color: #a3d0c9; }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 56px 24px 80px;
+    }
+
+    .headline {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #a3d0c9;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .sub {
+      font-size: 15px;
+      color: #999;
+      margin-bottom: 52px;
+      text-align: center;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    /* ── Coach cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: #2a2a2e;
+      border: 1px solid #36363b;
+      border-radius: 12px;
+      padding: 28px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s, transform 0.15s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      border-color: #a3d0c9;
+      transform: translateY(-2px);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      width: fit-content;
+    }
+    .badge-he  { background: #1e3a3a; color: #a3d0c9; }
+    .badge-she { background: #3a1e3a; color: #c9a3d0; }
+    .badge-we  { background: #1e2e3a; color: #a3b8d0; }
+
+    .card-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .card-by {
+      font-size: 12px;
+      color: #888;
+      font-weight: 500;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .card-cta {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #a3d0c9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-cta::after { content: "→"; }
+
+    /* ── Loading / auth states ── */
+    .loading-screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #333;
+      border-top-color: #a3d0c9;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-screen p { color: #888; font-size: 14px; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 11px;
+      color: #555;
+      border-top: 1px solid #2e2e32;
+    }
+    .footer a { color: #666; text-decoration: none; }
+    .footer a:hover { color: #a3d0c9; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .header { padding: 16px 20px; }
+      .main { padding: 40px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading state — shown while auth is checked -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Verifying your access…</p>
+  </div>
+
+  <!-- Authenticated view — hidden until session confirmed -->
+  <div id="appShell" style="display:none; flex-direction:column; min-height:100vh;">
+
+    <header class="header">
+      <div class="header-logo">Proximity Coaching</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="header-user" id="userEmail"></span>
+        <button class="signout-btn" onclick="handleSignOut()">Sign out</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="headline">Full Access</div>
+      <h1>Your three coaches are ready.</h1>
+      <p class="sub">You have active access to all three. Choose a coach below to begin your session.</p>
+
+      <div class="cards">
+
+        <a href="/proxi-he" class="card">
+          <span class="card-badge badge-he">Men's coaching</span>
+          <div class="card-name">Proxi He</div>
+          <div class="card-by">With Dr. John Schinnerer</div>
+          <p class="card-desc">Self-leadership, stress, anger, identity, and emotional intelligence — for men who want to lead themselves better from the inside out.</p>
+          <div class="card-cta">Open Proxi He</div>
+        </a>
+
+        <a href="/proxi-she" class="card">
+          <span class="card-badge badge-she">Women's coaching</span>
+          <div class="card-name">Proxi She</div>
+          <div class="card-by">With Joree Rose, MA LMFT</div>
+          <p class="card-desc">Self-awareness, emotional patterns, mindfulness, and finding meaning — for women ready to slow down, get curious, and grow.</p>
+          <div class="card-cta">Open Proxi She</div>
+        </a>
+
+        <a href="/proxi-we" class="card">
+          <span class="card-badge badge-we">Couples coaching</span>
+          <div class="card-name">Proxi We</div>
+          <div class="card-by">With Dr. John &amp; Joree Rose</div>
+          <p class="card-desc">Relational intelligence, communication, and emotional connection — for couples who want their relationship to match the excellence of the rest of their lives.</p>
+          <div class="card-cta">Open Proxi We</div>
+        </a>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      Proxi He, Proxi She, and Proxi We are educational coaching tools — not therapy, counseling, or crisis support. &nbsp;·&nbsp;
+      <a href="https://proximitycoaching.com/terms.html" target="_blank" rel="noopener noreferrer">Terms</a> &nbsp;·&nbsp;
+      <a href="https://proximitycoaching.com/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+    </footer>
+
+  </div><!-- /appShell -->
+
+  <script>
+    var SUPABASE_URL      = "https://osywbzzvsfjdvjhjalju.supabase.co";
+    var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function showApp(user) {
+      document.getElementById("loadingScreen").style.display = "none";
+      var shell = document.getElementById("appShell");
+      shell.style.display = "flex";
+      if (user && user.email) {
+        document.getElementById("userEmail").textContent = user.email;
+      }
+    }
+
+    function showAuthRequired() {
+      document.getElementById("loadingScreen").innerHTML =
+        '<p style="color:#f87171;font-size:14px;">Access required. Please use the link in your welcome email, or <a href="https://proximitycoaching.com" style="color:#a3d0c9;">contact support</a>.</p>';
+    }
+
+    async function handleSignOut() {
+      await sb.auth.signOut();
+      window.location.href = "/";
+    }
+
+    async function init() {
+      var result = await sb.auth.getSession();
+      if (result.data && result.data.session) {
+        showApp(result.data.session.user);
+      } else {
+        showAuthRequired();
+      }
+    }
+
+    // Also catch SIGNED_IN from magic link if user lands here directly
+    sb.auth.onAuthStateChange(function(event, session) {
+      if (event === "SIGNED_IN" && session) {
+        // Clean hash tokens from URL
+        if (window.history && window.history.replaceState) {
+          history.replaceState(null, "", window.location.pathname);
+        }
+        showApp(session.user);
+      }
+      if (event === "SIGNED_OUT") {
+        window.location.href = "/";
+      }
+    });
+
+    init();
+  </script>
+
+</body>
+</html>

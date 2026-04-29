@@ -33,3 +33,6 @@
 
 /proxi-we.html
   Cache-Control: no-store, no-cache, must-revalidate
+
+/proxi-all.html
+  Cache-Control: no-store, no-cache, must-revalidate
