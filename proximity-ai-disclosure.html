@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Disclosure — Proximity Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'Gyst'; src: local('Gyst'); }
+
+:root {
+  --aqua: #a3d0c9;
+  --charcoal: #202023;
+  --charcoal-lighter: #d5d5d5;
+  --off-white: #eeeeee;
+  --muted: #6b6b70;
+  --link: #6bada3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--off-white);
+  color: var(--charcoal);
+  line-height: 1.7;
+  padding: 0;
+}
+
+.site-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--charcoal-lighter);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.site-header .brand {
+  font-family: 'Gyst', Georgia, serif;
+  color: var(--charcoal);
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.site-header nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.site-header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.site-header nav a:hover { color: var(--link); }
+
+.content {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.doc-title {
+  font-family: 'Gyst', Georgia, serif;
+  font-size: 28px;
+  color: var(--charcoal);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.doc-subtitle {
+  font-size: 16px;
+  color: var(--link);
+  margin-bottom: 4px;
+}
+.doc-date {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.attorney-note {
+  background: rgba(192, 57, 43, 0.06);
+  border: 1px solid rgba(192, 57, 43, 0.3);
+  color: #c0392b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Prominent disclosure box */
+.disclosure-box {
+  background: #ffffff;
+  border: 2px solid var(--aqua);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 32px;
+}
+.disclosure-box .disclosure-label {
+  font-family: 'Gyst', Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--link);
+  margin-bottom: 8px;
+}
+.disclosure-box p {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+/* Coach card grid */
+.coach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 20px 0 28px;
+}
+.coach-card {
+  background: #ffffff;
+  border: 1px solid var(--charcoal-lighter);
+  border-top: 3px solid var(--aqua);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.coach-card .coach-name {
+  font-family: 'Gyst', Georgia, serif;
+  font-size: 17px;
+  color: var(--charcoal);
+  margin-bottom: 4px;
+}
+.coach-card .coach-role {
+  font-size: 12px;
+  color: var(--link);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.coach-card .coach-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+h2 {
+  font-family: 'Gyst', Georgia, serif;
+  font-size: 22px;
+  color: var(--charcoal);
+  margin-top: 36px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--charcoal-lighter);
+}
+h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--link);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+p { margin-bottom: 14px; font-size: 14px; }
+
+ul { margin: 8px 0 16px 24px; padding: 0; }
+li { margin-bottom: 8px; font-size: 14px; }
+li::marker { color: var(--aqua); }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--charcoal); }
+
+/* Crisis box */
+.crisis-box {
+  background: rgba(163, 208, 201, 0.15);
+  border: 1px solid var(--aqua);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 20px 0;
+}
+.crisis-box .crisis-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--charcoal);
+  margin-bottom: 12px;
+}
+.crisis-box ul { margin-top: 0; }
+.crisis-box li { font-size: 13px; }
+
+.site-footer {
+  background: #ffffff;
+  border-top: 1px solid var(--charcoal-lighter);
+  padding: 20px 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.site-footer a { color: var(--link); }
+
+@media (max-width: 600px) {
+  .doc-title { font-size: 22px; }
+  h2 { font-size: 19px; }
+  .content { padding: 24px 16px 60px; }
+  .disclosure-box { padding: 18px; }
+  .coach-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">Proximity Coaching</div>
+  <nav>
+    <a href="proximity-terms.html">Terms of Service</a>
+    <a href="proximity-privacy.html">Privacy Policy</a>
+    <a href="proximity-ai-disclosure.html">AI Disclosure</a>
+  </nav>
+</header>
+
+<main class="content">
+
+<h1 class="doc-title">AI DISCLOSURE &amp; INFORMED USE NOTICE</h1>
+<p class="doc-subtitle">Proximity Coaching Platform — All AI Coaches</p>
+<p class="doc-date">Effective Date: April 30, 2026 &nbsp;|&nbsp; Last Updated: April 30, 2026</p>
+
+<div class="attorney-note">⚠ DRAFT — Have a licensed attorney review before publishing. This document does not constitute legal advice.</div>
+
+<!-- Prominent disclosure required by California AB 489 / SB 243 -->
+<div class="disclosure-box">
+  <div class="disclosure-label">Required Disclosure — California AB 489 &amp; SB 243</div>
+  <p>You are interacting with an artificial intelligence system, not a human being. The AI Coaches on the Proximity Coaching platform are educational and personal development tools — not therapy, counseling, medical care, or crisis services. No human reviews or approves individual responses in real time. <strong>In an emergency, call 911.</strong></p>
+</div>
+
+<h2><strong>1. What Is Proximity Coaching?</strong></h2>
+<p>Proximity Coaching is a platform offering three AI-powered coaching companions, each designed to support a specific audience in building greater self-awareness, emotional intelligence, and communication skills.</p>
+
+<div class="coach-grid">
+  <div class="coach-card">
+    <div class="coach-name">Proxi He</div>
+    <div class="coach-role">Men's Inner Leadership Coach</div>
+    <div class="coach-desc">Designed for adult men. Frameworks developed by Dr. John Schinnerer, Ph.D. Focused on self-leadership, stress, anger, communication, identity, and meaning.</div>
+  </div>
+  <div class="coach-card">
+    <div class="coach-name">Proxi She</div>
+    <div class="coach-role">Inner Journey Coach for Women</div>
+    <div class="coach-desc">Designed for adult women. Frameworks developed by Joree Rose, MA, LMFT. Focused on mindfulness, emotional resilience, self-awareness, and personal growth.</div>
+  </div>
+  <div class="coach-card">
+    <div class="coach-name">Proxi We</div>
+    <div class="coach-role">Elite Couples Coach</div>
+    <div class="coach-desc">Designed for adult couples. Frameworks developed by Dr. John Schinnerer, Ph.D. and Joree Rose, MA, LMFT. Focused on relational intelligence, communication, and partnership.</div>
+  </div>
+</div>
+
+<h2><strong>2. You Are Interacting With Artificial Intelligence</strong></h2>
+<p>Each AI Coach on the Proximity Coaching platform is powered by <strong>Claude</strong>, a large language model developed by Anthropic PBC. You are interacting with software, not a human coach, therapist, psychologist, or counselor. No human being reviews, edits, or approves the AI's responses before they are delivered to you.</p>
+<p>The AI Coach generates responses by processing your message together with:</p>
+<ul>
+<li>Proprietary system instructions and coaching frameworks developed by Dr. John Schinnerer, Ph.D. and/or Joree Rose, MA, LMFT;</li>
+<li>A curated knowledge base drawn from books, courses, podcast transcripts, and coaching materials;</li>
+<li>Safety logic and content filters designed to prevent harmful outputs; and</li>
+<li>Your current session context (messages within the active session).</li>
+</ul>
+<p>The AI Coach does not have memory of prior sessions unless you restate that information within a new session.</p>
+
+<h2><strong>3. What the AI Coaches Are — And Are Not</strong></h2>
+
+<h3><strong>3.1 What They Are</strong></h3>
+<ul>
+<li>Educational tools for personal development, self-reflection, and communication skill building;</li>
+<li>AI-powered coaching companions grounded in evidence-based frameworks (CBT, IFS, attachment theory, polyvagal theory, positive psychology, mindfulness);</li>
+<li>Available 24 hours a day, 7 days a week for ongoing personal development support; and</li>
+<li>Structured to help you explore patterns, build self-awareness, and develop actionable next steps.</li>
+</ul>
+
+<h3><strong>3.2 What They Are Not</strong></h3>
+<ul>
+<li><strong>Not therapy or counseling.</strong> The AI Coaches do not provide psychotherapy, clinical counseling, mental health treatment, or any service that requires a state-issued healthcare license;</li>
+<li><strong>Not medical care.</strong> The AI Coaches do not provide medical advice, diagnosis, prescriptions, or clinical assessment of any kind;</li>
+<li><strong>Not crisis services.</strong> The AI Coaches cannot provide crisis intervention, emergency assistance, or real-time safety monitoring;</li>
+<li><strong>Not a substitute for a licensed professional.</strong> If you are experiencing a mental health crisis, considering harming yourself or others, managing a serious mental illness, or in a situation requiring clinical care, you must seek help from a qualified human professional; and</li>
+<li><strong>Not continuously monitored.</strong> No human monitors your conversations in real time.</li>
+</ul>
+
+<h2><strong>4. About the Creators</strong></h2>
+
+<h3><strong>4.1 Dr. John Schinnerer, Ph.D. (Proxi He &amp; Proxi We)</strong></h3>
+<p>Dr. John Schinnerer holds a Ph.D. in Educational Psychology from UC Berkeley. He operates as an educational and performance coach. <strong>Dr. Schinnerer does not hold a clinical license as a psychologist, therapist, counselor, or healthcare provider, and does not provide licensed clinical care through any AI Coach.</strong> His frameworks and content are used in Proxi He and Proxi We for educational coaching purposes only.</p>
+
+<h3><strong>4.2 Joree Rose, MA, LMFT (Proxi She &amp; Proxi We)</strong></h3>
+<p>Joree Rose holds a Master's degree and a California Marriage and Family Therapist (LMFT) license. She operates as a mindfulness teacher and life coach through the Proximity Coaching platform. <strong>Joree Rose does not provide licensed therapy, counseling, diagnosis, or clinical treatment through any AI Coach.</strong> Her frameworks and content are used in Proxi She and Proxi We for educational coaching purposes only. Her LMFT license does not create a therapist-client relationship between you and Joree Rose through the use of any AI Coach.</p>
+
+<h2><strong>5. AI Limitations — What You Need to Know</strong></h2>
+<p>AI-generated responses can and do contain errors. Before relying on any information provided by an AI Coach, you should understand the following:</p>
+<ul>
+<li><strong>Hallucinations:</strong> AI models can generate responses that are factually incorrect, including fabricated citations, invented statistics, or inaccurate summaries of research;</li>
+<li><strong>No knowledge of your full situation:</strong> The AI Coach only knows what you share within the current session. It cannot account for your full personal history, health, medical records, family background, legal situation, or other context it has not been told;</li>
+<li><strong>Not personalized clinical advice:</strong> AI-generated coaching suggestions are general in nature and may not be appropriate for your specific circumstances;</li>
+<li><strong>Potential for inappropriate responses:</strong> Despite safety filters, the AI Coach may occasionally produce responses that are incomplete, irrelevant, or not suited to your situation; and</li>
+<li><strong>No continuity across sessions:</strong> The AI Coach does not remember previous conversations. Each session starts fresh.</li>
+</ul>
+<p><strong>Always use your own judgment.</strong> For important decisions involving your health, mental health, relationships, finances, employment, or legal matters, consult a qualified professional.</p>
+
+<h2><strong>6. Safety Protocols and Crisis Response</strong></h2>
+<p>The AI Coaches are equipped with automated safety protocols designed to recognize certain crisis-related language, including statements that may suggest suicidal ideation or self-harm intent. When these protocols are triggered, an AI Coach will:</p>
+<ul>
+<li>Stop the current coaching conversation;</li>
+<li>Acknowledge what you shared in a non-judgmental way;</li>
+<li>Clearly state the limits of the AI Coach as a non-clinical, non-crisis tool; and</li>
+<li>Provide relevant crisis resources.</li>
+</ul>
+
+<div class="crisis-box">
+  <div class="crisis-title">Crisis and Emergency Resources</div>
+  <ul>
+    <li><strong>988 Suicide &amp; Crisis Lifeline:</strong> Call or text <strong>988</strong> (US)</li>
+    <li><strong>Crisis Text Line:</strong> Text <strong>HOME</strong> to <strong>741741</strong></li>
+    <li><strong>National Domestic Violence Hotline:</strong> <strong>1-800-799-7233</strong></li>
+    <li><strong>SAMHSA National Helpline:</strong> <strong>1-800-662-4357</strong></li>
+    <li><strong>Emergency Services:</strong> Call <strong>911</strong></li>
+  </ul>
+</div>
+
+<p><strong>These safety protocols are automated and imperfect.</strong> The AI Coach will not always recognize or appropriately respond to every crisis situation. Do not rely on any AI Coach to detect an emergency or keep you safe. If you or someone you know is in danger, call 911 immediately.</p>
+
+<h2><strong>7. Compliance Disclosures</strong></h2>
+
+<h3><strong>7.1 California AB 489 — AI Disclosure</strong></h3>
+<p>California Assembly Bill 489 requires that any person operating an AI system that engages in real-time text communication must disclose that the system is not a human being before or at the start of each interaction. This disclosure is made prominently within the AI Coach interface at the beginning of every session, and is also provided in this document and in the Terms of Service.</p>
+
+<h3><strong>7.2 California SB 243 — Companion Chatbot Safety</strong></h3>
+<p>To the extent the AI Coaches are classified as "companion chatbots" under California Senate Bill 243, the Company maintains the following:</p>
+<ul>
+<li>A prominent, persistent disclosure that the AI Coach is not a human being;</li>
+<li>Crisis safety protocols with automatic referral to emergency resources;</li>
+<li>Safety event logging (event occurrence and timestamp, retained minimum 3 years);</li>
+<li>An annual anonymized report of crisis safety protocol activations, beginning July 1, 2027; and</li>
+<li>No design features intended to create the false impression that the user is communicating with a human.</li>
+</ul>
+
+<h3><strong>7.3 California AB 316 — AI Accountability</strong></h3>
+<p>Evolved Caveman AI, LLC is the responsible operator of the AI Coaches. The Company accepts accountability for the design, configuration, deployment, and operation of these systems. The Company does not attribute legal liability for AI outputs to Anthropic or any third-party AI provider, and does not represent that the AI Coaches are autonomous legal persons.</p>
+
+<h2><strong>8. Your Informed Use Agreement</strong></h2>
+<p>By using any AI Coach on the Proximity Coaching platform, you confirm that you:</p>
+<ul>
+<li>Have read and understood this AI Disclosure and Informed Use Notice;</li>
+<li>Understand that you are interacting with artificial intelligence, not a human being;</li>
+<li>Understand that the AI Coaches are educational tools, not therapy, counseling, medical care, or crisis services;</li>
+<li>Will not use any AI Coach as a substitute for professional mental health, medical, legal, financial, or other licensed services;</li>
+<li>Will seek immediate help from a licensed professional or emergency service if you are in crisis or danger;</li>
+<li>Understand that AI-generated responses may contain errors and must be evaluated with your own judgment; and</li>
+<li>Are at least 18 years of age.</li>
+</ul>
+
+<h2><strong>9. Changes to This Disclosure</strong></h2>
+<p>We may update this AI Disclosure from time to time as the technology, legal requirements, or our practices change. Material updates will be communicated via email or prominent notice within the Products at least thirty (30) days before taking effect. The date of the most recent revision is shown at the top of this document.</p>
+
+<h2><strong>10. Contact</strong></h2>
+<p>For questions about this AI Disclosure or the AI Coaches, contact us at:</p>
+<p><strong>Evolved Caveman AI, LLC</strong><br>
+Email: <a href="mailto:John@GuideToSelf.com">John@GuideToSelf.com</a><br>
+Website: <a href="https://proximitycoaching.com">proximitycoaching.com</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>Proximity Coaching &middot; Evolved Caveman AI, LLC &middot; California &middot;
+    <a href="proximity-terms.html">Terms</a> &middot;
+    <a href="proximity-privacy.html">Privacy</a> &middot;
+    <a href="proximity-ai-disclosure.html">AI Disclosure</a>
+  </p>
+</footer>
+
+</body>
+</html>
