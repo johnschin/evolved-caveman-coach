@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Welcome — All Three Coaches — Proximity Coaching</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #202023; color: #eeeeee; min-height: 100vh; }
+    .page { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+    .wordmark { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #a3d0c9; margin-bottom: 40px; }
+    .coach-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #a3d0c9; border: 1px solid rgba(163,208,201,0.5); border-radius: 100px; padding: 4px 14px; margin-bottom: 18px; }
+    h1 { font-size: 30px; font-weight: 700; line-height: 1.2; margin-bottom: 16px; color: #eeeeee; }
+    .confirm-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(163,208,201,0.08); color: #a3d0c9; border: 1px solid rgba(163,208,201,0.25); border-radius: 6px; font-size: 13px; font-weight: 600; padding: 8px 14px; margin-bottom: 36px; }
+    .section { background: #27272b; border: 1px solid #333; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #a3d0c9; margin-bottom: 10px; }
+    .section h2 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: #eeeeee; }
+    .section p { font-size: 14px; color: #aaa; line-height: 1.75; margin-bottom: 10px; }
+    .section p:last-child { margin-bottom: 0; }
+    .icon-row { display: flex; align-items: flex-start; gap: 16px; }
+    .icon-box { width: 40px; height: 40px; background: rgba(163,208,201,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .icon-text h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .icon-text p { font-size: 13px; color: #999; line-height: 1.65; margin: 0; }
+    .icon-text a { color: #a3d0c9; text-decoration: none; }
+    .coach-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .coach-card { background: #232326; border: 1px solid #333; border-radius: 10px; padding: 16px 18px; }
+    .coach-card-name { font-size: 15px; font-weight: 700; color: #eeeeee; margin-bottom: 3px; }
+    .coach-card-by { font-size: 11px; color: #a3d0c9; margin-bottom: 6px; letter-spacing: 0.3px; }
+    .coach-card-desc { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 10px; }
+    .coach-card-link { font-size: 12px; font-weight: 600; color: #a3d0c9; text-decoration: none; letter-spacing: 0.3px; }
+    .coach-card-link:hover { text-decoration: underline; }
+    .prompt-intro { font-size: 13px; color: #888; line-height: 1.6; margin-top: 4px; margin-bottom: 14px; }
+    .prompt-grid { display: flex; flex-direction: column; gap: 10px; }
+    .prompt-card { background: #232326; border: 1px solid #333; border-radius: 8px; padding: 14px 50px 14px 16px; font-size: 13px; color: #ccc; line-height: 1.55; cursor: pointer; position: relative; transition: border-color 0.15s, background 0.15s; text-align: left; width: 100%; font-family: inherit; }
+    .prompt-card:hover { border-color: #a3d0c9; background: #28282d; }
+    .copy-label { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #a3d0c9; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+    .prompt-card:hover .copy-label { opacity: 1; }
+    .prompt-card.copied { border-color: #a3d0c9; }
+    .prompt-card.copied .copy-label { opacity: 1; }
+    .prompt-coach-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #a3d0c9; background: rgba(163,208,201,0.1); border-radius: 4px; padding: 2px 7px; margin-bottom: 5px; }
+    .cta-section { margin-top: 28px; text-align: center; }
+    .cta-note { font-size: 13px; color: #666; margin-bottom: 14px; line-height: 1.6; }
+    .cta-btn { display: inline-block; padding: 15px 32px; background: #a3d0c9; color: #202023; text-decoration: none; font-weight: 700; font-size: 15px; border-radius: 8px; }
+    .cta-btn:hover { background: #b5d9d3; }
+    .disclaimer { background: rgba(255,255,255,0.02); border: 1px solid #2c2c30; border-radius: 8px; padding: 16px 20px; margin-top: 20px; }
+    .disclaimer p { font-size: 12px; color: #5a5a60; line-height: 1.7; margin: 0; }
+    .support { text-align: center; margin-top: 28px; font-size: 13px; color: #555; }
+    .support a { color: #a3d0c9; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="wordmark">Proximity Coaching</div>
+  <div class="coach-tag">Full Access · All Three Coaches</div>
+  <h1>Welcome. You have access to all three coaches.</h1>
+  <div class="confirm-badge">✓ &nbsp;Payment confirmed</div>
+
+  <!-- Email notice -->
+  <div class="section">
+    <div class="icon-row">
+      <div class="icon-box">📧</div>
+      <div class="icon-text">
+        <h2>Check your inbox — your sign-in link is on the way</h2>
+        <p>One link gives you access to all three coaches. It expires in <strong style="color:#ddd;">24 hours</strong> and works once. If it expires before you use it, email <a href="mailto:John@guidetoself.com">John@guidetoself.com</a> and we'll send a fresh one right away.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Memory tip -->
+  <div class="section">
+    <div class="icon-row">
+      <div class="icon-box">🧠</div>
+      <div class="icon-text">
+        <h2>Each coach has its own memory</h2>
+        <p>Proxi He, Proxi She, and Proxi We each remember your conversations independently. The more context you share — your situation, what's been coming up, the patterns you're noticing — the more useful each coaching session becomes. Don't hold back on the details.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- What to expect -->
+  <div class="section">
+    <div class="section-label">What to expect</div>
+    <h2>Three specialized coaches — one sign-in</h2>
+    <p>Your bundle gives you access to three distinct coaching tools, each built on different expertise and designed for a different focus area. They work best when you use each one for what it's actually built for — and bring the insights from one into the others.</p>
+    <div class="coach-cards">
+      <div class="coach-card">
+        <div class="coach-card-name">Proxi He</div>
+        <div class="coach-card-by">with Dr. John Schinnerer, PhD</div>
+        <div class="coach-card-desc">Self-leadership for men: stress, anger, emotional intelligence, identity, and meaning. Designed for men who are functioning well externally but wrestling with something internally.</div>
+        <a href="/proxi-he" class="coach-card-link">proximitycoaching.com/proxi-he →</a>
+      </div>
+      <div class="coach-card">
+        <div class="coach-card-name">Proxi She</div>
+        <div class="coach-card-by">with Joree Rose, MA LMFT</div>
+        <div class="coach-card-desc">Inner journey for women: mindfulness, emotional awareness, self-compassion, anxiety, and personal growth. Warm, reflective, and grounded in what's alive for you right now.</div>
+        <a href="/proxi-she" class="coach-card-link">proximitycoaching.com/proxi-she →</a>
+      </div>
+      <div class="coach-card">
+        <div class="coach-card-name">Proxi We</div>
+        <div class="coach-card-by">with Dr. John &amp; Joree Rose</div>
+        <div class="coach-card-desc">Couples coaching: communication patterns, conflict cycles, emotional reactivity, reconnection, and relational intelligence. Best used individually and brought into real conversations together.</div>
+        <a href="/proxi-we" class="coach-card-link">proximitycoaching.com/proxi-we →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Getting started -->
+  <div class="section">
+    <div class="section-label">Where to begin</div>
+    <h2>Start with the individual coaches before going to Proxi We</h2>
+    <p>The most powerful sequence is to do some individual work first — Proxi He or Proxi She — and then bring that self-awareness into your couples work with Proxi We. Understanding your own patterns before examining the dynamic between you makes the couples coaching significantly more effective.</p>
+    <p>That said, if there's something urgent happening in your relationship right now, start there. Follow what's most alive.</p>
+  </div>
+
+  <!-- 5 starter prompts -->
+  <div class="section">
+    <div class="section-label">5 ways to start your first sessions</div>
+    <h2>Copy a prompt — paste it in when you sign in</h2>
+    <p class="prompt-intro">Click any card to copy it. Each prompt is labeled with which coach it's designed for.</p>
+    <div class="prompt-grid">
+      <button class="prompt-card" data-prompt="I'm not sure which coach to start with given what I'm dealing with right now. Can you help me think through where to begin?">
+        <span class="prompt-coach-tag">Any coach</span><br>
+        "I'm not sure which coach to start with given what I'm dealing with right now. Can you help me think through where to begin?"
+        <span class="copy-label">Copy</span>
+      </button>
+      <button class="prompt-card" data-prompt="I feel stuck — irritable, stressed, and disconnected from what actually matters to me. Help me understand what's driving this.">
+        <span class="prompt-coach-tag">Proxi He</span><br>
+        "I feel stuck — irritable, stressed, and disconnected from what actually matters to me. Help me understand what's driving this."
+        <span class="copy-label">Copy</span>
+      </button>
+      <button class="prompt-card" data-prompt="I want to develop a real mindfulness practice and better emotional awareness. I know something needs to shift internally. Where do I begin?">
+        <span class="prompt-coach-tag">Proxi She</span><br>
+        "I want to develop a real mindfulness practice and better emotional awareness. I know something needs to shift internally. Where do I begin?"
+        <span class="copy-label">Copy</span>
+      </button>
+      <button class="prompt-card" data-prompt="My partner and I keep hitting the same wall. The conversation escalates (or shuts down) the same way every time. What's actually happening between us?">
+        <span class="prompt-coach-tag">Proxi We</span><br>
+        "My partner and I keep hitting the same wall. The conversation escalates (or shuts down) the same way every time. What's actually happening between us?"
+        <span class="copy-label">Copy</span>
+      </button>
+      <button class="prompt-card" data-prompt="How do I use all three coaches most effectively? What's the best rhythm and sequence for someone doing both individual and relationship work?">
+        <span class="prompt-coach-tag">Any coach</span><br>
+        "How do I use all three coaches most effectively? What's the best rhythm and sequence for someone doing both individual and relationship work?"
+        <span class="copy-label">Copy</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <p class="cta-note">Once you've clicked the link in your email and signed in, your coaching hub is here:</p>
+    <a href="/proxi-all" class="cta-btn">Open your coaching hub →</a>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong style="color:#777;">Important:</strong> Proxi He, Proxi She, and Proxi We are educational coaching tools for self-leadership, personal development, and relational intelligence. They are not therapy, counseling, psychiatric care, crisis support, or substitutes for a licensed mental health professional. If you or your partner are experiencing a mental health crisis, please contact a qualified professional or call or text <strong style="color:#777;">988</strong> (Suicide &amp; Crisis Lifeline).</p>
+  </div>
+
+  <div class="support">Questions? <a href="mailto:John@guidetoself.com">John@guidetoself.com</a></div>
+
+</div>
+<script>
+  document.querySelectorAll('.prompt-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var text = this.dataset.prompt;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          card.classList.add('copied');
+          card.querySelector('.copy-label').textContent = 'Copied!';
+          setTimeout(function() {
+            card.classList.remove('copied');
+            card.querySelector('.copy-label').textContent = 'Copy';
+          }, 2000);
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

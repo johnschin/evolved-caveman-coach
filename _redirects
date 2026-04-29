@@ -3,6 +3,12 @@
 # Auth callback — processes Supabase magic link and routes to correct coach
 /auth/callback    /auth-callback.html    200
 
+# Post-purchase welcome pages (Stripe success_url destinations)
+/welcome-he       /welcome-he.html       200
+/welcome-she      /welcome-she.html      200
+/welcome-we       /welcome-we.html       200
+/welcome-bundle   /welcome-bundle.html   200
+
 # Proxi coach pages (new branded URLs)
 /proxi-he         /proxi-he.html         200
 /proxi-she        /proxi-she.html        200
