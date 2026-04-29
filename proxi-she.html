@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxi She — Proximity Coaching</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" integrity="sha384-BqW9ZnUhs8B3bGaZeNfcY6qQnTHMeMu5/NsLjEoGGzY5eXVsGlTxQC18eAn5bY9z" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+    :root {
+      /* Joree Rose Brand Colors */
+      --plum: #82316c;           /* Primary accent — bold, grounded */
+      --plum-light: #a793b4;     /* Lighter purple — secondary accent */
+      --plum-soft: #d5cad6;      /* Soft lavender — subtle backgrounds */
+      --mauve: #beacbf;          /* Warm mauve — borders, soft elements */
+      --sage: #c2d8d3;           /* Sage green — calm, grounding */
+      --sage-light: #d9e7e4;     /* Light sage — backgrounds */
+      --slate: #555b6e;          /* Slate blue-gray — text, grounding */
+
+      --warm-cream: #FAF6F1;
+      --warm-white: #FFFDF9;
+      --text-primary: #3A3A3A;
+      --text-secondary: #555b6e;
+      --text-light: #8A8A9A;
+      --border: #d5cad6;
+      --shadow: rgba(130, 49, 108, 0.06);
+      --user-bubble: #82316c;
+      --ai-bubble: #FFFFFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--warm-cream);
+      color: var(--text-primary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--plum);
+      letter-spacing: 0.5px;
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      color: var(--text-light);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-subtle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-subtle:hover {
+      border-color: var(--plum-light);
+      color: var(--plum);
+    }
+
+    /* ===== SCREENS (Login, Disclaimer, Trial, Chat) ===== */
+    .screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* ===== AUTH SCREEN ===== */
+    .auth-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+
+    .auth-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--plum);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      background: var(--warm-cream);
+      color: var(--text-primary);
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--plum-light);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--plum);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary:hover { background: #6b2759; }
+    .btn-primary:disabled { background: var(--plum-soft); cursor: not-allowed; opacity: 0.7; }
+
+    .auth-toggle {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .auth-toggle a {
+      color: var(--plum);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .auth-toggle a:hover { text-decoration: underline; }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: var(--text-light);
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .auth-divider::before { margin-right: 16px; }
+    .auth-divider::after { margin-left: 16px; }
+
+    .trial-input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .trial-input-row input { flex: 1; }
+    .trial-input-row button {
+      padding: 12px 20px;
+      white-space: nowrap;
+      width: auto;
+    }
+
+    .auth-error {
+      background: #FFF0F0;
+      color: #C44;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ===== DISCLAIMER SCREEN ===== */
+    .disclaimer-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .disclaimer-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+
+    .disclaimer-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--plum);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .disclaimer-text {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .disclaimer-text h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 16px 0 8px;
+    }
+
+    .disclaimer-text ul {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    .disclaimer-text li {
+      margin-bottom: 4px;
+    }
+
+    .disclaimer-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .disclaimer-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .disclaimer-check input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--plum);
+      flex-shrink: 0;
+    }
+
+    .disclaimer-check a {
+      color: var(--plum);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .disclaimer-check a:hover {
+      color: #6b2759;
+    }
+
+    /* ===== AI DISCLOSURE BANNER ===== */
+    .ai-disclosure-banner {
+      background: var(--sage-light);
+      border: 1px solid var(--sage);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--slate);
+      line-height: 1.5;
+      transition: opacity 0.3s ease;
+    }
+
+    .ai-disclosure-banner.hidden { display: none; }
+    .ai-disclosure-banner.dismissing { opacity: 0; }
+
+    .banner-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .banner-text a {
+      color: var(--plum);
+      text-decoration: underline;
+    }
+
+    .banner-dismiss {
+      background: none;
+      border: none;
+      color: var(--slate);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .banner-dismiss:hover { color: var(--plum); }
+
+    /* ===== CHAT SCREEN ===== */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 14.5px;
+      line-height: 1.65;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: var(--user-bubble);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.assistant {
+      align-self: flex-start;
+      background: var(--ai-bubble);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.system-msg {
+      align-self: center;
+      background: var(--warm-cream);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-style: italic;
+      max-width: 85%;
+      text-align: center;
+    }
+
+    .typing-indicator {
+      align-self: flex-start;
+      padding: 14px 18px;
+      background: var(--ai-bubble);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      display: none;
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--plum-soft);
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typing 1.2s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ===== INPUT AREA ===== */
+    .chat-input-area {
+      padding: 16px 24px 24px;
+      background: var(--warm-white);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .chat-input-row textarea {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-family: 'Inter', sans-serif;
+      background: var(--warm-cream);
+      color: var(--text-primary);
+      resize: none;
+      min-height: 46px;
+      max-height: 120px;
+      line-height: 1.4;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input-row textarea:focus {
+      outline: none;
+      border-color: var(--plum-light);
+    }
+
+    .btn-send {
+      width: 46px;
+      height: 46px;
+      background: var(--plum);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .btn-send:hover { background: #6b2759; }
+    .btn-send:disabled { background: var(--plum-soft); cursor: not-allowed; }
+
+    .copy-chat-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 6px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .copy-chat-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-light);
+        font-size: 11px;
+        font-family: inherit;
+        padding: 5px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .copy-chat-btn:hover { color: var(--plum); border-color: var(--plum); }
+    .copy-chat-btn svg { width: 13px; height: 13px; }
+    .copy-chat-btn.copied { color: var(--plum); border-color: var(--plum); }
+
+    .chat-footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    .trial-info {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    /* ===== EDUCATIONAL BANNER ===== */
+    .edu-banner {
+      background: var(--sage-light);
+      border-bottom: 1px solid var(--sage);
+      padding: 10px 24px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 12.5px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .edu-banner strong {
+      color: var(--plum);
+    }
+
+    .edu-banner a {
+      color: var(--plum);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .edu-banner a:hover {
+      color: #6b2759;
+    }
+
+    .legal-links {
+      margin-top: 4px;
+      font-size: 11.5px;
+    }
+
+    .legal-links a {
+      margin: 0 8px;
+    }
+
+    /* ===== SIDEBAR / CHAT HISTORY ===== */
+    .hamburger-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-right: 10px;
+    }
+    .hamburger-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 90;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: -300px;
+      width: 280px;
+      height: 100%;
+      background: var(--warm-white);
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: left 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 12px var(--shadow);
+    }
+    .sidebar.open { left: 0; }
+
+    .sidebar-header {
+      padding: 18px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--plum);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-light);
+      padding: 0 4px;
+    }
+    .sidebar-close:hover { color: var(--plum); }
+
+    .sidebar-sessions {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .sidebar-session-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .sidebar-session-item:hover { background: var(--sage-light); }
+    .sidebar-session-item.active-session { background: var(--sage-light); border-left: 3px solid var(--plum); }
+
+    .sidebar-session-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-session-meta {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    .sidebar-empty {
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .sidebar-loading {
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .auth-card, .disclaimer-card { padding: 32px 24px; }
+      .message { max-width: 88%; }
+      .header { padding: 12px 16px; }
+      .header-logo { font-size: 18px; }
+      .chat-messages { padding: 16px; }
+      .chat-input-area { padding: 12px 16px 16px; }
+      .edu-banner { padding: 8px 16px; font-size: 11.5px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== SIDEBAR ===== -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span>Past Sessions</span>
+      <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+    </div>
+    <div class="sidebar-sessions" id="sidebarSessions">
+      <div class="sidebar-empty">No past sessions yet.</div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-brand">
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" title="Chat history" style="display:none;">
+        <span></span><span></span><span></span>
+      </button>
+      <div>
+        <div class="header-logo">Proxi She</div>
+        <div class="header-subtitle">Proximity Coaching</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-subtle" id="btn-new-session" style="display:none;" onclick="startNewSession()">New Session</button>
+      <button class="btn-subtle" id="btn-logout" style="display:none;" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- ===== EDUCATIONAL BANNER ===== -->
+  <div class="edu-banner">
+    <strong>This is an educational coaching tool, not therapy, counseling, or crisis support.</strong>
+    <div class="legal-links">
+      <a href="https://johnschin.github.io/evolved-caveman-coach/joree-privacy.html" target="_blank">Privacy Policy</a>
+      <a href="https://johnschin.github.io/evolved-caveman-coach/joree-terms.html" target="_blank">Terms of Service</a>
+      <a href="https://johnschin.github.io/evolved-caveman-coach/joree-ai-disclosure.html" target="_blank">AI Disclosure</a>
+    </div>
+  </div>
+
+  <!-- ===== AUTH SCREEN ===== -->
+  <div class="screen active" id="screen-auth">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-title">Welcome</div>
+        <div class="auth-subtitle">A space to slow down, get curious, and find meaning in what you're moving through.</div>
+        <div class="auth-error" id="auth-error"></div>
+
+        <!-- Login Form -->
+        <div id="auth-login">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="Your password">
+          </div>
+          <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+          <div class="auth-toggle">
+            Don't have an account? <a onclick="showSignup()">Create one</a>
+          </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="auth-signup" style="display:none;">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="signup-name" placeholder="Your first name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="signup-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signup-password" placeholder="Create a password (min 6 characters)">
+          </div>
+          <button class="btn-primary" onclick="handleSignup()">Create Account</button>
+          <div class="auth-toggle">
+            Already have an account? <a onclick="showLogin()">Sign in</a>
+          </div>
+        </div>
+
+        <!-- Trial Token -->
+        <div class="auth-divider">or enter your access code</div>
+        <div class="trial-input-row">
+          <input type="text" id="trial-token-input" placeholder="Access code">
+          <button class="btn-primary" onclick="handleTrialToken()" style="border-radius:10px;">Go</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DISCLAIMER SCREEN ===== -->
+  <div class="screen" id="screen-disclaimer">
+    <div class="disclaimer-container">
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">Before We Begin</div>
+        <div class="disclaimer-text">
+          <p>Welcome to Proxi She, created by Joree Rose. Before you begin, please read and acknowledge the following:</p>
+
+          <h3>What This Is</h3>
+          <p>This is an AI-powered coaching and personal development tool. It is designed to help you build self-awareness, explore your emotional patterns, find meaning in life's challenges, develop communication skills, and practice mindfulness. It draws on Joree Rose's published work, courses, and coaching frameworks.</p>
+
+          <h3>What This Is Not</h3>
+          <ul>
+            <li>This is <strong>not therapy, counseling, or mental health treatment</strong>.</li>
+            <li>This tool <strong>does not provide medical advice</strong> or diagnose conditions.</li>
+            <li>This is <strong>not a crisis service</strong> and cannot provide emergency support.</li>
+            <li>This tool is <strong>not a substitute for a licensed mental health professional</strong>.</li>
+          </ul>
+
+          <h3>If You Are in Crisis</h3>
+          <p>If you are experiencing a mental health emergency, thoughts of self-harm, or danger to yourself or others, please contact:</p>
+          <ul>
+            <li><strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988</li>
+            <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+            <li><strong>Emergency Services:</strong> Call 911</li>
+          </ul>
+
+          <h3>AI Disclosure</h3>
+          <p>This coaching companion is powered by artificial intelligence. While it is grounded in Joree Rose's actual content and coaching frameworks, responses are generated by AI and may not always be perfectly accurate, appropriate, or complete. No AI system can replace the nuance, judgment, and relational depth of a human coach or mental health professional.</p>
+
+          <h3>Privacy</h3>
+          <p>Your conversations are stored securely to provide coaching continuity between sessions. Conversations may be reviewed for safety monitoring purposes. Your data is not shared with third parties or used for advertising.</p>
+
+          <h3>Limitation of Liability</h3>
+          <p>By using this tool, you acknowledge that Proximity Coaching and all affiliated parties are not liable for any decisions, actions, or outcomes arising from your use of this coaching companion. You use this tool at your own discretion and risk.</p>
+        </div>
+
+        <div class="disclaimer-checks">
+          <label class="disclaimer-check">
+            <input type="checkbox" class="consent-checkbox" id="checkbox-tos">
+            <span>I have read and agree to the <a href="https://johnschin.github.io/evolved-caveman-coach/joree-terms.html" target="_blank">Terms of Service</a>.</span>
+          </label>
+          <label class="disclaimer-check">
+            <input type="checkbox" class="consent-checkbox" id="checkbox-privacy">
+            <span>I have read and agree to the <a href="https://johnschin.github.io/evolved-caveman-coach/joree-privacy.html" target="_blank">Privacy Policy</a>.</span>
+          </label>
+          <label class="disclaimer-check">
+            <input type="checkbox" class="consent-checkbox" id="checkbox-disclosure">
+            <span>I have read and agree to the <a href="https://johnschin.github.io/evolved-caveman-coach/joree-ai-disclosure.html" target="_blank">AI Disclosure</a>. I acknowledge that this is an AI coaching tool — not therapy, counseling, or crisis support.</span>
+          </label>
+        </div>
+
+        <button class="btn-primary" id="btn-accept-disclaimer" disabled onclick="acceptDisclaimer()">I Understand — Let's Begin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHAT SCREEN ===== -->
+  <div class="screen" id="screen-chat">
+    <div class="chat-messages" id="chat-messages">
+      <div class="ai-disclosure-banner hidden" id="aiDisclosureBanner">
+        <span class="banner-icon">&#9432;</span>
+        <span class="banner-text">Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. <a href="https://johnschin.github.io/evolved-caveman-coach/joree-ai-disclosure.html" target="_blank">View our AI Disclosure</a> for full details.</span>
+        <button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>
+      </div>
+      <div class="typing-indicator" id="typing-indicator">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <div class="chat-input-row">
+        <textarea id="chat-input" placeholder="What's on your heart today?" rows="1" onkeydown="handleInputKeydown(event)"></textarea>
+        <button class="btn-send" id="btn-send" onclick="sendMessage()">&#8593;</button>
+      </div>
+      <div class="copy-chat-row">
+        <button class="copy-chat-btn" id="copyChatBtn" onclick="copyConversation()" title="Copy entire conversation to clipboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copyChatLabel">Copy conversation</span>
+        </button>
+      </div>
+      <div class="chat-footer-note">
+        Proxi She — not therapy or crisis support.<br>
+        <a href="https://johnschin.github.io/evolved-caveman-coach/joree-terms.html" target="_blank" style="color: var(--text-light); text-decoration: underline;">Terms</a> &middot;
+        <a href="https://johnschin.github.io/evolved-caveman-coach/joree-privacy.html" target="_blank" style="color: var(--text-light); text-decoration: underline;">Privacy</a> &middot;
+        <a href="https://johnschin.github.io/evolved-caveman-coach/joree-ai-disclosure.html" target="_blank" style="color: var(--text-light); text-decoration: underline;">AI Disclosure</a>
+      </div>
+      <div class="trial-info" id="trial-info" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    // ===== CONFIGURATION =====
+    const SUPABASE_URL = 'https://osywbzzvsfjdvjhjalju.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA';
+    const PROXY_URL = SUPABASE_URL + '/functions/v1/chat';
+    const COACH = 'joree';
+    const CONSENT_VERSION = 'joree-v1.0';
+
+    // ===== SYSTEM PROMPT =====
+    const SYSTEM_PROMPT = `You are Proxi She, created by Joree Rose. You are a warm, grounded, and relational coaching tool that helps women build self-awareness, self-trust, and deeper connection with themselves and their relationships.
+
+You sound like Joree — warm, real, compassionate, and wise. Think: your wisest paid bestie who also happens to have a master's degree, ten years of clinical practice, and has been exactly where you are. You lead with emotional honesty and model vulnerability as a practice, not a performance. You are not distant, clinical, or preachy. You are present, human, and deeply attuned.
+
+Your tone creates the feeling of a big exhale — like finally finding someone who not only knows how she feels but knows what to do about it.
+
+CORE PHILOSOPHY:
+Healing begins when we are being witnessed. There is power in being seen, heard, and validated. So much of our wounds come from being dismissed, ignored, or unseen. When a safe space is created, being witnessed serves as a core foundation to healing old wounds.
+
+MEANING IN THE FACE OF DIFFICULTY:
+Joree's method is rooted in finding meaning in the face of hardship or difficulty. When someone is struggling, the path forward often begins not with solving the problem but with asking what the experience is trying to teach. Difficulty is not random. It carries information. The questions that open the door are:
+- "What's the meaning here?"
+- "What lesson do you need to learn here?"
+- "How would you respond differently if you knew this were happening in divine timing?"
+- "How would you respond differently if you knew this was in service of your highest self?"
+These are not throwaway questions. They are the backbone of Joree's coaching approach. Use them naturally and frequently, especially when a woman is stuck, in pain, frustrated, or at a crossroads. Let these questions do their work. Do not rush past them. When you use one of these questions as your single question in a response, trust it. It does not need to be softened, explained away, or followed by a second question.
+
+THE UNALOME FRAMEWORK:
+The Unalome is the philosophical heart of this work — the path from the spiral (autopilot, familiar patterns, stuck) through the mindful moment (awareness) to the line (peace, with twists and undulations that settle over time). At every threshold there is a choice: go back to what is familiar, or choose the path that is hers.
+
+SIX COACHING PILLARS:
+1. Awareness — "You can't change what you're not aware of." Always the beginning.
+2. Permission — She is allowed to want more, need depth, change, take up space.
+3. Relationships — Attachment patterns, communication, intimacy, boundaries.
+4. Identity — Who she is becoming underneath all her roles and responsibilities.
+5. Self-Trust — Rebuilding confidence in her own inner knowing. Quieting the inner critic.
+6. Mindfulness — Learning to observe rather than be consumed. Being the observer creates space for response.
+
+RESPONSE STRUCTURE:
+1. Mirror first — Reflect her emotional experience so precisely she feels found. Recognition before instruction. Always.
+2. Give language — Name what she feels but cannot yet name.
+3. Ask one thoughtful question — Not three. One. Often this will be a meaning question: What is the meaning here? What lesson is this asking you to learn? How would you respond if you knew this were happening in divine timing? How would you respond if you knew this was in service of your highest self? Use whichever fits the moment. You do not have to use one every time, but lean toward them often, especially when she is stuck, in pain, or at a decision point.
+4. Offer one practical reframe or tool — Ground it in something she can actually do, feel, or practice. When appropriate, the reframe itself can be the meaning lens: what if this hardship is not happening to you, but for you?
+
+CRITICAL — ONE QUESTION PER RESPONSE:
+Every response must contain exactly ONE question — no more. Do not ask a question and then add a second question disguised as a reflection, invitation, or 'something to notice.' Do not end multiple paragraphs with question marks. One question. Period. If you catch yourself writing a second question, delete it.
+
+CORE JOREE-ISMS (use naturally when relevant):
+- "Awareness sucks." — Because once you truly see what is true for you, you cannot unsee it. But it is the beginning of everything.
+- "You can't receive what you don't believe."
+- "You can't change what you're not aware of."
+- "Fear and excitement feel the same in the body."
+- "When the student is ready, the teacher appears."
+- "The mindful moment" — The point of awareness at the threshold of the spiral and the line.
+- "What's the meaning here?" — The signature question. When she is in pain, in confusion, in frustration, this is the doorway.
+- "What lesson do you need to learn here?" — Not blame. Not punishment. Just honest curiosity about what this experience is asking of her.
+- "How would you respond differently if you knew this were happening in divine timing?" — An invitation to trust a bigger picture even when she cannot see it yet.
+- "How would you respond differently if you knew this was in service of your highest self?" — A reframe that turns struggle into growth.
+
+CLINICAL FOUNDATIONS (inform your approach, don't lecture):
+Carl Rogers Humanistic Approach, Attachment Theory, Internal Family Systems (IFS), Gottman Method, Mindfulness-Based Stress Reduction (MBSR), Positive Psychology.
+
+LANGUAGE RULES:
+Always use: pause, listen, notice, honor, explore, be curious, dignity, wholeness, self-trust, permission, meaning, lesson, divine timing, highest self, in service of, what is this teaching you.
+Never use: broken, fixing, repairing, deficit language, self-improvement framing, generic/sterile language, therapy jargon without traction, toxic positivity, spiritual bypassing, em dashes, three-line poetic stanza formatting.
+
+SAFETY FILTERS:
+Green (core coaching): Values, self-awareness, communication, permission, boundaries, mindfulness, identity, self-trust, relationships, gratitude, self-compassion.
+Yellow (coach with care, stay present-focused): Shame, grief, attachment wounds, inherited family patterns, enmeshment, anger, loneliness, codependency, loss of identity.
+Red (out of scope, redirect with warmth): Trauma processing, abuse memories, active suicidal ideation, self-harm, eating disorders, substance abuse, psychosis, dissociation, diagnosing conditions, medication questions, treatment planning.
+
+Safety redirect: "What you're sharing matters deeply, and it deserves the kind of space and care that goes beyond what I can offer here. I'd encourage you to reach out to a licensed mental health professional who can walk alongside you in this. You deserve that level of support. If you are in crisis, please contact the 988 Suicide & Crisis Lifeline by calling or texting 988."
+
+HARD BOUNDARIES:
+- You are an educational coaching companion.
+- Never diagnose, prescribe, or provide clinical treatment recommendations.
+- Never discuss medications or pharmaceutical treatments.
+- Never provide crisis intervention.
+- Never use deficit language — she is not broken and does not need fixing.
+- Never fabricate citations.
+- Keep responses conversational and warm. Typically 3-6 sentences unless the topic warrants more depth. Never use numbered lists or bullet points in your responses to the user.`;
+
+    // ===== SESSION OPENERS =====
+    const WELCOME_MESSAGE = "Hi there. I'm so glad you're here. I'm your Proxi She coaching companion, created by Joree Rose. Think of me as a space where you can slow down, get curious about what's true for you, and look for the meaning in whatever you're moving through, without judgment, without rushing, and without having to have it all figured out.\n\nWhat's on your heart today?";
+
+    const SESSION_OPENERS = [
+      "Welcome back. I'm glad you're here again. Sometimes just showing up is the bravest thing we do. What's present for you today?",
+      "Hey, welcome back. Before we dive in, take a breath with me. Okay. Now, what feels most alive or most heavy for you right now?",
+      "It's good to see you again. I've been thinking about something Joree often asks: what's the meaning here? Sometimes the hardest moments carry the most important lessons. What are you sitting with right now?"
+    ];
+
+    // ===== STATE =====
+    let supabaseClient;
+    let currentUser = null;
+    let trialToken = null;
+    let sessionId = null;
+    let conversationHistory = [];
+    let isFirstMessage = true;
+    let openingVariation = null;
+    let isSending = false;
+
+    // ===== INIT =====
+    async function init() {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      sessionId = uuid.v4();
+
+      // Check for existing session
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        await checkDisclaimerAndStart();
+      }
+
+      // Disclaimer checkboxes — all three must be checked
+      document.querySelectorAll('.consent-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const allChecked = Array.from(document.querySelectorAll('.consent-checkbox')).every(c => c.checked);
+          document.getElementById('btn-accept-disclaimer').disabled = !allChecked;
+        });
+      });
+
+      // Auto-resize textarea
+      const textarea = document.getElementById('chat-input');
+      textarea.addEventListener('input', () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+      });
+    }
+
+    // ===== AUTH FUNCTIONS =====
+    function showLogin() {
+      document.getElementById('auth-login').style.display = 'block';
+      document.getElementById('auth-signup').style.display = 'none';
+      clearAuthError();
+    }
+
+    function showSignup() {
+      document.getElementById('auth-login').style.display = 'none';
+      document.getElementById('auth-signup').style.display = 'block';
+      clearAuthError();
+    }
+
+    function showAuthError(msg) {
+      const el = document.getElementById('auth-error');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function clearAuthError() {
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    async function handleLogin() {
+      clearAuthError();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) { showAuthError('Please enter your email and password.'); return; }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) { showAuthError(error.message); return; }
+      currentUser = data.user;
+      await checkDisclaimerAndStart();
+    }
+
+    async function handleSignup() {
+      clearAuthError();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      if (!name || !email || !password) { showAuthError('Please fill in all fields.'); return; }
+      if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
+
+      const { data, error } = await supabaseClient.auth.signUp({ email, password, options: { data: { display_name: name } } });
+      if (error) { showAuthError(error.message); return; }
+      if (data.user) {
+        // Update profile with display name
+        await supabaseClient.from('profiles').update({ display_name: name }).eq('id', data.user.id);
+        currentUser = data.user;
+        await checkDisclaimerAndStart();
+      }
+    }
+
+    async function handleTrialToken() {
+      clearAuthError();
+      const token = document.getElementById('trial-token-input').value.trim();
+      if (!token) { showAuthError('Please enter your access code.'); return; }
+
+      try {
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'check_trial', trial_token: token, coach: COACH })
+        });
+        const data = await res.json();
+        if (data.status === 'active') {
+          trialToken = token;
+          showScreen('screen-chat');
+          document.getElementById('btn-new-session').style.display = 'inline-block';
+          document.getElementById('hamburgerBtn').style.display = 'flex';
+          updateTrialInfo(data);
+          showOpeningMessage(data.first_name || null);
+        } else if (data.status === 'session_complete') {
+          trialToken = token;
+          showTrialSessionComplete(data);
+        } else if (data.status === 'trial_expired') {
+          showAuthError('This access code has expired. Visit joreerose.com for full access.');
+        } else {
+          showAuthError('Invalid access code. Please check and try again.');
+        }
+      } catch (e) {
+        showAuthError('Connection error. Please try again.');
+      }
+    }
+
+    async function handleLogout() {
+      if (currentUser) {
+        triggerSessionSummary();
+        await supabaseClient.auth.signOut();
+      }
+      currentUser = null;
+      trialToken = null;
+      conversationHistory = [];
+      isFirstMessage = true;
+      sessionId = uuid.v4();
+      document.getElementById('chat-messages').innerHTML = '<div class="typing-indicator" id="typing-indicator"><span></span><span></span><span></span></div>';
+      document.getElementById('btn-logout').style.display = 'none';
+      document.getElementById('btn-new-session').style.display = 'none';
+      document.getElementById('hamburgerBtn').style.display = 'none';
+      closeSidebar();
+      showScreen('screen-auth');
+    }
+
+    // ===== DISCLAIMER =====
+    async function checkDisclaimerAndStart() {
+      const { data: profile } = await supabaseClient.from('profiles').select('disclaimer_accepted, display_name').eq('id', currentUser.id).single();
+
+      if (profile?.disclaimer_accepted) {
+        showScreen('screen-chat');
+        document.getElementById('btn-logout').style.display = 'inline-block';
+        document.getElementById('btn-new-session').style.display = 'inline-block';
+        document.getElementById('hamburgerBtn').style.display = 'flex';
+        showAIDisclosureBanner();
+        showOpeningMessage(profile.display_name || null);
+      } else {
+        showScreen('screen-disclaimer');
+      }
+    }
+
+    async function acceptDisclaimer() {
+      await supabaseClient.from('profiles').update({
+        disclaimer_accepted: true,
+        disclaimer_accepted_at: new Date().toISOString(),
+        consent_version: CONSENT_VERSION
+      }).eq('id', currentUser.id);
+
+      showScreen('screen-chat');
+      document.getElementById('btn-logout').style.display = 'inline-block';
+      document.getElementById('btn-new-session').style.display = 'inline-block';
+      document.getElementById('hamburgerBtn').style.display = 'flex';
+      showAIDisclosureBanner();
+
+      const { data: profile } = await supabaseClient.from('profiles').select('display_name').eq('id', currentUser.id).single();
+      showOpeningMessage(profile?.display_name || null);
+    }
+
+    // ===== AI DISCLOSURE BANNER =====
+    let bannerTimer = null;
+
+    function showAIDisclosureBanner() {
+      const banner = document.getElementById('aiDisclosureBanner');
+      if (!banner) return;
+      if (bannerTimer) clearTimeout(bannerTimer);
+      banner.classList.remove('hidden', 'dismissing');
+      bannerTimer = setTimeout(() => { dismissBanner(); }, 30000);
+    }
+
+    function dismissBanner() {
+      const banner = document.getElementById('aiDisclosureBanner');
+      if (!banner || banner.classList.contains('hidden')) return;
+      if (bannerTimer) clearTimeout(bannerTimer);
+      banner.classList.add('dismissing');
+      setTimeout(() => { banner.classList.add('hidden'); banner.classList.remove('dismissing'); }, 300);
+    }
+
+    // ===== SCREEN MANAGEMENT =====
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // ===== CHAT FUNCTIONS =====
+    function showOpeningMessage(firstName) {
+      const variation = Math.floor(Math.random() * 3);
+      openingVariation = ['A', 'B', 'C'][variation];
+      let message;
+
+      if (isFirstMessage && firstName) {
+        message = WELCOME_MESSAGE.replace("Hi there.", `Hi ${firstName}.`);
+      } else if (firstName) {
+        message = SESSION_OPENERS[variation].replace("Welcome back.", `Welcome back, ${firstName}.`).replace("Hey, welcome back.", `Hey ${firstName}, welcome back.`).replace("It's good to see you again.", `${firstName}, it's good to see you again.`);
+      } else {
+        message = isFirstMessage ? WELCOME_MESSAGE : SESSION_OPENERS[variation];
+      }
+
+      addMessage('assistant', message);
+      conversationHistory.push({ role: 'assistant', content: message });
+    }
+
+    function addMessage(role, content) {
+      const messagesEl = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = `message ${role}`;
+      // Escape HTML first to prevent XSS, then apply safe markdown-like formatting
+      // escapeHtml() does not affect ** * or \n so markdown transforms still work
+      let safe = escapeHtml(content);
+      let html = safe
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+      div.innerHTML = html;
+      messagesEl.insertBefore(div, document.getElementById('typing-indicator'));
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addSystemMessage(content) {
+      const messagesEl = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'message system-msg';
+      div.textContent = content;
+      messagesEl.insertBefore(div, document.getElementById('typing-indicator'));
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function showTyping(show) {
+      const el = document.getElementById('typing-indicator');
+      el.style.display = show ? 'block' : 'none';
+      if (show) {
+        const messagesEl = document.getElementById('chat-messages');
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+    }
+
+    function handleInputKeydown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    async function sendMessage() {
+      if (isSending) return;
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      isSending = true;
+      document.getElementById('btn-send').disabled = true;
+      input.value = '';
+      input.style.height = 'auto';
+
+      addMessage('user', text);
+      conversationHistory.push({ role: 'user', content: text });
+      showTyping(true);
+
+      try {
+        const requestBody = {
+          system: SYSTEM_PROMPT,
+          messages: conversationHistory,
+          session_id: sessionId,
+          is_first_message: isFirstMessage,
+          coach: COACH
+        };
+
+        const headers = { 'Content-Type': 'application/json' };
+
+        if (trialToken) {
+          requestBody.trial_token = trialToken;
+        } else if (currentUser) {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          if (session?.access_token) {
+            headers['Authorization'] = `Bearer ${session.access_token}`;
+            requestBody.access_token = session.access_token;
+          }
+        }
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(requestBody)
+        });
+
+        const data = await res.json();
+        showTyping(false);
+
+        if (data.error) {
+          addSystemMessage('Something went wrong. Please try again.');
+          console.error('API error:', data.error);
+        } else if (data.trial_status === 'session_complete') {
+          addSystemMessage(data.message || 'This session is complete. Come back anytime to start a new one.');
+          updateTrialInfo(data);
+        } else if (data.trial_status === 'trial_expired') {
+          addSystemMessage(data.message || 'Your free trial has ended. Visit joreerose.com for full access.');
+        } else {
+          const assistantText = data.content?.[0]?.text || '';
+          addMessage('assistant', assistantText);
+          conversationHistory.push({ role: 'assistant', content: assistantText });
+          if (trialToken) updateTrialInfo(data);
+        }
+
+        isFirstMessage = false;
+      } catch (e) {
+        showTyping(false);
+        addSystemMessage('Connection error. Please check your internet and try again.');
+        console.error('Send error:', e);
+      }
+
+      isSending = false;
+      document.getElementById('btn-send').disabled = false;
+      input.focus();
+    }
+
+    // ===== TRIAL MANAGEMENT =====
+    function updateTrialInfo(data) {
+      const el = document.getElementById('trial-info');
+      if (!trialToken) { el.style.display = 'none'; return; }
+      const sessionMsgs = data.session_messages_remaining ?? '?';
+      const sessions = data.sessions_remaining ?? '?';
+      el.textContent = `${sessionMsgs} messages left in this session | ${sessions} session${sessions === 1 ? '' : 's'} remaining`;
+      el.style.display = 'block';
+    }
+
+    function showTrialSessionComplete(data) {
+      showScreen('screen-chat');
+      document.getElementById('btn-new-session').style.display = 'inline-block';
+      document.getElementById('hamburgerBtn').style.display = 'flex';
+      const sessions = data.sessions_remaining || 0;
+      if (sessions > 0) {
+        addSystemMessage(`Your previous session is complete. You have ${sessions} session${sessions === 1 ? '' : 's'} remaining. Click "New Session" to begin.`);
+      } else {
+        addSystemMessage('Your free trial has ended. Visit joreerose.com for full access.');
+      }
+    }
+
+    async function startNewSession() {
+      // Summarize current session
+      triggerSessionSummary();
+
+      if (trialToken) {
+        try {
+          const res = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'start_new_session', trial_token: trialToken, coach: COACH })
+          });
+          const data = await res.json();
+          if (data.status !== 'active') {
+            addSystemMessage(data.message || 'Unable to start a new session.');
+            return;
+          }
+        } catch (e) {
+          addSystemMessage('Connection error. Please try again.');
+          return;
+        }
+      }
+
+      // Reset state
+      sessionId = uuid.v4();
+      conversationHistory = [];
+      isFirstMessage = true;
+      document.getElementById('chat-messages').innerHTML = '<div class="typing-indicator" id="typing-indicator"><span></span><span></span><span></span></div>';
+
+      if (currentUser) {
+        const { data: profile } = await supabaseClient.from('profiles').select('display_name').eq('id', currentUser.id).single();
+        showOpeningMessage(profile?.display_name || null);
+      } else {
+        showOpeningMessage(null);
+      }
+    }
+
+    // ===== SESSION SUMMARY =====
+    function triggerSessionSummary() {
+      if (!currentUser || conversationHistory.length < 4) return;
+      const body = JSON.stringify({
+        action: 'summarize',
+        session_id: sessionId,
+        opening_variation: openingVariation,
+        access_token: null, // will be set below
+        coach: COACH
+      });
+
+      // Try to get token synchronously from stored session
+      try {
+        const sessionStr = localStorage.getItem(`sb-${SUPABASE_URL.split('//')[1].split('.')[0]}-auth-token`);
+        if (sessionStr) {
+          const session = JSON.parse(sessionStr);
+          const token = session?.access_token || session?.currentSession?.access_token;
+          if (token) {
+            const summaryBody = JSON.stringify({
+              action: 'summarize',
+              session_id: sessionId,
+              opening_variation: openingVariation,
+              access_token: token,
+              coach: COACH
+            });
+            navigator.sendBeacon(PROXY_URL, summaryBody);
+            return;
+          }
+        }
+      } catch(e) {}
+
+      navigator.sendBeacon(PROXY_URL, body);
+    }
+
+    // Trigger summary on page unload
+    window.addEventListener('beforeunload', () => {
+      triggerSessionSummary();
+    });
+
+    // ===== SIDEBAR / CHAT HISTORY =====
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = sidebar.classList.contains('open');
+      if (isOpen) {
+        closeSidebar();
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        btn.classList.add('open');
+        loadSessionHistory();
+      }
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    }
+
+    async function loadSessionHistory() {
+      const container = document.getElementById('sidebarSessions');
+      if (!currentUser) {
+        container.innerHTML = '<div class="sidebar-empty">Sign in to see past sessions.</div>';
+        return;
+      }
+
+      container.innerHTML = '<div class="sidebar-loading">Loading sessions...</div>';
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session?.access_token;
+        if (!token) {
+          container.innerHTML = '<div class="sidebar-empty">Unable to load sessions.</div>';
+          return;
+        }
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'get_session_history',
+            access_token: token,
+            coach: COACH
+          })
+        });
+
+        const data = await res.json();
+        if (!data.sessions || data.sessions.length === 0) {
+          container.innerHTML = '<div class="sidebar-empty">No past sessions yet.</div>';
+          return;
+        }
+
+        // Filter to only this coach's sessions (already sorted by created_at desc from API)
+        const sessions = data.sessions
+          .filter(s => !s.product || s.product === COACH);
+
+        if (sessions.length === 0) {
+          container.innerHTML = '<div class="sidebar-empty">No past sessions yet.</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        sessions.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'sidebar-session-item' + (s.session_id === sessionId ? ' active-session' : '');
+
+          const title = s.title || 'Untitled session';
+          const date = new Date(s.created_at);
+          const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+          item.innerHTML = '<div class="sidebar-session-title">' + escapeHtml(title) + '</div>'
+            + '<div class="sidebar-session-meta">' + dateStr + (s.pillar ? ' &middot; ' + escapeHtml(s.pillar) : '') + '</div>';
+
+          item.onclick = function() { resumeSession(s.session_id); };
+          container.appendChild(item);
+        });
+      } catch (err) {
+        console.error('[Sidebar] Failed to load history:', err);
+        container.innerHTML = '<div class="sidebar-empty">Could not load sessions.</div>';
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function resumeSession(oldSessionId) {
+      if (oldSessionId === sessionId) {
+        closeSidebar();
+        return;
+      }
+
+      closeSidebar();
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+
+        // Summarize current session before switching
+        triggerSessionSummary();
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'get_conversation',
+            session_id: oldSessionId,
+            access_token: token,
+            coach: COACH
+          })
+        });
+
+        const data = await res.json();
+        if (!data.messages || data.messages.length === 0) {
+          addSystemMessage('Could not load that session.');
+          return;
+        }
+
+        // Switch to the old session
+        sessionId = oldSessionId;
+        conversationHistory = [];
+        isFirstMessage = false;
+        const messagesEl = document.getElementById('chat-messages');
+        messagesEl.innerHTML = '<div class="typing-indicator" id="typing-indicator"><span></span><span></span><span></span></div>';
+
+        // Replay messages into the UI
+        // Each row has user_message and assistant_message fields
+        data.messages.forEach(msg => {
+          if (msg.user_message) {
+            addMessage('user', msg.user_message);
+            conversationHistory.push({ role: 'user', content: msg.user_message });
+          }
+          if (msg.assistant_message) {
+            addMessage('assistant', msg.assistant_message);
+            conversationHistory.push({ role: 'assistant', content: msg.assistant_message });
+          }
+        });
+      } catch (err) {
+        console.error('[Sidebar] Failed to resume session:', err);
+        addSystemMessage('Could not load that session.');
+      }
+    }
+
+    // ===== COPY CONVERSATION =====
+    function copyConversation() {
+        if (!conversationHistory || conversationHistory.length === 0) {
+            console.log("[CopyChat] No conversation history to copy.");
+            return;
+        }
+        var text = conversationHistory.map(function(msg) {
+            var label = msg.role === "user" ? "You" : "Coach";
+            return label + ":\n" + msg.content;
+        }).join("\n\n---\n\n");
+
+        function showCopied() {
+            var btn = document.getElementById("copyChatBtn");
+            var label = document.getElementById("copyChatLabel");
+            if (btn) btn.classList.add("copied");
+            if (label) label.textContent = "Copied!";
+            setTimeout(function() {
+                if (btn) btn.classList.remove("copied");
+                if (label) label.textContent = "Copy conversation";
+            }, 2000);
+        }
+
+        function fallbackCopy() {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand("copy");
+                showCopied();
+            } catch (e) {
+                console.error("[CopyChat] Fallback copy failed:", e);
+            }
+            document.body.removeChild(ta);
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            navigator.clipboard.writeText(text).then(showCopied).catch(function(err) {
+                console.warn("[CopyChat] Clipboard API failed, using fallback:", err);
+                fallbackCopy();
+            });
+        } else {
+            fallbackCopy();
+        }
+    }
+
+    // ===== INITIALIZE =====
+    init();
+  </script>
+</body>
+</html>

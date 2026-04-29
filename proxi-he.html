@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxi He — Proximity Coaching</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --aqua: #a3d0c9;
+            --charcoal: #202023;
+            --charcoal-light: #f5f5f5;
+            --charcoal-lighter: #d5d5d5;
+            --off-white: #eeeeee;
+            --muted: #6b6b70;
+            --error: #c0392b;
+            --success: #27ae60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--off-white);
+            color: var(--charcoal);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--charcoal-lighter);
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--charcoal);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .header-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn-small {
+            background: transparent;
+            border: 1px solid var(--charcoal-lighter);
+            color: var(--muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-small:hover {
+            border-color: var(--aqua);
+            color: var(--aqua);
+        }
+
+        /* --- AUTH SCREEN --- */
+        .auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 20px;
+        }
+        .auth-box {
+            background: #ffffff;
+            border: 1px solid var(--charcoal-lighter);
+            border-radius: 12px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .auth-box h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .auth-box .tagline {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--off-white);
+            border: 1px solid var(--charcoal-lighter);
+            border-radius: 8px;
+            color: var(--charcoal);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: var(--aqua);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: var(--aqua);
+            color: var(--charcoal);
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 8px;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        .auth-link {
+            font-size: 12px;
+            color: #6bada3;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: underline;
+        }
+        .auth-message {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+        .auth-message.error { color: var(--error); }
+        .auth-message.success { color: var(--success); }
+
+        /* ============================================
+           ADDED: TOS AGREEMENT CHECKBOX (signup form)
+           ============================================ */
+        .tos-agreement {
+            margin: 16px 0 4px 0;
+        }
+        .tos-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--muted);
+            gap: 8px;
+            line-height: 1.5;
+        }
+        .tos-checkbox-label:hover {
+            color: var(--charcoal);
+        }
+        .tos-checkbox {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--aqua);
+        }
+        .tos-label-text { flex: 1; }
+        .tos-link {
+            color: #6bada3;
+            text-decoration: none;
+        }
+        .tos-link:hover {
+            text-decoration: underline;
+        }
+
+        /* --- CHAT AREA --- */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        .chat-container.active { display: flex; }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+
+        /* ============================================
+           ADDED: PER-SESSION AI DISCLOSURE BANNER
+           SB 243 compliance — shown each session
+           ============================================ */
+        .ai-disclosure-banner {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            background: #ffffff;
+            border-left: 3px solid var(--aqua);
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: bannerSlideIn 0.3s ease-out;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .ai-disclosure-banner.dismissing {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        .ai-disclosure-banner.hidden {
+            display: none;
+        }
+        @keyframes bannerSlideIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .banner-icon {
+            color: var(--aqua);
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .banner-text { flex: 1; }
+        .banner-link {
+            color: #6bada3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .banner-link:hover { text-decoration: underline; }
+        .banner-dismiss {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+            flex-shrink: 0;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .banner-dismiss:hover {
+            color: var(--aqua);
+            background: var(--charcoal-lighter);
+            border-radius: 4px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .message.user { flex-direction: row-reverse; }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .message.assistant .message-avatar {
+            background: var(--aqua);
+            color: var(--charcoal);
+        }
+        .message.user .message-avatar {
+            background: var(--charcoal);
+            color: var(--off-white);
+        }
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 75%;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .message.assistant .message-bubble {
+            background: #ffffff;
+            border: 1px solid var(--charcoal-lighter);
+            border-top-left-radius: 4px;
+            color: var(--charcoal);
+        }
+        .message.user .message-bubble {
+            background: var(--aqua);
+            color: var(--charcoal);
+            border-top-right-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto 16px;
+            padding: 0 20px;
+        }
+        .typing-indicator.active { display: flex; }
+        .typing-indicator .dots {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid var(--charcoal-lighter);
+            border-radius: 12px;
+            margin-left: 42px;
+        }
+        .typing-indicator .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--aqua);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+            opacity: 0.4;
+        }
+        .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        /* --- INPUT AREA --- */
+        .input-area {
+            padding: 12px 20px 20px;
+            border-top: 1px solid var(--charcoal-lighter);
+            flex-shrink: 0;
+        }
+        .input-row {
+            display: flex;
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            align-items: flex-end;
+        }
+        .input-row textarea {
+            flex: 1;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid var(--charcoal-lighter);
+            border-radius: 12px;
+            color: var(--charcoal);
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            max-height: 120px;
+            min-height: 44px;
+            transition: border-color 0.2s;
+        }
+        .input-row textarea:focus { border-color: var(--aqua); }
+        .send-btn {
+            background: var(--aqua);
+            color: var(--charcoal);
+            border: none;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: opacity 0.2s;
+        }
+        .send-btn:hover { opacity: 0.85; }
+        .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .send-btn svg { width: 20px; height: 20px; }
+        .copy-chat-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 6px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .copy-chat-btn {
+            background: transparent;
+            border: 1px solid var(--charcoal-lighter);
+            color: var(--muted);
+            font-size: 11px;
+            font-family: inherit;
+            padding: 5px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .copy-chat-btn:hover { color: var(--aqua); border-color: var(--aqua); }
+        .copy-chat-btn svg { width: 13px; height: 13px; }
+        .copy-chat-btn.copied { color: var(--aqua); border-color: var(--aqua); }
+        .disclaimer-bar {
+            font-size: 10px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 8px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /* ADDED: links in disclaimer bar */
+        .disclaimer-bar a {
+            color: #6bada3;
+            text-decoration: none;
+        }
+        .disclaimer-bar a:hover { text-decoration: underline; }
+
+        /* ===== SIDEBAR / CHAT HISTORY ===== */
+        .hamburger-btn { background: none; border: none; cursor: pointer; padding: 6px; display: flex; flex-direction: column; gap: 4px; margin-right: 10px; }
+        .hamburger-btn span { display: block; width: 20px; height: 2px; background: #202023; border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 90; }
+        .sidebar-overlay.active { display: block; }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #eeeeee; border-right: 1px solid #d0d0d0; z-index: 100; transition: left 0.25s ease; display: flex; flex-direction: column; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+        .sidebar.open { left: 0; }
+        .sidebar-header { padding: 18px 16px 12px; border-bottom: 1px solid #d0d0d0; font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600; color: #202023; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #666; padding: 0 4px; }
+        .sidebar-close:hover { color: #a3d0c9; }
+        .sidebar-sessions { flex: 1; overflow-y: auto; padding: 8px 0; }
+        .sidebar-session-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #d0d0d0; transition: background 0.15s; }
+        .sidebar-session-item:hover { background: #e0e0e0; }
+        .sidebar-session-item.active-session { background: #e0e0e0; border-left: 3px solid #a3d0c9; }
+        .sidebar-session-title { font-size: 13px; font-weight: 500; color: #202023; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-session-meta { font-size: 11px; color: #666; }
+        .sidebar-empty { padding: 24px 16px; text-align: center; color: #666; font-size: 13px; font-style: italic; }
+        .sidebar-loading { padding: 24px 16px; text-align: center; color: #666; font-size: 13px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .message-bubble { max-width: 88%; font-size: 13px; }
+            .auth-box { padding: 24px 20px; }
+            .header-title { font-size: 13px; }
+            .ai-disclosure-banner { font-size: 12px; padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUTH SCREEN -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-box">
+            <h2>Proxi He</h2>
+            <p class="tagline">The Evolved Caveman</p>
+
+            <!-- LOGIN FORM -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Your password">
+                </div>
+                <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Sign In</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('signup')">Create account</button>
+                    <button class="auth-link" onclick="showView('forgot')">Forgot password?</button>
+                </div>
+                <div id="loginMessage" class="auth-message"></div>
+            </div>
+
+            <!-- SIGNUP FORM -->
+            <div id="signupForm" style="display:none;">
+                <div id="kajabiWelcome" style="display:none; text-align:center; margin-bottom:16px; padding:12px; background:rgba(163,208,201,0.1); border-radius:8px; border:1px solid rgba(163,208,201,0.2);">
+                    <div style="font-size:14px; font-weight:600; color:var(--aqua); margin-bottom:4px;">Payment received — welcome aboard.</div>
+                    <div style="font-size:12px; color:var(--muted);">Create your login to get started.</div>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="signupFirstName" autocomplete="given-name" placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="signupLastName" autocomplete="family-name" placeholder="Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" autocomplete="new-password" placeholder="Min 6 characters">
+                </div>
+
+                <!-- ============================================
+                     ADDED: TOS ACCEPTANCE CHECKBOX
+                     Must be checked before account creation
+                     ============================================ -->
+                <div class="tos-agreement">
+                    <label class="tos-checkbox-label">
+                        <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
+                        <span class="tos-label-text">
+                            I agree to the
+                            <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+                            <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+                            <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+                        </span>
+                    </label>
+                </div>
+
+                <button class="btn-primary" id="signupBtn" onclick="handleSignup()" disabled>Create Account</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+                <div id="signupMessage" class="auth-message"></div>
+            </div>
+
+            <!-- FORGOT PASSWORD FORM -->
+            <div id="forgotForm" style="display:none;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgotEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Link</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+                <div id="forgotMessage" class="auth-message"></div>
+            </div>
+
+            <!-- RESET PASSWORD FORM -->
+            <div id="resetForm" style="display:none;">
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="resetPassword" autocomplete="new-password" placeholder="Min 6 characters">
+                </div>
+                <button class="btn-primary" onclick="handleResetPassword()">Set New Password</button>
+                <div id="resetMessage" class="auth-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span>Past Sessions</span>
+            <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+        </div>
+        <div class="sidebar-sessions" id="sidebarSessions">
+            <div class="sidebar-empty">No past sessions yet.</div>
+        </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div id="chatScreen" class="chat-container">
+        <div class="header">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" title="Chat history" style="display:none;">
+                    <span></span><span></span><span></span>
+                </button>
+                <div>
+                    <div class="header-title">Proxi He</div>
+                    <div class="header-subtitle">The Evolved Caveman</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-small" onclick="startNewSession()">New Session</button>
+                <button class="btn-small" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+            <!-- ============================================
+                 ADDED: PER-SESSION AI DISCLOSURE BANNER
+                 Shown at the start of each session (SB 243).
+                 Starts hidden; showAIDisclosureBanner() reveals it.
+                 ============================================ -->
+            <div class="ai-disclosure-banner hidden" id="aiDisclosureBanner">
+                <span class="banner-icon">&#9432;</span>
+                <span class="banner-text">
+                    Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support.
+                    <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.
+                </span>
+                <button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-row">
+                <textarea id="userInput" rows="1" placeholder="What's on your mind?" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+            <div class="copy-chat-row">
+                <button class="copy-chat-btn" id="copyChatBtn" onclick="copyConversation()" title="Copy entire conversation to clipboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span id="copyChatLabel">Copy conversation</span>
+                </button>
+            </div>
+            <!-- UPDATED: disclaimer bar now links to legal docs -->
+            <div class="disclaimer-bar">
+                Proxi He is an educational coaching tool — not therapy, counseling, or crisis support. View our
+                <a href="https://johnschin.github.io/evolved-caveman-coach/terms.html" target="_blank" rel="noopener noreferrer">Terms</a>,
+                <a href="https://johnschin.github.io/evolved-caveman-coach/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>, and
+                <a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // =====================================================
+    // CONFIGURATION
+    // =====================================================
+    var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+    var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+    var EDGE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/chat";
+    var SIGNUP_PAID_URL = SUPABASE_URL + "/functions/v1/signup-paid";
+    var COACH = "john";
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Read Kajabi redirect params (?plan=monthly&key=caveman2026paid)
+    var urlParams = new URLSearchParams(window.location.search);
+    var kajabiPlan = urlParams.get("plan");   // "monthly" or "annual"
+    var kajabiKey = urlParams.get("key");     // signup key
+    var isKajabiRedirect = !!(kajabiPlan && kajabiKey);
+
+    // =====================================================
+    // STATE
+    // =====================================================
+    var currentUser = null;
+    var accessToken = null;
+    var sessionId = null;
+    var conversationHistory = [];
+    var messageCount = 0;
+    var isFirstMessage = true;
+    var isSending = false;
+    var enterChatCalled = false;
+    var loginInProgress = false;
+    var openingVariation = null;
+    var isReturningUser = false;
+    var sessionInProgress = false;
+    var bannerTimer = null; // ADDED: for AI disclosure banner auto-dismiss
+
+    // =====================================================
+    // SYSTEM PROMPT
+    // =====================================================
+    var SYSTEM_PROMPT = "You are the Inner Leadership AI Coach, built by Dr. John Schinnerer \u2014 a psychologist, executive coach, and expert on men's emotional intelligence with 30+ years of experience. You hold a PhD in Psychology from UC Berkeley and served as an expert consultant on Pixar's Inside Out.\n\n" +
+    "VOICE:\n" +
+    "Sound like John \u2014 warm, direct, slightly irreverent, grounded in science but delivered conversationally. Not a neutral product voice. Think: your smartest friend who has a PhD and won't let you off the hook. Use occasional humor but never at the user's expense. Challenge gently but persistently. You're a thinking partner, not a yes-man.\n\n" +
+    "WHAT YOU ARE:\n" +
+    "- A coaching tool for self-leadership, communication, stress management, relationships, and decision-making\n" +
+    "- Educational, not clinical\n" +
+    "- Direct, grounded, occasionally provocative \u2014 but always in service of the user's growth\n\n" +
+    "WHAT YOU ARE NOT:\n" +
+    "- NOT a therapist, counselor, or crisis service\n" +
+    "- NOT a diagnostic tool\n" +
+    "- NOT a substitute for licensed mental health care\n" +
+    "- NEVER position yourself as any of the above\n\n" +
+    "FOUR COACHING PILLARS:\n" +
+    "1. Stress, Burnout & Overload \u2014 Why successful men feel constantly stressed; burnout as a nervous system problem\n" +
+    "2. Anger, Irritability & Reactivity \u2014 How men get stuck in anger; irritability as unprocessed stress\n" +
+    "3. Relationships & Communication \u2014 Why conversations escalate; logic failing in relationship conflict\n" +
+    "4. Identity, Meaning & Midlife \u2014 Successful on the outside, unsatisfied on the inside\n\n" +
+    "DEFAULT RESPONSE STRUCTURE:\n" +
+    "1. Name the pattern or tension you see\n" +
+    "2. Ask ONE sharp coaching question (not three \u2014 one)\n" +
+    "3. Offer one practical reframe\n" +
+    "4. Suggest one concrete next step\n\n" +
+    "CRITICAL — ONE QUESTION PER RESPONSE:\n" +
+    "Every response must contain exactly ONE question — no more. Do not ask a question and then add a second question disguised as a reframe, follow-up, or 'something to sit with.' Do not end multiple paragraphs with question marks. One question. Period. If you catch yourself writing a second question, delete it.\n\n" +
+    "Keep responses concise \u2014 aim for 3-5 paragraphs max. Don't lecture. Don't give numbered lists of tips. One insight beats ten surface suggestions.\n\n" +
+    "INNER BOARD MEETING FRAMEWORK:\n" +
+    "When relevant, use this model to help users understand their internal dynamics:\n" +
+    "- The CEO \u2014 Grounded, values-driven decision maker. The leader they're building.\n" +
+    "- The Director of Defense \u2014 Protects through anger, control, or withdrawal. Often running the show when stress hits.\n" +
+    "- The VP of Emotions \u2014 Carries vulnerability, needs, and relational signals. Often suppressed in men.\n" +
+    "Use this framework naturally \u2014 introduce it when it fits, don't force it.\n\n" +
+    "LANGUAGE RULES:\n" +
+    "Preferred: pattern, operating strategy, default response, leadership habit, automatic script, performance cost, relationship impact, self-command, self-leadership, awareness, accountability, values alignment, next step, decision point\n" +
+    "Avoid as primary language: trauma, healing old wounds, childhood wounds, diagnosis, treatment, mental disorder labels, psychoanalyze, therapeutic intervention, process your trauma, nervous system stuck in threat mode\n\n" +
+    "SAFETY FILTERS:\n" +
+    "GREEN (core coaching): Values, leadership patterns, accountability, communication, conflict patterns, goal alignment, performance\n" +
+    "YELLOW (use with coaching framing): Identity, shame-adjacent topics, emotional awareness, inherited patterns, meaning/emptiness, anger depth, relationship pain \u2014 keep present-focused, redirect to action\n" +
+    "RED (out of scope \u2014 redirect): Trauma exploration, abuse memories, inner child work, diagnosing conditions, treatment planning, sustained crisis engagement \u2014 acknowledge importance, state limits, recommend professional support\n\n" +
+    "CRISIS PROTOCOL:\n" +
+    "If a user expresses suicidal ideation, self-harm intent, or immediate danger:\n" +
+    "1. Acknowledge what they shared with compassion\n" +
+    "2. State clearly: 'This is beyond what I can help with as a coaching tool.'\n" +
+    "3. Provide: 988 Suicide & Crisis Lifeline (call or text 988), Crisis Text Line (text HOME to 741741), or call 911\n" +
+    "4. Do not continue coaching. Hold space and redirect to professional help.\n\n" +
+    "THINKERS TO REFERENCE (when relevant):\n" +
+    "John Gottman, Terry Real, Todd Kashdan, Carl Jung, Marcus Aurelius, Martin Seligman, Esther Perel, Sue Johnson (EFT), Paul Ekman, Gabor Mat\u00e9, Bessel van der Kolk, Stephen Porges (Polyvagal), CBT, IFS, REBT, Positive Psychology, Attachment Theory\n\n" +
+    "NEVER REFERENCE: Jordan Peterson, manosphere/red-pill figures, Tony Robbins, far-right or far-left political ideology, organized religion\n\n" +
+    "DISCLAIMER (always active): Inner Leadership AI Coach is a coaching tool for self-leadership, communication, and personal development. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n";
+
+    var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
+    "Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
+    "Hey man, welcome. I'm your Inner Leadership AI Coach \u2014 built on decades of research in psychology, neuroscience, and executive coaching to help you lead yourself better from the inside out.\n\n" +
+    "Here's what I do: I help you spot your patterns, sharpen your self-awareness, strengthen how you communicate, and make better decisions under pressure \u2014 at work, at home, in the moments that actually matter.\n\n" +
+    "Here's what I don't do: I'm not a therapist, I'm not a crisis line, and I'm not going to psychoanalyze your childhood. If you're dealing with something that needs professional mental health support, I'll tell you straight \u2014 go get it. No shame in that.\n\n" +
+    "What I am is a thinking partner. Direct. Grounded. Occasionally a pain in the ass \u2014 but only because I'm not going to let you coast on autopilot when you've got more in you.\n\n" +
+    "Before we start: I need your active agreement that you understand this is educational coaching, not therapy or medical care. If you're in crisis, reach out to professionals \u2014 988 Suicide & Crisis Lifeline, your doctor, or emergency services. Type 'I agree' if you're good with that framework, and then we'll get to work.\n\n" +
+    "IMPORTANT: Stop here. Do NOT add any coaching question after the consent request. Wait for the user to respond.\n\n";
+
+    var OPENING_VARIATIONS = {
+        A: "AFTER USER AGREES:\nDeliver this opening question:\n\"So here's where we start: What's the thing that's been taking up the most space in your head lately \u2014 the situation, the relationship, the decision that keeps circling back? Give me the real answer, not the polished one.\"\n\n",
+        B: "AFTER USER AGREES:\nDeliver this opening question:\n\"Alright, let's get into it. If I could see a dashboard of what's draining your battery right now \u2014 work, relationship, internal noise \u2014 what would be in the red zone? Be specific.\"\n\n",
+        C: "AFTER USER AGREES:\nDeliver this opening question:\n\"Good. Here's your first coaching question: What's the pattern you keep running into \u2014 the one where you already know what you should do differently, but you keep doing the same thing anyway?\"\n\n"
+    };
+
+    var RETURNING_USER_BLOCK = "RETURNING USER INSTRUCTIONS:\n" +
+    "This user has been here before. Do NOT deliver the full welcome or consent request again. Instead, greet them warmly and naturally. Something like:\n" +
+    "\"Good to see you back, man. [Brief natural reference to last session if context is provided]. What's on your mind today \u2014 want to pick up where we left off, or is there something new?\"\n" +
+    "Keep it short and move into coaching.\n\n";
+
+    // =====================================================
+    // AUTH FUNCTIONS
+    // =====================================================
+    function showView(view) {
+        document.getElementById("loginForm").style.display = view === "login" ? "block" : "none";
+        document.getElementById("signupForm").style.display = view === "signup" ? "block" : "none";
+        document.getElementById("forgotForm").style.display = view === "forgot" ? "block" : "none";
+        document.getElementById("resetForm").style.display = view === "reset" ? "block" : "none";
+        clearMessages();
+    }
+
+    function clearMessages() {
+        var msgs = ["loginMessage", "signupMessage", "forgotMessage", "resetMessage"];
+        for (var i = 0; i < msgs.length; i++) {
+            var el = document.getElementById(msgs[i]);
+            if (el) { el.textContent = ""; el.className = "auth-message"; }
+        }
+    }
+
+    function showAuthMsg(id, text, type) {
+        var el = document.getElementById(id);
+        if (el) { el.textContent = text; el.className = "auth-message " + type; }
+    }
+
+    async function handleLogin() {
+        var email = document.getElementById("loginEmail").value.trim();
+        var password = document.getElementById("loginPassword").value;
+        if (!email || !password) {
+            showAuthMsg("loginMessage", "Please enter email and password.", "error");
+            return;
+        }
+        loginInProgress = true;
+        document.getElementById("loginBtn").disabled = true;
+        showAuthMsg("loginMessage", "Signing in...", "");
+        try {
+            var result = await sb.auth.signInWithPassword({ email: email, password: password });
+            if (result.error) throw result.error;
+            currentUser = result.data.user;
+            accessToken = result.data.session.access_token;
+            await enterChat();
+            loginInProgress = false;
+        } catch (err) {
+            showAuthMsg("loginMessage", err.message || "Login failed.", "error");
+            loginInProgress = false;
+        }
+        document.getElementById("loginBtn").disabled = false;
+    }
+
+    async function handleSignup() {
+        var firstName = document.getElementById("signupFirstName").value.trim();
+        var lastName = document.getElementById("signupLastName").value.trim();
+        var email = document.getElementById("signupEmail").value.trim();
+        var password = document.getElementById("signupPassword").value;
+
+        if (!email || !password) {
+            showAuthMsg("signupMessage", "Please enter email and password.", "error");
+            return;
+        }
+        if (password.length < 6) {
+            showAuthMsg("signupMessage", "Password must be at least 6 characters.", "error");
+            return;
+        }
+        // Validate TOS checkbox before signup
+        if (!document.getElementById("tosCheckbox").checked) {
+            showAuthMsg("signupMessage", "Please accept the Terms of Service, Privacy Policy, and AI Disclosure to continue.", "error");
+            return;
+        }
+
+        document.getElementById("signupBtn").disabled = true;
+        showAuthMsg("signupMessage", "Creating account...", "");
+
+        try {
+            if (isKajabiRedirect) {
+                // PAID SIGNUP: Call edge function for instant account (no email confirmation)
+                var response = await fetch(SIGNUP_PAID_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        password: password,
+                        plan_type: kajabiPlan,
+                        signup_key: kajabiKey
+                    })
+                });
+                var data = await response.json();
+                if (!response.ok) {
+                    if (data.code === "EMAIL_EXISTS") {
+                        // Account already exists — switch to login view so they use their existing password
+                        showAuthMsg("signupMessage", "An account with this email already exists. Switching to sign in...", "error");
+                        document.getElementById("loginEmail").value = email;
+                        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
+                        setTimeout(function() { showView("login"); document.getElementById("loginPassword").focus(); }, 1500);
+                        return;
+                    } else {
+                        throw new Error(data.error || "Signup failed");
+                    }
+                }
+                // Auto-sign in after account creation
+                loginInProgress = true;
+                var loginResult = await sb.auth.signInWithPassword({ email: email, password: password });
+                if (loginResult.error) { loginInProgress = false; throw loginResult.error; }
+                currentUser = loginResult.data.user;
+                accessToken = loginResult.data.session.access_token;
+                // Clear URL params so refresh doesn't re-trigger Kajabi flow
+                history.replaceState(null, "", window.location.pathname);
+                await enterChat();
+                loginInProgress = false;
+            } else {
+                // STANDARD SIGNUP: Uses Supabase native signUp (sends confirmation email)
+                var result = await sb.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            display_name: [firstName, lastName].filter(Boolean).join(" ")
+                        }
+                    }
+                });
+                if (result.error) throw result.error;
+                if (result.data.user && !result.data.session) {
+                    showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
+                } else if (result.data.session) {
+                    currentUser = result.data.user;
+                    accessToken = result.data.session.access_token;
+                    await enterChat();
+                }
+            }
+        } catch (err) {
+            showAuthMsg("signupMessage", err.message || "Signup failed.", "error");
+        }
+        // Re-enable based on checkbox state
+        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
+    }
+
+    async function handleForgotPassword() {
+        var email = document.getElementById("forgotEmail").value.trim();
+        if (!email) {
+            showAuthMsg("forgotMessage", "Please enter your email.", "error");
+            return;
+        }
+        try {
+            var result = await sb.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname
+            });
+            if (result.error) throw result.error;
+            showAuthMsg("forgotMessage", "Check your email for a reset link.", "success");
+        } catch (err) {
+            showAuthMsg("forgotMessage", err.message || "Reset failed.", "error");
+        }
+    }
+
+    async function handleResetPassword() {
+        var password = document.getElementById("resetPassword").value;
+        if (!password || password.length < 6) {
+            showAuthMsg("resetMessage", "Password must be at least 6 characters.", "error");
+            return;
+        }
+        try {
+            var result = await sb.auth.updateUser({ password: password });
+            if (result.error) throw result.error;
+            showAuthMsg("resetMessage", "Password updated! Redirecting...", "success");
+            setTimeout(function() { window.location.hash = ""; window.location.reload(); }, 1500);
+        } catch (err) {
+            showAuthMsg("resetMessage", err.message || "Reset failed.", "error");
+        }
+    }
+
+    async function handleLogout() {
+        await saveSessionSummary();
+        await sb.auth.signOut();
+        currentUser = null;
+        accessToken = null;
+        sessionId = null;
+        enterChatCalled = false;
+        loginInProgress = false;
+        sessionInProgress = false;
+        isReturningUser = false;
+        closeSidebar();
+        document.getElementById("authScreen").style.display = "flex";
+        document.getElementById("chatScreen").classList.remove("active");
+        showView("login");
+    }
+
+    // =====================================================
+    // ADDED: AI DISCLOSURE BANNER (SB 243 per-session)
+    // =====================================================
+    function showAIDisclosureBanner() {
+        var banner = document.getElementById("aiDisclosureBanner");
+        if (!banner) return;
+        if (bannerTimer) clearTimeout(bannerTimer);
+        banner.classList.remove("hidden", "dismissing");
+        // Auto-dismiss after 10 seconds
+        bannerTimer = setTimeout(function() { dismissBanner(); }, 30000);
+    }
+
+    function dismissBanner() {
+        var banner = document.getElementById("aiDisclosureBanner");
+        if (!banner || banner.classList.contains("hidden")) return;
+        if (bannerTimer) clearTimeout(bannerTimer);
+        banner.classList.add("dismissing");
+        setTimeout(function() {
+            banner.classList.add("hidden");
+            banner.classList.remove("dismissing");
+        }, 300);
+    }
+
+    // =====================================================
+    // SESSION MANAGEMENT
+    // =====================================================
+    function generateSessionId() {
+        return crypto.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0;
+            return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    function pickOpeningVariation() {
+        var options = ["A", "B", "C"];
+        return options[Math.floor(Math.random() * options.length)];
+    }
+
+    function buildSystemPrompt(isReturningUser) {
+        var prompt = SYSTEM_PROMPT;
+        if (isReturningUser) {
+            prompt += RETURNING_USER_BLOCK;
+        } else {
+            prompt += FIRST_TIME_WELCOME_BLOCK;
+            prompt += OPENING_VARIATIONS[openingVariation] || OPENING_VARIATIONS["A"];
+        }
+        return prompt;
+    }
+
+    async function startNewSession() {
+        if (sessionInProgress) return;
+        sessionInProgress = true;
+        await saveSessionSummary();
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+        isReturningUser = false;
+        openingVariation = pickOpeningVariation();
+        document.getElementById("messages").innerHTML = "";
+
+        // ADDED: Re-insert the banner HTML (since innerHTML cleared it)
+        var messagesEl = document.getElementById("messages");
+        var bannerDiv = document.createElement("div");
+        bannerDiv.className = "ai-disclosure-banner hidden";
+        bannerDiv.id = "aiDisclosureBanner";
+        bannerDiv.innerHTML = '<span class="banner-icon">&#9432;</span>' +
+            '<span class="banner-text">' +
+            'Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. ' +
+            '<a href="https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
+            '</span>' +
+            '<button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>';
+        messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
+
+        // ADDED: Show banner for new session
+        showAIDisclosureBanner();
+
+        await sendInitialMessage();
+        sessionInProgress = false;
+    }
+
+    async function sendInitialMessage() {
+        isReturningUser = false;
+        if (accessToken) {
+            try {
+                var checkRes = await fetch(EDGE_FUNCTION_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + accessToken },
+                    body: JSON.stringify({ action: "get_last_summary" })
+                });
+                if (checkRes.ok) {
+                    var checkData = await checkRes.json();
+                    if (checkData.summary) { isReturningUser = true; }
+                }
+            } catch (e) { console.warn("Failed to check returning user status:", e); }
+        }
+
+        var systemPrompt = buildSystemPrompt(isReturningUser);
+        showTyping(true);
+        var triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
+        conversationHistory.push({ role: "user", content: triggerMessage });
+
+        try {
+            var res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": accessToken ? "Bearer " + accessToken : "" },
+                body: JSON.stringify({
+                    system: systemPrompt,
+                    messages: conversationHistory,
+                    session_id: sessionId,
+                    is_first_message: true
+                })
+            });
+            if (!res.ok) throw new Error("Server returned " + res.status);
+            var data;
+            try { data = await res.json(); } catch (parseErr) { throw new Error("Invalid response from server"); }
+            showTyping(false);
+            if (data.content && data.content[0] && data.content[0].text) {
+                var reply = data.content[0].text;
+                conversationHistory.push({ role: "assistant", content: reply });
+                appendMessage("assistant", reply);
+                messageCount++;
+                isFirstMessage = false;
+            } else {
+                appendMessage("assistant", "Having trouble connecting. Please try refreshing the page.");
+            }
+        } catch (err) {
+            showTyping(false);
+            appendMessage("assistant", "Something went wrong connecting to the coach. Please try refreshing the page.");
+            console.error("Initial message error:", err);
+        }
+    }
+
+    // =====================================================
+    // SESSION SUMMARY
+    // =====================================================
+    async function saveSessionSummary() {
+        if (!accessToken || !sessionId || messageCount < 4) return;
+        try {
+            var res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + accessToken },
+                body: JSON.stringify({ action: "summarize", session_id: sessionId, opening_variation: openingVariation })
+            });
+            var data = await res.json();
+            if (data.success) console.log("Session summary saved successfully");
+        } catch (e) { console.warn("Failed to save session summary:", e); }
+    }
+
+    window.addEventListener("beforeunload", function() {
+        if (!accessToken || !sessionId || messageCount < 4) return;
+        var payload = JSON.stringify({
+            action: "summarize", session_id: sessionId,
+            opening_variation: openingVariation, access_token: accessToken
+        });
+        if (navigator.sendBeacon) {
+            var blob = new Blob([payload], { type: "application/json" });
+            navigator.sendBeacon(EDGE_FUNCTION_URL, blob);
+        }
+    });
+
+    // =====================================================
+    // CHAT FUNCTIONS
+    // =====================================================
+    function appendMessage(role, text) {
+        var container = document.getElementById("messages");
+        var div = document.createElement("div");
+        div.className = "message " + role;
+        var avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = role === "assistant" ? "EC" : "U";
+        var bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+        bubble.textContent = text;
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping(show) {
+        var el = document.getElementById("typingIndicator");
+        if (show) { el.classList.add("active"); } else { el.classList.remove("active"); }
+        document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+    }
+
+    function trimConversationHistory() {
+        var maxMessages = 40;
+        if (conversationHistory.length > maxMessages) {
+            var firstPair = conversationHistory.slice(0, 2);
+            var recent = conversationHistory.slice(-1 * (maxMessages - 2));
+            conversationHistory = firstPair.concat(recent);
+        }
+    }
+
+    async function sendMessage() {
+        var input = document.getElementById("userInput");
+        var text = input.value.trim();
+        if (!text || isSending) return;
+
+        isSending = true;
+        document.getElementById("sendBtn").disabled = true;
+        input.value = "";
+        input.style.height = "auto";
+        appendMessage("user", text);
+        showTyping(true);
+        conversationHistory.push({ role: "user", content: text });
+        trimConversationHistory();
+
+        var systemPrompt;
+        if (!isReturningUser && messageCount < 3) {
+            systemPrompt = buildSystemPrompt(false);
+        } else {
+            systemPrompt = SYSTEM_PROMPT;
+        }
+
+        try {
+            var res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": accessToken ? "Bearer " + accessToken : "" },
+                body: JSON.stringify({
+                    system: systemPrompt,
+                    messages: conversationHistory,
+                    session_id: sessionId,
+                    is_first_message: false
+                })
+            });
+            if (!res.ok) throw new Error("Server returned " + res.status);
+            var data;
+            try { data = await res.json(); } catch (parseErr) { throw new Error("Invalid response from server"); }
+            showTyping(false);
+
+            if (data.content && data.content[0] && data.content[0].text) {
+                var reply = data.content[0].text;
+                conversationHistory.push({ role: "assistant", content: reply });
+                appendMessage("assistant", reply);
+                messageCount++;
+            } else if (data.error) {
+                appendMessage("assistant", "I hit a snag \u2014 " + (data.error.message || "something went wrong") + ". Try again?");
+                conversationHistory.pop();
+            } else {
+                appendMessage("assistant", "Got an unexpected response. Try sending that again?");
+                conversationHistory.pop();
+            }
+        } catch (err) {
+            showTyping(false);
+            appendMessage("assistant", "Connection issue. Check your internet and try again.");
+            conversationHistory.pop();
+            console.error("Send error:", err);
+        }
+        isSending = false;
+        document.getElementById("sendBtn").disabled = false;
+        input.focus();
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    function autoResize(el) {
+        el.style.height = "auto";
+        el.style.height = Math.min(el.scrollHeight, 120) + "px";
+    }
+
+    // =====================================================
+    // SIDEBAR / CHAT HISTORY
+    // =====================================================
+    function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("sidebarOverlay");
+        var btn = document.getElementById("hamburgerBtn");
+        var isOpen = sidebar.classList.contains("open");
+        if (isOpen) {
+            closeSidebar();
+        } else {
+            sidebar.classList.add("open");
+            overlay.classList.add("active");
+            btn.classList.add("open");
+            loadSessionHistory();
+        }
+    }
+
+    function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("active");
+        document.getElementById("hamburgerBtn").classList.remove("open");
+    }
+
+    async function loadSessionHistory() {
+        var container = document.getElementById("sidebarSessions");
+        if (!currentUser) {
+            container.innerHTML = "<div class=\"sidebar-empty\">Sign in to see past sessions.</div>";
+            return;
+        }
+
+        container.innerHTML = "<div class=\"sidebar-loading\">Loading sessions...</div>";
+
+        try {
+            if (!accessToken) {
+                container.innerHTML = "<div class=\"sidebar-empty\">Unable to load sessions.</div>";
+                return;
+            }
+
+            var res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + accessToken },
+                body: JSON.stringify({
+                    action: "get_session_history",
+                    coach: COACH
+                })
+            });
+
+            var data = await res.json();
+            if (!data.sessions || data.sessions.length === 0) {
+                container.innerHTML = "<div class=\"sidebar-empty\">No past sessions yet.</div>";
+                return;
+            }
+
+            // Filter to only this coach's sessions
+            var sessions = data.sessions.filter(function(s) {
+                return !s.product || s.product === COACH;
+            });
+
+            if (sessions.length === 0) {
+                container.innerHTML = "<div class=\"sidebar-empty\">No past sessions yet.</div>";
+                return;
+            }
+
+            container.innerHTML = "";
+            sessions.forEach(function(s) {
+                var item = document.createElement("div");
+                item.className = "sidebar-session-item" + (s.session_id === sessionId ? " active-session" : "");
+
+                var title = s.title || "Untitled session";
+                var date = new Date(s.created_at);
+                var dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+                item.innerHTML = "<div class=\"sidebar-session-title\">" + escapeHtml(title) + "</div>"
+                    + "<div class=\"sidebar-session-meta\">" + dateStr + (s.pillar ? " &middot; " + escapeHtml(s.pillar) : "") + "</div>";
+
+                item.onclick = function() { resumeSession(s.session_id); };
+                container.appendChild(item);
+            });
+        } catch (err) {
+            console.error("[Sidebar] Failed to load history:", err);
+            container.innerHTML = "<div class=\"sidebar-empty\">Could not load sessions.</div>";
+        }
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    async function resumeSession(oldSessionId) {
+        if (oldSessionId === sessionId) {
+            closeSidebar();
+            return;
+        }
+
+        closeSidebar();
+
+        try {
+            if (!accessToken) return;
+
+            var res = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + accessToken },
+                body: JSON.stringify({
+                    action: "get_conversation",
+                    session_id: oldSessionId
+                })
+            });
+
+            var data = await res.json();
+            if (!data.messages || data.messages.length === 0) {
+                appendMessage("assistant", "Could not load that session.");
+                return;
+            }
+
+            // Switch to the old session
+            sessionId = oldSessionId;
+            conversationHistory = [];
+            isFirstMessage = false;
+            var messagesEl = document.getElementById("messages");
+            messagesEl.innerHTML = "";
+
+            // Re-add the disclosure banner
+            var bannerDiv = document.createElement("div");
+            bannerDiv.className = "ai-disclosure-banner hidden";
+            bannerDiv.id = "aiDisclosureBanner";
+            bannerDiv.innerHTML = "<span class=\"banner-icon\">&#9432;</span>" +
+                "<span class=\"banner-text\">" +
+                "Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. " +
+                "<a href=\"https://johnschin.github.io/evolved-caveman-coach/ai-disclosure.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"banner-link\">View our AI Disclosure</a> for full details." +
+                "</span>" +
+                "<button class=\"banner-dismiss\" onclick=\"dismissBanner()\" aria-label=\"Dismiss\">&times;</button>";
+            messagesEl.appendChild(bannerDiv);
+
+            // Replay messages into the UI
+            // Each row has user_message and assistant_message fields
+            data.messages.forEach(function(msg) {
+                if (msg.user_message) {
+                    appendMessage("user", msg.user_message);
+                    conversationHistory.push({ role: "user", content: msg.user_message });
+                }
+                if (msg.assistant_message) {
+                    appendMessage("assistant", msg.assistant_message);
+                    conversationHistory.push({ role: "assistant", content: msg.assistant_message });
+                }
+            });
+        } catch (err) {
+            console.error("[Sidebar] Failed to resume session:", err);
+            appendMessage("assistant", "Could not load that session.");
+        }
+    }
+
+    // =====================================================
+    // COPY CONVERSATION
+    // =====================================================
+    function copyConversation() {
+        if (!conversationHistory || conversationHistory.length === 0) {
+            console.log("[CopyChat] No conversation history to copy.");
+            return;
+        }
+        var text = conversationHistory.map(function(msg) {
+            var label = msg.role === "user" ? "You" : "Coach";
+            return label + ":\n" + msg.content;
+        }).join("\n\n---\n\n");
+
+        function showCopied() {
+            var btn = document.getElementById("copyChatBtn");
+            var label = document.getElementById("copyChatLabel");
+            if (btn) btn.classList.add("copied");
+            if (label) label.textContent = "Copied!";
+            setTimeout(function() {
+                if (btn) btn.classList.remove("copied");
+                if (label) label.textContent = "Copy conversation";
+            }, 2000);
+        }
+
+        function fallbackCopy() {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand("copy");
+                showCopied();
+            } catch (e) {
+                console.error("[CopyChat] Fallback copy failed:", e);
+            }
+            document.body.removeChild(ta);
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            navigator.clipboard.writeText(text).then(showCopied).catch(function(err) {
+                console.warn("[CopyChat] Clipboard API failed, using fallback:", err);
+                fallbackCopy();
+            });
+        } else {
+            fallbackCopy();
+        }
+    }
+
+    // =====================================================
+    // ENTER CHAT
+    // =====================================================
+    async function enterChat() {
+        if (enterChatCalled) return;
+        enterChatCalled = true;
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("chatScreen").classList.add("active");
+        document.getElementById("hamburgerBtn").style.display = "flex";
+
+        // ADDED: Show per-session AI disclosure banner (SB 243)
+        showAIDisclosureBanner();
+
+        // Ensure profile exists
+        try {
+            var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+            if (profileResult.error && profileResult.error.code === "PGRST116") {
+                await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false });
+            }
+        } catch (e) { console.warn("Profile check error:", e); }
+
+        // Start a new session
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+        openingVariation = pickOpeningVariation();
+        await sendInitialMessage();
+        document.getElementById("userInput").focus();
+    }
+
+    // =====================================================
+    // INITIALIZATION
+    // =====================================================
+    async function init() {
+        var hash = window.location.hash;
+        if (hash && (hash.includes("type=recovery") || hash.includes("type=signup"))) {
+            if (hash.includes("type=recovery")) { showView("reset"); }
+            return;
+        }
+        var sessionResult = await sb.auth.getSession();
+        if (sessionResult.data.session) {
+            currentUser = sessionResult.data.session.user;
+            accessToken = sessionResult.data.session.access_token;
+            await enterChat();
+        } else if (isKajabiRedirect) {
+            // Coming from Kajabi after payment — show signup form with welcome banner
+            showView("signup");
+            document.getElementById("kajabiWelcome").style.display = "block";
+        }
+    }
+
+    // Listen for auth state changes
+    sb.auth.onAuthStateChange(async function(event, session) {
+        if (event === "TOKEN_REFRESHED" && session) {
+            accessToken = session.access_token;
+            console.log("Access token refreshed");
+            return;
+        }
+        if (loginInProgress) return;
+        if (event === "PASSWORD_RECOVERY") { showView("reset"); return; }
+        if (event === "SIGNED_IN" && session && !enterChatCalled) {
+            currentUser = session.user;
+            accessToken = session.access_token;
+            if (window.location.hash) {
+                history.replaceState(null, "", window.location.pathname + window.location.search);
+            }
+            await enterChat();
+        }
+    });
+
+    // ADDED: TOS checkbox controls signup button
+    document.getElementById("tosCheckbox").addEventListener("change", function() {
+        document.getElementById("signupBtn").disabled = !this.checked;
+    });
+
+    // Handle Enter on login fields
+    document.getElementById("loginEmail").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("loginPassword").focus(); }
+    });
+    document.getElementById("loginPassword").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); handleLogin(); }
+    });
+    document.getElementById("signupFirstName").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupLastName").focus(); }
+    });
+    document.getElementById("signupLastName").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupEmail").focus(); }
+    });
+    document.getElementById("signupEmail").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("signupPassword").focus(); }
+    });
+    document.getElementById("signupPassword").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); handleSignup(); }
+    });
+
+    init();
+    </script>
+</body>
+</html>

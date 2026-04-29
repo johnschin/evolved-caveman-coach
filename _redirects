@@ -1,1 +1,12 @@
-/  /ai_coach.html  200
+# Proximity Coaching — Netlify Redirects
+# ─────────────────────────────────────────────────────────────────────────────
+# Auth callback — processes Supabase magic link and routes to correct coach
+/auth/callback    /auth-callback.html    200
+
+# Proxi coach pages (new branded URLs)
+/proxi-he         /proxi-he.html         200
+/proxi-she        /proxi-she.html        200
+/proxi-we         /proxi-we.html         200
+
+# Root fallback
+/                 /proxi-he.html         200
