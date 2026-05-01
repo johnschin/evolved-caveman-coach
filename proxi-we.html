@@ -193,7 +193,7 @@
         .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .send-btn svg { width: 18px; height: 18px; }
         .disclaimer-bar {
-            font-size: 10px; color: var(--muted); text-align: center;
+            font-size: 12px; color: var(--muted); text-align: center;
             padding: 8px 16px; line-height: 1.5; max-width: 700px;
             margin-left: auto; margin-right: auto;
         }
@@ -272,7 +272,7 @@
     <div id="authScreen" class="auth-screen">
         <div class="auth-box">
             <h2>Proxi We</h2>
-            <p class="tagline">Love Isn't Enough</p>
+            <p class="tagline">Elite Couples Coach</p>
 
             <!-- LOGIN FORM -->
             <div id="loginForm">
@@ -342,9 +342,9 @@
                         <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
                         <span class="tos-label-text">
                             I agree to the
-                            <a href="https://johnschin.github.io/evolved-caveman-coach/lie-terms.html" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
-                            <a href="https://johnschin.github.io/evolved-caveman-coach/lie-privacy.html" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
-                            <a href="https://johnschin.github.io/evolved-caveman-coach/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+                            <a href="https://the-evolved-caveman.netlify.app/lie-terms.html" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+                            <a href="https://the-evolved-caveman.netlify.app/lie-privacy.html" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+                            <a href="https://the-evolved-caveman.netlify.app/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
                         </span>
                     </label>
                 </div>
@@ -377,7 +377,7 @@
                 </button>
                 <div class="header-brand">
                     <div class="header-title">Proxi We</div>
-                    <div class="header-subtitle">Love Isn't Enough</div>
+                    <div class="header-subtitle">Elite Couples Coach</div>
                 </div>
                 <div class="header-divider"></div>
                 <div class="mode-toggle">
@@ -397,7 +397,7 @@
                 <span class="banner-icon">&#9432;</span>
                 <span class="banner-text">
                     Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support.
-                    <a href="https://johnschin.github.io/evolved-caveman-coach/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.
+                    <a href="https://the-evolved-caveman.netlify.app/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.
                 </span>
                 <button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>
             </div>
@@ -420,9 +420,9 @@
             </div>
             <div class="disclaimer-bar">
                 Proxi We is an educational coaching tool — not therapy, counseling, or crisis support. View our
-                <a href="https://johnschin.github.io/evolved-caveman-coach/lie-terms.html" target="_blank" rel="noopener noreferrer">Terms</a>,
-                <a href="https://johnschin.github.io/evolved-caveman-coach/lie-privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>, and
-                <a href="https://johnschin.github.io/evolved-caveman-coach/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a>.
+                <a href="https://the-evolved-caveman.netlify.app/lie-terms.html" target="_blank" rel="noopener noreferrer">Terms</a>,
+                <a href="https://the-evolved-caveman.netlify.app/lie-privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>, and
+                <a href="https://the-evolved-caveman.netlify.app/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer">AI Disclosure</a>.
             </div>
         </div>
     </div>
@@ -453,7 +453,7 @@
     // =====================================================
     // SYSTEM PROMPT
     // =====================================================
-    var SYSTEM_PROMPT = "You are the Love Isn't Enough Relationship Coaching Companion — built by Dr. John Schinnerer and Joree Rose, relationship coaches with decades of combined experience in emotional intelligence, communication, and couples coaching. You help individuals and couples build stronger, more connected relationships through greater self-awareness, emotional intelligence, and practical communication skills.\n\n" +
+    var SYSTEM_PROMPT = "You are Proxi We, the Elite Couples Coach — built by Dr. John Schinnerer and Joree Rose, relationship coaches with decades of combined experience in emotional intelligence, communication, and couples coaching. You help individuals and couples build stronger, more connected relationships through greater self-awareness, emotional intelligence, and practical communication skills.\n\n" +
     "VOICE — TWO COACHES IN ONE:\n" +
     "You speak as both John and Joree, each in their own voice, labeled clearly.\n\n" +
     "**John:** Direct, warm, slightly irreverent. Grounded in science and frameworks. Uses metaphors and humor. Challenges with care.\n" +
@@ -492,7 +492,7 @@
     "- Joree NEVER uses the word 'honey' as a term of endearment. If Joree uses a warm address, she uses 'love' instead. This is a strict rule.\n\n" +
     "THINKERS TO REFERENCE (when relevant):\n" +
     "John Gottman, Terry Real, Sue Johnson, Esther Perel, Stephen Porges, Carl Jung, Martin Seligman, Gabor Maté, Bessel van der Kolk, Todd Kashdan\n\n" +
-    "DISCLAIMER (always active): Love Isn't Enough Relationship Coaching Companion is a coaching tool for relational intelligence, communication, and personal development within partnership. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n";
+    "DISCLAIMER (always active): Proxi We is a coaching tool for relational intelligence, communication, and personal development within partnership. It is not therapy, counseling, medical care, crisis support, or a substitute for a licensed mental health professional.\n\n";
 
     var FIRST_TIME_WELCOME_BLOCK = "FIRST-TIME USER INSTRUCTIONS:\n" +
     "Deliver this welcome message exactly (you may adjust phrasing slightly for natural flow, but keep all key elements):\n\n" +
@@ -1030,7 +1030,7 @@
             bannerDiv.innerHTML = '<span class="banner-icon">&#9432;</span>' +
                 '<span class="banner-text">' +
                 'Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. ' +
-                '<a href="https://johnschin.github.io/evolved-caveman-coach/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
+                '<a href="https://the-evolved-caveman.netlify.app/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
                 '</span>' +
                 '<button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>';
             messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
@@ -1084,7 +1084,7 @@
         bannerDiv.innerHTML = '<span class="banner-icon">&#9432;</span>' +
             '<span class="banner-text">' +
             'Reminder: You are interacting with an AI system, not a human. This is an educational coaching tool — not therapy, counseling, or crisis support. ' +
-            '<a href="https://johnschin.github.io/evolved-caveman-coach/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
+            '<a href="https://the-evolved-caveman.netlify.app/lie-ai-disclosure.html" target="_blank" rel="noopener noreferrer" class="banner-link">View our AI Disclosure</a> for full details.' +
             '</span>' +
             '<button class="banner-dismiss" onclick="dismissBanner()" aria-label="Dismiss">&times;</button>';
         messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
