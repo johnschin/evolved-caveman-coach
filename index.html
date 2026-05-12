@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- ── SEO ── -->
+  <title>Proximity Coaching — AI Coaching by Dr. John Schinnerer & Joree Rose</title>
+  <meta name="description" content="Three AI coaching tools built by Dr. John Schinnerer (PhD, UC Berkeley) and Joree Rose (LMFT). Proxi He for men, Proxi She for women, Proxi We for couples. Available 24/7. From $29/month." />
+  <link rel="canonical" href="https://proximitycoaching.com/" />
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://proximitycoaching.com/" />
+  <meta property="og:title" content="Proximity Coaching — AI Coaching by Dr. John Schinnerer & Joree Rose" />
+  <meta property="og:description" content="Three AI coaching tools for men, women, and couples. Built on 30 years of psychology and coaching. Available 24/7 from $29/month." />
+  <meta property="og:site_name" content="Proximity Coaching" />
+
+  <!-- ── Twitter / X ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Proximity Coaching — AI Coaching for Men, Women & Couples" />
+  <meta name="twitter:description" content="Proxi He, Proxi She, Proxi We. AI coaching tools built on 30 years of work by Dr. John Schinnerer and Joree Rose, LMFT." />
+
+  <!-- ── JSON-LD Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://proximitycoaching.com/#organization",
+        "name": "Proximity Coaching",
+        "url": "https://proximitycoaching.com",
+        "description": "AI coaching tools for personal development, built by Dr. John Schinnerer and Joree Rose.",
+        "founder": [
+          {
+            "@type": "Person",
+            "@id": "https://proximitycoaching.com/#john-schinnerer",
+            "name": "Dr. John Schinnerer",
+            "jobTitle": "Psychologist and Executive Coach",
+            "alumniOf": "University of California, Berkeley",
+            "knowsAbout": ["emotional intelligence", "men's psychology", "anger management", "positive psychology", "executive coaching"],
+            "url": "https://guidetoself.com",
+            "sameAs": ["https://guidetoself.com", "https://theevolvedcaveman.com", "https://linkedin.com/in/drjohnschinnerer"]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://proximitycoaching.com/#joree-rose",
+            "name": "Joree Rose",
+            "honorificSuffix": "MA, LMFT",
+            "jobTitle": "Licensed Marriage and Family Therapist",
+            "knowsAbout": ["mindfulness", "self-compassion", "anxiety", "women's coaching", "couples therapy"],
+            "url": "https://joreerose.com",
+            "sameAs": ["https://joreerose.com"]
+          }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Proximity AI Coaching",
+          "itemListElement": [
+            {
+              "@type": "SoftwareApplication",
+              "name": "Proxi He",
+              "applicationCategory": "LifestyleApplication",
+              "description": "AI coaching tool for men built on the frameworks of Dr. John Schinnerer.",
+              "offers": { "@type": "Offer", "price": "29", "priceCurrency": "USD", "billingPeriod": "P1M" },
+              "url": "https://proximitycoaching.com/he"
+            },
+            {
+              "@type": "SoftwareApplication",
+              "name": "Proxi She",
+              "applicationCategory": "LifestyleApplication",
+              "description": "AI coaching tool for women built on the frameworks of Joree Rose, LMFT.",
+              "offers": { "@type": "Offer", "price": "29", "priceCurrency": "USD", "billingPeriod": "P1M" },
+              "url": "https://proximitycoaching.com/she"
+            },
+            {
+              "@type": "SoftwareApplication",
+              "name": "Proxi We",
+              "applicationCategory": "LifestyleApplication",
+              "description": "AI couples coaching tool built by Dr. John Schinnerer and Joree Rose.",
+              "offers": { "@type": "Offer", "price": "49", "priceCurrency": "USD", "billingPeriod": "P1M" },
+              "url": "https://proximitycoaching.com/we"
+            }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://proximitycoaching.com/#website",
+        "url": "https://proximitycoaching.com",
+        "name": "Proximity Coaching",
+        "publisher": { "@id": "https://proximitycoaching.com/#organization" }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="proximity-brand.css" />
+
+  <style>
+    /* ── Index-specific styles ── */
+
+    .index-hero {
+      background: var(--slate-plum);
+      padding: 80px 24px 88px;
+      text-align: center;
+    }
+
+    .index-hero__wordmark {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+      color: var(--warm-cream);
+      opacity: 0.6;
+      margin-bottom: 36px;
+    }
+
+    .index-hero__headline {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: clamp(30px, 5vw, 50px);
+      line-height: 1.15;
+      color: var(--warm-cream);
+      margin-bottom: 18px;
+      text-wrap: balance;
+    }
+
+    .index-hero__sub {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--warm-cream);
+      opacity: 0.7;
+      max-width: 520px;
+      margin: 0 auto 52px;
+    }
+
+    /* ── Coach selector cards ── */
+    .coach-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 720px) {
+      .coach-grid { grid-template-columns: 1fr; max-width: 420px; }
+    }
+
+    .coach-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 32px 24px 28px;
+      text-decoration: none;
+      color: var(--warm-cream);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      text-align: left;
+    }
+
+    .coach-card:hover {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-2px);
+    }
+
+    .coach-card__dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .coach-card__dot--he  { background: var(--soft-aqua); }
+    .coach-card__dot--she { background: var(--dusty-mauve); }
+    .coach-card__dot--we  {
+      background: var(--slate-plum);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .coach-card__label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      margin-bottom: 8px;
+    }
+
+    .coach-card__name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--warm-cream);
+      margin-bottom: 10px;
+    }
+
+    .coach-card__desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--warm-cream);
+      opacity: 0.65;
+      flex: 1;
+      margin-bottom: 22px;
+    }
+
+    .coach-card__price {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--warm-cream);
+      opacity: 0.5;
+    }
+
+    /* ── About section ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 56px;
+      margin-top: 52px;
+    }
+
+    @media (max-width: 620px) {
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+
+    .about-person__name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+
+    .about-person__title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lavender-ash);
+      margin-bottom: 14px;
+    }
+
+    .about-person__bio {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--smoke-plum);
+    }
+
+    /* ── FAQ section ── */
+    .faq-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .faq-item {
+      border-bottom: 0.5px solid var(--soft-sand);
+      padding: 24px 0;
+    }
+
+    .faq-item:first-child { border-top: 0.5px solid var(--soft-sand); }
+
+    .faq-q {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      margin-bottom: 10px;
+    }
+
+    .faq-a {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--smoke-plum);
+    }
+
+    /* ── Index-specific CTA band ── */
+    .index-cta-band {
+      background: var(--warm-cream);
+      padding: 72px 24px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ════════════════════════════════════════════════════════════ -->
+  <header class="prox-header">
+    <div class="prox-header__inner">
+      <a href="/" class="prox-wordmark">proximity</a>
+      <div class="prox-header__right">
+        <a href="/proxi-he" class="prox-header__signin">Sign in →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ HERO + COACH SELECTOR ═════════════════════════════════════════════ -->
+  <section class="index-hero" aria-label="Choose your coach">
+    <div class="index-hero__wordmark">proximity</div>
+    <h1 class="index-hero__headline">AI coaching that meets you<br>where the work actually happens.</h1>
+    <p class="index-hero__sub">
+      Three coaches built on 30 years of psychology, coaching, and therapy.
+      Available 24/7. No scheduling. No waiting until things get bad enough.
+    </p>
+    <nav class="coach-grid" aria-label="Choose a coach">
+      <a href="/he" class="coach-card" aria-label="Proxi He — AI coaching for men">
+        <div class="coach-card__dot coach-card__dot--he"></div>
+        <div class="coach-card__label">For men</div>
+        <div class="coach-card__name">Proxi He</div>
+        <p class="coach-card__desc">
+          Inner leadership coaching built on the work of Dr. John Schinnerer.
+          Stress, anger, relationships, and what's actually driving the patterns.
+        </p>
+        <div class="coach-card__price">$29 / month →</div>
+      </a>
+      <a href="/she" class="coach-card" aria-label="Proxi She — AI coaching for women">
+        <div class="coach-card__dot coach-card__dot--she"></div>
+        <div class="coach-card__label">For women</div>
+        <div class="coach-card__name">Proxi She</div>
+        <p class="coach-card__desc">
+          Mindfulness-grounded coaching built on the work of Joree Rose, LMFT.
+          Self-compassion, anxiety, relationships, and coming back to yourself.
+        </p>
+        <div class="coach-card__price">$29 / month →</div>
+      </a>
+      <a href="/we" class="coach-card" aria-label="Proxi We — AI couples coaching">
+        <div class="coach-card__dot coach-card__dot--we"></div>
+        <div class="coach-card__label">For couples</div>
+        <div class="coach-card__name">Proxi We</div>
+        <p class="coach-card__desc">
+          Couples coaching built by John and Joree — partners in life and work.
+          For the conversation that's about to escalate, and the weeks between sessions.
+        </p>
+        <div class="coach-card__price">$49 / month (both partners) →</div>
+      </a>
+    </nav>
+  </section>
+
+  <!-- ══ ABOUT THE FOUNDERS ═════════════════════════════════════════════════ -->
+  <section class="prox-section" aria-labelledby="about-heading">
+    <div class="prox-inner">
+      <p class="prox-section__eyebrow" style="color:var(--lavender-ash);">Built by practitioners</p>
+      <h2 class="prox-section__headline" id="about-heading">
+        Real expertise. Real relationship.
+      </h2>
+      <div class="prox-section__body">
+        <p>
+          Proximity was built by two people who do this work professionally — and
+          who also live it personally. Every framework in these coaches has been
+          pressure-tested in the hardest laboratory there is: an actual partnership,
+          navigating actual life.
+        </p>
+      </div>
+      <div class="about-grid">
+        <div class="about-person">
+          <div class="about-person__name">Dr. John Schinnerer</div>
+          <div class="about-person__title">Ph.D. Psychology, UC Berkeley &nbsp;·&nbsp; Executive Coach</div>
+          <p class="about-person__bio">
+            30 years in psychology, neuroscience, and executive coaching. Consultant
+            on Pixar's <em>Inside Out</em>. Coach to leaders at Meta, Stanford,
+            Airbnb, and Bank of America. Author. Host of The Evolved Caveman podcast.
+            Known for translating clinical science into tools men can actually use.
+          </p>
+        </div>
+        <div class="about-person">
+          <div class="about-person__name">Joree Rose, MA LMFT</div>
+          <div class="about-person__title">Licensed Marriage & Family Therapist &nbsp;·&nbsp; Mindfulness Teacher</div>
+          <p class="about-person__bio">
+            Author of <em>A Year of Gratitude</em>, mindfulness and meditation teacher,
+            retreat leader, and host of <em>Journey Forward</em> podcast. Her work has
+            helped thousands of people build greater self-awareness, emotional
+            resilience, and compassion. Featured in Oprah Magazine, NBC News,
+            and Business Insider.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQ ════════════════════════════════════════════════════════════════ -->
+  <section class="prox-section prox-section--cream" aria-labelledby="faq-heading">
+    <div class="prox-inner">
+      <p class="prox-section__eyebrow" style="color:var(--lavender-ash);">Questions</p>
+      <h2 class="prox-section__headline" id="faq-heading">What people ask before they start.</h2>
+      <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">Is this a real coaching tool or just a chatbot?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">These are purpose-built AI coaching tools trained on specific bodies of work — not generic AI assistants. Each coach has a distinct methodology, voice, and point of view. They respond the way John or Joree would: naming the pattern, asking one sharp question, offering a reframe, and giving you something concrete to do.</span>
+          </div>
+        </div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">Is this therapy?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">No. Proximity coaches are coaching and educational tools for self-leadership and personal development. They are not therapy, counseling, medical care, or crisis support, and are not substitutes for a licensed mental health professional. If you're in crisis, please call or text 988.</span>
+          </div>
+        </div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">What's the difference between the three coaches?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">Proxi He is built on John's 30 years of men's psychology and coaching. Proxi She is built on Joree's work as a therapist and mindfulness teacher. Proxi We is built by both of them for couples — focused on communication patterns, conflict, intimacy, and the work between sessions. Each has a distinct methodology, voice, and focus area.</span>
+          </div>
+        </div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">Can I use this alongside therapy or coaching?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">Yes — and many people find the combination more effective than either alone. The coaches are designed to hold the work between formal sessions: processing what came up, preparing for what's next, building the daily habits that make the larger work stick.</span>
+          </div>
+        </div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">How does access work after I pay?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">After purchase you'll receive a secure sign-in link by email. Click it to access your coach. No app download required — works in any browser on any device.</span>
+          </div>
+        </div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <div class="faq-q" itemprop="name">Can I cancel anytime?</div>
+          <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <span itemprop="text">Yes. All plans are month-to-month and can be cancelled at any time. Email John@guidetoself.com and we'll take care of it.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══════════════════════════════════════════════════════════ -->
+  <section class="index-cta-band">
+    <div class="prox-inner" style="text-align:center;">
+      <h2 class="prox-section__headline" style="margin-bottom:14px;">
+        The work doesn't wait.<br>Neither should you.
+      </h2>
+      <p class="prox-section__body" style="font-size:16px;line-height:1.65;color:var(--smoke-plum);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;">Choose the coach that meets you where you are.</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;">
+        <a href="/he" class="btn btn--slate">Proxi He — for men</a>
+        <a href="/she" class="btn btn--slate">Proxi She — for women</a>
+        <a href="/we" class="btn btn--slate">Proxi We — for couples</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ═════════════════════════════════════════════════════════════ -->
+  <footer class="prox-footer">
+    <div class="prox-footer__inner">
+      <div class="prox-footer__wordmark">proximity</div>
+      <nav class="prox-footer__links">
+        <a href="/he">Proxi He</a>
+        <a href="/she">Proxi She</a>
+        <a href="/we">Proxi We</a>
+        <a href="/proximity-privacy">Privacy Policy</a>
+        <a href="/proximity-terms">Terms of Service</a>
+        <a href="/proximity-ai-disclosure">AI Disclosure</a>
+        <a href="mailto:John@guidetoself.com">Support</a>
+      </nav>
+      <p class="prox-footer__disclaimer">
+        Proximity coaching tools are educational and coaching products for personal
+        development. They are not therapy, counseling, medical care, or crisis support,
+        and are not substitutes for licensed mental health professionals. If you are
+        in crisis, please contact the 988 Suicide and Crisis Lifeline by calling or
+        texting 988.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

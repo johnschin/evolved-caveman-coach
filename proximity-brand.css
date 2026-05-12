@@ -1,0 +1,722 @@
+/*
+ * proximity-brand.css
+ * Shared brand system for all Proximity Coaching landing pages.
+ * Load this file once. Sub-brand pages set class="sub--he" / "sub--she" / "sub--we"
+ * on <body> to activate sub-brand accent colors throughout.
+ * Last updated: per Brand Guidelines v2026-04-30
+ */
+
+/* ─── FONTS ─────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Fraunces:ital,wght@1,300&display=swap');
+
+/* ─── BRAND TOKENS ───────────────────────────────────────────────────────── */
+
+:root {
+  /* Slate plum family */
+  --deep-slate:   #2e2c34;
+  --slate-plum:   #4e4a55;
+  --smoke-plum:   #6e6873;
+  --lavender-ash: #908a96;
+
+  /* Mauve family — Proxi She */
+  --wine-smoke:   #7a6470;
+  --dusty-mauve:  #998193;
+  --powder-mauve: #b8a4ac;
+  --rose-mist:    #d8c5cc;
+
+  /* Aqua family — Proxi He */
+  --deep-tide:    #6a8d94;
+  --sea-slate:    #8fafb6;
+  --soft-aqua:    #afc9cf;
+  --pale-mist:    #bfdcdc;
+
+  /* Warm neutrals */
+  --linen-white:  #faf6ef;
+  --warm-cream:   #f0ebe2;
+  --soft-sand:    #e7dfd2;
+  --almond:       #d4c4ad;
+
+  /* Typography */
+  --font-sans:    'Manrope', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Fraunces', Georgia, serif;
+
+  /* Sub-brand defaults (umbrella / We) */
+  --sub-accent:   var(--slate-plum);
+  --sub-deep:     var(--deep-slate);
+  --sub-surface:  var(--soft-sand);
+  --sub-text-on-accent: var(--linen-white);
+  --sub-hero-bg:  var(--slate-plum);
+  --sub-hero-text: var(--linen-white);
+}
+
+/* Sub-brand overrides — set on <body> */
+body.sub--he {
+  --sub-accent:          var(--soft-aqua);
+  --sub-deep:            var(--deep-tide);
+  --sub-surface:         var(--pale-mist);
+  --sub-text-on-accent:  var(--slate-plum);
+  --sub-hero-bg:         var(--soft-aqua);
+  --sub-hero-text:       var(--slate-plum);
+}
+
+body.sub--she {
+  --sub-accent:          var(--dusty-mauve);
+  --sub-deep:            var(--wine-smoke);
+  --sub-surface:         var(--rose-mist);
+  --sub-text-on-accent:  var(--linen-white);
+  --sub-hero-bg:         var(--dusty-mauve);
+  --sub-hero-text:       var(--linen-white);
+}
+
+body.sub--we {
+  --sub-accent:          var(--slate-plum);
+  --sub-deep:            var(--deep-slate);
+  --sub-surface:         var(--soft-sand);
+  --sub-text-on-accent:  var(--linen-white);
+  --sub-hero-bg:         var(--slate-plum);
+  --sub-hero-text:       var(--linen-white);
+}
+
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  background: var(--linen-white);
+  color: var(--smoke-plum);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ─── LAYOUT ─────────────────────────────────────────────────────────────── */
+
+.prox-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.prox-inner--wide {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────────── */
+
+.prox-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--linen-white);
+  border-bottom: 0.5px solid rgba(78, 74, 85, 0.10);
+  padding: 0 24px;
+}
+
+.prox-header__inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prox-wordmark {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--slate-plum);
+  text-decoration: none;
+}
+
+.prox-header__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.prox-header__signin {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--smoke-plum);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.prox-header__signin:hover {
+  color: var(--slate-plum);
+}
+
+/* ─── HERO ───────────────────────────────────────────────────────────────── */
+
+.prox-hero {
+  background: var(--sub-hero-bg);
+  color: var(--sub-hero-text);
+  padding: 72px 24px 80px;
+  text-align: center;
+}
+
+.prox-hero__inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.prox-hero__tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sub-hero-text);
+  opacity: 0.7;
+  border: 1px solid currentColor;
+  border-radius: 100px;
+  padding: 4px 14px;
+  margin-bottom: 28px;
+}
+
+.prox-hero__headline {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(32px, 5.5vw, 52px);
+  line-height: 1.1;
+  color: var(--sub-hero-text);
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+
+.prox-hero__sub {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--sub-hero-text);
+  opacity: 0.85;
+  margin-bottom: 36px;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prox-hero__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.prox-hero__trust {
+  font-size: 12px;
+  color: var(--sub-hero-text);
+  opacity: 0.55;
+  letter-spacing: 0.01em;
+}
+
+/* ─── SECTION SHELLS ─────────────────────────────────────────────────────── */
+
+.prox-section {
+  padding: 80px 24px;
+  background: var(--linen-white);
+}
+
+.prox-section--cream {
+  background: var(--warm-cream);
+}
+
+.prox-section--sand {
+  background: var(--soft-sand);
+}
+
+.prox-section__eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sub-accent);
+  margin-bottom: 14px;
+}
+
+/* He eyebrow needs to be the deep-tide (darker) for contrast on white */
+body.sub--he .prox-section__eyebrow { color: var(--deep-tide); }
+body.sub--she .prox-section__eyebrow { color: var(--wine-smoke); }
+body.sub--we  .prox-section__eyebrow { color: var(--slate-plum); }
+
+.prox-section__headline {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(24px, 3.5vw, 36px);
+  line-height: 1.2;
+  color: var(--slate-plum);
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+
+.prox-section__body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--smoke-plum);
+}
+
+.prox-section__body p + p { margin-top: 18px; }
+
+/* ─── HOW IT WORKS — 3 STEPS ─────────────────────────────────────────────── */
+
+.prox-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 52px;
+  position: relative;
+}
+
+.prox-steps::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 28px;
+  bottom: 28px;
+  width: 1px;
+  background: var(--soft-sand);
+}
+
+.prox-step {
+  display: flex;
+  gap: 24px;
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.prox-step:last-child { padding-bottom: 0; }
+
+.prox-step__num {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sub-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-plum);
+  position: relative;
+  z-index: 1;
+}
+
+.prox-step__content { padding-top: 8px; }
+
+.prox-step__title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--slate-plum);
+  margin-bottom: 8px;
+}
+
+.prox-step__body {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--smoke-plum);
+}
+
+/* ─── PILLARS / TOPICS ───────────────────────────────────────────────────── */
+
+.prox-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+@media (max-width: 520px) {
+  .prox-pillars { grid-template-columns: 1fr; }
+}
+
+.prox-pillar {
+  background: var(--sub-surface);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.prox-pillar__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--slate-plum);
+  margin-bottom: 8px;
+}
+
+.prox-pillar__body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--smoke-plum);
+}
+
+/* ─── SKEPTIC / OBJECTION SECTION ────────────────────────────────────────── */
+
+.prox-skeptic__eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+body.sub--he .prox-skeptic__eyebrow { color: var(--deep-tide); }
+body.sub--she .prox-skeptic__eyebrow { color: var(--wine-smoke); }
+body.sub--we  .prox-skeptic__eyebrow { color: var(--slate-plum); }
+
+.prox-skeptic__bar {
+  width: 36px;
+  height: 3px;
+  background: var(--sub-accent);
+  border-radius: 2px;
+  margin-bottom: 18px;
+}
+
+body.sub--he .prox-skeptic__bar { background: var(--soft-aqua); }
+body.sub--she .prox-skeptic__bar { background: var(--dusty-mauve); }
+
+.prox-skeptic__headline {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.15;
+  color: var(--slate-plum);
+  margin-bottom: 32px;
+}
+
+.prox-skeptic__headline em {
+  font-style: italic;
+  color: var(--sub-accent);
+}
+
+body.sub--he .prox-skeptic__headline em { color: var(--soft-aqua); }
+body.sub--she .prox-skeptic__headline em { color: var(--dusty-mauve); }
+
+.prox-skeptic__body p {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--smoke-plum);
+  margin-bottom: 20px;
+}
+
+.prox-skeptic__body p:last-child { margin-bottom: 0; }
+
+.prox-skeptic__pull {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(19px, 2.8vw, 25px);
+  line-height: 1.45;
+  color: var(--slate-plum);
+  border-left: 2px solid var(--sub-accent);
+  padding: 6px 0 6px 22px;
+  margin: 44px 0;
+}
+
+body.sub--he .prox-skeptic__pull { border-color: var(--soft-aqua); }
+body.sub--she .prox-skeptic__pull { border-color: var(--dusty-mauve); }
+
+.prox-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 44px 0;
+}
+
+@media (max-width: 540px) {
+  .prox-compare { grid-template-columns: 1fr; }
+}
+
+.prox-compare-card {
+  border-radius: 12px;
+  padding: 26px;
+}
+
+.prox-compare-card--lit {
+  background: var(--sub-surface);
+}
+
+.prox-compare-card--dim {
+  background: var(--warm-cream);
+}
+
+.prox-compare-card__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+body.sub--he .prox-compare-card--lit .prox-compare-card__label { color: var(--deep-tide); }
+body.sub--she .prox-compare-card--lit .prox-compare-card__label { color: var(--wine-smoke); }
+body.sub--we  .prox-compare-card--lit .prox-compare-card__label { color: var(--slate-plum); }
+.prox-compare-card--dim .prox-compare-card__label { color: var(--lavender-ash); }
+
+.prox-compare-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prox-compare-card li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--smoke-plum);
+  padding-left: 18px;
+  position: relative;
+}
+
+.prox-compare-card li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  top: 1px;
+}
+
+body.sub--he .prox-compare-card--lit li::before { color: var(--soft-aqua); }
+body.sub--she .prox-compare-card--lit li::before { color: var(--dusty-mauve); }
+body.sub--we  .prox-compare-card--lit li::before { color: var(--slate-plum); }
+.prox-compare-card--dim li { color: var(--lavender-ash); }
+.prox-compare-card--dim li::before { color: var(--lavender-ash); }
+
+.prox-skeptic__rule {
+  height: 1px;
+  background: var(--soft-sand);
+  border: none;
+  margin: 48px 0;
+}
+
+.prox-skeptic__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+/* ─── AUTHORITY STRIP ────────────────────────────────────────────────────── */
+
+.prox-authority {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 48px;
+  margin-top: 48px;
+}
+
+.prox-authority__item {
+  flex: 1 1 200px;
+}
+
+.prox-authority__num {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--slate-plum);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.prox-authority__label {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--smoke-plum);
+}
+
+/* ─── PRICING ────────────────────────────────────────────────────────────── */
+
+.prox-price-card {
+  background: var(--linen-white);
+  border: 0.5px solid rgba(78, 74, 85, 0.12);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 440px;
+  margin: 48px auto 0;
+}
+
+.prox-price-card__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lavender-ash);
+  margin-bottom: 18px;
+}
+
+.prox-price-card__price {
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--slate-plum);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.prox-price-card__cadence {
+  font-size: 14px;
+  color: var(--lavender-ash);
+  margin-bottom: 28px;
+}
+
+.prox-price-card__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.prox-price-card__features li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--smoke-plum);
+  padding-left: 20px;
+  position: relative;
+}
+
+.prox-price-card__features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--sub-accent);
+  font-size: 13px;
+}
+
+body.sub--he .prox-price-card__features li::before { color: var(--deep-tide); }
+body.sub--she .prox-price-card__features li::before { color: var(--wine-smoke); }
+body.sub--we  .prox-price-card__features li::before { color: var(--slate-plum); }
+
+.prox-price-card__note {
+  font-size: 12px;
+  color: var(--lavender-ash);
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────────────── */
+
+.prox-footer {
+  background: var(--deep-slate);
+  color: var(--warm-cream);
+  padding: 52px 24px;
+}
+
+.prox-footer__inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.prox-footer__wordmark {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--warm-cream);
+  margin-bottom: 20px;
+}
+
+.prox-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 24px;
+}
+
+.prox-footer__links a {
+  font-size: 13px;
+  color: var(--lavender-ash);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.prox-footer__links a:hover { color: var(--warm-cream); }
+
+.prox-footer__disclaimer {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--lavender-ash);
+  max-width: 580px;
+}
+
+/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+  border: none;
+  text-align: center;
+}
+
+/* Primary — uses sub-brand accent */
+.btn--sub {
+  background: var(--sub-accent);
+  color: var(--sub-text-on-accent);
+}
+body.sub--he .btn--sub:hover  { background: var(--deep-tide); color: var(--linen-white); }
+body.sub--she .btn--sub:hover { background: var(--wine-smoke); }
+body.sub--we  .btn--sub:hover { background: var(--deep-slate); }
+
+/* Slate — universal primary */
+.btn--slate {
+  background: var(--slate-plum);
+  color: var(--linen-white);
+}
+.btn--slate:hover { background: var(--deep-slate); }
+
+/* Ghost */
+.btn--ghost {
+  background: transparent;
+  color: var(--slate-plum);
+  border: 1px solid var(--slate-plum);
+}
+.btn--ghost:hover { background: var(--warm-cream); }
+
+/* Ghost on dark hero */
+.btn--ghost-light {
+  background: transparent;
+  color: var(--sub-hero-text);
+  border: 1px solid rgba(255,255,255,0.45);
+}
+body.sub--he .btn--ghost-light {
+  color: var(--slate-plum);
+  border-color: rgba(78,74,85,0.3);
+}
+.btn--ghost-light:hover { background: rgba(255,255,255,0.12); }
+body.sub--he .btn--ghost-light:hover { background: rgba(78,74,85,0.07); }
+
+/* Large variant */
+.btn--lg { padding: 14px 32px; font-size: 15px; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .prox-hero { padding: 56px 20px 64px; }
+  .prox-section { padding: 60px 20px; }
+  .prox-price-card { padding: 28px 24px; }
+  .prox-header { padding: 0 16px; }
+  .prox-steps::before { display: none; }
+}

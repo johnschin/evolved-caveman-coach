@@ -1,5 +1,11 @@
 # Proximity Coaching — Netlify Redirects
 # ─────────────────────────────────────────────────────────────────────────────
+# LANDING PAGES (marketing/sales — live before the app)
+/                 /index.html            200
+/he               /he-landing.html       200
+/she              /she-landing.html      200
+/we               /we-landing.html       200
+
 # Auth callback — processes Supabase magic link and routes to correct coach
 /auth/callback    /auth-callback.html    200
 
@@ -9,17 +15,25 @@
 /welcome-we       /welcome-we.html       200
 /welcome-bundle   /welcome-bundle.html   200
 
-# Proxi coach pages (new branded URLs)
+# Proxi coach app pages (post-auth, gated)
 /proxi-he         /proxi-he.html         200
 /proxi-she        /proxi-she.html        200
 /proxi-we         /proxi-we.html         200
 
-/proximity-terms    /proximity-terms.html   200
-/proximity-privacy  /proximity-privacy.html 200
-/proximity-ai-disclosure /proximity-ai-disclosure.html 200
-
 # Bundle hub (all three coaches)
 /proxi-all        /proxi-all.html        200
 
-# Root fallback
-/                 /proxi-he.html         200
+# Legal pages — Proxi He / John (Guide to Self)
+/privacy             /proximity-privacy.html        200
+/terms               /proximity-terms.html          200
+/ai-disclosure       /proximity-ai-disclosure.html  200
+
+# Legal pages — Proxi She / Joree Rose
+/joree-privacy       /joree-privacy.html            200
+/joree-terms         /joree-terms.html              200
+/joree-ai-disclosure /joree-ai-disclosure.html      200
+
+# Legal pages — Proxi We / Love Isn't Enough
+/lie-privacy         /lie-privacy.html              200
+/lie-terms           /lie-terms.html                200
+/lie-ai-disclosure   /lie-ai-disclosure.html        200
