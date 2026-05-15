@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxi He — Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
+    <style>
+        /* =============================================
+           PROXIMITY BRAND VARIABLES
+           ============================================= */
+        :root {
+            --linen:        #FAF8F5;
+            --slate-plum:   #3A3353;
+            --slate-deep:   #1C1A2E;
+            --aqua:         #a3d0c9;
+            --aqua-deep:    #6bada3;
+            --aqua-soft:    rgba(163, 208, 201, 0.14);
+            --muted:        #7A7090;
+            --border:       #EAE6F0;
+            --card:         #FFFFFF;
+            --chip-idle:    #F0EBF8;
+            --chip-text:    #3A3353;
+            --error:        #c0392b;
+            --success:      #27ae60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--linen);
+            color: var(--slate-plum);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =============================================
+           AUTH SCREEN
+           ============================================= */
+        .auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px 20px;
+        }
+
+        .auth-logo {
+            margin-bottom: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .auth-logo-mark {
+            display: block;
+        }
+        .auth-logo-name {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--slate-plum);
+        }
+        .auth-logo-sub {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: -4px;
+        }
+
+        .auth-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 24px rgba(58, 51, 83, 0.08);
+        }
+        .auth-box h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-plum);
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .auth-tagline {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--linen);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--slate-plum);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus { border-color: var(--aqua); }
+
+        .btn-primary {
+            width: 100%;
+            padding: 13px;
+            background: var(--aqua);
+            color: var(--slate-plum);
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:active { transform: scale(0.99); }
+        .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        .auth-link {
+            font-size: 12px;
+            color: var(--aqua-deep);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: underline;
+        }
+        .auth-message {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+        .auth-message.error { color: var(--error); }
+        .auth-message.success { color: var(--success); }
+
+        .tos-agreement { margin: 16px 0 4px; }
+        .tos-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--muted);
+            gap: 8px;
+            line-height: 1.5;
+        }
+        .tos-checkbox {
+            width: 16px; height: 16px; min-width: 16px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--aqua);
+        }
+        .tos-label-text { flex: 1; }
+        .tos-link { color: var(--aqua-deep); text-decoration: none; }
+        .tos-link:hover { text-decoration: underline; }
+
+        /* =============================================
+           HOME SCREEN
+           ============================================= */
+        .home-screen {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .home-screen.active { display: flex; }
+
+        /* --- PAGE HEADER --- */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px 14px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-wordmark {
+            display: flex;
+            flex-direction: column;
+        }
+        .header-name {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--slate-plum);
+            line-height: 1;
+        }
+        .header-role {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .header-greeting {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--slate-plum);
+        }
+        .header-signout {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .header-signout:hover { border-color: var(--aqua); color: var(--aqua-deep); }
+
+        /* --- SCROLLABLE CONTENT --- */
+        .home-content {
+            flex: 1;
+            padding: 20px 16px 40px;
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* =============================================
+           CARD: TALK TO PROXI HE (primary CTA)
+           ============================================= */
+        .coach-cta-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.15s;
+            text-decoration: none;
+            color: var(--slate-plum);
+            box-shadow: 0 2px 12px rgba(58, 51, 83, 0.06);
+        }
+        .coach-cta-card:hover {
+            box-shadow: 0 6px 24px rgba(58, 51, 83, 0.12);
+            transform: translateY(-1px);
+        }
+        .coach-cta-card:active { transform: translateY(0); }
+        .coach-cta-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .coach-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--aqua);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .coach-cta-text {}
+        .coach-cta-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--slate-plum);
+            line-height: 1.2;
+        }
+        .coach-cta-sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+        .coach-cta-arrow {
+            color: var(--aqua-deep);
+            flex-shrink: 0;
+        }
+
+        /* =============================================
+           CARD: RIGHT NOW MODE (hero)
+           ============================================= */
+        .rightnow-card {
+            background: var(--slate-deep);
+            border-radius: 16px;
+            padding: 22px 20px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Subtle radial glow */
+        .rightnow-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(163, 208, 201, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .rightnow-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .rightnow-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--aqua);
+            background: rgba(163, 208, 201, 0.15);
+            border: 1px solid rgba(163, 208, 201, 0.3);
+            padding: 3px 9px;
+            border-radius: 20px;
+        }
+        .rightnow-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 10px 0 6px;
+            line-height: 1.3;
+        }
+        .rightnow-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 16px;
+        }
+        .chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .chip {
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .chip:hover {
+            background: rgba(163, 208, 201, 0.18);
+            border-color: var(--aqua);
+            color: #FFFFFF;
+        }
+        .chip.selected {
+            background: var(--aqua);
+            border-color: var(--aqua);
+            color: var(--slate-plum);
+            transform: scale(0.97);
+        }
+        .chip-icon { font-size: 14px; }
+
+        /* =============================================
+           CARD: DAILY PULSE
+           ============================================= */
+        .pulse-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 20px;
+            box-shadow: 0 2px 12px rgba(58, 51, 83, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--slate-plum);
+        }
+        .card-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            background: var(--aqua-soft);
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+        .slider-group:last-of-type { margin-bottom: 8px; }
+
+        .slider-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--slate-plum);
+        }
+        .slider-value-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--aqua-deep);
+            background: var(--aqua-soft);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-track {
+            position: relative;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 0 2px;
+        }
+        .slider-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--aqua);
+            border-radius: 3px;
+            transition: width 0.15s;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            height: 24px;
+            margin: 0;
+        }
+        input[type="range"]:focus { outline: none; }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 2.5px solid var(--aqua);
+            box-shadow: 0 1px 4px rgba(58,51,83,0.2);
+            margin-top: -7px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px rgba(163, 208, 201, 0.5);
+        }
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+        }
+        input[type="range"]::-moz-range-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 2.5px solid var(--aqua);
+            box-shadow: 0 1px 4px rgba(58,51,83,0.2);
+            cursor: pointer;
+        }
+
+        .slider-range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .slider-range-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .pulse-start-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--aqua);
+            color: var(--slate-plum);
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .pulse-start-btn:hover { opacity: 0.9; }
+        .pulse-start-btn:active { transform: scale(0.99); }
+
+        /* =============================================
+           QUICK TILES (2-column)
+           ============================================= */
+        .tiles-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .tile-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 16px;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.15s;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 2px 10px rgba(58, 51, 83, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            user-select: none;
+        }
+        .tile-card:hover {
+            box-shadow: 0 6px 20px rgba(58, 51, 83, 0.1);
+            transform: translateY(-1px);
+        }
+        .tile-card:active { transform: translateY(0); }
+        .tile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--aqua-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tile-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--slate-plum);
+            line-height: 1.3;
+        }
+        .tile-desc {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: -4px;
+            line-height: 1.4;
+        }
+
+        /* =============================================
+           EXPLORE SECTION
+           ============================================= */
+        .explore-section {}
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+        .explore-group {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(58, 51, 83, 0.04);
+        }
+        .explore-group-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            background: var(--aqua-soft);
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .explore-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+            gap: 12px;
+        }
+        .explore-item:last-child { border-bottom: none; }
+        .explore-item:hover { background: var(--linen); }
+        .explore-item:active { background: var(--chip-idle); }
+        .explore-item-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--aqua-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .explore-item-text { flex: 1; }
+        .explore-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-plum);
+        }
+        .explore-item-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .explore-chevron { color: var(--border); flex-shrink: 0; }
+
+        /* =============================================
+           5-MINUTE BOOST MODAL
+           ============================================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(28, 26, 46, 0.6);
+            z-index: 100;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-sheet {
+            background: var(--card);
+            border-radius: 20px 20px 0 0;
+            padding: 24px 24px 40px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: sheetUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes sheetUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+        .boost-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            margin-bottom: 4px;
+        }
+        .boost-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-plum);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .boost-body {
+            font-size: 15px;
+            color: var(--slate-plum);
+            line-height: 1.7;
+            opacity: 0.85;
+            white-space: pre-wrap;
+        }
+        .boost-close {
+            width: 100%;
+            padding: 13px;
+            background: var(--aqua-soft);
+            color: var(--slate-plum);
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: background 0.2s;
+        }
+        .boost-close:hover { background: rgba(163, 208, 201, 0.25); }
+
+        /* =============================================
+           RESPONSIVE
+           ============================================= */
+        @media (max-width: 400px) {
+            .home-content { padding: 16px 12px 36px; }
+            .chips-grid { grid-template-columns: 1fr 1fr; }
+            .tiles-row { gap: 10px; }
+            .tile-card { padding: 16px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =============================================
+         AUTH SCREEN
+         ============================================= -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-logo">
+            <!-- Proxi He Logo: aqua tile + slate dots -->
+            <svg class="auth-logo-mark" width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                <rect width="52" height="52" rx="14" fill="#a3d0c9"/>
+                <circle cx="18" cy="19" r="4.5" fill="#3A3353"/>
+                <circle cx="34" cy="19" r="4.5" fill="#3A3353"/>
+                <circle cx="18" cy="33" r="4.5" fill="#3A3353"/>
+                <circle cx="34" cy="33" r="4.5" fill="#3A3353"/>
+            </svg>
+            <span class="auth-logo-name">Proxi He</span>
+            <span class="auth-logo-sub">Men's Inner Leadership Coach</span>
+        </div>
+
+        <div class="auth-box">
+            <!-- LOGIN -->
+            <div id="loginForm">
+                <h2>Welcome back</h2>
+                <p class="auth-tagline">Sign in to continue your work</p>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Your password">
+                </div>
+                <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Sign In</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('signup')">Create account</button>
+                    <button class="auth-link" onclick="showView('forgot')">Forgot password?</button>
+                </div>
+                <div id="loginMessage" class="auth-message"></div>
+            </div>
+
+            <!-- SIGNUP -->
+            <div id="signupForm" style="display:none;">
+                <h2>Create account</h2>
+                <p class="auth-tagline">Set up your Proxi He access</p>
+                <div id="kajabiWelcome" style="display:none; text-align:center; margin-bottom:16px; padding:12px; background:var(--aqua-soft); border-radius:8px; border:1px solid rgba(163,208,201,0.3);">
+                    <div style="font-size:14px; font-weight:600; color:var(--aqua-deep); margin-bottom:4px;">Payment received — welcome.</div>
+                    <div style="font-size:12px; color:var(--muted);">Create your login to get started.</div>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="signupFirstName" autocomplete="given-name" placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="signupLastName" autocomplete="family-name" placeholder="Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" autocomplete="new-password" placeholder="Min 6 characters">
+                </div>
+                <div class="tos-agreement">
+                    <label class="tos-checkbox-label">
+                        <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
+                        <span class="tos-label-text">
+                            I agree to the
+                            <a href="/terms" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+                            <a href="/privacy" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+                            <a href="/ai-disclosure" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+                        </span>
+                    </label>
+                </div>
+                <button class="btn-primary" id="signupBtn" onclick="handleSignup()" disabled>Create Account</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+                <div id="signupMessage" class="auth-message"></div>
+            </div>
+
+            <!-- FORGOT PASSWORD -->
+            <div id="forgotForm" style="display:none;">
+                <h2>Reset password</h2>
+                <p class="auth-tagline">We'll send a reset link to your email</p>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgotEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Link</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+                <div id="forgotMessage" class="auth-message"></div>
+            </div>
+
+            <!-- RESET PASSWORD -->
+            <div id="resetForm" style="display:none;">
+                <h2>Set new password</h2>
+                <p class="auth-tagline">Choose something you'll remember</p>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="resetPassword" autocomplete="new-password" placeholder="Min 6 characters">
+                </div>
+                <button class="btn-primary" onclick="handleResetPassword()">Set New Password</button>
+                <div id="resetMessage" class="auth-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         HOME SCREEN
+         ============================================= -->
+    <div id="homeScreen" class="home-screen">
+
+        <!-- HEADER -->
+        <header class="page-header">
+            <div class="header-brand">
+                <svg width="32" height="32" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="52" height="52" rx="14" fill="#a3d0c9"/>
+                    <circle cx="18" cy="19" r="4.5" fill="#3A3353"/>
+                    <circle cx="34" cy="19" r="4.5" fill="#3A3353"/>
+                    <circle cx="18" cy="33" r="4.5" fill="#3A3353"/>
+                    <circle cx="34" cy="33" r="4.5" fill="#3A3353"/>
+                </svg>
+                <div class="header-wordmark">
+                    <span class="header-name">Proxi He</span>
+                    <span class="header-role">Inner Leadership Coach</span>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span class="header-greeting" id="greetingText"></span>
+                <button class="header-signout" onclick="handleLogout()">Sign out</button>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE CONTENT -->
+        <div class="home-content">
+
+            <!-- ── 1. TALK TO PROXI HE (primary CTA) ── -->
+            <a class="coach-cta-card" href="/proxi-he" id="coachCtaCard">
+                <div class="coach-cta-left">
+                    <div class="coach-avatar">
+                        <!-- Proxi He logo mark -->
+                        <svg width="28" height="28" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="52" height="52" rx="14" fill="#a3d0c9"/>
+                            <circle cx="18" cy="19" r="4.5" fill="#3A3353"/>
+                            <circle cx="34" cy="19" r="4.5" fill="#3A3353"/>
+                            <circle cx="18" cy="33" r="4.5" fill="#3A3353"/>
+                            <circle cx="34" cy="33" r="4.5" fill="#3A3353"/>
+                        </svg>
+                    </div>
+                    <div class="coach-cta-text">
+                        <div class="coach-cta-label">Talk to Proxi He</div>
+                        <div class="coach-cta-sub">Start or continue a coaching session</div>
+                    </div>
+                </div>
+                <div class="coach-cta-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- ── 2. RIGHT NOW MODE ── -->
+            <div class="rightnow-card">
+                <div class="rightnow-header">
+                    <span class="rightnow-badge">Right Now Mode</span>
+                </div>
+                <div class="rightnow-title">What are you dealing with right now?</div>
+                <div class="rightnow-sub">Tap to start a focused session</div>
+                <div class="chips-grid">
+                    <div class="chip" onclick="selectChip(this, 'work-stress')">
+                        <span class="chip-icon">⚡</span> Work stress
+                    </div>
+                    <div class="chip" onclick="selectChip(this, 'relationship-tension')">
+                        <span class="chip-icon">🔁</span> Relationship tension
+                    </div>
+                    <div class="chip" onclick="selectChip(this, 'feeling-stuck')">
+                        <span class="chip-icon">🧭</span> Feeling stuck
+                    </div>
+                    <div class="chip" onclick="selectChip(this, 'anger-irritability')">
+                        <span class="chip-icon">🔥</span> Anger / irritability
+                    </div>
+                    <div class="chip" onclick="selectChip(this, 'cant-switch-off')">
+                        <span class="chip-icon">🌀</span> Can't switch off
+                    </div>
+                    <div class="chip" onclick="selectChip(this, 'big-decision')">
+                        <span class="chip-icon">⚖️</span> Big decision
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 3. DAILY PULSE ── -->
+            <div class="pulse-card">
+                <div class="card-header">
+                    <span class="card-title">Daily Pulse</span>
+                    <span class="card-badge">How are you today?</span>
+                </div>
+
+                <!-- Stress Level -->
+                <div class="slider-group">
+                    <div class="slider-label-row">
+                        <span class="slider-name">Stress level</span>
+                        <span class="slider-value-badge" id="stressVal">3</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="3" id="stressSlider"
+                           oninput="updateSlider('stress', this.value)">
+                    <div class="slider-range-labels">
+                        <span class="slider-range-label">Calm</span>
+                        <span class="slider-range-label">Overwhelmed</span>
+                    </div>
+                </div>
+
+                <!-- Relationship Energy -->
+                <div class="slider-group">
+                    <div class="slider-label-row">
+                        <span class="slider-name">Relationship energy</span>
+                        <span class="slider-value-badge" id="relVal">3</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="3" id="relSlider"
+                           oninput="updateSlider('rel', this.value)">
+                    <div class="slider-range-labels">
+                        <span class="slider-range-label">Disconnected</span>
+                        <span class="slider-range-label">Connected</span>
+                    </div>
+                </div>
+
+                <!-- Challenge Level -->
+                <div class="slider-group">
+                    <div class="slider-label-row">
+                        <span class="slider-name">Willingness to be challenged</span>
+                        <span class="slider-value-badge" id="challengeVal">3</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="3" id="challengeSlider"
+                           oninput="updateSlider('challenge', this.value)">
+                    <div class="slider-range-labels">
+                        <span class="slider-range-label">Ease up</span>
+                        <span class="slider-range-label">Push me</span>
+                    </div>
+                </div>
+
+                <button class="pulse-start-btn" onclick="startPulseSession()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Start today's session
+                </button>
+            </div>
+
+            <!-- ── 4. QUICK TILES ── -->
+            <div class="tiles-row">
+                <!-- Emotion Wheel -->
+                <a class="tile-card" href="/emotion_wheel">
+                    <div class="tile-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
+                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="tile-label">Emotion Wheel</div>
+                        <div class="tile-desc">Name what you're feeling</div>
+                    </div>
+                </a>
+
+                <!-- 5-Min Boost -->
+                <div class="tile-card" onclick="openBoostModal()">
+                    <div class="tile-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="tile-label">5-Min Boost</div>
+                        <div class="tile-desc">Today's quick exercise</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 5. EXPLORE ── -->
+            <div class="explore-section">
+                <div class="section-label">Explore</div>
+
+                <!-- Relationship group -->
+                <div class="explore-group">
+                    <div class="explore-group-label">Relationship</div>
+
+                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Conversation starters</div>
+                            <div class="explore-item-desc">Break the ice or go deeper</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+
+                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Say this instead</div>
+                            <div class="explore-item-desc">Swap reactive for responsive</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+
+                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Date night ideas</div>
+                            <div class="explore-item-desc">Reconnect with intention</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+
+                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Repair toolkit</div>
+                            <div class="explore-item-desc">After it goes sideways</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <!-- Learn group -->
+                <div class="explore-group">
+                    <div class="explore-group-label">Learn</div>
+
+                    <a class="explore-item" href="https://theevolvedcaveman.com/podcast" target="_blank" rel="noopener noreferrer">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Podcast episodes</div>
+                            <div class="explore-item-desc">The Evolved Caveman</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+
+                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Framework library</div>
+                            <div class="explore-item-desc">Inner Board Meeting and more</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+            </div>
+            <!-- END EXPLORE -->
+
+        </div>
+        <!-- END home-content -->
+    </div>
+
+    <!-- =============================================
+         5-MIN BOOST MODAL
+         ============================================= -->
+    <div class="modal-overlay" id="boostModal" onclick="closeBoostOnOverlay(event)">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="boost-label">5-Minute Evolution Boost</div>
+            <div class="boost-title" id="boostTitle"></div>
+            <div class="boost-body" id="boostBody"></div>
+            <button class="boost-close" onclick="closeBoostModal()">Got it — I'll try this</button>
+        </div>
+    </div>
+
+    <script>
+    // =====================================================
+    // CONFIGURATION — matches proxi-he.html exactly
+    // =====================================================
+    var SUPABASE_URL     = "https://osywbzzvsfjdvjhjalju.supabase.co";
+    var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+    var SIGNUP_PAID_URL  = SUPABASE_URL + "/functions/v1/signup-paid";
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var urlParams      = new URLSearchParams(window.location.search);
+    var kajabiPlan     = urlParams.get("plan");
+    var kajabiKey      = urlParams.get("key");
+    var isKajabiRedirect = !!(kajabiPlan && kajabiKey);
+
+    var currentUser    = null;
+    var loginInProgress = false;
+
+    // =====================================================
+    // 5-MINUTE BOOST EXERCISES (7 — rotates by day of week)
+    // =====================================================
+    var BOOSTS = [
+        {
+            title: "Name It to Tame It",
+            body: "Take 30 seconds and name one emotion you're feeling right now. Specific beats vague: not 'stressed' but 'frustrated that my effort isn't being recognized.' Naming it shifts your brain from reactive to reflective — the CEO starts driving instead of the Director of Defense.\n\nSet a timer, close your eyes, and identify the most accurate word for what you're carrying. Just one."
+        },
+        {
+            title: "The Values Check-In",
+            body: "Pick one decision or situation currently on your plate. Ask: what do I actually value here? Not what you should want — what you do want.\n\nWrite it in one sentence. If you can't say it clearly, you're not making a values-based decision yet — you're reacting to pressure. The sentence you write is your compass for the next step."
+        },
+        {
+            title: "The CEO Reframe",
+            body: "Think about a recent conflict or frustration. Ask yourself: what would the most grounded, values-aligned version of me do here? Not the reactive version — the deliberate one.\n\nThis is your Inner CEO speaking. He's not louder than the Director of Defense by default. You have to consciously call him in. Take 60 seconds and let him frame your next move."
+        },
+        {
+            title: "The Stress Source Check",
+            body: "Write down the three things taking up the most mental energy right now. Don't filter — just write.\n\nNow circle the one you actually have influence over. That's where your energy belongs. The rest is static. Focus is not about working harder; it's about directing your attention where it can actually move something."
+        },
+        {
+            title: "The Relationship Temperature Check",
+            body: "On a 1–10 scale: how connected do you feel to the most important person in your life right now?\n\nIf it's below 7, what's one small thing — a text, a question, a moment of genuine attention — you could do in the next 24 hours to move it one point up? Not a grand gesture. One small deliberate move. That's all it takes to start changing the temperature."
+        },
+        {
+            title: "The 60-Second Pause",
+            body: "Before you respond to the next thing that demands your attention, take a full 60 seconds.\n\nNotice what your body is telling you. Where is there tension? What's the underlying need beneath your reaction? This gap between stimulus and response is where your self-leadership actually lives. You can't find it if you're always already in motion."
+        },
+        {
+            title: "The Completion Circuit",
+            body: "Think of one thing you've been avoiding — a conversation, a decision, a task.\n\nSay it out loud. Literally say: 'I'm avoiding ___.' Notice what shifts when you acknowledge it directly. Avoidance is expensive; it runs quietly in the background and taxes your attention constantly. Naming it doesn't fix it — but it stops the hidden cost."
+        }
+    ];
+
+    // =====================================================
+    // AUTH FUNCTIONS
+    // =====================================================
+    function showView(view) {
+        document.getElementById("loginForm").style.display   = view === "login"   ? "block" : "none";
+        document.getElementById("signupForm").style.display  = view === "signup"  ? "block" : "none";
+        document.getElementById("forgotForm").style.display  = view === "forgot"  ? "block" : "none";
+        document.getElementById("resetForm").style.display   = view === "reset"   ? "block" : "none";
+        clearAuthMessages();
+    }
+
+    function clearAuthMessages() {
+        ["loginMessage","signupMessage","forgotMessage","resetMessage"].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) { el.textContent = ""; el.className = "auth-message"; }
+        });
+    }
+
+    function showAuthMsg(id, text, type) {
+        var el = document.getElementById(id);
+        if (el) { el.textContent = text; el.className = "auth-message " + type; }
+    }
+
+    async function handleLogin() {
+        var email    = document.getElementById("loginEmail").value.trim();
+        var password = document.getElementById("loginPassword").value;
+        if (!email || !password) {
+            showAuthMsg("loginMessage", "Please enter email and password.", "error"); return;
+        }
+        loginInProgress = true;
+        document.getElementById("loginBtn").disabled = true;
+        showAuthMsg("loginMessage", "Signing in...", "");
+        try {
+            var result = await sb.auth.signInWithPassword({ email: email, password: password });
+            if (result.error) throw result.error;
+            currentUser = result.data.user;
+            showHome();
+            loginInProgress = false;
+        } catch (err) {
+            showAuthMsg("loginMessage", err.message || "Login failed.", "error");
+            loginInProgress = false;
+        }
+        document.getElementById("loginBtn").disabled = false;
+    }
+
+    async function handleSignup() {
+        var firstName = document.getElementById("signupFirstName").value.trim();
+        var lastName  = document.getElementById("signupLastName").value.trim();
+        var email     = document.getElementById("signupEmail").value.trim();
+        var password  = document.getElementById("signupPassword").value;
+
+        if (!email || !password) {
+            showAuthMsg("signupMessage", "Please enter email and password.", "error"); return;
+        }
+        if (password.length < 6) {
+            showAuthMsg("signupMessage", "Password must be at least 6 characters.", "error"); return;
+        }
+        if (!document.getElementById("tosCheckbox").checked) {
+            showAuthMsg("signupMessage", "Please accept the Terms, Privacy Policy, and AI Disclosure.", "error"); return;
+        }
+
+        document.getElementById("signupBtn").disabled = true;
+        showAuthMsg("signupMessage", "Creating account...", "");
+
+        try {
+            if (isKajabiRedirect) {
+                var response = await fetch(SIGNUP_PAID_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ first_name: firstName, last_name: lastName, email: email, password: password, plan_type: kajabiPlan, signup_key: kajabiKey })
+                });
+                var data = await response.json();
+                if (!response.ok) {
+                    if (data.code === "EMAIL_EXISTS") {
+                        showAuthMsg("signupMessage", "Account exists — switching to sign in...", "error");
+                        document.getElementById("loginEmail").value = email;
+                        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
+                        setTimeout(function() { showView("login"); document.getElementById("loginPassword").focus(); }, 1500);
+                        return;
+                    } else { throw new Error(data.error || "Signup failed"); }
+                }
+                loginInProgress = true;
+                var loginResult = await sb.auth.signInWithPassword({ email: email, password: password });
+                if (loginResult.error) { loginInProgress = false; throw loginResult.error; }
+                currentUser = loginResult.data.user;
+                history.replaceState(null, "", window.location.pathname);
+                showHome();
+                loginInProgress = false;
+            } else {
+                var result = await sb.auth.signUp({
+                    email: email, password: password,
+                    options: { data: { first_name: firstName, last_name: lastName, display_name: [firstName, lastName].filter(Boolean).join(" ") } }
+                });
+                if (result.error) throw result.error;
+                if (result.data.user && !result.data.session) {
+                    showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
+                } else if (result.data.session) {
+                    currentUser = result.data.user;
+                    showHome();
+                }
+            }
+        } catch (err) {
+            showAuthMsg("signupMessage", err.message || "Signup failed.", "error");
+        }
+        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
+    }
+
+    async function handleForgotPassword() {
+        var email = document.getElementById("forgotEmail").value.trim();
+        if (!email) { showAuthMsg("forgotMessage", "Please enter your email.", "error"); return; }
+        try {
+            var result = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
+            if (result.error) throw result.error;
+            showAuthMsg("forgotMessage", "Check your email for a reset link.", "success");
+        } catch (err) { showAuthMsg("forgotMessage", err.message || "Reset failed.", "error"); }
+    }
+
+    async function handleResetPassword() {
+        var password = document.getElementById("resetPassword").value;
+        if (!password || password.length < 6) {
+            showAuthMsg("resetMessage", "Password must be at least 6 characters.", "error"); return;
+        }
+        try {
+            var result = await sb.auth.updateUser({ password: password });
+            if (result.error) throw result.error;
+            showAuthMsg("resetMessage", "Password updated! Loading home...", "success");
+            setTimeout(function() { window.location.hash = ""; window.location.reload(); }, 1500);
+        } catch (err) { showAuthMsg("resetMessage", err.message || "Reset failed.", "error"); }
+    }
+
+    async function handleLogout() {
+        await sb.auth.signOut();
+        currentUser = null;
+        loginInProgress = false;
+        document.getElementById("homeScreen").classList.remove("active");
+        document.getElementById("authScreen").style.display = "flex";
+        showView("login");
+    }
+
+    // =====================================================
+    // SHOW HOME SCREEN
+    // =====================================================
+    function showHome() {
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("homeScreen").classList.add("active");
+        setGreeting();
+        loadSavedPulse();
+    }
+
+    function setGreeting() {
+        var hour = new Date().getHours();
+        var period = hour >= 5 && hour < 12 ? "morning"
+                   : hour >= 12 && hour < 17 ? "afternoon"
+                   : hour >= 17 && hour < 21 ? "evening"
+                   : null;
+
+        var firstName = "";
+        if (currentUser) {
+            firstName = (currentUser.user_metadata && currentUser.user_metadata.first_name)
+                     || (currentUser.user_metadata && currentUser.user_metadata.display_name)
+                     || "";
+            if (firstName && firstName.includes(" ")) {
+                firstName = firstName.split(" ")[0];
+            }
+        }
+
+        var el = document.getElementById("greetingText");
+        if (el) {
+            el.textContent = period
+                ? "Good " + period + (firstName ? ", " + firstName : "")
+                : (firstName ? "Hey, " + firstName : "");
+        }
+    }
+
+    // =====================================================
+    // RIGHT NOW MODE — CHIP SELECTION
+    // =====================================================
+    function selectChip(el, context) {
+        // Deselect all chips first
+        document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
+        el.classList.add("selected");
+
+        // Navigate after brief visual feedback
+        setTimeout(function() {
+            window.location.href = "/proxi-he?mode=rightnow&context=" + encodeURIComponent(context);
+        }, 320);
+    }
+
+    // =====================================================
+    // DAILY PULSE — SLIDERS
+    // =====================================================
+    function updateSlider(type, value) {
+        document.getElementById(type + "Val").textContent = value;
+        // Save to localStorage for persistence
+        savePulse();
+    }
+
+    function savePulse() {
+        var pulse = {
+            stress:    document.getElementById("stressSlider").value,
+            rel:       document.getElementById("relSlider").value,
+            challenge: document.getElementById("challengeSlider").value,
+            date:      new Date().toDateString()
+        };
+        try { localStorage.setItem("proxi_he_pulse", JSON.stringify(pulse)); } catch(e) {}
+    }
+
+    function loadSavedPulse() {
+        try {
+            var saved = localStorage.getItem("proxi_he_pulse");
+            if (!saved) return;
+            var pulse = JSON.parse(saved);
+            // Only restore if saved today
+            if (pulse.date !== new Date().toDateString()) return;
+            if (pulse.stress) {
+                document.getElementById("stressSlider").value = pulse.stress;
+                document.getElementById("stressVal").textContent = pulse.stress;
+            }
+            if (pulse.rel) {
+                document.getElementById("relSlider").value = pulse.rel;
+                document.getElementById("relVal").textContent = pulse.rel;
+            }
+            if (pulse.challenge) {
+                document.getElementById("challengeSlider").value = pulse.challenge;
+                document.getElementById("challengeVal").textContent = pulse.challenge;
+            }
+        } catch(e) {}
+    }
+
+    function startPulseSession() {
+        var stress    = document.getElementById("stressSlider").value;
+        var rel       = document.getElementById("relSlider").value;
+        var challenge = document.getElementById("challengeSlider").value;
+        savePulse();
+        window.location.href = "/proxi-he?mode=pulse&pulse_stress=" + stress + "&pulse_rel=" + rel + "&pulse_challenge=" + challenge;
+    }
+
+    // =====================================================
+    // 5-MIN BOOST MODAL
+    // =====================================================
+    function openBoostModal() {
+        var dayIndex = new Date().getDay(); // 0=Sun, 6=Sat
+        var boost = BOOSTS[dayIndex % BOOSTS.length];
+        document.getElementById("boostTitle").textContent = boost.title;
+        document.getElementById("boostBody").textContent  = boost.body;
+        document.getElementById("boostModal").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeBoostModal() {
+        document.getElementById("boostModal").classList.remove("active");
+        document.body.style.overflow = "";
+    }
+
+    function closeBoostOnOverlay(e) {
+        if (e.target === document.getElementById("boostModal")) closeBoostModal();
+    }
+
+    // =====================================================
+    // COMING SOON PLACEHOLDER
+    // =====================================================
+    function comingSoon(e) {
+        e.preventDefault();
+        alert("Coming soon — this section is in development.");
+        return false;
+    }
+
+    // =====================================================
+    // KEYBOARD / FORM SHORTCUTS
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", function() {
+        // TOS checkbox controls signup button
+        var tosCheck = document.getElementById("tosCheckbox");
+        if (tosCheck) {
+            tosCheck.addEventListener("change", function() {
+                document.getElementById("signupBtn").disabled = !this.checked;
+            });
+        }
+
+        // Enter key navigation in login form
+        var loginEmail = document.getElementById("loginEmail");
+        var loginPwd   = document.getElementById("loginPassword");
+        if (loginEmail) loginEmail.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); loginPwd.focus(); } });
+        if (loginPwd)   loginPwd.addEventListener("keydown",   function(e) { if (e.key === "Enter") { e.preventDefault(); handleLogin(); } });
+
+        // Enter key navigation in signup form
+        ["signupFirstName","signupLastName","signupEmail"].forEach(function(id, i) {
+            var el = document.getElementById(id);
+            var nextIds = ["signupLastName","signupEmail","signupPassword"];
+            if (el) el.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); document.getElementById(nextIds[i]).focus(); } });
+        });
+        var signupPwd = document.getElementById("signupPassword");
+        if (signupPwd) signupPwd.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); handleSignup(); } });
+    });
+
+    // =====================================================
+    // INITIALIZATION
+    // =====================================================
+    async function init() {
+        var hash = window.location.hash;
+        if (hash && (hash.includes("type=recovery") || hash.includes("type=signup"))) {
+            if (hash.includes("type=recovery")) showView("reset");
+            return;
+        }
+
+        var sessionResult = await sb.auth.getSession();
+        if (sessionResult.data.session) {
+            currentUser = sessionResult.data.session.user;
+            showHome();
+        } else if (isKajabiRedirect) {
+            showView("signup");
+            document.getElementById("kajabiWelcome").style.display = "block";
+        }
+    }
+
+    sb.auth.onAuthStateChange(async function(event, session) {
+        if (event === "TOKEN_REFRESHED" && session) { return; }
+        if (loginInProgress) return;
+        if (event === "PASSWORD_RECOVERY") { showView("reset"); return; }
+        if (event === "SIGNED_IN" && session && !currentUser) {
+            currentUser = session.user;
+            if (window.location.hash) {
+                history.replaceState(null, "", window.location.pathname + window.location.search);
+            }
+            showHome();
+        }
+    });
+
+    init();
+    </script>
+</body>
+</html>

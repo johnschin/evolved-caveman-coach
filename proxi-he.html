@@ -684,6 +684,13 @@
     var kajabiKey = urlParams.get("key");     // signup key
     var isKajabiRedirect = !!(kajabiPlan && kajabiKey);
 
+    // Read home-screen context params (set by home-he.html navigation)
+    var urlMode         = urlParams.get("mode");            // "rightnow" | "pulse"
+    var urlContext      = urlParams.get("context");         // "work-stress" | "relationship-tension" | etc.
+    var pulseStress     = urlParams.get("pulse_stress");    // "1"–"5"
+    var pulseRel        = urlParams.get("pulse_rel");       // "1"–"5"
+    var pulseChallenge  = urlParams.get("pulse_challenge"); // "1"–"5"
+
     // =====================================================
     // STATE
     // =====================================================
@@ -998,8 +1005,60 @@
         return options[Math.floor(Math.random() * options.length)];
     }
 
+    // Human-readable labels for Right Now Mode chip values
+    var CONTEXT_LABELS = {
+        "work-stress":          "work stress and overload",
+        "relationship-tension": "relationship tension",
+        "feeling-stuck":        "feeling stuck or lost",
+        "anger-irritability":   "anger or irritability",
+        "cant-switch-off":      "not being able to switch off",
+        "big-decision":         "a big decision they are navigating"
+    };
+
+    // Builds an optional context block injected into the system prompt
+    // when the user arrives from the home screen with mode/pulse params.
+    function buildContextBlock() {
+        var block = "";
+
+        if (urlMode === "rightnow" && urlContext && CONTEXT_LABELS[urlContext]) {
+            var label = CONTEXT_LABELS[urlContext];
+            block +=
+                "HOME SCREEN CONTEXT — RIGHT NOW MODE:\n" +
+                "The user tapped '" + label + "' on the home screen before entering this session. " +
+                "They have already told you what they are dealing with.\n" +
+                "Do NOT open with 'what's on your mind?' or a generic session opener. " +
+                "Start directly with this topic.\n" +
+                "— For a RETURNING user: acknowledge them briefly, then ask one sharp coaching " +
+                "question about " + label + ". No preamble.\n" +
+                "— For a FIRST-TIME user: after they agree to the framework, open with a response " +
+                "tailored to " + label + " instead of the generic opener in OPENING_VARIATIONS.\n\n";
+        }
+
+        if (urlMode === "pulse" && (pulseStress || pulseRel || pulseChallenge)) {
+            block +=
+                "HOME SCREEN CONTEXT — DAILY PULSE (user self-report):\n" +
+                (pulseStress    ? "- Stress level:                  " + pulseStress    + " / 5  (1 = calm, 5 = overwhelmed)\n" : "") +
+                (pulseRel       ? "- Relationship energy:           " + pulseRel       + " / 5  (1 = disconnected, 5 = connected)\n" : "") +
+                (pulseChallenge ? "- Willingness to be challenged:  " + pulseChallenge + " / 5  (1 = ease up, 5 = push me)\n" : "") +
+                "\nUse this data to calibrate your opening and coaching intensity:\n" +
+                "- Stress 4–5: acknowledge the weight they are carrying before anything else.\n" +
+                "- Stress 1–2: they are in a steady state — good time to go deeper or explore.\n" +
+                "- Challenge 1–2: be gentler and more exploratory; do not push hard.\n" +
+                "- Challenge 4–5: be direct and precise; do not soften the coaching.\n" +
+                "- Relationship energy below 3: consider weaving that thread in early.\n\n";
+        }
+
+        return block;
+    }
+
     function buildSystemPrompt(isReturningUser) {
         var prompt = SYSTEM_PROMPT;
+
+        // Inject home-screen context (Right Now Mode or Pulse) before the
+        // session-type block so the coach knows the context when it opens.
+        var contextBlock = buildContextBlock();
+        if (contextBlock) prompt += contextBlock;
+
         if (isReturningUser) {
             prompt += RETURNING_USER_BLOCK;
         } else {
@@ -1012,6 +1071,15 @@
     async function startNewSession() {
         if (sessionInProgress) return;
         sessionInProgress = true;
+
+        // Clear home-screen context vars so this new session does not inherit
+        // the chip or pulse context from the original page-load navigation.
+        urlMode        = null;
+        urlContext     = null;
+        pulseStress    = null;
+        pulseRel       = null;
+        pulseChallenge = null;
+
         await saveSessionSummary();
         sessionId = generateSessionId();
         conversationHistory = [];
@@ -1457,6 +1525,13 @@
         messageCount = 0;
         isFirstMessage = true;
         openingVariation = pickOpeningVariation();
+
+        // Clear home-screen context params from the URL now that they are
+        // captured in JS variables — prevents replay on refresh.
+        if (urlMode || pulseStress) {
+            history.replaceState(null, "", window.location.pathname);
+        }
+
         await sendInitialMessage();
         document.getElementById("userInput").focus();
     }

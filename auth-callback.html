@@ -167,7 +167,7 @@
   //    5. Redirect to the correct coach app page
   //
   //  Coach routing:
-  //    inner-leadership  →  /proxi-he
+  //    inner-leadership  →  /home-he   (Proxi He home screen)
   //    inner-journey     →  /proxi-she
   //    couples           →  /proxi-we
   //    bundle            →  /proxi-all
@@ -182,13 +182,13 @@
   // Whitelist: coach param value → app route
   // Only these exact routes are valid redirect targets (open-redirect protection)
   var VALID_ROUTES = {
-    "inner-leadership": "/proxi-he",
+    "inner-leadership": "/home-he",
     "inner-journey":    "/proxi-she",
     "couples":          "/proxi-we",
     "bundle":           "/proxi-all"
   };
 
-  var DEFAULT_ROUTE = "/proxi-he";
+  var DEFAULT_ROUTE = "/home-he";
 
   function showError() {
     document.getElementById("loading-state").style.display = "none";
