@@ -199,12 +199,39 @@
     try {
       var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // Supabase automatically picks up #access_token / #refresh_token from URL hash
-      var result = await sb.auth.getSession();
-      var session = result.data && result.data.session;
+      // Explicitly parse tokens from the URL hash rather than relying on
+      // Supabase's detectSessionInUrl auto-detection, which has a race condition
+      // on first client initialization and can return null for valid tokens.
+      var hashStr = window.location.hash.slice(1); // strip leading #
+      var hashParams = new URLSearchParams(hashStr);
+      var accessToken  = hashParams.get("access_token");
+      var refreshToken = hashParams.get("refresh_token");
+
+      var session = null;
+
+      if (accessToken && refreshToken) {
+        var setResult = await sb.auth.setSession({
+          access_token:  accessToken,
+          refresh_token: refreshToken
+        });
+        if (setResult.data && setResult.data.session) {
+          session = setResult.data.session;
+        } else {
+          console.error("auth-callback: setSession failed", setResult.error);
+        }
+      }
+
+      // Fall back to getSession in case session was already in localStorage
+      if (!session) {
+        var fallback = await sb.auth.getSession();
+        session = fallback.data && fallback.data.session;
+        if (!session) {
+          console.error("auth-callback: no session after setSession + getSession",
+            { accessToken: !!accessToken, refreshToken: !!refreshToken, hash: hashStr.slice(0, 80) });
+        }
+      }
 
       if (!session) {
-        console.error("auth-callback: no session after getSession()", result.error);
         showError();
         return;
       }
