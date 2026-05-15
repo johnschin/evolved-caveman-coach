@@ -291,6 +291,16 @@
     }
   </style>
 </head>
+<script>
+  // If Supabase drops an auth token at the root (e.g. dashboard magic link),
+  // forward it to auth-callback so the session gets established correctly.
+  (function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('access_token=') !== -1) {
+      window.location.replace('/auth/callback' + window.location.search + hash);
+    }
+  })();
+</script>
 <body>
 
   <!-- ══ HEADER ════════════════════════════════════════════════════════════ -->
