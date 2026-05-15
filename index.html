@@ -294,10 +294,20 @@
 <script>
   // If Supabase drops an auth token at the root (e.g. dashboard magic link),
   // forward it to auth-callback so the session gets established correctly.
+  //
+  // IMPORTANT: use an absolute non-www URL, NOT a relative path.
+  // A relative redirect (/auth/callback) triggers Netlify's www→non-www 301,
+  // which strips the hash fragment and loses the access_token.
+  // Jumping straight to https://proximitycoaching.com/auth/callback skips that
+  // intermediate 301 and preserves the hash.
   (function() {
     var hash = window.location.hash;
     if (hash && hash.indexOf('access_token=') !== -1) {
-      window.location.replace('/auth/callback' + window.location.search + hash);
+      window.location.replace(
+        'https://proximitycoaching.com/auth/callback' +
+        window.location.search +
+        hash
+      );
     }
   })();
 </script>
