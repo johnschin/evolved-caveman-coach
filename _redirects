@@ -27,6 +27,11 @@
 # Emotion wheel (linked from home-he.html)
 /emotion_wheel    /emotion_wheel.html    200
 
+# Conversation Starters (linked from home-he.html)
+/conversation-starters    /conversation-starters.html    200
+/cs-romantic              /cs-romantic.html              200
+/cs-family                /cs-family.html                200
+
 # Legal pages — Proxi He / John (Guide to Self)
 /privacy             /proximity-privacy.html        200
 /terms               /proximity-terms.html          200

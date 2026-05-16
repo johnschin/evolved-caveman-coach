@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent &amp; Child — Conversation Starters</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.14);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 64px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── PERSPECTIVE PICKER ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .level-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .level-pill {
+      padding: 8px 20px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .level-pill:hover { border-color: var(--aqua-deep); color: var(--slate-plum); }
+    .level-pill.active { background: var(--slate-plum); border-color: var(--slate-plum); color: #fff; }
+
+    /* ── LEVEL DESC ── */
+    .level-desc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .level-desc.visible { display: block; }
+
+    /* ── ACTIONS ROW ── */
+    .actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .count-text { font-size: 12px; color: var(--muted); }
+    .shuffle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: var(--aqua);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .shuffle-btn:hover { opacity: 0.85; }
+
+    /* ── QUESTION CARDS ── */
+    .questions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .q-num {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--aqua-deep);
+      margin-bottom: 7px;
+    }
+    .q-text {
+      font-size: 15px;
+      color: var(--slate-plum);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ── TIP BLOCK ── */
+    .container-tip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      display: none;
+    }
+    .container-tip.visible { display: block; }
+    .container-tip strong { color: var(--slate-plum); }
+
+    /* ── EMPTY STATE ── */
+    #empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    #questions-section { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/conversation-starters" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Parent &amp; Child</span>
+</header>
+
+<main>
+  <h1 class="page-title">Parent &amp; Child</h1>
+  <p class="page-sub">Pick a perspective. One question is enough. Then be quiet and really listen.</p>
+
+  <p class="section-label">Choose a perspective</p>
+  <div class="level-pills">
+    <button class="level-pill" data-level="teens"  onclick="selectLevel('teens')">For Teens</button>
+    <button class="level-pill" data-level="kids"   onclick="selectLevel('kids')">For Kids (6–13)</button>
+    <button class="level-pill" data-level="flip"   onclick="selectLevel('flip')">Ask Your Parent</button>
+  </div>
+
+  <div class="level-desc" id="level-desc"></div>
+
+  <div id="empty-state">
+    <p>Select a perspective above to get your questions.</p>
+  </div>
+
+  <div id="questions-section">
+    <div class="actions-row">
+      <span class="count-text" id="count-text"></span>
+      <button class="shuffle-btn" onclick="shuffleQuestions()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+        </svg>
+        New set
+      </button>
+    </div>
+    <div class="questions-grid" id="questions-grid"></div>
+    <div class="container-tip" id="container-tip"></div>
+  </div>
+</main>
+
+<script>
+var PER_SET = 8;
+var currentLevel = null;
+
+var LEVELS = {
+
+  teens: {
+    desc: "Questions for parents to ask their teenager. Designed to foster connection, curiosity, and mutual understanding — not interrogation.",
+    tip: "<strong>Dr. John's tip:</strong> Pick one question. Ask it at dinner, on a drive, or before bed. Then be quiet and really listen. Connection is built in small moments, consistently repeated.",
+    questions: [
+      "What's something you've been thinking about a lot lately that you haven't told me?",
+      "If you could change one thing about your school, what would it be?",
+      "What do you think you're better at now than you were a year ago?",
+      "What's something you wish I understood better about your life?",
+      "Who in your life right now do you feel most yourself around?",
+      "What do you think makes a friendship actually last?",
+      "If you could have dinner with anyone in history, who would it be and why?",
+      "What's something you're afraid of failing at?",
+      "What does a really good day look like for you right now?",
+      "Is there anything you wish you could ask me but feel like you can't?",
+      "What do you think you'll regret if you don't try it?",
+      "What do you think you need more of right now — space, or connection?",
+      "What's a belief you used to have that you've changed your mind about?",
+      "What's something going on in the world that actually worries you?",
+      "What kind of person do you want to be by the time you're 25?",
+      "What do you wish more adults understood about being a teenager?",
+      "Is there someone in your life who brings out the best in you? What is it about them?",
+      "What does fairness mean to you?",
+      "What's a risk you want to take but haven't yet?",
+      "When do you feel most proud of yourself?",
+      "What's the hardest part of social media for you?",
+      "If I knew one thing about your life that would help me understand you better, what would it be?",
+      "What do you think love looks like in a healthy relationship?",
+      "How do you handle it when you feel overwhelmed?",
+      "What's something you think I worry about too much?",
+      "What would you do with your life if you knew you couldn't fail?",
+      "What does home feel like to you?",
+      "What's something that happened this week that you're still thinking about?",
+      "What's one way I could support you better?",
+      "Who do you go to when things get hard, and why?",
+      "What's a value you have that you'd never compromise on?",
+      "What's something you've learned from a mistake you made?",
+      "What does success look like to you — not what I think, but what you actually think?",
+      "Is there anything I've said or done that hurt you that we've never really talked about?",
+      "What are you most excited about in the next year?",
+      "What's something you wish you were braver about?",
+      "What's one thing I do that makes you feel loved?",
+      "What do you think is the biggest problem facing your generation?",
+      "If you could redesign your life right now, what would you change first?",
+      "What's something you want me to know about who you're becoming?"
+    ]
+  },
+
+  kids: {
+    desc: "Questions for parents to ask their child, ages 6–13. These spark curiosity, safety, and closeness — designed to make kids feel genuinely seen.",
+    tip: "<strong>Dr. John's tip:</strong> Silly questions are a door to real ones. Start light, follow their energy. The goal is presence, not information.",
+    questions: [
+      "What made you laugh today?",
+      "If you could have any superpower, what would it be and how would you use it?",
+      "What's your favorite thing about yourself?",
+      "If you were a teacher, what would you teach?",
+      "What do you think about before you fall asleep?",
+      "Who is your kindest friend, and what makes them kind?",
+      "What's something that felt really hard this week?",
+      "If you could go anywhere in the world tomorrow, where would you go?",
+      "What's something you learned recently that surprised you?",
+      "When do you feel the most safe and cozy?",
+      "What's something you want to get really good at?",
+      "If animals could talk, which one do you think would be the funniest?",
+      "What do you wish grown-ups knew about being a kid?",
+      "What's something that made you feel proud recently?",
+      "If you could make one rule for our whole family, what would it be?",
+      "What makes you feel better when you're sad?",
+      "What's the best dream you've ever had?",
+      "Who do you think is the bravest person you know?",
+      "If you could invent something, what would it do?",
+      "What do you think makes someone a good friend?",
+      "What's something you're curious about right now?",
+      "What's your favorite thing we do together?",
+      "What's something you think is unfair?",
+      "If you had $100, how would you spend it?",
+      "What's the funniest thing that's happened to you recently?",
+      "What's something you're a little bit scared of?",
+      "If you could change one thing about school, what would it be?",
+      "What do you think you'll be like when you're grown up?",
+      "What's something you love that you don't think I know about?",
+      "What's the best thing about being your age?",
+      "What's something you wish we did more together?",
+      "What's a question you have that you don't know the answer to?",
+      "What does it feel like when someone is really mean to you?",
+      "If today was the last day of school ever, what would you do?",
+      "What's something you're really, really good at?",
+      "What's a place that feels magical to you?",
+      "What do you think makes our family special?",
+      "If you could be any character from a book or movie, who would you be?",
+      "What's one thing you want to learn how to do this year?",
+      "What was the best part of your day today?"
+    ]
+  },
+
+  flip: {
+    desc: "Questions for kids and teens to ask their parent. These help children understand who their parents really are — and feel closer to them as real people.",
+    tip: "<strong>Dr. John's tip:</strong> When your kid asks you one of these, answer honestly. Admitting you don't have it all figured out is one of the best things you can model.",
+    questions: [
+      "What were you like when you were my age?",
+      "What's something you were scared of as a kid?",
+      "What's the best decision you've ever made?",
+      "What's something you've changed your mind about as you got older?",
+      "What was your biggest dream when you were young?",
+      "What's something you wish you'd known when you were a teenager?",
+      "What's the funniest thing that happened to you as a kid?",
+      "What's something you've failed at that taught you something important?",
+      "Who was your best friend growing up, and what happened to them?",
+      "What's one thing you're still learning about yourself?",
+      "What do you love most about being my parent?",
+      "What's something that makes you really happy?",
+      "What was school like for you — what did you love, what did you hate?",
+      "Is there something you regret not doing when you were younger?",
+      "What's the hardest thing about being a grown-up?",
+      "What's the most important life lesson you've learned so far?",
+      "What did you want to be when you grew up?",
+      "How did you know you were in love for the first time?",
+      "What's something that still scares you?",
+      "Who was the most important person in your life growing up, and why?",
+      "What do you think makes a family strong?",
+      "What's something you're really proud of?",
+      "What do you think is the most important quality in a friend?",
+      "Was there a moment in your life that changed everything for you?",
+      "What's something you wish you could go back and tell your younger self?",
+      "What's the hardest thing you've ever had to get through?",
+      "What do you think happens when we die?",
+      "What does happiness mean to you?",
+      "What are you most grateful for right now?",
+      "What's one thing you hope I learn in my life?",
+      "What was your relationship with your own parents like?",
+      "Is there something you want to ask me but aren't sure how?",
+      "What do you think our family does really well?",
+      "What's something you still don't know how to do?",
+      "What's a mistake you made that you learned a lot from?",
+      "What's something you wish you were braver about?",
+      "What does a really good day look like for you?",
+      "What's something about the world right now that worries you?",
+      "What's the nicest thing anyone has ever done for you?",
+      "What do you love most about our relationship?"
+    ]
+  }
+
+};
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function selectLevel(level) {
+  currentLevel = level;
+
+  document.querySelectorAll('.level-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.level === level);
+  });
+
+  var data = LEVELS[level];
+  var descEl = document.getElementById('level-desc');
+  descEl.textContent = data.desc;
+  descEl.classList.add('visible');
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('questions-section').style.display = 'block';
+
+  var tipEl = document.getElementById('container-tip');
+  tipEl.innerHTML = data.tip;
+  tipEl.classList.add('visible');
+
+  shuffleQuestions();
+}
+
+function shuffleQuestions() {
+  if (!currentLevel) return;
+  var data = LEVELS[currentLevel];
+  var picked = shuffle(data.questions).slice(0, PER_SET);
+
+  var grid = document.getElementById('questions-grid');
+  grid.innerHTML = '';
+  picked.forEach(function(q, i) {
+    var card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = '<div class="q-num">Q' + (i + 1) + '</div><div class="q-text">' + q + '</div>';
+    grid.appendChild(card);
+  });
+
+  document.getElementById('count-text').textContent =
+    'Showing ' + picked.length + ' of ' + data.questions.length + ' questions';
+}
+</script>
+
+</body>
+</html>
