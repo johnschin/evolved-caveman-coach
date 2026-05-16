@@ -289,6 +289,82 @@
       padding: 72px 24px;
       text-align: center;
     }
+
+    /* ── Trial band ── */
+    .trial-band {
+      margin-top: 40px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 24px 28px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 40px;
+    }
+    .trial-band__label {
+      font-size: 14px;
+      color: var(--warm-cream);
+      opacity: 0.75;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .trial-band__form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trial-band__input {
+      flex: 1;
+      min-width: 200px;
+      max-width: 260px;
+      padding: 11px 16px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: rgba(255,255,255,0.08);
+      color: var(--warm-cream);
+      transition: border-color 0.2s;
+    }
+    .trial-band__input::placeholder { color: rgba(255,255,255,0.4); }
+    .trial-band__input:focus { outline: none; border-color: rgba(255,255,255,0.45); }
+    .trial-band__select {
+      padding: 11px 14px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: rgba(255,255,255,0.08);
+      color: var(--warm-cream);
+      cursor: pointer;
+    }
+    .trial-band__select option { background: #3A3353; color: #fff; }
+    .trial-band__btn {
+      padding: 11px 22px;
+      background: var(--aqua, #a3d0c9);
+      color: var(--slate-plum, #3A3353);
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .trial-band__btn:hover { opacity: 0.85; }
+    .trial-band__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .trial-band__msg {
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+      color: var(--warm-cream);
+      opacity: 0.8;
+    }
+    .trial-band__msg.error { color: #ff8f8f; opacity: 1; }
+    .trial-band__msg.success { color: #a3d0c9; opacity: 1; }
   </style>
 </head>
 <script>
@@ -363,6 +439,21 @@
         <div class="coach-card__price">$49 / month (both partners) →</div>
       </a>
     </nav>
+
+    <!-- Try free band -->
+    <div class="trial-band">
+      <p class="trial-band__label">Not ready to commit? Try any coach free — 3 sessions, 20 messages each, no credit card.</p>
+      <div class="trial-band__form">
+        <input type="email" id="homeTrial-email" class="trial-band__input" placeholder="Your email" autocomplete="email">
+        <select id="homeTrial-coach" class="trial-band__select">
+          <option value="john">Proxi He (for men)</option>
+          <option value="joree">Proxi She (for women)</option>
+          <option value="couples">Proxi We (for couples)</option>
+        </select>
+        <button class="trial-band__btn" id="homeTrial-btn" onclick="startIndexTrial()">Try free →</button>
+      </div>
+      <div class="trial-band__msg" id="homeTrial-msg"></div>
+    </div>
   </section>
 
   <!-- ══ ABOUT THE FOUNDERS ═════════════════════════════════════════════════ -->
@@ -490,5 +581,62 @@
     </div>
   </footer>
 
+<script>
+  var _IX_EDGE_FN = "https://osywbzzvsfjdvjhjalju.supabase.co/functions/v1/chat";
+  var _IX_COACH_PAGES = { john: "/proxi-he", joree: "/proxi-she", couples: "/proxi-we" };
+  var _IX_SESSION_KEYS = { john: "prx_trial_john", joree: "prx_trial_joree", couples: "prx_trial_couples" };
+  var _IX_STRIPE = {
+    john: "https://buy.stripe.com/4gM8wRaqhcPN5Qd7EfbMQ05",
+    joree: "https://buy.stripe.com/fZu14p2XP0311zX3nZbMQ06",
+    couples: "https://buy.stripe.com/7sY9AV7e5031bax4s3bMQ07"
+  };
+
+  async function startIndexTrial() {
+    var email = (document.getElementById("homeTrial-email").value || "").trim();
+    var coach = document.getElementById("homeTrial-coach").value;
+    var btn = document.getElementById("homeTrial-btn");
+    var msg = document.getElementById("homeTrial-msg");
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      msg.textContent = "Please enter a valid email address.";
+      msg.className = "trial-band__msg error";
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Starting…";
+    msg.textContent = "";
+    msg.className = "trial-band__msg";
+    try {
+      var res = await fetch(_IX_EDGE_FN, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "start_email_trial", email: email, coach: coach })
+      });
+      var data = await res.json();
+      if (data.status === "trial_expired") {
+        msg.innerHTML = "Trial used for this coach. <a href=\"" + _IX_STRIPE[coach] + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue →</a>";
+        msg.className = "trial-band__msg error";
+        btn.disabled = false;
+        btn.textContent = "Try free →";
+        return;
+      }
+      if (data.token) {
+        sessionStorage.setItem(_IX_SESSION_KEYS[coach], data.token);
+        window.location.href = _IX_COACH_PAGES[coach];
+      } else {
+        throw new Error("No token");
+      }
+    } catch (e) {
+      msg.textContent = "Something went wrong. Please try again.";
+      msg.className = "trial-band__msg error";
+      btn.disabled = false;
+      btn.textContent = "Try free →";
+      console.error("Index trial error:", e);
+    }
+  }
+
+  document.getElementById("homeTrial-email").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") { e.preventDefault(); startIndexTrial(); }
+  });
+</script>
 </body>
 </html>

@@ -745,7 +745,14 @@
     <div class="header-actions">
       <button class="btn-subtle" id="btn-new-session" style="display:none;" onclick="startNewSession()">New Session</button>
       <button class="btn-subtle" id="btn-logout" style="display:none;" onclick="handleLogout()">Sign Out</button>
+      <a href="https://buy.stripe.com/fZu14p2XP0311zX3nZbMQ06" class="btn-subtle" id="btn-subscribe" style="display:none;background:var(--plum,#82316c);color:#fff;font-weight:700;text-decoration:none;padding:7px 14px;border-radius:8px;">Subscribe →</a>
     </div>
+  </div>
+  <!-- Trial status bar -->
+  <div id="trialStatusBar" style="display:none;background:rgba(130,49,108,0.07);border-bottom:1px solid rgba(130,49,108,0.15);padding:7px 20px;text-align:center;font-size:12.5px;color:var(--slate,#555b6e);">
+    <span id="trialStatusText">Free trial</span>
+    &nbsp;·&nbsp;
+    <a href="https://buy.stripe.com/fZu14p2XP0311zX3nZbMQ06" style="color:var(--plum,#82316c);font-weight:600;text-decoration:none;">Subscribe for unlimited access →</a>
   </div>
 
   <!-- ===== EDUCATIONAL BANNER ===== -->
@@ -802,11 +809,12 @@
           </div>
         </div>
 
-        <!-- Trial Token -->
-        <div class="auth-divider">or enter your access code</div>
-        <div class="trial-input-row">
-          <input type="text" id="trial-token-input" placeholder="Access code">
-          <button class="btn-primary" onclick="handleTrialToken()" style="border-radius:10px;">Go</button>
+        <!-- Free trial CTA -->
+        <div class="auth-divider">or</div>
+        <div style="text-align:center; margin-top:4px;">
+          <a href="/she" style="color:var(--plum,#82316c);font-size:13px;font-weight:600;text-decoration:none;">
+            Try 3 free sessions — no credit card →
+          </a>
         </div>
       </div>
     </div>
@@ -1007,11 +1015,39 @@ HARD BOUNDARIES:
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       sessionId = uuid.v4();
 
-      // Check for existing session
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session?.user) {
-        currentUser = session.user;
-        await checkDisclaimerAndStart();
+      // ── Check sessionStorage for email-based free trial token ──────────────
+      const savedTrial = sessionStorage.getItem('prx_trial_joree');
+      if (savedTrial) {
+        try {
+          const tRes = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'check_trial', trial_token: savedTrial, coach: COACH })
+          });
+          const tData = await tRes.json();
+          if (tData.status === 'active') {
+            trialToken = savedTrial;
+            showScreen('screen-chat');
+            document.getElementById('btn-new-session').style.display = 'inline-block';
+            document.getElementById('hamburgerBtn').style.display = 'flex';
+            updateTrialInfo(tData);
+            showAIDisclosureBanner();
+            showOpeningMessage(tData.first_name || null);
+          } else if (tData.status === 'session_complete') {
+            trialToken = savedTrial;
+            showTrialSessionComplete(tData);
+          } else {
+            sessionStorage.removeItem('prx_trial_joree');
+            // fall through to normal auth
+            await checkNormalAuth();
+          }
+        } catch (e) {
+          console.warn('Trial check failed:', e);
+          sessionStorage.removeItem('prx_trial_joree');
+          await checkNormalAuth();
+        }
+      } else {
+        await checkNormalAuth();
       }
 
       // Disclaimer checkboxes — all three must be checked
@@ -1028,6 +1064,14 @@ HARD BOUNDARIES:
         textarea.style.height = 'auto';
         textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
       });
+    }
+
+    async function checkNormalAuth() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        await checkDisclaimerAndStart();
+      }
     }
 
     // ===== AUTH FUNCTIONS =====
@@ -1330,17 +1374,32 @@ HARD BOUNDARIES:
       const sessions = data.sessions_remaining ?? '?';
       el.textContent = `${sessionMsgs} messages left in this session | ${sessions} session${sessions === 1 ? '' : 's'} remaining`;
       el.style.display = 'block';
+      // Also update status bar
+      const bar = document.getElementById('trialStatusBar');
+      const barText = document.getElementById('trialStatusText');
+      if (bar && barText) {
+        const sessUsed = data.sessions_used !== undefined ? data.sessions_used : '?';
+        barText.textContent = `Free trial · Session ${sessUsed + 1} of 3 · ${sessionMsgs} messages remaining this session`;
+        bar.style.display = 'block';
+        const subBtn = document.getElementById('btn-subscribe');
+        if (subBtn) subBtn.style.display = 'inline-block';
+      }
     }
 
     function showTrialSessionComplete(data) {
       showScreen('screen-chat');
       document.getElementById('btn-new-session').style.display = 'inline-block';
-      document.getElementById('hamburgerBtn').style.display = 'flex';
+      document.getElementById('hamburgerBtn').style.display = 'none';
+      const subBtn = document.getElementById('btn-subscribe');
+      if (subBtn) subBtn.style.display = 'inline-block';
+      const bar = document.getElementById('trialStatusBar');
+      if (bar) bar.style.display = 'block';
+      showAIDisclosureBanner();
       const sessions = data.sessions_remaining || 0;
       if (sessions > 0) {
-        addSystemMessage(`Your previous session is complete. You have ${sessions} session${sessions === 1 ? '' : 's'} remaining. Click "New Session" to begin.`);
+        addSystemMessage(`Your previous session is complete. You have ${sessions} session${sessions === 1 ? '' : 's'} remaining in your free trial. Click "New Session" to begin.`);
       } else {
-        addSystemMessage('Your free trial has ended. Visit joreerose.com for full access.');
+        addSystemMessage('Your free trial has ended. Subscribe to continue — $29/month, cancel anytime.');
       }
     }
 

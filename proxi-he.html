@@ -615,9 +615,16 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn-small" onclick="startNewSession()">New Session</button>
-                <button class="btn-small" onclick="handleLogout()">Sign Out</button>
+                <button class="btn-small" id="btnNewSession" onclick="startNewSession()">New Session</button>
+                <button class="btn-small" id="btnSignOut" onclick="handleLogout()">Sign Out</button>
+                <a href="https://buy.stripe.com/4gM8wRaqhcPN5Qd7EfbMQ05" class="btn-small" id="btnSubscribe" style="display:none;background:var(--aqua,#a3d0c9);color:var(--slate-plum,#3A3353);font-weight:700;text-decoration:none;">Subscribe →</a>
             </div>
+        </div>
+        <!-- Trial status bar -->
+        <div id="trialStatusBar" style="display:none;background:rgba(163,208,201,0.12);border-bottom:1px solid rgba(163,208,201,0.25);padding:7px 20px;text-align:center;font-size:12.5px;color:var(--muted,#7A7090);">
+          <span id="trialStatusText">Free trial</span>
+          &nbsp;·&nbsp;
+          <a href="https://buy.stripe.com/4gM8wRaqhcPN5Qd7EfbMQ05" style="color:var(--aqua-deep,#6bada3);font-weight:600;text-decoration:none;">Subscribe for unlimited access →</a>
         </div>
 
         <div class="messages" id="messages">
@@ -696,6 +703,7 @@
     // =====================================================
     var currentUser = null;
     var accessToken = null;
+    var trialToken = null;      // set when user arrives from landing page trial
     var sessionId = null;
     var conversationHistory = [];
     var messageCount = 0;
@@ -1080,6 +1088,27 @@
         pulseRel       = null;
         pulseChallenge = null;
 
+        // If in trial mode, advance the session on the backend
+        if (trialToken) {
+            try {
+                var sRes = await fetch(EDGE_FUNCTION_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "start_new_session", trial_token: trialToken, coach: COACH })
+                });
+                var sData = await sRes.json();
+                if (sData.status === "trial_expired" || sData.status === "error") {
+                    appendMessage("assistant", "Your free trial has ended. Subscribe to continue — $29/month, cancel anytime.");
+                    showTrialExpiredUI();
+                    sessionInProgress = false;
+                    return;
+                }
+                updateTrialStatusBar(sData);
+            } catch (e) {
+                console.warn("start_new_session error:", e);
+            }
+        }
+
         await saveSessionSummary();
         sessionId = generateSessionId();
         conversationHistory = [];
@@ -1131,26 +1160,38 @@
         conversationHistory.push({ role: "user", content: triggerMessage });
 
         try {
+            var initPayload = {
+                system: systemPrompt,
+                messages: conversationHistory,
+                session_id: sessionId,
+                is_first_message: true,
+                coach: COACH
+            };
+            if (trialToken) {
+                initPayload.trial_token = trialToken;
+            }
             var res = await fetch(EDGE_FUNCTION_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": accessToken ? "Bearer " + accessToken : "" },
-                body: JSON.stringify({
-                    system: systemPrompt,
-                    messages: conversationHistory,
-                    session_id: sessionId,
-                    is_first_message: true
-                })
+                body: JSON.stringify(initPayload)
             });
             if (!res.ok) throw new Error("Server returned " + res.status);
             var data;
             try { data = await res.json(); } catch (parseErr) { throw new Error("Invalid response from server"); }
             showTyping(false);
-            if (data.content && data.content[0] && data.content[0].text) {
+            if (data.trial_status === "trial_expired") {
+                appendMessage("assistant", "Your free trial has ended. Subscribe to continue — $29/month, cancel anytime.");
+                showTrialExpiredUI();
+            } else if (data.trial_status === "session_complete") {
+                appendMessage("assistant", data.content && data.content[0] ? data.content[0].text : "Session complete.");
+                if (trialToken) updateTrialStatusBar(data);
+            } else if (data.content && data.content[0] && data.content[0].text) {
                 var reply = data.content[0].text;
                 conversationHistory.push({ role: "assistant", content: reply });
                 appendMessage("assistant", reply);
                 messageCount++;
                 isFirstMessage = false;
+                if (trialToken) updateTrialStatusBar(data);
             } else {
                 appendMessage("assistant", "Having trouble connecting. Please try refreshing the page.");
             }
@@ -1245,26 +1286,42 @@
         }
 
         try {
+            var msgPayload = {
+                system: systemPrompt,
+                messages: conversationHistory,
+                session_id: sessionId,
+                is_first_message: false,
+                coach: COACH
+            };
+            if (trialToken) {
+                msgPayload.trial_token = trialToken;
+            }
             var res = await fetch(EDGE_FUNCTION_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": accessToken ? "Bearer " + accessToken : "" },
-                body: JSON.stringify({
-                    system: systemPrompt,
-                    messages: conversationHistory,
-                    session_id: sessionId,
-                    is_first_message: false
-                })
+                body: JSON.stringify(msgPayload)
             });
             if (!res.ok) throw new Error("Server returned " + res.status);
             var data;
             try { data = await res.json(); } catch (parseErr) { throw new Error("Invalid response from server"); }
             showTyping(false);
 
-            if (data.content && data.content[0] && data.content[0].text) {
+            if (data.trial_status === "trial_expired") {
+                conversationHistory.pop();
+                appendMessage("assistant", "Your free trial has ended. Subscribe to keep going \u2014 $29/month, cancel anytime.");
+                showTrialExpiredUI();
+            } else if (data.trial_status === "session_complete") {
+                var sessText = data.content && data.content[0] ? data.content[0].text : "Session complete.";
+                conversationHistory.push({ role: "assistant", content: sessText });
+                appendMessage("assistant", sessText);
+                messageCount++;
+                if (trialToken) updateTrialStatusBar(data);
+            } else if (data.content && data.content[0] && data.content[0].text) {
                 var reply = data.content[0].text;
                 conversationHistory.push({ role: "assistant", content: reply });
                 appendMessage("assistant", reply);
                 messageCount++;
+                if (trialToken) updateTrialStatusBar(data);
             } else if (data.error) {
                 appendMessage("assistant", "I hit a snag \u2014 " + (data.error.message || "something went wrong") + ". Try again?");
                 conversationHistory.pop();
@@ -1545,6 +1602,32 @@
             if (hash.includes("type=recovery")) { showView("reset"); }
             return;
         }
+
+        // ── Trial token check (email-based free trial) ──────────────────────
+        var savedTrial = sessionStorage.getItem("prx_trial_john");
+        if (savedTrial) {
+            try {
+                var tRes = await fetch(EDGE_FUNCTION_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "check_trial", trial_token: savedTrial, coach: COACH })
+                });
+                var tData = await tRes.json();
+                if (tData.status === "active" || tData.status === "session_complete") {
+                    trialToken = savedTrial;
+                    await enterTrialChat(tData);
+                    return;
+                } else {
+                    // expired or invalid — clear it
+                    sessionStorage.removeItem("prx_trial_john");
+                }
+            } catch (e) {
+                console.warn("Trial check failed:", e);
+                sessionStorage.removeItem("prx_trial_john");
+            }
+        }
+
+        // ── Normal Supabase auth ─────────────────────────────────────────────
         var sessionResult = await sb.auth.getSession();
         if (sessionResult.data.session) {
             currentUser = sessionResult.data.session.user;
@@ -1555,6 +1638,50 @@
             showView("signup");
             document.getElementById("kajabiWelcome").style.display = "block";
         }
+    }
+
+    // ── Trial-mode entry ─────────────────────────────────────────────────────
+    async function enterTrialChat(checkData) {
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("chatScreen").classList.add("active");
+        document.getElementById("hamburgerBtn").style.display = "none"; // no history for trial users
+        document.getElementById("btnNewSession").style.display = "inline-block";
+        document.getElementById("btnSignOut").style.display = "none";
+        document.getElementById("btnSubscribe").style.display = "inline-block";
+
+        showAIDisclosureBanner();
+
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+        openingVariation = pickOpeningVariation();
+
+        updateTrialStatusBar(checkData);
+        document.getElementById("trialStatusBar").style.display = "block";
+
+        if (checkData.status === "session_complete") {
+            var sessRemain = checkData.sessions_remaining || 0;
+            if (sessRemain > 0) {
+                appendMessage("assistant", "Welcome back. Your previous session is complete. You have " + sessRemain + " session" + (sessRemain === 1 ? "" : "s") + " remaining in your free trial. Click “New Session” to begin.");
+            } else {
+                appendMessage("assistant", "Your free trial has ended. Subscribe to continue the work — $29/month, cancel anytime.");
+                showTrialExpiredUI();
+            }
+        } else {
+            await sendInitialMessage();
+        }
+    }
+
+    function updateTrialStatusBar(data) {
+        var sessionsLeft = data.sessions_remaining !== undefined ? data.sessions_remaining : "?";
+        var msgsLeft = data.session_messages_remaining !== undefined ? data.session_messages_remaining : (data.messages_remaining !== undefined ? data.messages_remaining : "?");
+        document.getElementById("trialStatusText").textContent =
+            "Free trial · Session " + ((data.sessions_used || 0) + 1) + " of 3 · " + msgsLeft + " messages remaining this session";
+    }
+
+    function showTrialExpiredUI() {
+        document.getElementById("btnSubscribe").style.display = "inline-block";
     }
 
     // Listen for auth state changes
