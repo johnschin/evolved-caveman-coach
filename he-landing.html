@@ -93,7 +93,48 @@
       }
     ]
   }
-  </script>
+  
+  function startTrialHero() {
+    var email = (document.getElementById("trialEmailHero").value || "").trim();
+    var btn = document.getElementById("trialBtnHero");
+    var msg = document.getElementById("trialMsgHero");
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      msg.textContent = "Please enter a valid email address.";
+      msg.className = "prox-trial__msg error";
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Starting…";
+    msg.textContent = "";
+    msg.className = "prox-trial__msg";
+    fetch(_EDGE_FN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start_email_trial", email: email, coach: _COACH })
+    }).then(r => r.json()).then(data => {
+      if (data.status === "trial_expired") {
+        msg.innerHTML = "Your free trial has been used. <a href=\"" + _STRIPE_URL + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue →</a>";
+        msg.className = "prox-trial__msg error";
+        btn.disabled = false;
+        btn.textContent = "Start 3 free sessions";
+        return;
+      }
+      if (data.token) {
+        sessionStorage.setItem(_SESSION_KEY, data.token);
+        window.location.href = _COACH_PAGE;
+      }
+    }).catch(e => {
+      msg.textContent = "Something went wrong. Please try again.";
+      msg.className = "prox-trial__msg error";
+      btn.disabled = false;
+      btn.textContent = "Start 3 free sessions";
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    var heroInput = document.getElementById("trialEmailHero");
+    if (heroInput) heroInput.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); startTrialHero(); } });
+  });
+</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,6 +150,16 @@
     .prox-trial__msg { font-size: 13px; min-height: 18px; margin-top: 4px; text-align: center; }
     .prox-trial__msg.error { color: #c0392b; }
     .prox-trial__msg.success { color: var(--aqua-deep,#6bada3); }
+    .prox-trial--hero { margin-top: 24px; }
+    .prox-trial--hero .prox-trial__divider { color: rgba(255,255,255,0.6); }
+    .prox-trial--hero .prox-trial__divider::before,
+    .prox-trial--hero .prox-trial__divider::after { background: rgba(255,255,255,0.25); }
+    .prox-trial--hero .prox-trial__sub { color: rgba(255,255,255,0.6); }
+    .prox-trial--hero .prox-trial__input { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); color: #fff; }
+    .prox-trial--hero .prox-trial__input::placeholder { color: rgba(255,255,255,0.45); }
+    .prox-trial--hero .prox-trial__input:focus { border-color: rgba(255,255,255,0.6); }
+    .prox-trial--hero .prox-trial__msg.error { color: #ffaaaa; }
+    .prox-trial--hero .prox-trial__msg.success { color: rgba(255,255,255,0.8); }
   </style>
 </head>
 <body class="sub--he">
@@ -138,6 +189,15 @@
         <a href="#what-it-is" class="btn btn--ghost-light btn--lg">Learn more</a>
       </div>
       <p class="prox-hero__trust">Cancel anytime &nbsp;·&nbsp; Not therapy &nbsp;·&nbsp; No scheduling required</p>
+      <div class="prox-trial prox-trial--hero">
+        <div class="prox-trial__divider">or try it free first</div>
+        <p class="prox-trial__sub">3 sessions &nbsp;&middot;&nbsp; 20 messages each &nbsp;&middot;&nbsp; no credit card</p>
+        <div class="prox-trial__form">
+          <input type="email" id="trialEmailHero" class="prox-trial__input" placeholder="Your email address" autocomplete="email">
+          <button class="btn btn--sub" id="trialBtnHero" onclick="startTrialHero()">Start 3 free sessions</button>
+        </div>
+        <div class="prox-trial__msg" id="trialMsgHero"></div>
+      </div>
     </div>
   </section>
 
@@ -440,7 +500,7 @@
   var _EDGE_FN = "https://osywbzzvsfjdvjhjalju.supabase.co/functions/v1/chat";
   var _COACH = "john";
   var _SESSION_KEY = "prx_trial_john";
-  var _COACH_PAGE = "/proxi-he";
+  var _COACH_PAGE = "/home-he";
   var _STRIPE_URL = "https://buy.stripe.com/4gM8wRaqhcPN5Qd7EfbMQ05";
 
   async function startTrial() {

@@ -1497,6 +1497,13 @@
             return;
         }
 
+        // Trial users: if a trial token exists in sessionStorage, show home directly
+        var trialToken = sessionStorage.getItem("prx_trial_john");
+        if (trialToken) {
+            showHome();
+            return;
+        }
+
         var sessionResult = await sb.auth.getSession();
         if (sessionResult.data.session) {
             currentUser = sessionResult.data.session.user;
