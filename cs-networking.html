@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networking — Conversation Starters</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.14);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 64px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .how-to {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .how-to strong { color: var(--slate-plum); }
+
+    /* ── TIER FILTER ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .tier-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .tier-pill {
+      padding: 7px 16px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tier-pill:hover { border-color: var(--aqua-deep); color: var(--slate-plum); }
+    .tier-pill.active { background: var(--slate-plum); border-color: var(--slate-plum); color: #fff; }
+
+    /* ── ACTIONS ROW ── */
+    .actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .count-text { font-size: 12px; color: var(--muted); }
+    .shuffle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: var(--aqua);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .shuffle-btn:hover { opacity: 0.85; }
+
+    /* ── QUESTION CARDS ── */
+    .questions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .q-num {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--aqua-deep);
+    }
+    .q-tier {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      background: #F0EBF8;
+      padding: 2px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .q-text {
+      font-size: 15px;
+      color: var(--slate-plum);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ── DR JOHN TIP ── */
+    .dr-john-tip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+    .dr-john-tip strong { color: var(--slate-plum); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/conversation-starters" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Networking</span>
+</header>
+
+<main>
+  <h1 class="page-title">Business Networking</h1>
+  <p class="page-sub">Turn contacts into real connections. Ditch "so what do you do?"</p>
+
+  <div class="how-to">
+    <strong>How to use these:</strong> Start at Tier 1 and follow the energy. You don't need all 60 — pick 3–5 that match the moment. The most important move is what comes <em>after</em> the question: stay quiet, stay curious, and ask one genuine follow-up. That's where the real connection forms.
+  </div>
+
+  <p class="section-label">Filter by tier</p>
+  <div class="tier-pills">
+    <button class="tier-pill active" data-tier="all"   onclick="setTier('all')">All tiers</button>
+    <button class="tier-pill" data-tier="1" onclick="setTier('1')">Tier 1 — Easy Open</button>
+    <button class="tier-pill" data-tier="2" onclick="setTier('2')">Tier 2 — Warming Up</button>
+    <button class="tier-pill" data-tier="3" onclick="setTier('3')">Tier 3 — Getting Interesting</button>
+    <button class="tier-pill" data-tier="4" onclick="setTier('4')">Tier 4 — Real Conversation</button>
+    <button class="tier-pill" data-tier="5" onclick="setTier('5')">Tier 5 — The Ones That Stick</button>
+  </div>
+
+  <div class="actions-row">
+    <span class="count-text" id="count-text"></span>
+    <button class="shuffle-btn" onclick="shuffleQuestions()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+        <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+      </svg>
+      New set
+    </button>
+  </div>
+
+  <div class="questions-grid" id="questions-grid"></div>
+
+  <div class="dr-john-tip">
+    <strong>Dr. John:</strong> The goal of a great networking question isn't information — it's invitation. You're inviting someone to show you the part of themselves that doesn't fit on a business card. Do that, and they'll remember you long after the event is over.
+  </div>
+</main>
+
+<script>
+var PER_SET = 8;
+var currentTier = 'all';
+
+var QUESTIONS = [
+  { tier: "1", label: "Easy Open",          text: "What's the most interesting thing you're working on right now?" },
+  { tier: "1", label: "Easy Open",          text: "What brought you to this particular event?" },
+  { tier: "1", label: "Easy Open",          text: "What's the best thing that's happened in your work in the last few months?" },
+  { tier: "1", label: "Easy Open",          text: "If you had to describe what you do in a way that would make someone curious — not the LinkedIn version — how would you put it?" },
+  { tier: "1", label: "Easy Open",          text: "What's something in your industry right now that you think is genuinely exciting?" },
+  { tier: "1", label: "Easy Open",          text: "What does a really great workday look like for you?" },
+  { tier: "1", label: "Easy Open",          text: "What's a project or idea you're most looking forward to right now?" },
+  { tier: "1", label: "Easy Open",          text: "What kind of people do you find most energizing to work with?" },
+  { tier: "1", label: "Easy Open",          text: "What's the most interesting problem you're trying to solve these days?" },
+  { tier: "1", label: "Easy Open",          text: "What originally drew you to your field?" },
+  { tier: "1", label: "Easy Open",          text: "What's something about your work that people outside your industry rarely appreciate?" },
+  { tier: "1", label: "Easy Open",          text: "What's a win you've had recently that you're still smiling about?" },
+
+  { tier: "2", label: "Warming Up",         text: "What's something you've figured out in the last year that changed how you work?" },
+  { tier: "2", label: "Warming Up",         text: "What does your ideal collaboration look like — the kind where the work actually gets better?" },
+  { tier: "2", label: "Warming Up",         text: "What's a skill you've been building lately — professional or otherwise?" },
+  { tier: "2", label: "Warming Up",         text: "What part of your work do you think you're genuinely best at?" },
+  { tier: "2", label: "Warming Up",         text: "What's an industry trend you're excited about — and one you're skeptical of?" },
+  { tier: "2", label: "Warming Up",         text: "Who outside your industry influences how you think about your work?" },
+  { tier: "2", label: "Warming Up",         text: "What does growth look like for you professionally right now?" },
+  { tier: "2", label: "Warming Up",         text: "What kind of work energizes you, and what kind quietly drains you?" },
+  { tier: "2", label: "Warming Up",         text: "What's a project you're most proud of in the last couple of years?" },
+  { tier: "2", label: "Warming Up",         text: "If you could solve one problem in your field, what would it be?" },
+  { tier: "2", label: "Warming Up",         text: "What are you learning right now — inside or outside of work?" },
+  { tier: "2", label: "Warming Up",         text: "What's a tool, book, or resource that's made a real difference in how you operate?" },
+
+  { tier: "3", label: "Getting Interesting", text: "What's a mistake you made early in your career that turned into a real lesson?" },
+  { tier: "3", label: "Getting Interesting", text: "What's something you believed about your industry when you started that turned out to be wrong?" },
+  { tier: "3", label: "Getting Interesting", text: "What's a career decision that looked risky at the time but worked out?" },
+  { tier: "3", label: "Getting Interesting", text: "What do you wish someone had told you at the start of your career?" },
+  { tier: "3", label: "Getting Interesting", text: "What's something about leadership that took you a long time to actually figure out?" },
+  { tier: "3", label: "Getting Interesting", text: "What do you think most people in your field are getting wrong right now?" },
+  { tier: "3", label: "Getting Interesting", text: "What's something you've changed your mind about professionally in the last few years?" },
+  { tier: "3", label: "Getting Interesting", text: "What's the best piece of feedback you ever received — and did you actually use it?" },
+  { tier: "3", label: "Getting Interesting", text: "How has your definition of success changed since you started your career?" },
+  { tier: "3", label: "Getting Interesting", text: "What does work-life balance actually mean to you — not the corporate answer?" },
+  { tier: "3", label: "Getting Interesting", text: "What's something you've deliberately stopped doing that made you better at your work?" },
+  { tier: "3", label: "Getting Interesting", text: "What's a project that didn't go as planned — and what did it teach you?" },
+
+  { tier: "4", label: "Real Conversation",   text: "What values are non-negotiable in how you work — things you won't compromise on, even when it costs you?" },
+  { tier: "4", label: "Real Conversation",   text: "What drives you on the days when motivation is hard to find?" },
+  { tier: "4", label: "Real Conversation",   text: "What kind of work gives you a genuine sense of meaning — not just accomplishment?" },
+  { tier: "4", label: "Real Conversation",   text: "What's something about your career path that you're still figuring out?" },
+  { tier: "4", label: "Real Conversation",   text: "What's a professional relationship that changed the trajectory of your work?" },
+  { tier: "4", label: "Real Conversation",   text: "What does integrity look like in your industry — and where does it get tested?" },
+  { tier: "4", label: "Real Conversation",   text: "What do you think separates people who do good work from people who do truly great work?" },
+  { tier: "4", label: "Real Conversation",   text: "What have you built or created that you're proud of — not because it succeeded, but because of what it took?" },
+  { tier: "4", label: "Real Conversation",   text: "If you could only be known for one thing professionally, what would you want it to be?" },
+  { tier: "4", label: "Real Conversation",   text: "What's a conversation or encounter that fundamentally shifted how you think about your work?" },
+  { tier: "4", label: "Real Conversation",   text: "What's the most important thing you've learned about working with people — the real lesson, not the textbook one?" },
+  { tier: "4", label: "Real Conversation",   text: "Who's a mentor or influence whose approach to their work you most admire, and why?" },
+
+  { tier: "5", label: "The Ones That Stick", text: "If you could start your career over knowing what you know now, what would you do differently?" },
+  { tier: "5", label: "The Ones That Stick", text: "What would you work on if you knew it couldn't fail — and money wasn't part of the equation?" },
+  { tier: "5", label: "The Ones That Stick", text: "What legacy do you want to leave in your field?" },
+  { tier: "5", label: "The Ones That Stick", text: "What's a problem in your industry that most of your peers aren't taking seriously enough?" },
+  { tier: "5", label: "The Ones That Stick", text: "At what point in your career did you feel like you finally understood what you were really doing — and what changed?" },
+  { tier: "5", label: "The Ones That Stick", text: "If you stepped away from your work tomorrow, what would you most want to have contributed?" },
+  { tier: "5", label: "The Ones That Stick", text: "What do you think is the most important thing work can give a person — beyond a paycheck?" },
+  { tier: "5", label: "The Ones That Stick", text: "What are you trying to build or change that matters beyond the bottom line?" },
+  { tier: "5", label: "The Ones That Stick", text: "What's the hardest professional decision you've made that you're still at peace with?" },
+  { tier: "5", label: "The Ones That Stick", text: "What would you want someone just starting in your field to know that you had to figure out the hard way?" },
+  { tier: "5", label: "The Ones That Stick", text: "What do you think the next generation of professionals in your field needs to understand that most aren't being taught?" },
+  { tier: "5", label: "The Ones That Stick", text: "What does doing meaningful work actually mean to you — at this point in your career?" }
+];
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function setTier(tier) {
+  currentTier = tier;
+  document.querySelectorAll('.tier-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.tier === tier);
+  });
+  shuffleQuestions();
+}
+
+function shuffleQuestions() {
+  var pool = currentTier === 'all'
+    ? QUESTIONS
+    : QUESTIONS.filter(function(q) { return q.tier === currentTier; });
+
+  var picked = shuffle(pool).slice(0, PER_SET);
+
+  var grid = document.getElementById('questions-grid');
+  grid.innerHTML = '';
+  picked.forEach(function(q, i) {
+    var card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML =
+      '<div class="q-meta">' +
+        '<span class="q-num">Q' + (i + 1) + '</span>' +
+        '<span class="q-tier">Tier ' + q.tier + ' — ' + q.label + '</span>' +
+      '</div>' +
+      '<div class="q-text">' + q.text + '</div>';
+    grid.appendChild(card);
+  });
+
+  document.getElementById('count-text').textContent =
+    'Showing ' + picked.length + ' of ' + pool.length + ' questions';
+}
+
+// Init on load
+shuffleQuestions();
+</script>
+
+</body>
+</html>
