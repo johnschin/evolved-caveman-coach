@@ -612,8 +612,8 @@
         body: JSON.stringify({ action: "start_email_trial", email: email, coach: coach })
       });
       var data = await res.json();
-      if (data.status === "trial_expired") {
-        msg.innerHTML = "Trial used for this coach. <a href=\"" + _IX_STRIPE[coach] + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue →</a>";
+      if (data.status === "trial_expired" || data.status === "already_subscribed") {
+        msg.textContent = "Sorry. This email has been used once already.";
         msg.className = "trial-band__msg error";
         btn.disabled = false;
         btn.textContent = "Try free →";

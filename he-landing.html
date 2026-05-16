@@ -484,8 +484,8 @@
         body: JSON.stringify({ action: "start_email_trial", email: email, coach: _COACH })
       });
       var data = await res.json();
-      if (data.status === "trial_expired") {
-        msg.innerHTML = "Your free trial has been used. <a href=\"" + _STRIPE_URL + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue →</a>";
+      if (data.status === "trial_expired" || data.status === "already_subscribed") {
+        msg.textContent = "Sorry. This email has been used once already.";
         msg.className = "prox-trial__msg error";
         btn.disabled = false;
         btn.textContent = "Start 3 free sessions";
@@ -528,8 +528,8 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "start_email_trial", email: email, coach: _COACH })
     }).then(r => r.json()).then(data => {
-      if (data.status === "trial_expired") {
-        msg.innerHTML = "Your free trial has been used. <a href=\"" + _STRIPE_URL + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue \u2192</a>";
+      if (data.status === "trial_expired" || data.status === "already_subscribed") {
+        msg.textContent = "Sorry. This email has been used once already.";
         msg.className = "prox-trial__msg error";
         btn.disabled = false;
         btn.textContent = "Start 3 free sessions";
