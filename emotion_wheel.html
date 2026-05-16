@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion Wheel — The Evolved Caveman</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:            #a3d0c9;
+      --aqua-dim:        #5a8a83;
+      --aqua-dark:       #2a4a46;
+      --charcoal:        #1a1a1d;
+      --charcoal-light:  #222226;
+      --charcoal-lighter:#2e2e33;
+      --charcoal-hover:  #35353b;
+      --off-white:       #e8e8e8;
+      --muted:           #888;
+      --dim:             #555;
+      --border:          #333338;
+      --font-sans:       'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--charcoal);
+      color: var(--off-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: var(--charcoal-light);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--aqua); }
+    .brand h1 { font-size: 13px; font-weight: 700; color: var(--aqua); letter-spacing: 0.8px; text-transform: uppercase; }
+    .header-tag { font-size: 10px; background: var(--aqua-dark); color: var(--aqua); padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .header-count { font-size: 12px; color: var(--dim); }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 28px 28px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .page-intro { text-align: center; }
+    .page-intro h2 { font-size: 22px; font-weight: 700; color: var(--off-white); margin-bottom: 8px; }
+    .page-intro p { font-size: 14px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+    /* LAYOUT */
+    .wheel-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--charcoal-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .sidebar-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 10px 12px 5px;
+    }
+    .sidebar-divider { height: 1px; background: var(--border); margin: 6px 0; }
+
+    .cat-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0 8px;
+      gap: 0;
+    }
+    .cat-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      text-align: left;
+      padding: 7px 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-radius: 6px;
+      transition: all 0.12s;
+    }
+    .cat-btn:hover { background: var(--charcoal-lighter); color: var(--off-white); }
+    .cat-btn.selected { background: var(--charcoal-lighter); color: var(--off-white); }
+    .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .toggle-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      color: var(--dim);
+      font-size: 10px;
+      flex-shrink: 0;
+      transition: all 0.12s;
+    }
+    .toggle-btn:hover { background: var(--charcoal-lighter); color: var(--muted); }
+    .toggle-btn.open { color: var(--muted); }
+
+    .sub-list {
+      display: none;
+      flex-direction: column;
+      padding: 2px 8px 4px 28px;
+      gap: 1px;
+    }
+    .sub-list.open { display: flex; }
+
+    .sub-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      text-align: left;
+      padding: 5px 8px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: #666;
+      border-radius: 5px;
+      transition: all 0.12s;
+    }
+    .sub-btn:hover { background: var(--charcoal-lighter); color: var(--off-white); }
+    .sub-btn.selected { color: var(--off-white); }
+    .sub-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; opacity: 0.6; }
+
+    /* DETAIL PANEL */
+    .detail-panel {
+      background: var(--charcoal-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .detail-empty { text-align: center; }
+    .detail-empty p { font-size: 13px; color: var(--dim); line-height: 1.6; }
+
+    .detail-content { width: 100%; }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .breadcrumb-parent {
+      font-size: 11px;
+      color: var(--dim);
+      font-weight: 500;
+    }
+    .breadcrumb-sep { font-size: 11px; color: var(--dim); }
+    .breadcrumb-current { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .detail-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .detail-icon-inner { width: 15px; height: 15px; border-radius: 50%; }
+    .detail-name { font-size: 20px; font-weight: 700; color: var(--off-white); margin-bottom: 3px; }
+    .detail-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .sub-pills-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; }
+    .sub-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+    .sub-pill {
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 999px;
+      border: 1px solid; cursor: pointer;
+      transition: opacity 0.12s;
+    }
+    .sub-pill:hover { opacity: 0.8; }
+
+    .insight-block { border-left: 2.5px solid var(--aqua); padding-left: 16px; }
+    .insight-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--aqua-dim); text-transform: uppercase; margin-bottom: 8px; }
+    .insight-text { font-size: 15px; color: var(--off-white); line-height: 1.78; }
+
+    /* FOOTER */
+    footer {
+      padding: 14px 28px;
+      background: var(--charcoal-light);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    footer p { font-size: 12px; color: var(--dim); }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--charcoal);
+      background: var(--aqua);
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .cta-btn:hover { opacity: 0.85; }
+
+    @media (max-width: 700px) {
+      .wheel-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <h1>The Evolved Caveman</h1>
+    <span class="header-tag">Emotion Wheel</span>
+  </div>
+  <span class="header-count">11 categories · 50 emotions</span>
+</header>
+
+<main>
+
+  <div class="page-intro">
+    <h2>What are you actually feeling?</h2>
+    <p>Most men operate with a three-word emotional vocabulary: good, bad, fine. This wheel builds granularity — because the more precisely you can name what's happening inside, the more you can actually do with it.</p>
+  </div>
+
+  <div class="wheel-layout">
+
+    <div class="sidebar" id="sidebar">
+      <p class="sidebar-section-label">Uncomfortable</p>
+    </div>
+
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-empty">
+        <p>Select a category or specific emotion<br>from the list on the left</p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Inner Leadership Tool — The Evolved Caveman</p>
+  <a href="https://theevolvedcaveman.com" target="_blank" class="cta-btn">Talk to the AI Coach →</a>
+</footer>
+
+<script>
+const EMOTIONS = [
+  {
+    name:"Afraid", type:"u", color:"#8875e0",
+    insight:"Fear tends to wear disguises — it shows up as busyness, control, irritability, or shutdown. Before you can work with it, you have to name it. What specifically feels threatening to you right now?",
+    sub:[
+      {name:"Stressed", insight:"Stress is the gap between what's demanded of you and what you believe you can handle. It's not weakness — it's your nervous system registering overload. What's the single demand that most needs your attention right now?"},
+      {name:"Overwhelmed", insight:"Overwhelm is what happens when too many things feel equally urgent. The brain can't prioritize under threat, so everything feels like a fire. What one thing, if handled, would make the rest feel more manageable?"},
+      {name:"Powerless", insight:"Powerlessness is one of the most painful emotional states — it signals that you believe you have no agency. The question isn't whether you control everything. It's: what small thing can you actually influence right now?"},
+      {name:"Anxious", insight:"Anxiety is fear about the future — specifically, a future you believe you can't handle. Your brain is running threat simulations. Grounding yourself in what's actually true right now, not the simulation, is the first move."},
+      {name:"Ashamed", insight:"Shame says 'I am bad.' Guilt says 'I did something bad.' Those are very different signals. Shame needs compassion, not punishment. If a close friend felt this way about himself, what would you tell him?"}
+    ]
+  },
+  {
+    name:"Embarrassed", type:"u", color:"#6b5bd6",
+    insight:"Embarrassment is the gap between who you want to be and how you just showed up. The men who feel it most intensely often have the strongest internal values. That intensity is a signal, not a character flaw.",
+    sub:[
+      {name:"Guilty", insight:"Guilt is actually healthy when it's proportionate — it signals that you've violated your own values. The question is: what do you need to do to repair it? Guilt that doesn't lead to action becomes self-punishment."},
+      {name:"Humiliated", insight:"Humiliation is shame that was inflicted by someone else — the experience of being diminished in front of others. The rage that often follows makes sense. What do you need right now to restore your sense of dignity?"}
+    ]
+  },
+  {
+    name:"Angry", type:"u", color:"#4a7fd4",
+    insight:"Anger is almost never the primary emotion — it's the bodyguard. It rides on top of something else: hurt, fear, or injustice. If you can name what's underneath it, you have something you can actually work with.",
+    sub:[
+      {name:"Resentful", insight:"Resentment is anger that's been stored. It builds when you feel wronged and haven't addressed it — or when you've said yes to things you wanted to say no to. What is the resentment actually about, and have you said it out loud?"},
+      {name:"Remorseful", insight:"Remorse is grief over something you did. Unlike guilt (which is problem-focused), remorse carries emotional weight. It's healthy when it motivates repair — corrosive when it becomes a permanent identity."},
+      {name:"Bored", insight:"Boredom at the surface looks passive, but underneath it often signals an unmet need for challenge, meaning, or novelty. What would 'genuinely engaged' actually look like for you right now?"},
+      {name:"Offended", insight:"Offense is the signal that something crossed a value or a boundary. It's worth asking: what specifically was crossed? Naming the underlying value makes the feeling actionable."},
+      {name:"Jealous", insight:"Jealousy is a signal, not a character flaw. It's telling you something you want — something you fear losing or fear you can't have. What does the jealousy point to that you actually care about?"}
+    ]
+  },
+  {
+    name:"Sad", type:"u", color:"#2a9a85",
+    insight:"Sadness signals that something that mattered to you got lost — a relationship, a version of yourself, a future you were counting on. It asks to be acknowledged, not managed away. What are you grieving?",
+    sub:[
+      {name:"Depressed", insight:"Depression isn't sadness amplified — it's often sadness that's been cut off from its source. If you're feeling emotionally flat or hollow, it's worth asking: what am I not letting myself grieve?"},
+      {name:"Deflated", insight:"Deflation happens when hope meets disappointment. Something you were counting on didn't come through. That's a real loss — even if no one else can see it."},
+      {name:"Discouraged", insight:"Discouragement is what happens when effort meets sustained resistance. It doesn't mean you're wrong to try — it means the path is harder than you expected. What would you tell a friend who was exactly where you are right now?"},
+      {name:"Hurt", insight:"Hurt almost always involves someone you care about — you can't be deeply hurt by someone who doesn't matter to you. The hurt signals that connection matters. What do you need to say, or hear, right now?"}
+    ]
+  },
+  {
+    name:"Alone", type:"u", color:"#1aaa90",
+    insight:"Loneliness isn't about being by yourself — it's about being unseen. You can be surrounded by people and feel completely alone. That's data about connection quality, not quantity. Who truly sees you right now?",
+    sub:[
+      {name:"Lonely", insight:"Loneliness is one of the most medically dangerous emotional states — Holt-Lunstad's research shows it's more harmful than smoking 15 cigarettes a day. It's also one of the most treatable. Who in your life could you reach out to today?"},
+      {name:"Excluded", insight:"Exclusion activates the same neural pathways as physical pain — your brain registers being left out as a genuine threat. What story are you telling yourself about why you were excluded, and how accurate is it?"},
+      {name:"Isolated", insight:"Isolation is often something we do to ourselves — a protection strategy that ends up cutting off the connection we actually need. What would it cost you to let one person in right now?"},
+      {name:"Abandoned", insight:"Abandonment fear often has roots that predate the current situation. When you feel abandoned, it's worth asking: is this about what's actually happening now, or is this an old wound that just got activated?"}
+    ]
+  },
+  {
+    name:"Dislike", type:"u", color:"#4a9040",
+    insight:"Contempt is the single strongest predictor of relationship breakdown — Gottman's research is definitive on this. If you're regularly feeling disgust or contempt toward someone close to you, that's the flag to address directly.",
+    sub:[
+      {name:"Disgusted", insight:"Disgust is one of the most ancient emotional responses — it evolved to protect us from harm. In social contexts, it often signals a deep values violation. What specifically crossed a line for you?"},
+      {name:"Sickened", insight:"Being sickened goes deeper than disgust — it's a stronger visceral rejection. When something feels morally wrong, your body often registers it before your mind catches up. Trust that signal enough to examine it."},
+      {name:"Contemptuous", insight:"Contempt is the most corrosive emotion in close relationships — Gottman called it 'sulfuric acid for love.' It positions you as superior to the other person. The antidote isn't fake warmth — it's genuine curiosity about what's driving the contempt in you."},
+      {name:"Critical", insight:"There's a real difference between criticism and feedback. Criticism attacks the person; feedback addresses the behavior. If you're in critical mode, ask: what am I actually frustrated about — and have I said it directly?"}
+    ]
+  },
+  {
+    name:"Accepted", type:"c", color:"#c03578",
+    insight:"Being seen and accepted is a core human need — not a weakness. A lot of men struggle to let appreciation actually land. Next time someone offers it genuinely, try just saying 'thank you' and sitting with it.",
+    sub:[
+      {name:"Loved", insight:"Feeling genuinely loved — not earned, not performed, just received — is rare for many men. We often confuse love with approval. Approval is conditional. Love isn't. When it's there, let it land."},
+      {name:"Honored", insight:"Being honored means someone recognized something real in you and chose to acknowledge it. Don't deflect, minimize, or make a joke. Let it register."},
+      {name:"Appreciated", insight:"Gottman's research shows that lasting relationships require at least a 5:1 ratio of positive to negative interactions. Noticing when you're appreciated — and actually letting it register — matters more than it might seem."},
+      {name:"Respected", insight:"Respect from people you actually respect is deeply meaningful. Unlike approval (which is driven by fear of rejection), respect is earned through character. What did you do to earn it — and can you acknowledge that?"}
+    ]
+  },
+  {
+    name:"Confident", type:"c", color:"#a02858",
+    insight:"Confidence rooted in genuine competence and self-knowledge is durable. Confidence built from external validation evaporates the moment someone challenges you. Which type are you running on right now?",
+    sub:[
+      {name:"Positive", insight:"A positive emotional state expands what psychologists call your 'action repertoire' — you literally see more options when you feel good. This isn't naive optimism. It's a neurological advantage. Use it."},
+      {name:"Powerful", insight:"The feeling of power isn't about domination — it's about agency and effectiveness. You have real influence. The question is: what's worth directing it toward?"},
+      {name:"Brave", insight:"Courage isn't the absence of fear — it's action in the presence of it. Noticing that you feel brave means you're moving through something difficult anyway. That's worth acknowledging."},
+      {name:"Proud", insight:"Healthy pride is tied to effort and growth — it's the signal that you lived up to your own standards. Don't dismiss it or minimize it. Let it reinforce what you want to keep doing."}
+    ]
+  },
+  {
+    name:"Interested", type:"c", color:"#c04828",
+    insight:"Curiosity is the antidote to defensiveness. A curious man isn't threatened by what he doesn't know — he's energized by it. When you feel defensive, ask: 'What would I need to believe to be genuinely curious about this instead?'",
+    sub:[
+      {name:"Attracted", insight:"Attraction is information — it tells you where your energy naturally wants to go. That could be toward a person, an idea, or a direction. What are you being drawn toward right now, and what does that tell you?"},
+      {name:"Curious", insight:"Curiosity is one of the most powerful states for learning and growth — and the direct antidote to defensiveness. A curious man isn't threatened by complexity or ambiguity. He's energized by it."},
+      {name:"Inspired", insight:"Inspiration is the signal that something resonates with your deeper values or sense of possibility. It's pointing at something that matters. What does this inspiration want you to do?"},
+      {name:"Creative", insight:"Creativity is a state, not a talent. When you feel creative, your prefrontal cortex is active and your threat response is low. Protect that state when you're in it — and use it."}
+    ]
+  },
+  {
+    name:"Excited", type:"c", color:"#b07010",
+    insight:"Excitement is your aliveness signal. When's the last time you felt genuinely lit up — not just busy, not just productive, but actually excited about something? If you can't answer quickly, that gap is worth examining.",
+    sub:[
+      {name:"Passionate", insight:"Passion is a sign that something aligns with who you are at a deep level. It's not performance — it's signal. What are you passionate about right now, and what are you doing with it?"},
+      {name:"Surprised", insight:"Surprise breaks the pattern your brain expected. In that gap is a moment of genuine presence — you're here, right now. What does this surprise reveal to you?"},
+      {name:"Eager", insight:"Eagerness is energy moving toward something. It's one of the cleanest positive emotional states — no conflict, just direction. What are you eager about, and how can you channel it?"}
+    ]
+  },
+  {
+    name:"Loving", type:"c", color:"#608018",
+    insight:"Gratitude and awe are 'self-transcendent emotions' — they shift attention from self to something larger than you. These tend to be the emotional states that make life feel meaningful, not just productive.",
+    sub:[
+      {name:"Peaceful", insight:"Peace isn't just the absence of conflict — it's a genuine felt sense of safety and okayness. When you feel it, notice it. Savor it. Positive psychology research shows that intentionally registering positive states helps wire them in neurologically."},
+      {name:"Committed", insight:"Commitment is love expressed through consistency — the daily choice to show up, even when it's inconvenient. What are you most committed to right now, and is your behavior actually aligned with that?"},
+      {name:"Friendly", insight:"Friendliness is an underrated emotional state for men. Warm, open, and accessible — it's the social baseline that makes real connection possible. And it costs nothing."},
+      {name:"Grateful", insight:"Gratitude is one of the most well-researched positive emotions — correlated with lower depression, better sleep, and stronger relationships. Robert Emmons' research shows the practice is simple: name three specific things you're grateful for today, and say why."},
+      {name:"Awed", insight:"Awe — the feeling of encountering something vast that expands your sense of what's possible — is both humbling and energizing. Dacher Keltner's research shows it reduces self-focus, increases generosity, and expands perspective. Where do you find it?"}
+    ]
+  }
+];
+
+function hexRgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)].join(','); }
+
+const sidebar = document.getElementById('sidebar');
+const panel = document.getElementById('detail-panel');
+let selected = null;
+
+function setSelected(el) {
+  if (selected) selected.classList.remove('selected');
+  el.classList.add('selected');
+  selected = el;
+}
+
+function addLabel(text) {
+  const p = document.createElement('p');
+  p.className = 'sidebar-section-label';
+  p.textContent = text;
+  sidebar.appendChild(p);
+}
+function addDivider() {
+  const d = document.createElement('div');
+  d.className = 'sidebar-divider';
+  sidebar.appendChild(d);
+}
+
+function showCatDetail(e) {
+  const rgb = hexRgb(e.color);
+  panel.style.alignItems = 'flex-start';
+  panel.innerHTML = `
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-icon" style="background:rgba(${rgb},0.18);">
+          <div class="detail-icon-inner" style="background:${e.color};"></div>
+        </div>
+        <div>
+          <p class="detail-name">${e.name}</p>
+          <p class="detail-meta">${e.type==='u'?'Uncomfortable':'Comfortable'} · ${e.sub.length} specific emotions</p>
+        </div>
+      </div>
+      <p class="sub-pills-label">Specific emotions in this category</p>
+      <div class="sub-pills">
+        ${e.sub.map(s=>`<span class="sub-pill" style="background:rgba(${rgb},0.12);color:${e.color};border-color:rgba(${rgb},0.35);" data-name="${s.name}">${s.name}</span>`).join('')}
+      </div>
+      <div class="insight-block">
+        <p class="insight-label">Coaching insight</p>
+        <p class="insight-text">${e.insight}</p>
+      </div>
+    </div>`;
+  panel.querySelectorAll('.sub-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const sub = e.sub.find(s=>s.name===pill.dataset.name);
+      if (sub) {
+        showSubDetail(e, sub);
+        const subBtn = sidebar.querySelector(`.sub-btn[data-cat="${e.name}"][data-name="${sub.name}"]`);
+        if (subBtn) setSelected(subBtn);
+      }
+    });
+  });
+}
+
+function showSubDetail(cat, sub) {
+  const rgb = hexRgb(cat.color);
+  panel.style.alignItems = 'flex-start';
+  panel.innerHTML = `
+    <div class="detail-content">
+      <div class="breadcrumb">
+        <span class="breadcrumb-parent">${cat.name}</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">${sub.name}</span>
+      </div>
+      <div class="detail-header">
+        <div class="detail-icon" style="background:rgba(${rgb},0.18);">
+          <div class="detail-icon-inner" style="background:${cat.color};"></div>
+        </div>
+        <div>
+          <p class="detail-name">${sub.name}</p>
+          <p class="detail-meta">${cat.type==='u'?'Uncomfortable':'Comfortable'} emotion</p>
+        </div>
+      </div>
+      <div class="insight-block">
+        <p class="insight-label">Coaching insight</p>
+        <p class="insight-text">${sub.insight}</p>
+      </div>
+    </div>`;
+}
+
+function renderCategory(e) {
+  const row = document.createElement('div');
+  row.className = 'cat-row';
+
+  const catBtn = document.createElement('button');
+  catBtn.className = 'cat-btn';
+  catBtn.dataset.cat = e.name;
+  catBtn.innerHTML = `<span class="cat-dot" style="background:${e.color};"></span>${e.name}`;
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'toggle-btn';
+  toggleBtn.innerHTML = '▶';
+  toggleBtn.setAttribute('aria-label', `Expand ${e.name}`);
+
+  row.appendChild(catBtn);
+  row.appendChild(toggleBtn);
+  sidebar.appendChild(row);
+
+  const subList = document.createElement('div');
+  subList.className = 'sub-list';
+
+  e.sub.forEach(sub => {
+    const subBtn = document.createElement('button');
+    subBtn.className = 'sub-btn';
+    subBtn.dataset.name = sub.name;
+    subBtn.dataset.cat = e.name;
+    subBtn.innerHTML = `<span class="sub-dot" style="background:${e.color};"></span>${sub.name}`;
+    subBtn.addEventListener('click', () => {
+      setSelected(subBtn);
+      showSubDetail(e, sub);
+    });
+    subList.appendChild(subBtn);
+  });
+  sidebar.appendChild(subList);
+
+  catBtn.addEventListener('click', () => {
+    setSelected(catBtn);
+    showCatDetail(e);
+    if (!subList.classList.contains('open')) {
+      subList.classList.add('open');
+      toggleBtn.classList.add('open');
+      toggleBtn.innerHTML = '▼';
+    }
+  });
+
+  toggleBtn.addEventListener('click', () => {
+    const isOpen = subList.classList.toggle('open');
+    toggleBtn.classList.toggle('open', isOpen);
+    toggleBtn.innerHTML = isOpen ? '▼' : '▶';
+  });
+}
+
+EMOTIONS.filter(e=>e.type==='u').forEach(renderCategory);
+addDivider();
+addLabel('Comfortable');
+EMOTIONS.filter(e=>e.type==='c').forEach(renderCategory);
+addDivider();
+</script>
+
+</body>
+</html>
