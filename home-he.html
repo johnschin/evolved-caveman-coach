@@ -247,6 +247,43 @@
         }
         .header-signout:hover { border-color: var(--aqua); color: var(--aqua-deep); }
 
+        /* --- TRIAL STATUS BANNER --- */
+        .trial-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: rgba(163, 208, 201, 0.12);
+            border-bottom: 1px solid rgba(163, 208, 201, 0.25);
+            padding: 9px 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--aqua-deep, #5a9e95);
+        }
+        .trial-banner.visible { display: flex; }
+        .trial-banner-left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .trial-banner-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #a3d0c9;
+            flex-shrink: 0;
+        }
+        .trial-banner-upgrade {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--aqua-deep, #5a9e95);
+            text-decoration: none;
+            white-space: nowrap;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .trial-banner-upgrade:hover { opacity: 1; }
+
         /* --- SCROLLABLE CONTENT --- */
         .home-content {
             flex: 1;
@@ -895,6 +932,15 @@
             </div>
         </header>
 
+        <!-- TRIAL STATUS BANNER — shown only for trial users -->
+        <div class="trial-banner" id="trialBanner">
+            <div class="trial-banner-left">
+                <div class="trial-banner-dot"></div>
+                <span id="trialBannerText">Free trial</span>
+            </div>
+            <a href="https://buy.stripe.com/4gM8wRaqhcPN5Qd7EfbMQ05" class="trial-banner-upgrade">Subscribe →</a>
+        </div>
+
         <!-- SCROLLABLE CONTENT -->
         <div class="home-content">
 
@@ -1339,6 +1385,41 @@
         document.getElementById("homeScreen").classList.add("active");
         setGreeting();
         loadSavedPulse();
+        loadTrialBanner();
+    }
+
+    async function loadTrialBanner() {
+        var token = sessionStorage.getItem("prx_trial_john");
+        if (!token) return; // paid user — no banner
+        var banner = document.getElementById("trialBanner");
+        var bannerText = document.getElementById("trialBannerText");
+        try {
+            var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "check_trial", trial_token: token, coach: "john" })
+            });
+            var data = await res.json();
+            if (data.status === "active" || data.status === "session_complete") {
+                var sessionsLeft = data.sessions_remaining != null ? data.sessions_remaining : (data.max_sessions - data.sessions_used);
+                var msgsLeft     = data.messages_remaining != null ? data.messages_remaining : 0;
+                var sessWord     = sessionsLeft === 1 ? "session" : "sessions";
+                var msgWord      = msgsLeft === 1 ? "message" : "messages";
+                if (data.messages_used === 0) {
+                    // Haven't started yet — show full scope
+                    bannerText.textContent = "Free trial · " + sessionsLeft + " " + sessWord + " · " + data.messages_per_session + " messages each";
+                } else {
+                    bannerText.textContent = "Free trial · " + sessionsLeft + " " + sessWord + " left · " + msgsLeft + " " + msgWord + " remaining";
+                }
+                banner.classList.add("visible");
+            } else if (data.status === "trial_expired") {
+                bannerText.textContent = "Your free trial has ended";
+                banner.classList.add("visible");
+            }
+            // invalid / error — don't show banner
+        } catch(e) {
+            console.warn("Trial banner fetch failed:", e);
+        }
     }
 
     function setGreeting() {
