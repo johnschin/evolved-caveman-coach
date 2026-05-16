@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Romantic Partner — Conversation Starters</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.14);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --spicy:      #8B4B7A;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 64px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── LEVEL PICKER ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .level-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .level-pill {
+      padding: 8px 20px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .level-pill:hover { border-color: var(--aqua-deep); color: var(--slate-plum); }
+    .level-pill.active { background: var(--slate-plum); border-color: var(--slate-plum); color: #fff; }
+    .level-pill.spicy.active { background: var(--spicy); border-color: var(--spicy); }
+
+    /* ── LEVEL DESC ── */
+    .level-desc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .level-desc.visible { display: block; }
+
+    /* ── ACTIONS ROW ── */
+    .actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .count-text { font-size: 12px; color: var(--muted); }
+    .shuffle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: var(--aqua);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .shuffle-btn:hover { opacity: 0.85; }
+
+    /* ── QUESTION CARDS ── */
+    .questions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .q-num {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--aqua-deep);
+      margin-bottom: 7px;
+    }
+    .q-text {
+      font-size: 15px;
+      color: var(--slate-plum);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ── CONTAINER TIP ── */
+    .container-tip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      display: none;
+    }
+    .container-tip.visible { display: block; }
+    .container-tip strong { color: var(--slate-plum); }
+
+    /* ── EMPTY STATE ── */
+    #empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    #questions-section { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/conversation-starters" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Romantic Partner</span>
+</header>
+
+<main>
+  <h1 class="page-title">Romantic Partner</h1>
+  <p class="page-sub">Pick a level. Phones down. One question at a time.</p>
+
+  <p class="section-label">Choose a level</p>
+  <div class="level-pills">
+    <button class="level-pill" data-level="beginner"  onclick="selectLevel('beginner')">Beginner</button>
+    <button class="level-pill" data-level="moderate"  onclick="selectLevel('moderate')">Moderate</button>
+    <button class="level-pill" data-level="deep"      onclick="selectLevel('deep')">Deep</button>
+    <button class="level-pill spicy" data-level="spicy" onclick="selectLevel('spicy')">Spicy 🔥</button>
+  </div>
+
+  <div class="level-desc" id="level-desc"></div>
+
+  <div id="empty-state">
+    <p>Select a level above to get your questions.</p>
+  </div>
+
+  <div id="questions-section">
+    <div class="actions-row">
+      <span class="count-text" id="count-text"></span>
+      <button class="shuffle-btn" onclick="shuffleQuestions()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+        </svg>
+        New set
+      </button>
+    </div>
+    <div class="questions-grid" id="questions-grid"></div>
+    <div class="container-tip" id="container-tip"></div>
+  </div>
+</main>
+
+<script>
+var PER_SET = 8;
+var currentLevel = null;
+
+var LEVELS = {
+
+  beginner: {
+    desc: "Warm, low-risk questions that build trust and re-establish connection. Perfect for new couples or long-term partners who want to meet each other again.",
+    tip: "<strong>Before you start:</strong> One question at a time. The listener's only job is to get curious — not fix, advise, or counter-share.",
+    questions: [
+      "What's something small that reliably makes your day better?",
+      "How do you usually like to start your mornings?",
+      "What kind of social energy do you have — more people, fewer people, or a mix?",
+      "What's a simple pleasure you never get tired of?",
+      "What's one thing you've been enjoying lately?",
+      "When do you feel most like yourself?",
+      "What's your ideal way to spend a free afternoon?",
+      "What helps you relax when you're stressed?",
+      "What's something you're quietly proud of?",
+      "What's one thing that makes you laugh almost every time?",
+      "What does a 'good day' look like to you right now?",
+      "How do you usually know when you're feeling overwhelmed?",
+      "What helps you feel appreciated in a relationship?",
+      "How do you tend to show care for someone you like or love?",
+      "What's something you've learned about yourself in the last few years?",
+      "What's important to you in how conflict is handled?",
+      "What helps you feel safe being honest with someone?",
+      "What role does routine vs. spontaneity play in your life?",
+      "What's something that's changed about you over time?",
+      "What does feeling 'connected' mean to you?",
+      "When do you feel most at ease around another person?",
+      "What's something you enjoy sharing with a partner?",
+      "How do you usually like to spend quality time with someone?",
+      "What helps you feel listened to?",
+      "What's something you're curious about right now — in life or in people?",
+      "What's one thing you value more now than you used to?",
+      "What's something that helps you trust someone over time?",
+      "How do you like to receive support when things are hard?",
+      "What's something you'd like more of in your life this season?",
+      "What feels nourishing to you lately?",
+      "What feels different about you now compared to a few years ago?",
+      "What do you enjoy more now than you used to?",
+      "What's something new you're discovering about yourself?",
+      "What's a way you've grown that you don't always get credit for?",
+      "What helps you feel close these days?",
+      "What do you need more of now than you did before?",
+      "What feels easier in relationships than it used to?",
+      "What feels more tender or important now?",
+      "What's something you want to protect in this stage of life?",
+      "What's one thing you'd like me to know about who you are now?",
+      "What's something you appreciate about how we're talking tonight?",
+      "What made this conversation easier than you expected?",
+      "What did you learn about me that surprised you a little?",
+      "What felt good to say out loud?",
+      "What's something you're glad we asked each other?"
+    ]
+  },
+
+  moderate: {
+    desc: "Past small talk, not yet in raw-nerve territory. Real honesty, grounded connection — no emotional ambushes.",
+    tip: "<strong>Container:</strong> \"We're listening to understand — not to fix, convince, or win.\" After each answer, try: \"What I'm hearing is…\"",
+    questions: [
+      "When do you feel most connected to me lately?",
+      "What's something I do that helps you feel supported?",
+      "What's one way our relationship challenges you — in a good way?",
+      "What's something you've learned about yourself through being with me?",
+      "When do you feel most relaxed around me?",
+      "What's one need you're getting better at naming?",
+      "What's a small adjustment that would improve how we relate day to day?",
+      "What helps you feel emotionally close without feeling pressured?",
+      "What's something you appreciate about how we handle disagreements?",
+      "When do you feel like we're on the same team?",
+      "What's a pattern you're becoming more aware of in yourself during conflict?",
+      "What's something I do that makes you feel valued?",
+      "What does 'quality time' actually mean to you right now?",
+      "What's a boundary that's been helpful for you in this relationship?",
+      "What's one thing you want to grow into together?",
+      "What helps you trust me more over time?",
+      "What's something you've been wanting to talk about but didn't know how to start?",
+      "What's a way you feel emotionally braver now than before?",
+      "What's one assumption about me you've realized wasn't accurate?",
+      "What makes you want to keep investing in us?"
+    ]
+  },
+
+  deep: {
+    desc: "For couples with trust and history. Truth that costs something — and deepens intimacy because of it. Use slowly. One or two questions can be a whole evening.",
+    tip: "<strong>Container:</strong> No fixing, defending, or counter-sharing. Reflect first, respond later. Pauses are allowed. After each answer, say only: \"Thank you for trusting me with that.\"",
+    questions: [
+      "What part of yourself do you fear I won't fully accept if you show it more?",
+      "When have I hurt you in a way that still lives in your body, even if you've 'forgiven' it?",
+      "What do you most need from me when you're emotionally overwhelmed — but struggle to ask for?",
+      "What story about yourself feels truest — and most shameful — at the same time?",
+      "When do you feel safest with me, and what specifically creates that safety?",
+      "What's a desire you've downplayed because you were afraid it would create distance between us?",
+      "What part of our relationship feels most alive right now — and what part feels fragile?",
+      "What fear about us do you carry quietly so you don't burden me with it?",
+      "What do you believe I misunderstand most about your inner world?",
+      "When do you feel most emotionally alone — even when we're together?",
+      "What do you need to grieve — individually or together — that we haven't fully acknowledged?",
+      "What pattern do you see yourself repeating in this relationship that you don't want to pass on?",
+      "What's something you need to forgive yourself for in how you've shown up with me?",
+      "What's a truth about your past that still shapes how you love me today?",
+      "What do you most hope I never stop seeing in you?",
+      "What scares you about how much you care about me?",
+      "When have you felt deeply chosen by me — and when have you doubted that choice?",
+      "What part of you wants more closeness, and what part pulls away to stay safe?",
+      "What would loving me more fully require you to risk?",
+      "If we were radically honest tonight, what would you want me to understand about you?",
+      "When we're close and something gets tense, what do you notice first in your body?",
+      "Where do you feel stress show up when you don't say what you're thinking?",
+      "What physical cue tells you you're shutting down or pulling away?",
+      "When you feel safe with me, what changes in your body or breathing?",
+      "What sensation tells you you've had enough and need space?",
+      "What pattern do you notice in how you respond when I'm upset?",
+      "When conflict escalates, what's your default 'strategy' — and what is it protecting you from?",
+      "What do you optimize for in our relationship: peace, control, closeness, or independence?",
+      "What's the cost of that strategy — for you and for us?",
+      "What would happen if you tried the opposite move, even briefly?",
+      "What do you consciously not say because it feels inefficient, risky, or messy?",
+      "What emotion feels most dangerous to express — and what do you fear it would cause?",
+      "What part of yourself do you keep contained so things don't spiral?",
+      "When have you felt misunderstood because you explained instead of revealed?",
+      "What truth would be simpler to say than to analyze?",
+      "What do you choose to feel responsible for in this relationship — and what do you avoid?",
+      "Where do you default to self-sufficiency instead of letting me in?",
+      "What kind of support actually helps you, even if it's uncomfortable?",
+      "What risk are you willing to take with me that you weren't before?",
+      "What would staying emotionally present in this moment require from you?"
+    ]
+  },
+
+  spicy: {
+    desc: "Charged and intimate. Designed to raise the temperature. Use at night, phones down, eye contact optional but encouraged.",
+    tip: "<strong>How to use:</strong> Ask one, then stop talking. Let the answer linger. Respond with curiosity or touch — not analysis. If something lands, say: \"Tell me more about that…\"",
+    questions: [
+      "What's one way you secretly hope I never change… and one way you really hope I do?",
+      "When do you feel most emotionally naked with me — and when do you hide the most?",
+      "If our relationship were a Netflix category, what would it be called?",
+      "What's something I do that annoys you but also weirdly makes you feel safe?",
+      "What part of yourself do you feel like you get to express only with me?",
+      "What's the pettiest argument we've ever had — and what was it really about?",
+      "When have you felt the most desired by me… and when have you felt invisible?",
+      "What's one fantasy — emotional, sexual, or life-related — you've never quite said out loud?",
+      "If we broke up tomorrow (don't panic), what would you miss first — and what would you feel relieved about?",
+      "What childhood habit or wound of mine do you see playing out in our relationship?",
+      "When do you feel like we're a badass team — and when do you feel like we're roommates?",
+      "What's something you've learned about love because of being with me that surprised you?",
+      "What's a moment when you felt proud to be my partner — but didn't say it at the time?",
+      "If our sex life could talk, what would it politely request… and what would it angrily demand?",
+      "What do you think I misunderstand most about you?",
+      "What's one way I challenge you that you hate in the moment but respect later?",
+      "When do you feel most chosen by me — and when do you feel taken for granted?",
+      "What's a fear about us you don't usually let yourself think about?",
+      "What's one small, doable thing I could do that would make you feel more loved this month?",
+      "Why do you think we work — beyond chemistry, convenience, or habit?",
+      "What part of my body do you notice first when you're feeling turned on?",
+      "What's something I do unintentionally that gets you in the mood?",
+      "When do you feel most desired by me?",
+      "What kind of touch do you crave when you're stressed versus when you're playful?",
+      "What's a memory of us that still turns you on a little?",
+      "What's something you wish I'd initiate more often?",
+      "When do you feel most confident and attractive with me?",
+      "What kind of energy do you want tonight — slow, playful, intense, or surprising?",
+      "What's a place (real or imagined) where you'd love to be kissed longer than necessary?",
+      "What's one thing I could whisper to you that would immediately shift the mood?",
+      "What's your favorite way to be teased — emotionally or physically?",
+      "What's something you enjoy anticipating almost as much as the act itself?",
+      "What kind of touch makes you feel claimed rather than rushed?",
+      "What's a part of you that loves being wanted — but doesn't always admit it?",
+      "What signal do you give when you're ready for things to escalate?",
+      "What's something you enjoy taking your time with?",
+      "How do you like to be looked at when you're feeling desired?",
+      "What kind of closeness makes you feel most open to pleasure?",
+      "What's one way you like me to lead — and one way you like to lead me?",
+      "What would make tonight feel indulgent rather than routine?",
+      "What thought about me has turned you on recently that you didn't act on?",
+      "When you imagine tonight unfolding perfectly, what's the first thing that happens?",
+      "What kind of touch makes you lose track of time with me?",
+      "Where do you most like being touched when you're already halfway there?",
+      "What do you love about how I want you?",
+      "What part of you likes being slowly undone?",
+      "What's something you want tonight that you don't usually ask for?",
+      "Do you want to be taken, teased, or steadily pulled closer — and why?",
+      "What's a sound I make that gets to you faster than it should?",
+      "Where do you like my attention to linger longer than necessary?",
+      "What does it feel like when you realize I'm fully focused on you?",
+      "What kind of pace do you want me to set tonight?",
+      "What makes you feel most desired right before things turn physical?",
+      "What do you want me to notice about you when you're turned on?",
+      "What part of your body feels most receptive right now?",
+      "What's something you want to savor instead of rush tonight?",
+      "What kind of closeness makes you feel open and hungry at the same time?",
+      "How do you like being guided once you've said yes?",
+      "What would make tonight feel unforgettable rather than just good?",
+      "What do you want me to do first — slowly?",
+      "Do you want me to lead you gently tonight — or decisively?",
+      "What helps you relax fastest when you know I've got you?",
+      "How do you like being claimed — slowly, verbally, or through presence?",
+      "What kind of attention makes you feel irresistible instead of rushed?",
+      "When I'm fully grounded and focused, what shifts in you?",
+      "What part of you softens when you feel my certainty?",
+      "How do you like me to let you know I want you — before I touch you?",
+      "What pace helps you trust where this is going?",
+      "What makes you feel most safe saying yes to more?",
+      "How do you want to be invited into what comes next?",
+      "How do you like to be invited instead of taken?",
+      "What kind of confidence from me pulls you closer?",
+      "When I slow things down, what happens inside you?",
+      "What makes you feel chosen rather than tested?",
+      "How do you like to know I want you — before I say anything?",
+      "What kind of anticipation works best for you?",
+      "When I lead with desire instead of words, what do you notice?",
+      "What helps you stay present instead of jumping ahead?",
+      "How do you like me to signal that I'm ready for more?",
+      "What would make following me feel effortless tonight?"
+    ]
+  }
+
+};
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function selectLevel(level) {
+  currentLevel = level;
+
+  document.querySelectorAll('.level-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.level === level);
+  });
+
+  var data = LEVELS[level];
+  var descEl = document.getElementById('level-desc');
+  descEl.textContent = data.desc;
+  descEl.classList.add('visible');
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('questions-section').style.display = 'block';
+
+  var tipEl = document.getElementById('container-tip');
+  tipEl.innerHTML = data.tip;
+  tipEl.classList.add('visible');
+
+  shuffleQuestions();
+}
+
+function shuffleQuestions() {
+  if (!currentLevel) return;
+  var data = LEVELS[currentLevel];
+  var picked = shuffle(data.questions).slice(0, PER_SET);
+
+  var grid = document.getElementById('questions-grid');
+  grid.innerHTML = '';
+  picked.forEach(function(q, i) {
+    var card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = '<div class="q-num">Q' + (i + 1) + '</div><div class="q-text">' + q + '</div>';
+    grid.appendChild(card);
+  });
+
+  document.getElementById('count-text').textContent =
+    'Showing ' + picked.length + ' of ' + data.questions.length + ' questions';
+}
+</script>
+
+</body>
+</html>
