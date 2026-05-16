@@ -386,9 +386,16 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn-small" onclick="startNewSession()">New Session</button>
-                <button class="btn-small" onclick="handleLogout()">Sign Out</button>
+                <button class="btn-small" id="btnNewSession" onclick="startNewSession()">New Session</button>
+                <button class="btn-small" id="btnSignOut" onclick="handleLogout()">Sign Out</button>
+                <a href="https://buy.stripe.com/7sY9AV7e5031bax4s3bMQ07" class="btn-small" id="btnSubscribe" style="display:none;background:var(--mauve,#998193);color:#fff;font-weight:700;text-decoration:none;">Subscribe →</a>
             </div>
+        </div>
+        <!-- Trial status bar -->
+        <div id="trialStatusBar" style="display:none;background:rgba(153,129,147,0.08);border-bottom:1px solid rgba(153,129,147,0.2);padding:7px 20px;text-align:center;font-size:12.5px;color:var(--muted,#8a8590);">
+          <span id="trialStatusText">Free trial</span>
+          &nbsp;·&nbsp;
+          <a href="https://buy.stripe.com/7sY9AV7e5031bax4s3bMQ07" style="color:var(--mauve,#998193);font-weight:600;text-decoration:none;">Subscribe for unlimited access →</a>
         </div>
 
         <div class="messages" id="messages">
@@ -434,6 +441,8 @@
     var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
     var SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
     var SIGNUP_KEY = "loveisnt2026couples";
+    var COACH = "couples";
+    var EDGE_FN = SUPABASE_URL + "/functions/v1/chat";
 
     var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -441,6 +450,7 @@
     // STATE
     // =====================================================
     var currentUser = null;
+    var trialToken = null;      // set when user arrives from landing page trial
     var sessionId = null;
     var conversationHistory = [];
     var messageCount = 0;
@@ -567,10 +577,71 @@
     });
 
     async function checkAuth() {
+        // ── Check for email-based trial token first ──────────────────────────
+        var savedTrial = sessionStorage.getItem("prx_trial_couples");
+        if (savedTrial) {
+            try {
+                var tRes = await fetch(EDGE_FN, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "check_trial", trial_token: savedTrial, coach: COACH })
+                });
+                var tData = await tRes.json();
+                if (tData.status === "active" || tData.status === "session_complete") {
+                    trialToken = savedTrial;
+                    await enterTrialChat(tData);
+                    return;
+                } else {
+                    sessionStorage.removeItem("prx_trial_couples");
+                }
+            } catch (e) {
+                console.warn("Trial check failed:", e);
+                sessionStorage.removeItem("prx_trial_couples");
+            }
+        }
+        // ── Normal auth ──────────────────────────────────────────────────────
         var result = await sb.auth.getSession();
         if (result.data.session) {
             currentUser = result.data.session.user;
             enterChat();
+        }
+    }
+
+    async function enterTrialChat(checkData) {
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("chatScreen").classList.add("active");
+        document.getElementById("hamburgerBtn").style.display = "none";
+        document.getElementById("btnNewSession").style.display = "inline-block";
+        document.getElementById("btnSignOut").style.display = "none";
+        document.getElementById("btnSubscribe").style.display = "inline-block";
+        showAIDisclosureBanner();
+
+        sessionId = generateSessionId();
+        conversationHistory = [];
+        messageCount = 0;
+        isFirstMessage = true;
+
+        updateTrialStatusBar(checkData);
+        document.getElementById("trialStatusBar").style.display = "block";
+
+        if (checkData.status === "session_complete") {
+            var sessRemain = checkData.sessions_remaining || 0;
+            if (sessRemain > 0) {
+                addMessage("assistant", "Welcome back. Your previous session is complete. You have " + sessRemain + " session" + (sessRemain === 1 ? "" : "s") + " remaining in your free trial. Click "New Session" to begin.");
+            } else {
+                addMessage("assistant", "Your free trial has ended. Subscribe to continue — $49/month for both partners.");
+            }
+        } else {
+            await sendInitialMessage();
+        }
+    }
+
+    function updateTrialStatusBar(data) {
+        var msgsLeft = data.session_messages_remaining !== undefined ? data.session_messages_remaining : (data.messages_remaining !== undefined ? data.messages_remaining : "?");
+        var sessUsed = data.sessions_used !== undefined ? data.sessions_used : 0;
+        var statusEl = document.getElementById("trialStatusText");
+        if (statusEl) {
+            statusEl.textContent = "Free trial · Session " + (sessUsed + 1) + " of 3 · " + msgsLeft + " messages remaining this session";
         }
     }
 
@@ -758,25 +829,37 @@
 
         try {
             var token = (await sb.auth.getSession()).data.session?.access_token || "";
-            var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+            var initPayload = {
+                system: systemPrompt,
+                messages: conversationHistory,
+                session_id: sessionId,
+                coach: COACH,
+                is_first_message: true
+            };
+            if (trialToken) initPayload.trial_token = trialToken;
+            var res = await fetch(EDGE_FN, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-                body: JSON.stringify({
-                    system: systemPrompt,
-                    messages: conversationHistory,
-                    session_id: sessionId,
-                    coach: "couples",
-                    is_first_message: true
-                })
+                headers: { "Content-Type": "application/json", "Authorization": token ? "Bearer " + token : "" },
+                body: JSON.stringify(initPayload)
             });
             var data = await res.json();
-            var text = data.content && data.content[0] ? data.content[0].text : "Welcome! How can I help you today?";
-
-            conversationHistory.push({ role: "assistant", content: text });
             removeTypingIndicator();
-            addMessage("assistant", text);
-            messageCount++;
-            isFirstMessage = false;
+            if (data.trial_status === "trial_expired") {
+                addMessage("assistant", "Your free trial has ended. Subscribe to continue — $49/month for both partners.");
+                document.getElementById("btnSubscribe").style.display = "inline-block";
+            } else if (data.trial_status === "session_complete") {
+                var sText = data.content && data.content[0] ? data.content[0].text : "Session complete.";
+                conversationHistory.push({ role: "assistant", content: sText });
+                addMessage("assistant", sText);
+                if (trialToken) updateTrialStatusBar(data);
+            } else {
+                var text = data.content && data.content[0] ? data.content[0].text : "Welcome! How can I help you today?";
+                conversationHistory.push({ role: "assistant", content: text });
+                addMessage("assistant", text);
+                messageCount++;
+                isFirstMessage = false;
+                if (trialToken) updateTrialStatusBar(data);
+            }
         } catch (err) {
             removeTypingIndicator();
             addMessage("assistant", "Welcome to Proxi We. I'm having trouble connecting — please try refreshing the page.");
