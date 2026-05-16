@@ -97,46 +97,7 @@
     ]
   }
   
-  function startTrialHero() {
-    var email = (document.getElementById("trialEmailHero").value || "").trim();
-    var btn = document.getElementById("trialBtnHero");
-    var msg = document.getElementById("trialMsgHero");
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      msg.textContent = "Please enter a valid email address.";
-      msg.className = "prox-trial__msg error";
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = "Starting…";
-    msg.textContent = "";
-    msg.className = "prox-trial__msg";
-    fetch(_EDGE_FN, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "start_email_trial", email: email, coach: _COACH })
-    }).then(r => r.json()).then(data => {
-      if (data.status === "trial_expired") {
-        msg.innerHTML = "Your free trial has been used. <a href=\"" + _STRIPE_URL + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue →</a>";
-        msg.className = "prox-trial__msg error";
-        btn.disabled = false;
-        btn.textContent = "Start 3 free sessions";
-        return;
-      }
-      if (data.token) {
-        sessionStorage.setItem(_SESSION_KEY, data.token);
-        window.location.href = _COACH_PAGE;
-      }
-    }).catch(e => {
-      msg.textContent = "Something went wrong. Please try again.";
-      msg.className = "prox-trial__msg error";
-      btn.disabled = false;
-      btn.textContent = "Start 3 free sessions";
-    });
-  }
-  document.addEventListener("DOMContentLoaded", function() {
-    var heroInput = document.getElementById("trialEmailHero");
-    if (heroInput) heroInput.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); startTrialHero(); } });
-  });
+
 </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -563,6 +524,44 @@
   document.getElementById("trialEmail").addEventListener("keydown", function(e) {
     if (e.key === "Enter") { e.preventDefault(); startTrial(); }
   });
+
+  function startTrialHero() {
+    var email = (document.getElementById("trialEmailHero").value || "").trim();
+    var btn = document.getElementById("trialBtnHero");
+    var msg = document.getElementById("trialMsgHero");
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      msg.textContent = "Please enter a valid email address.";
+      msg.className = "prox-trial__msg error";
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Starting\u2026";
+    msg.textContent = "";
+    msg.className = "prox-trial__msg";
+    fetch(_EDGE_FN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start_email_trial", email: email, coach: _COACH })
+    }).then(r => r.json()).then(data => {
+      if (data.status === "trial_expired") {
+        msg.innerHTML = "Your free trial has been used. <a href=\"" + _STRIPE_URL + "\" style=\"color:inherit;font-weight:700;text-decoration:underline;\">Subscribe to continue \u2192</a>";
+        msg.className = "prox-trial__msg error";
+        btn.disabled = false;
+        btn.textContent = "Start 3 free sessions";
+        return;
+      }
+      if (data.token) {
+        sessionStorage.setItem(_SESSION_KEY, data.token);
+        window.location.href = _COACH_PAGE;
+      }
+    }).catch(function(e) {
+      msg.textContent = "Something went wrong. Please try again.";
+      msg.className = "prox-trial__msg error";
+      btn.disabled = false;
+      btn.textContent = "Start 3 free sessions";
+    });
+  }
+  document.getElementById("trialEmailHero") && document.getElementById("trialEmailHero").addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); startTrialHero(); } });
 </script>
 </body>
 </html>
