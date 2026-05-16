@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Say This Instead — Proxi He</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.14);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    main {
+      flex: 1;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 44px 24px 64px;
+    }
+
+    .page-title {
+      font-size: 23px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 8px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 40px;
+      line-height: 1.65;
+    }
+
+    .situations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .situation-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 20px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .situation-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(58,51,83,0.10);
+      border-color: var(--aqua);
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--aqua-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/home-he" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Home
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Say This Instead</span>
+</header>
+
+<main>
+  <h1 class="page-title">What's the situation?</h1>
+  <p class="page-sub">Swap the reactive response for one that actually works.</p>
+
+  <div class="situations-grid">
+
+    <a href="/sti-partner" class="situation-card">
+      <div class="card-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <div class="card-title">With My Partner</div>
+      <div class="card-desc">Conflict, defensiveness, and disconnection moments</div>
+    </a>
+
+    <a href="/sti-angry" class="situation-card">
+      <div class="card-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 15s1.5-2 4-2 4 2 4 2"/>
+          <line x1="9" y1="9" x2="9.01" y2="9"/>
+          <line x1="15" y1="9" x2="15.01" y2="9"/>
+          <path d="M9.5 8.5c.5-1 2-1.5 2.5-1"/>
+          <path d="M14.5 8.5c-.5-1-2-1.5-2.5-1"/>
+        </svg>
+      </div>
+      <div class="card-title">When I'm Angry</div>
+      <div class="card-desc">What to say when you're activated or overwhelmed</div>
+    </a>
+
+    <a href="/sti-kids" class="situation-card">
+      <div class="card-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="card-title">With My Kids</div>
+      <div class="card-desc">Discipline, big feelings, and real connection</div>
+    </a>
+
+    <a href="/sti-work" class="situation-card">
+      <div class="card-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+      </div>
+      <div class="card-title">At Work</div>
+      <div class="card-desc">Leadership, feedback, and tough conversations</div>
+    </a>
+
+  </div>
+</main>
+
+</body>
+</html>

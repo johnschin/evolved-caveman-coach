@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>With My Kids — Say This Instead</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.10);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --before-bg:  #FFF5F5;
+      --before-label: #B84A4A;
+      --before-text:  #6B3535;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    main {
+      flex: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 72px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .tip-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .tip-bar strong { color: var(--slate-plum); }
+
+    .swap-count {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .swaps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .swap-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .swap-before {
+      padding: 15px 18px 14px;
+      background: var(--before-bg);
+      border-bottom: 1px dashed #EACACA;
+    }
+    .swap-after {
+      padding: 15px 18px 14px;
+      background: var(--aqua-soft);
+    }
+
+    .swap-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .label-before { color: var(--before-label); }
+    .label-after  { color: var(--aqua-deep); }
+
+    .swap-text {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .text-before { color: var(--before-text); }
+    .text-after  { color: var(--slate-plum); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/say-this-instead" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">With My Kids</span>
+</header>
+
+<main>
+  <h1 class="page-title">With My Kids</h1>
+  <p class="page-sub">Kids don't need a perfect father. They need a present one. These swaps keep the connection open when things get hard.</p>
+  <div class="tip-bar">
+    <strong>Remember:</strong> The goal isn't to manage the behavior — it's to stay in relationship while the behavior gets addressed. Your regulated presence is the most powerful parenting tool you have.
+  </div>
+
+  <p class="swap-count">15 swaps</p>
+
+  <div class="swaps-list">
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Stop crying."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"It's okay to feel that way. I'm right here."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Because I said so."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I need you to do this. I'll explain why when we're both calmer."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're fine." (after a fall or upset)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"That looked like it hurt. Are you okay?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're being ridiculous."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I can see you're really upset. What's going on?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"I don't have time for this right now."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I want to hear this. Give me five minutes and I'll come find you."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Man up." / "Don't be a baby."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Feeling scared is normal. You can feel it and still be brave — those aren't opposites."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Why can't you be more like your brother/sister?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I see how hard you're working. Let's figure out what works for you."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're so dramatic."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"This feels really big to you right now. Tell me more."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Just ignore them." (about a bully or social conflict)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"That sounds really hard. What happened? Walk me through it."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You need to toughen up."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Hard things are supposed to feel hard. You don't have to pretend otherwise with me."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"That's not a big deal."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"It feels like a big deal to you — tell me about it."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Stop being so sensitive."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"You feel things deeply. That's not a problem — that's part of who you are."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You should know better."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"That was a mistake. Let's talk about what happened and what to try next time."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"We'll talk about this later." (and never follows through)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I want to talk about this tonight. Can we find 10 minutes before bed?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're fine, it's not that bad." (minimizing pain)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I can see it feels bad. Do you want to tell me about it, or just have me sit with you?"</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

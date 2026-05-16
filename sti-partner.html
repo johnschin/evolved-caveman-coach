@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>With My Partner — Say This Instead</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.10);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --before-bg:  #FFF5F5;
+      --before-label: #B84A4A;
+      --before-text:  #6B3535;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    main {
+      flex: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 72px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .tip-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .tip-bar strong { color: var(--slate-plum); }
+
+    .swap-count {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .swaps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .swap-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .swap-before {
+      padding: 15px 18px 14px;
+      background: var(--before-bg);
+      border-bottom: 1px dashed #EACACA;
+    }
+    .swap-after {
+      padding: 15px 18px 14px;
+      background: var(--aqua-soft);
+    }
+
+    .swap-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .label-before { color: var(--before-label); }
+    .label-after  { color: var(--aqua-deep); }
+
+    .swap-text {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .text-before { color: var(--before-text); }
+    .text-after  { color: var(--slate-plum); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/say-this-instead" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">With My Partner</span>
+</header>
+
+<main>
+  <h1 class="page-title">With My Partner</h1>
+  <p class="page-sub">The goal isn't to win — it's to stay connected while being honest. These swaps won't always feel natural at first. That's the point.</p>
+  <div class="tip-bar">
+    <strong>Before you use these:</strong> The words matter less than your tone and intent. If you're still activated, take a breath first. A regulated nervous system makes everything below land better.
+  </div>
+
+  <p class="swap-count">20 swaps</p>
+
+  <div class="swaps-list">
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're overreacting."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I can see this really matters to you. Help me understand what's going on."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"I was just joking."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"That came out wrong. I didn't mean to hurt you."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Here's what you should do…" (unsolicited advice)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"What would feel most helpful right now — advice or just being heard?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Fine. Whatever."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I need a few minutes. Can we come back to this in 20?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You always do this."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"When this happens, I feel disconnected. I want us to figure it out."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"I already said I was sorry. What more do you want?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I know my apology doesn't fix it yet. What would actually help right now?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're being too sensitive."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"That landed harder than I intended. That's on me."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Why do we always have to talk about this?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"This matters to you, so it matters to me. I'm listening."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"I'm fine." (when clearly not fine)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm actually a little frustrated and still figuring out how to say it."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You never appreciate what I do."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm feeling like my efforts aren't landing. Can we talk about that?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're being dramatic."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I can see you're really upset. Walk me through what happened."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"That's not what I said."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I think I came across differently than I meant to. Let me try again."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Can't we just drop it?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I want to resolve this — I just need a break first. Can we pick this up in 20 minutes?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"Why is this such a big deal?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm trying to understand why this feels big to you right now."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're always criticizing me."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I want to get this right. What do you actually need from me?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"I don't want to talk about this right now." (then never returns to it)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm not ready right now. Can we come back to this after dinner?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You're making a big deal out of nothing."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Something's bothering you — I'd rather understand it than dismiss it."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"That's just who I am."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"This is a pattern I want to work on. I'm not done growing."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You started it."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I don't want to trade blame. What do we both need to feel okay right now?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What he says</div>
+        <div class="swap-text text-before">"You should have known I didn't mean it that way."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I see how that landed. Makes sense given what I said — that's on me."</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
