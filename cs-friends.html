@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Making New Friends — Conversation Starters</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:       #a3d0c9;
+      --aqua-deep:  #6bada3;
+      --aqua-soft:  rgba(163,208,201,0.14);
+      --linen:      #FAF8F5;
+      --card:       #FFFFFF;
+      --slate-plum: #3A3353;
+      --muted:      #7A7090;
+      --border:     #EAE6F0;
+      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 64px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── PICKER ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .level-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .level-pill {
+      padding: 8px 20px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .level-pill:hover { border-color: var(--aqua-deep); color: var(--slate-plum); }
+    .level-pill.active { background: var(--slate-plum); border-color: var(--slate-plum); color: #fff; }
+
+    /* ── LEVEL DESC ── */
+    .level-desc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .level-desc.visible { display: block; }
+
+    /* ── ACTIONS ROW ── */
+    .actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .count-text { font-size: 12px; color: var(--muted); }
+    .shuffle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: var(--aqua);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-plum);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .shuffle-btn:hover { opacity: 0.85; }
+
+    /* ── QUESTION CARDS ── */
+    .questions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .q-num {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--aqua-deep);
+    }
+    .q-tier {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      background: #F0EBF8;
+      padding: 2px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .q-text {
+      font-size: 15px;
+      color: var(--slate-plum);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ── TIP BLOCK ── */
+    .container-tip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      display: none;
+    }
+    .container-tip.visible { display: block; }
+    .container-tip strong { color: var(--slate-plum); }
+
+    /* ── EMPTY STATE ── */
+    #empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    #questions-section { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/conversation-starters" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Making New Friends</span>
+</header>
+
+<main>
+  <h1 class="page-title">Making New Friends</h1>
+  <p class="page-sub">Start at whatever level feels right. Follow the energy — great conversations find their depth naturally.</p>
+
+  <p class="section-label">Where are you in life?</p>
+  <div class="level-pills">
+    <button class="level-pill" data-level="early"   onclick="selectLevel('early')">Early Adults (20s–30s)</button>
+    <button class="level-pill" data-level="midlife" onclick="selectLevel('midlife')">Middle Age (40s–60s)</button>
+  </div>
+
+  <div class="level-desc" id="level-desc"></div>
+
+  <div id="empty-state">
+    <p>Select your age group above to get your questions.</p>
+  </div>
+
+  <div id="questions-section">
+    <div class="actions-row">
+      <span class="count-text" id="count-text"></span>
+      <button class="shuffle-btn" onclick="shuffleQuestions()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+        </svg>
+        New set
+      </button>
+    </div>
+    <div class="questions-grid" id="questions-grid"></div>
+    <div class="container-tip" id="container-tip"></div>
+  </div>
+</main>
+
+<script>
+var PER_SET = 8;
+var currentLevel = null;
+
+var LEVELS = {
+
+  early: {
+    desc: "Questions for strangers, new acquaintances, or anyone in your 20s–30s you want to know better. Start light — the good stuff surfaces on its own.",
+    tip: "<strong>Dr. John's tip:</strong> The secret to a great conversation isn't the question — it's the pause after. Resist the urge to jump in with your own story. Stay curious for one more beat. Ask one follow-up. That's where connection actually happens.",
+    questions: [
+      { tier: "Easy Open",        text: "What's the best meal you've had recently — and where?" },
+      { tier: "Easy Open",        text: "Are you more of a morning person or a night owl — and are you actually okay with that?" },
+      { tier: "Easy Open",        text: "What's something you've been watching or listening to lately that you'd genuinely recommend?" },
+      { tier: "Easy Open",        text: "What's the best trip you've taken in the last couple of years?" },
+      { tier: "Easy Open",        text: "What did you want to be when you grew up — and how far off is the reality?" },
+      { tier: "Easy Open",        text: "What's your go-to comfort food or drink when you really need it?" },
+      { tier: "Easy Open",        text: "What's the last thing that genuinely made you laugh?" },
+      { tier: "Easy Open",        text: "Do you have a 'third place' — somewhere you go that's not home and not work?" },
+      { tier: "Warming Up",       text: "What does a perfect weekend actually look like for you?" },
+      { tier: "Warming Up",       text: "Are you someone who needs a lot of people around, or do you recharge better alone?" },
+      { tier: "Warming Up",       text: "What's something you're into that most people wouldn't expect?" },
+      { tier: "Warming Up",       text: "What's a skill you've picked up recently that you're kind of proud of?" },
+      { tier: "Warming Up",       text: "What's something you're working on right now that genuinely excites you?" },
+      { tier: "Warming Up",       text: "If you could get really good at one thing — anything at all — what would you pick?" },
+      { tier: "Warming Up",       text: "What's a book, podcast, or documentary that actually shifted how you think about something?" },
+      { tier: "Warming Up",       text: "What's a city or place you've visited that completely surprised you?" },
+      { tier: "Getting Interesting", text: "What do you think is underrated about where you grew up?" },
+      { tier: "Getting Interesting", text: "What's something you've changed your mind about in the last couple of years?" },
+      { tier: "Getting Interesting", text: "What's something you did that scared you, but turned out to be completely worth it?" },
+      { tier: "Getting Interesting", text: "What's something you're genuinely proud of that you don't really talk about?" },
+      { tier: "Getting Interesting", text: "If you could go back and give yourself one piece of advice at 18, what would it be?" },
+      { tier: "Getting Interesting", text: "What's something you've learned about yourself in the last year?" },
+      { tier: "Getting Interesting", text: "What does a 'good life' actually look like to you right now — not eventually, right now?" },
+      { tier: "Getting Interesting", text: "What's a belief you hold that you think most people your age don't share?" },
+      { tier: "Real Conversation",  text: "Is there something you're working toward right now that feels both exciting and a little terrifying?" },
+      { tier: "Real Conversation",  text: "What do you think is the hardest thing about making real friends as an adult?" },
+      { tier: "Real Conversation",  text: "What's something about how you were raised that you're grateful for — and something you're still unlearning?" },
+      { tier: "Real Conversation",  text: "What's a time you completely surprised yourself?" },
+      { tier: "Real Conversation",  text: "What's one thing you want your life to look like in 10 years that you haven't told many people?" },
+      { tier: "Real Conversation",  text: "Where do you feel like you truly belong — and what does that feel like?" },
+      { tier: "Real Conversation",  text: "Who is someone who changed the way you see things? What did they do?" },
+      { tier: "Real Conversation",  text: "What's something most people don't know about you that you'd be comfortable sharing?" },
+      { tier: "The Ones That Stick", text: "What do you think you're meant to be doing — even if you're not doing it yet?" },
+      { tier: "The Ones That Stick", text: "If the people closest to you described you in three words, what do you think they'd actually say?" },
+      { tier: "The Ones That Stick", text: "What are you still figuring out?" },
+      { tier: "The Ones That Stick", text: "What gives you that feeling of being fully alive — where time just disappears?" },
+      { tier: "The Ones That Stick", text: "What chapter of your life do you look back on with the most fondness?" },
+      { tier: "The Ones That Stick", text: "What's the best piece of advice you've ever received — and did you actually take it?" },
+      { tier: "The Ones That Stick", text: "What's something about you that takes people a while to understand?" },
+      { tier: "The Ones That Stick", text: "What's something you want to do before your next big birthday that you haven't told anyone?" }
+    ]
+  },
+
+  midlife: {
+    desc: "Questions for new acquaintances, colleagues, or anyone in your 40s–60s you want to connect with more deeply. These land differently when you've actually lived some life.",
+    tip: "<strong>Dr. John's tip:</strong> The secret to a great conversation isn't the question — it's the pause after. Resist the urge to jump in with your own story. Stay curious for one more beat. Ask one follow-up. That's where connection actually happens.",
+    questions: [
+      { tier: "Easy Open",        text: "What's something you've recently rediscovered that you used to love?" },
+      { tier: "Easy Open",        text: "What's your current favorite thing to do with free time — if you can find any?" },
+      { tier: "Easy Open",        text: "Are you someone who needs a plan, or do you prefer to see where things go?" },
+      { tier: "Easy Open",        text: "What's the best trip you've taken in the last few years?" },
+      { tier: "Easy Open",        text: "What are you watching, reading, or listening to right now that you'd actually recommend?" },
+      { tier: "Easy Open",        text: "What's your version of a perfect Sunday?" },
+      { tier: "Easy Open",        text: "What did you think your life would look like at this age — and how's the reality?" },
+      { tier: "Easy Open",        text: "What's something you've genuinely gotten better at as you've gotten older?" },
+      { tier: "Warming Up",       text: "What's something you're into now that your younger self would be completely surprised by?" },
+      { tier: "Warming Up",       text: "If you could go back to any decade of your life for a week, which would you pick — and why?" },
+      { tier: "Warming Up",       text: "What's something you've added to your life in the last few years that's made it noticeably better?" },
+      { tier: "Warming Up",       text: "What do you think is the most underrated part of getting older?" },
+      { tier: "Warming Up",       text: "What's something you've done recently that took you out of your comfort zone?" },
+      { tier: "Warming Up",       text: "If you had a completely free Saturday — no obligations, no one needing anything from you — what would you actually do?" },
+      { tier: "Warming Up",       text: "What's a hobby or skill you've always wanted to develop but haven't gotten around to yet?" },
+      { tier: "Warming Up",       text: "What's the best advice you've ever gotten — and did you actually take it?" },
+      { tier: "Getting Interesting", text: "What do you know now that you really wish you'd known at 25?" },
+      { tier: "Getting Interesting", text: "What's something about you that's changed significantly in the last decade?" },
+      { tier: "Getting Interesting", text: "What's a belief you've changed your mind about as you've gotten older?" },
+      { tier: "Getting Interesting", text: "What do you think you're genuinely better at than most people — not professionally, just as a human?" },
+      { tier: "Getting Interesting", text: "What's something you've stopped caring about that used to feel really important?" },
+      { tier: "Getting Interesting", text: "What's something you've started caring about much more as you've gotten older?" },
+      { tier: "Getting Interesting", text: "What does a meaningful week look like for you right now?" },
+      { tier: "Getting Interesting", text: "What are you still genuinely curious about — a subject, an idea, something you haven't explored yet?" },
+      { tier: "Real Conversation",  text: "What's something you've let go of — a goal, a version of yourself — that actually felt like a relief?" },
+      { tier: "Real Conversation",  text: "Is there a pivot or change you made that scared you at the time but turned out to be exactly right?" },
+      { tier: "Real Conversation",  text: "What's the most important thing you've learned about relationships over the years?" },
+      { tier: "Real Conversation",  text: "What do you think makes a friendship last — especially at this stage of life?" },
+      { tier: "Real Conversation",  text: "What do you think you'd tell yourself right now if you could be completely honest?" },
+      { tier: "Real Conversation",  text: "What are you still working on — personally, not professionally?" },
+      { tier: "Real Conversation",  text: "What does success look like to you now, compared to what you thought it looked like at 30?" },
+      { tier: "Real Conversation",  text: "Who has had the most lasting influence on who you've become?" },
+      { tier: "The Ones That Stick", text: "What's the chapter of your life you're most proud of — and why?" },
+      { tier: "The Ones That Stick", text: "What's something you want to experience or do that you keep putting off?" },
+      { tier: "The Ones That Stick", text: "Is there something you always assumed you'd do or become that you've quietly let go of — and how do you feel about that?" },
+      { tier: "The Ones That Stick", text: "Where do you feel like you truly belong these days?" },
+      { tier: "The Ones That Stick", text: "What do you want the people closest to you to really understand about who you are right now?" },
+      { tier: "The Ones That Stick", text: "If you could only pass one thing on to the next generation — a value, a lesson, a perspective — what would it be?" },
+      { tier: "The Ones That Stick", text: "What does the next chapter of your life look like, and how excited are you about it?" },
+      { tier: "The Ones That Stick", text: "What still surprises you about yourself?" }
+    ]
+  }
+
+};
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function selectLevel(level) {
+  currentLevel = level;
+
+  document.querySelectorAll('.level-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.level === level);
+  });
+
+  var data = LEVELS[level];
+  var descEl = document.getElementById('level-desc');
+  descEl.textContent = data.desc;
+  descEl.classList.add('visible');
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('questions-section').style.display = 'block';
+
+  var tipEl = document.getElementById('container-tip');
+  tipEl.innerHTML = data.tip;
+  tipEl.classList.add('visible');
+
+  shuffleQuestions();
+}
+
+function shuffleQuestions() {
+  if (!currentLevel) return;
+  var data = LEVELS[currentLevel];
+  var picked = shuffle(data.questions).slice(0, PER_SET);
+
+  var grid = document.getElementById('questions-grid');
+  grid.innerHTML = '';
+  picked.forEach(function(q, i) {
+    var card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML =
+      '<div class="q-meta">' +
+        '<span class="q-num">Q' + (i + 1) + '</span>' +
+        '<span class="q-tier">' + q.tier + '</span>' +
+      '</div>' +
+      '<div class="q-text">' + q.text + '</div>';
+    grid.appendChild(card);
+  });
+
+  document.getElementById('count-text').textContent =
+    'Showing ' + picked.length + ' of ' + data.questions.length + ' questions';
+}
+</script>
+
+</body>
+</html>
