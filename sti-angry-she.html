@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When I'm Overwhelmed — Say This Instead</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --mauve:       #9C8B9A;
+      --mauve-deep:  #6B5A70;
+      --mauve-soft:  rgba(156,139,154,0.10);
+      --linen:       #FAF8F5;
+      --card:        #FFFFFF;
+      --slate-plum:  #3A3353;
+      --muted:       #7A7090;
+      --border:      #EAE6F0;
+      --before-bg:   #FFF5F5;
+      --before-label: #B84A4A;
+      --before-text:  #6B3535;
+      --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--mauve); }
+
+    main {
+      flex: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 24px 72px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 4px;
+    }
+    .page-byline {
+      font-size: 13px;
+      color: var(--mauve-deep);
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    .tip-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--mauve);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .tip-bar strong { color: var(--slate-plum); }
+
+    .swap-count {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .swaps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .swap-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .swap-before {
+      padding: 15px 18px 14px;
+      background: var(--before-bg);
+      border-bottom: 1px dashed #EACACA;
+    }
+    .swap-after {
+      padding: 15px 18px 14px;
+      background: var(--mauve-soft);
+    }
+
+    .swap-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .label-before { color: var(--before-label); }
+    .label-after  { color: var(--mauve-deep); }
+
+    .swap-text {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .text-before { color: var(--before-text); }
+    .text-after  { color: var(--slate-plum); }
+
+    /* ── CUSTOM REFRAME CARD ── */
+    .reframe-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-top: 3px solid var(--mauve);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .reframe-card-header {
+      padding: 18px 20px 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .reframe-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--mauve-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .reframe-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 3px;
+    }
+    .reframe-card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .reframe-card-body {
+      padding: 0 20px 18px;
+    }
+    .reframe-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--slate-plum);
+      background: var(--linen);
+      resize: none;
+      line-height: 1.55;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 10px;
+    }
+    .reframe-textarea:focus { border-color: var(--mauve-deep); }
+    .reframe-textarea::placeholder { color: var(--muted); opacity: 0.7; }
+    .reframe-submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mauve-deep);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .reframe-submit-btn:hover { opacity: 0.85; }
+    .reframe-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .reframe-result {
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+      background: rgba(156,139,154,0.06);
+      display: none;
+    }
+    .reframe-thinking {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dot-flashing { display: inline-flex; gap: 4px; }
+    .dot-flashing span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--mauve-deep);
+      animation: dotFlash 1.2s infinite;
+    }
+    .dot-flashing span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-flashing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotFlash {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+    .reframe-response-text {
+      font-size: 14px;
+      color: var(--slate-plum);
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+    .reframe-try-again {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--mauve-deep);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      padding: 0;
+    }
+    .reframe-try-again:hover { opacity: 0.7; }
+    .reframe-error-text { font-size: 13px; color: #B84A4A; line-height: 1.55; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/say-this-instead-she" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">When I'm Overwhelmed</span>
+</header>
+
+<main>
+  <h1 class="page-title">When I'm Overwhelmed / Reactive</h1>
+  <p class="page-sub">Overwhelm isn't a character flaw — it's a signal. These swaps help you honor what you're feeling without letting it run the room.</p>
+  <p class="page-byline">— Joree</p>
+  <div class="tip-bar">
+    <strong>Before you use these:</strong> If you're flooded right now, your nervous system is in protection mode — and no script will land the way you want. Place a hand on your chest, take one slow breath, and feel your feet on the floor. Even 60 seconds of that changes what's available to you. Then come back here.
+  </div>
+
+  <!-- CUSTOM REFRAME CARD -->
+  <div class="reframe-card">
+    <div class="reframe-card-header">
+      <div class="reframe-card-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="reframe-card-title">Get a custom reframe</div>
+        <div class="reframe-card-sub">Type what you're saying when you're overwhelmed — I'll help you say what you actually mean.</div>
+      </div>
+    </div>
+    <div class="reframe-card-body">
+      <textarea id="reframeInput" class="reframe-textarea" rows="2" placeholder="e.g. 'I can't do this anymore' or 'Nobody ever helps me'"></textarea>
+      <button class="reframe-submit-btn" id="reframeBtn" onclick="getReframe()">
+        Reframe it
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+    <div class="reframe-result" id="reframeResult"></div>
+  </div>
+
+  <p class="swap-count">15 swaps</p>
+
+  <div class="swaps-list">
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"I can't do this right now." (then goes completely silent)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm overwhelmed and I need a few minutes to breathe. I'm not shutting you out — I'll come back when I can actually talk."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"You're making me crazy."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Something about this moment is really activating me. I don't think you're doing it on purpose — but I need a minute to sort out what's mine."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"I don't even know why I'm crying." (said while crying)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm more overwhelmed than I realized — my body got there before my words did. Can you just sit with me for a minute?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Everything is just too much."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm running on empty right now. I'm not asking you to fix it — I just need to say it out loud and feel like you heard me."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"You don't care at all."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Right now I'm not feeling like a priority, and that really hurts. I need to feel like I matter to you — can you show me that?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Leave me alone!" (but actually needing connection)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I need a little space right now, but please don't go far. I want to feel you close — just give me 10 minutes."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"I'm fine." (said sharply, while clearly not fine)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm not fine, I'm just not ready to talk about it yet. Can you give me a little grace while I figure out what I need?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Nobody ever helps me with anything."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm feeling really unsupported right now and I know that's not entirely fair — but I'm exhausted and I need you to step in without me having to ask."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Why do I always have to hold everything together?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I feel like I'm the one keeping all the plates spinning and I'm about to drop one. I need more partnership — can we figure out what that looks like?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"You wouldn't understand."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm not sure I can explain this well right now — but I want to try. Will you listen without trying to fix it?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"I shouldn't even have to explain this to you."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm frustrated because I feel like I've said this before and it hasn't changed. Can we actually sit with it this time instead of moving past it?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Just forget it." (while clearly still upset)</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm pulling back because I don't want to say something I'll regret. This isn't dropped — I just need to come back to it when I'm calmer."</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"I'm so tired of always feeling this way."</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"Something isn't working for me and it keeps showing up. I don't want to just vent — I want us to actually look at it. Can we do that?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">Going quiet, then suddenly exploding over something small</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I've been holding something and I can feel it building. Can we make space for me to get it out before it comes out the wrong way?"</div>
+      </div>
+    </div>
+
+    <div class="swap-card">
+      <div class="swap-before">
+        <div class="swap-label label-before">❌ What she says</div>
+        <div class="swap-text text-before">"Why can't anything ever just be easy?"</div>
+      </div>
+      <div class="swap-after">
+        <div class="swap-label label-after">✅ Say this instead</div>
+        <div class="swap-text text-after">"I'm hitting a wall today and I need softness, not solutions. Can you just be with me for a few minutes without trying to fix anything?"</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  var SUPABASE_URL = "https://osywbzzvsfjdvjhjalju.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
+  var EDGE_URL = SUPABASE_URL + "/functions/v1/chat";
+  var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  var REFRAME_SYSTEM =
+    "You are a communication coach speaking in Joree Rose's voice — warm, grounded, deeply compassionate, and gently honest. " +
+    "Joree is a licensed marriage and family therapist and mindfulness teacher. She speaks like a wise, caring friend who happens to have real clinical training — never clinical or cold, never preachy.\n\n" +
+    "A woman has shared something she said (or is about to say) when she's overwhelmed, flooded, or reactive. Give her:\n" +
+    "1. One or two sentences that acknowledge the valid feeling underneath — without judgment, and without minimizing what she's carrying.\n" +
+    "2. One natural, honest reframe she can actually use in the moment.\n" +
+    "3. Optionally a second alternative reframe if it would serve her.\n\n" +
+    "Be warm, but don't let her off the hook. Help her see both the validity of her feeling AND a more connected way to express it. " +
+    "Focus on her unmet need, not the behavior. " +
+    "Sound like a trusted friend who genuinely cares and also knows the research — not a script. " +
+    "Keep it short and immediately usable. No bullet points, no headers, no numbered lists in your response. " +
+    "Write in flowing, conversational prose. Do not ask clarifying questions — just give the reframe.";
+
+  async function getReframe() {
+    var input = document.getElementById("reframeInput");
+    var text = input.value.trim();
+    if (!text) { input.focus(); return; }
+
+    var btn = document.getElementById("reframeBtn");
+    var result = document.getElementById("reframeResult");
+    btn.disabled = true;
+    result.style.display = "block";
+    result.innerHTML = '<div class="reframe-thinking">Thinking<div class="dot-flashing"><span></span><span></span><span></span></div></div>';
+
+    try {
+      var sessionRes = await sb.auth.getSession();
+      var token = (sessionRes.data && sessionRes.data.session && sessionRes.data.session.access_token)
+        ? sessionRes.data.session.access_token
+        : SUPABASE_ANON_KEY;
+
+      var res = await fetch(EDGE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({
+          system: REFRAME_SYSTEM,
+          messages: [{ role: "user", content: '"' + text + '"' }]
+        })
+      });
+
+      if (!res.ok) throw new Error("Server returned " + res.status);
+      var data = await res.json();
+      var reply = (data.content && data.content[0] && data.content[0].text)
+        ? data.content[0].text
+        : (data.reply || data.message || "");
+      if (!reply) throw new Error("Empty response");
+
+      result.innerHTML =
+        '<div class="reframe-response-text">' + escapeHtml(reply) + '</div>' +
+        '<button class="reframe-try-again" onclick="clearReframe()">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>' +
+        ' Try another</button>';
+    } catch (e) {
+      result.innerHTML = '<div class="reframe-error-text">Something went wrong — try again.</div>';
+      console.error("Reframe error:", e);
+    }
+    btn.disabled = false;
+  }
+
+  function clearReframe() {
+    document.getElementById("reframeInput").value = "";
+    var result = document.getElementById("reframeResult");
+    result.style.display = "none";
+    result.innerHTML = "";
+    document.getElementById("reframeInput").focus();
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+</script>
+</body>
+</html>
