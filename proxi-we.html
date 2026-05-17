@@ -738,7 +738,7 @@
         if (checkData.status === "session_complete") {
             var sessRemain = checkData.sessions_remaining || 0;
             if (sessRemain > 0) {
-                addMessage("assistant", "Welcome back. Your previous session is complete. You have " + sessRemain + " session" + (sessRemain === 1 ? "" : "s") + " remaining in your free trial. Click "New Session" to begin.");
+                addMessage("assistant", "Welcome back. Your previous session is complete. You have " + sessRemain + " session" + (sessRemain === 1 ? "" : "s") + " remaining in your free trial. Click 'New Session' to begin.");
             } else {
                 addMessage("assistant", "Your free trial has ended. Subscribe to continue — $49/month for both partners.");
             }
