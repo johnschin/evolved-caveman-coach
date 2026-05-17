@@ -815,12 +815,10 @@
             var label = CONTEXT_LABELS[urlContext];
             block +=
                 "HOME SCREEN CONTEXT — RIGHT NOW MODE:\n" +
-                "The user tapped '" + label + "' on the home screen before entering this session. " +
-                "They have already told you what they are dealing with.\n" +
-                "Do NOT open with 'what's on your heart?' or a generic session opener. " +
-                "Start directly with this topic.\n" +
-                "— For a RETURNING user: acknowledge them briefly, then ask one warm coaching question about " + label + ". No preamble.\n" +
-                "— For a FIRST-TIME user: after they acknowledge the framework, open with a response tailored to " + label + " instead of the generic opener in OPENING_VARIATIONS.\n\n";
+                "The user selected '" + label + "' before entering this session. She has already told you what she is dealing with — do not ask her again.\n" +
+                "OVERRIDE ALL GENERIC OPENERS: Do NOT use 'What's present for you today?', 'What's on your heart?', or anything from OPENING_VARIATIONS. None of them apply here.\n" +
+                "For a RETURNING user: her first message already states the topic. Respond directly — name the experience, reflect it back precisely, and ask exactly ONE focused coaching question about " + label + ". No preamble, no 'welcome back' paragraph.\n" +
+                "For a FIRST-TIME user: after she acknowledges the welcome/consent message, skip OPENING_VARIATIONS entirely. Instead, open with a response specifically tailored to " + label + " — name the experience, reflect it back, and ask ONE focused question about it.\n\n";
         } else if (urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]) {
             // Free-form context string (e.g. from repair-toolkit-she or other tools)
             block +=
@@ -830,16 +828,19 @@
                 "Be warm, specific, and present. This is a practical entry point. Respond well, then invite her to go deeper if she wants.\n\n";
         }
 
-        if (urlMode === "pulse" && (pulsePlate || pulseConnected || pulseEnergy)) {
+        if ((pulsePlate || pulseConnected || pulseEnergy)) {
+            var pulseLabel = urlMode === "pulse"
+                ? "DAILY CHECK-IN (user self-report)"
+                : "BACKGROUND STATE — user's current energy (from home screen sliders)";
             block +=
-                "HOME SCREEN CONTEXT — DAILY CHECK-IN (user self-report):\n" +
+                "HOME SCREEN CONTEXT — " + pulseLabel + ":\n" +
                 (pulsePlate     ? "- Plate fullness:             " + pulsePlate     + " / 5  (1 = light load, 5 = too much)\n" : "") +
                 (pulseConnected ? "- Feeling connected:          " + pulseConnected + " / 5  (1 = isolated, 5 = held)\n" : "") +
                 (pulseEnergy    ? "- Energy for reflection:      " + pulseEnergy    + " / 5  (1 = go gentle, 5 = I'm ready)\n" : "") +
-                "\nUse this to calibrate your opening and approach:\n" +
+                "\nUse this to calibrate your tone and depth — it is always operative, regardless of the session topic:\n" +
                 "- Plate 4–5: acknowledge how much she is carrying before going anywhere else. Start with witnessing.\n" +
                 "- Plate 1–2: she is in a lighter place — good time to explore or go deeper.\n" +
-                "- Energy 1–2: be soft and spacious; do not push or challenge.\n" +
+                "- Energy 1–2: be soft and spacious; do not push or challenge. Match her pace.\n" +
                 "- Energy 4–5: she is ready to go deep — be direct and honest with her.\n" +
                 "- Connected below 3: weave in the relational thread early.\n\n";
         }
@@ -1116,8 +1117,18 @@
         showTyping(true);
 
         var isDirectRequest = !!(urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]);
-        var triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
-        if (isDirectRequest) { triggerMessage = urlContext; }
+        var isChipContext   = !!(urlMode === "rightnow" && urlContext && CONTEXT_LABELS[urlContext]);
+        var triggerMessage;
+        if (isDirectRequest) {
+            triggerMessage = urlContext;
+        } else if (isChipContext) {
+            // Put the chip topic directly in the user turn so the AI must respond to it
+            triggerMessage = isReturningUser
+                ? "I'm back. Right now I'm dealing with " + CONTEXT_LABELS[urlContext] + "."
+                : "Hi — I'm here because I'm dealing with " + CONTEXT_LABELS[urlContext] + ".";
+        } else {
+            triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
+        }
 
         conversationHistory.push({ role: "user", content: triggerMessage });
 

@@ -1086,6 +1086,13 @@ renderGrid('guys');
     // ── Tab label
     document.getElementById('tab-guys').innerHTML = '<span class="tab-icon">🌿</span> With the Girls';
 
+    // ── Date Night tab: update He-framed how-to and tip to Joree-voiced, gender-neutral copy
+    var panelDate = document.getElementById('panel-date');
+    panelDate.querySelector('.how-to').innerHTML =
+      '<strong>How to use these:</strong> Don\'t pick what\'s easiest or most familiar. Pick what your relationship actually needs right now. The best date isn\'t the most impressive one — it\'s the one that signals: <em>I thought about us, and I made space for this.</em> That intention is what love looks like in action.';
+    panelDate.querySelector('.dr-john-tip').innerHTML =
+      '<strong>Joree:</strong> The research on relationship satisfaction is consistent — it\'s not grand gestures that build lasting connection. It\'s small, repeated acts of intentional attention. A date night isn\'t about the activity. It\'s about the message underneath it: <em>I choose us. I make room for us. We matter enough to show up for.</em> That signal, offered consistently, is what love actually looks like over time.';
+
     // ── Panel: title, sub, how-to
     var panel = document.getElementById('panel-guys');
     panel.querySelector('.page-title').textContent = 'With the Girls';

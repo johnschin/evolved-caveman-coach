@@ -1424,7 +1424,13 @@
         document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
         el.classList.add("selected");
         setTimeout(function() {
-            window.location.href = "/proxi-she?mode=rightnow&context=" + encodeURIComponent(context);
+            var plate     = document.getElementById("stressSlider").value;
+            var connected = document.getElementById("relSlider").value;
+            var energy    = document.getElementById("challengeSlider").value;
+            window.location.href = "/proxi-she?mode=rightnow&context=" + encodeURIComponent(context)
+                + "&pulse_plate=" + plate
+                + "&pulse_connected=" + connected
+                + "&pulse_energy=" + energy;
         }, 320);
     }
 
