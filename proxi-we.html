@@ -259,6 +259,15 @@
             .form-row { grid-template-columns: 1fr; }
         }
 
+        /* Auth links row */
+        .auth-links { display: flex; justify-content: center; gap: 18px; margin-top: 12px; }
+        .auth-link {
+            background: none; border: none; padding: 0; font-family: inherit;
+            font-size: 13px; color: var(--teal); cursor: pointer; font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-link:hover { text-decoration: underline; }
+
         /* Scrollbar */
         .messages::-webkit-scrollbar { width: 5px; }
         .messages::-webkit-scrollbar-track { background: transparent; }
@@ -284,9 +293,12 @@
                     <label>Password</label>
                     <input type="password" id="loginPassword" autocomplete="current-password">
                 </div>
-                <div id="loginMessage" class="auth-message"></div>
                 <button class="btn-primary" onclick="handleLogin()">Sign In</button>
-                <div class="auth-toggle">Don't have an account? <a onclick="showView('signup')">Sign Up</a></div>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('signup')">Create account</button>
+                    <button class="auth-link" onclick="showView('forgot')">Forgot password?</button>
+                </div>
+                <div id="loginMessage" class="auth-message"></div>
             </div>
 
             <!-- SIGNUP FORM -->
@@ -351,7 +363,34 @@
 
                 <div id="signupMessage" class="auth-message"></div>
                 <button class="btn-primary" id="signupBtn" onclick="handleSignup()" disabled>Create Account</button>
-                <div class="auth-toggle">Already have an account? <a onclick="showView('login')">Sign In</a></div>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+            </div>
+
+            <!-- FORGOT PASSWORD FORM -->
+            <div id="forgotForm" style="display:none;">
+                <h3 style="font-size:16px; font-weight:700; color:var(--plum); margin-bottom:16px;">Reset your password</h3>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgotEmail" autocomplete="email" placeholder="you@email.com">
+                </div>
+                <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Link</button>
+                <div class="auth-links">
+                    <button class="auth-link" onclick="showView('login')">Back to sign in</button>
+                </div>
+                <div id="forgotMessage" class="auth-message"></div>
+            </div>
+
+            <!-- RESET PASSWORD FORM -->
+            <div id="resetForm" style="display:none;">
+                <h3 style="font-size:16px; font-weight:700; color:var(--plum); margin-bottom:16px;">Set a new password</h3>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="resetPassword" autocomplete="new-password" placeholder="Min 6 characters">
+                </div>
+                <button class="btn-primary" onclick="handleResetPassword()">Set New Password</button>
+                <div id="resetMessage" class="auth-message"></div>
             </div>
         </div>
     </div>
@@ -597,10 +636,14 @@
     // AUTH
     // =====================================================
     function showView(view) {
-        document.getElementById("loginForm").style.display = view === "login" ? "block" : "none";
+        document.getElementById("loginForm").style.display  = view === "login"  ? "block" : "none";
         document.getElementById("signupForm").style.display = view === "signup" ? "block" : "none";
-        document.getElementById("loginMessage").textContent = "";
-        document.getElementById("signupMessage").textContent = "";
+        document.getElementById("forgotForm").style.display = view === "forgot" ? "block" : "none";
+        document.getElementById("resetForm").style.display  = view === "reset"  ? "block" : "none";
+        ["loginMessage","signupMessage","forgotMessage","resetMessage"].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = "";
+        });
     }
 
     function toggleCouplesFields() {
@@ -627,7 +670,24 @@
         }
     });
 
+    // Auth state listener — handles SIGNED_IN from magic links and PASSWORD_RECOVERY
+    sb.auth.onAuthStateChange(function(event, session) {
+        if (event === "PASSWORD_RECOVERY") { showView("reset"); return; }
+        if (event === "SIGNED_IN" && session) {
+            if (window.location.hash) {
+                history.replaceState(null, "", window.location.pathname + window.location.search);
+            }
+        }
+    });
+
     async function checkAuth() {
+        // ── Handle password recovery / magic-link hash ───────────────────────
+        var hash = window.location.hash;
+        if (hash && hash.includes("type=recovery")) {
+            showView("reset");
+            return;
+        }
+
         // ── Check for email-based trial token first ──────────────────────────
         var savedTrial = sessionStorage.getItem("prx_trial_couples");
         if (savedTrial) {
@@ -694,6 +754,29 @@
         if (statusEl) {
             statusEl.textContent = "Free trial · Session " + (sessUsed + 1) + " of 3 · " + msgsLeft + " messages remaining this session";
         }
+    }
+
+    async function handleForgotPassword() {
+        var email = document.getElementById("forgotEmail").value.trim();
+        var msg = document.getElementById("forgotMessage");
+        if (!email) { msg.className = "auth-message error"; msg.textContent = "Please enter your email."; return; }
+        try {
+            var result = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
+            if (result.error) throw result.error;
+            msg.className = "auth-message success"; msg.textContent = "Check your email for a reset link.";
+        } catch (err) { msg.className = "auth-message error"; msg.textContent = err.message || "Reset failed."; }
+    }
+
+    async function handleResetPassword() {
+        var password = document.getElementById("resetPassword").value;
+        var msg = document.getElementById("resetMessage");
+        if (!password || password.length < 6) { msg.className = "auth-message error"; msg.textContent = "Password must be at least 6 characters."; return; }
+        try {
+            var result = await sb.auth.updateUser({ password: password });
+            if (result.error) throw result.error;
+            msg.className = "auth-message success"; msg.textContent = "Password updated! Signing you in...";
+            setTimeout(function() { window.location.hash = ""; window.location.reload(); }, 1500);
+        } catch (err) { msg.className = "auth-message error"; msg.textContent = err.message || "Reset failed."; }
     }
 
     async function handleLogin() {
