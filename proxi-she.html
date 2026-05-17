@@ -854,15 +854,30 @@
         var contextBlock = buildContextBlock();
         if (contextBlock) prompt += contextBlock;
 
-        // Free-form direct request: skip all openers, respond directly
         var isDirectRequest = !!(urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]);
+        var isChipContext   = !!(urlMode === "rightnow" && urlContext && CONTEXT_LABELS[urlContext]);
 
         if (isDirectRequest) {
+            // Free-form direct request: skip all openers, respond to the request
             prompt +=
                 "DIRECT REQUEST MODE:\n" +
                 "The user's first message contains a specific practical request. Respond to it directly.\n" +
                 "Skip ALL standard openers — no welcome, no consent gate, no 'what's on your heart?', no 'welcome back'.\n" +
                 "Be warm, specific, and practical. Answer the request well, then offer to explore more if she wants.\n\n";
+        } else if (isChipContext) {
+            // Chip selection: the user already told you what she is dealing with.
+            // Do NOT append RETURNING_USER_BLOCK or OPENING_VARIATIONS — they would
+            // re-introduce generic openers that contradict the chip context above.
+            if (isReturningUserFlag) {
+                prompt +=
+                    "RETURNING USER — CHIP MODE:\n" +
+                    "Skip the full welcome. Her first message already names the topic. " +
+                    "Respond directly to it — do not ask what she wants to talk about, she just told you.\n\n";
+            } else {
+                // First-time user still needs the consent/welcome, but SKIP OPENING_VARIATIONS.
+                // After she acknowledges, open with the chip topic per the context block above.
+                prompt += FIRST_TIME_WELCOME_BLOCK;
+            }
         } else if (isReturningUserFlag) {
             prompt += RETURNING_USER_BLOCK;
         } else {
