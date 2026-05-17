@@ -18,6 +18,7 @@
 # Proxi coach app pages (post-auth, gated)
 /home-he          /home-he.html          200
 /home-she         /home-she.html         200
+/home-we          /home-we.html          200
 /proxi-he         /proxi-he.html         200
 /proxi-she        /proxi-she.html        200
 /proxi-we         /proxi-we.html         200
@@ -50,6 +51,7 @@
 # Repair Toolkit (linked from home-he.html and home-she.html)
 /repair-toolkit           /repair-toolkit.html           200
 /repair-toolkit-she       /repair-toolkit-she.html       200
+/repair-toolkit-we        /repair-toolkit-we.html        200
 
 # Legal pages — Proxi He / John (Guide to Self)
 /privacy             /proximity-privacy.html        200

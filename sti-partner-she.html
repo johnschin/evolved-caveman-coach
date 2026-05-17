@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>With My Partner — Say This Instead</title>
+  <title>With My Partner — Her Perspective</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,18 +11,18 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
   <style>
     :root {
-      --aqua:       #a3d0c9;
-      --aqua-deep:  #6bada3;
-      --aqua-soft:  rgba(163,208,201,0.10);
-      --linen:      #FAF8F5;
-      --card:       #FFFFFF;
-      --slate-plum: #3A3353;
-      --muted:      #7A7090;
-      --border:     #EAE6F0;
-      --before-bg:  #FFF5F5;
+      --mauve:       #9C8B9A;
+      --mauve-deep:  #6B5A70;
+      --mauve-soft:  rgba(156,139,154,0.10);
+      --linen:       #FAF8F5;
+      --card:        #FFFFFF;
+      --slate-plum:  #3A3353;
+      --muted:       #7A7090;
+      --border:      #EAE6F0;
+      --before-bg:   #FFF5F5;
       --before-label: #B84A4A;
       --before-text:  #6B3535;
-      --font-sans:  'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -53,7 +53,7 @@
     }
     .back-btn:hover { color: #fff; }
     .header-sep { color: rgba(255,255,255,0.25); font-size: 13px; }
-    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--mauve); }
 
     main {
       flex: 1;
@@ -73,12 +73,19 @@
       font-size: 14px;
       color: var(--muted);
       line-height: 1.65;
+      margin-bottom: 4px;
+    }
+    .page-byline {
+      font-size: 13px;
+      color: var(--mauve-deep);
+      font-weight: 600;
       margin-bottom: 10px;
+      font-style: italic;
     }
     .tip-bar {
       background: var(--card);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--aqua);
+      border-left: 3px solid var(--mauve);
       border-radius: 0 10px 10px 0;
       padding: 12px 16px;
       font-size: 13px;
@@ -117,7 +124,7 @@
     }
     .swap-after {
       padding: 15px 18px 14px;
-      background: var(--aqua-soft);
+      background: var(--mauve-soft);
     }
 
     .swap-label {
@@ -131,7 +138,7 @@
       margin-bottom: 6px;
     }
     .label-before { color: var(--before-label); }
-    .label-after  { color: var(--aqua-deep); }
+    .label-after  { color: var(--mauve-deep); }
 
     .swap-text {
       font-size: 14px;
@@ -145,7 +152,7 @@
     .reframe-card {
       background: var(--card);
       border: 1.5px solid var(--border);
-      border-top: 3px solid var(--aqua);
+      border-top: 3px solid var(--mauve);
       border-radius: 14px;
       overflow: hidden;
       margin-bottom: 32px;
@@ -160,7 +167,7 @@
       width: 36px;
       height: 36px;
       border-radius: 10px;
-      background: var(--aqua-soft);
+      background: var(--mauve-soft);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -196,20 +203,20 @@
       transition: border-color 0.15s;
       margin-bottom: 10px;
     }
-    .reframe-textarea:focus { border-color: var(--aqua-deep); }
+    .reframe-textarea:focus { border-color: var(--mauve-deep); }
     .reframe-textarea::placeholder { color: var(--muted); opacity: 0.7; }
     .reframe-submit-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 10px 20px;
-      background: var(--aqua);
+      background: var(--mauve-deep);
+      color: #fff;
       border: none;
       border-radius: 8px;
+      padding: 10px 18px;
       font-family: var(--font-sans);
       font-size: 13px;
-      font-weight: 700;
-      color: var(--slate-plum);
+      font-weight: 600;
       cursor: pointer;
       transition: opacity 0.15s;
     }
@@ -218,7 +225,7 @@
     .reframe-result {
       border-top: 1px solid var(--border);
       padding: 16px 20px;
-      background: rgba(163,208,201,0.06);
+      background: rgba(156,139,154,0.06);
       display: none;
     }
     .reframe-thinking {
@@ -231,7 +238,7 @@
     .dot-flashing { display: inline-flex; gap: 4px; }
     .dot-flashing span {
       width: 5px; height: 5px; border-radius: 50%;
-      background: var(--aqua-deep);
+      background: var(--mauve-deep);
       animation: dotFlash 1.2s infinite;
     }
     .dot-flashing span:nth-child(2) { animation-delay: 0.2s; }
@@ -253,7 +260,7 @@
       margin-top: 14px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--aqua-deep);
+      color: var(--mauve-deep);
       cursor: pointer;
       background: none;
       border: none;
@@ -267,33 +274,34 @@
 <body>
 
 <header>
-  <a href="/say-this-instead" class="back-btn">
+  <a href="/say-this-instead-she" class="back-btn">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     Back
   </a>
   <span class="header-sep">/</span>
-  <span class="header-label">With My Partner</span>
+  <span class="header-label">With My Partner — Her Perspective</span>
 </header>
 
 <main>
   <h1 class="page-title">With My Partner</h1>
-  <p class="page-sub">The goal isn't to be right — it's to stay connected while being honest. These swaps invite understanding rather than defensiveness. They take practice. That's okay.</p>
+  <p class="page-sub">These patterns show up in all of us — and they make sense. They come from the parts of you that are hurting, not the part of you that wants to connect. These swaps help you close that gap.</p>
+  <p class="page-byline">— Joree</p>
   <div class="tip-bar">
-    <strong>Before you use these:</strong> Notice where you are first. If your body is tense, your breath is short, or you feel that rising heat — pause. Even one slow, conscious breath creates a little space between the feeling and the words. These land so much differently when they come from a grounded, open-hearted place.
+    <strong>A gentle reminder first:</strong> Connection starts with regulation. If you're flooded, your nervous system is in protection mode — and no script will land the way you want it to. Take a breath. Feel your feet on the floor. Then come back to this.
   </div>
 
   <!-- CUSTOM REFRAME CARD -->
   <div class="reframe-card">
     <div class="reframe-card-header">
       <div class="reframe-card-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6bada3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
           <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
         </svg>
       </div>
       <div>
         <div class="reframe-card-title">Get a custom reframe</div>
-        <div class="reframe-card-sub">Type exactly what you're saying to your partner — I'll help you say it in a way that keeps the door open.</div>
+        <div class="reframe-card-sub">Type exactly what you're saying to your partner — I'll help you say what you actually mean.</div>
       </div>
     </div>
     <div class="reframe-card-body">
@@ -317,216 +325,216 @@
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I need to feel heard right now more than I need a solution. Can you just listen?"</div>
+        <div class="swap-text text-after">"I don't feel heard right now. Can you put everything down for a few minutes and just be with me?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"If you loved me, you'd just know."</div>
+        <div class="swap-text text-before">"Fine." (when it's clearly not fine)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I know it's not fair to expect you to read my mind. What I actually need right now is ___."</div>
+        <div class="swap-text text-after">"I'm not fine — I'm still processing. I need a few minutes and then I want to talk about it."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Fine, I'll just do it myself."</div>
+        <div class="swap-text text-before">"If you really loved me, you'd just know."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'm feeling overwhelmed and I need some support. Can we figure this out together?"</div>
+        <div class="swap-text text-after">"I've been wanting something and hoping you'd notice — but I haven't actually said it. Can I tell you what I need?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Every time I bring something up, you get defensive."</div>
+        <div class="swap-text text-before">"I shouldn't have to ask you to do this."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"When I bring this up and it turns into an argument, I end up feeling more alone. That's not what I want for us."</div>
+        <div class="swap-text text-after">"I feel like I'm carrying this alone. It matters to me when you notice and step in without being asked — can we talk about that?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You don't care about how I feel."</div>
+        <div class="swap-text text-before">"Why do you always take their side?"</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'm feeling disconnected from you right now and I really want to feel close again."</div>
+        <div class="swap-text text-after">"When you agreed with them just now, I felt really unsupported. I need to know you're in my corner."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"I'm not angry, I'm just disappointed." (said with anger)</div>
+        <div class="swap-text text-before">"Do whatever you want." (when meaning the opposite)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'm really hurt right now. I need a moment — and then I want to talk about this."</div>
+        <div class="swap-text text-after">"I'm saying it's fine but I don't actually feel that way. I'm hurt and I'm having trouble saying it directly."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"If I have to tell you, it doesn't count."</div>
+        <div class="swap-text text-before">Bringing up grievances from months ago in a new argument</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'd love for you to anticipate this sometimes — and I know that's not always fair. Can I tell you what really helps me feel loved?"</div>
+        <div class="swap-text text-after">"I know this is about today, but I'm realizing I've been holding onto something older. Can we make space for that too?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"When you go quiet, I don't know what's happening."</div>
+        <div class="swap-text text-before">"You never help around the house."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"When you go quiet, I start to fill in the silence with worry. Can you help me understand what's going on for you?"</div>
+        <div class="swap-text text-after">"I'm feeling overwhelmed by how much I'm managing. I'd really love more partnership on the day-to-day stuff — can we figure out what that looks like?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You take me for granted."</div>
+        <div class="swap-text text-before">"After everything I do for you…"</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I've been feeling invisible lately and I miss feeling truly seen by you."</div>
+        <div class="swap-text text-after">"I'm feeling unseen right now. I give a lot and sometimes I need you to notice that — can you tell me you see it?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Nothing I do is ever enough."</div>
+        <div class="swap-text text-before">"I'm fine." (said with a tone that means: I am absolutely not fine)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'm feeling unappreciated and I need you to know that. Can we slow down and talk about what's happening between us?"</div>
+        <div class="swap-text text-after">"I want to tell you what's going on but I don't know how to say it yet. Can you just be close for a minute?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You're just not emotionally available."</div>
+        <div class="swap-text text-before">"Do I have to spell everything out for you?"</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I need more emotional connection with you. I'm not saying this to criticize — I'm saying it because I want more of you."</div>
+        <div class="swap-text text-after">"I'm exhausted from having to ask. And I know that's not entirely fair to you — can we talk about it calmly?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Why is it always on me to bring this up?"</div>
+        <div class="swap-text text-before">Going silent for days without explaining why</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I feel like I carry the emotional weight of our relationship alone sometimes, and it leaves me exhausted. I want us to carry it together."</div>
+        <div class="swap-text text-after">"I need some space to figure out what I'm feeling before I can talk. I'm not shutting you out — I'll come back when I'm ready. Give me until tonight."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"I can't talk to you when you're like this."</div>
+        <div class="swap-text text-before">"I'll just do it myself." (while visibly frustrated)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I need us both to be calm for this conversation to go somewhere good. Can we take 20 minutes and come back to it?"</div>
+        <div class="swap-text text-after">"I'm about to take this over because it feels easier — but what I actually want is for us to do it together. Will you help me?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You never make me a priority."</div>
+        <div class="swap-text text-before">"We need to talk." (with no context, leaving partner anxious)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I've been missing you. I want more intentional time with you — just us, no distractions."</div>
+        <div class="swap-text text-after">"There's something on my mind — nothing's wrong between us, I just want to talk through something. Is now okay, or is there a better time tonight?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Maybe this relationship isn't working."</div>
+        <div class="swap-text text-before">"You're just like [my ex / my dad / my last partner]."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"Something feels off between us and I'm scared to keep ignoring it. Can we actually talk about what's happening — without it turning into a fight?"</div>
+        <div class="swap-text text-after">"This is triggering something old for me. I know you're not them — can we slow down so I can separate what's past from what's present?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You always take their side."</div>
+        <div class="swap-text text-before">Crying, then saying "Nothing's wrong" when asked</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I need to feel like we're a team, especially in hard moments. I felt unsupported just now and I want to tell you why."</div>
+        <div class="swap-text text-after">"Something is wrong — I just don't have the words yet. I need you to stay close and not push. I'll find my way to it."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"I give so much and you barely notice."</div>
+        <div class="swap-text text-before">Going quiet and distant, then suddenly exploding</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I've been running on empty and I need to feel like we're giving to each other — not just me giving. Can we talk about how to shift that?"</div>
+        <div class="swap-text text-after">"I've been bottling something up and I can feel it building. Can we make time tonight so I can get it out before it comes out the wrong way?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You're impossible to talk to."</div>
+        <div class="swap-text text-before">"You always do this."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I feel like I lose you in our harder conversations and I really want to find a way through together. Can we try again?"</div>
+        <div class="swap-text text-after">"This is a pattern I keep noticing, and it really hurts. I want to talk about it — not to win, but because I want us to be closer."</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"Why do I always have to explain myself?"</div>
+        <div class="swap-text text-before">"My mom / my friend agrees with me." (invoking outside support mid-fight)</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I know helping you understand might actually help us both — so here's what's going on for me."</div>
+        <div class="swap-text text-after">"I've been talking to people outside of us because I needed to feel validated. What I really want is to feel that from you. Can you hear me on this?"</div>
       </div>
     </div>
 
     <div class="swap-card">
       <div class="swap-before">
         <div class="swap-label label-before">❌ What she says</div>
-        <div class="swap-text text-before">"You'll never change."</div>
+        <div class="swap-text text-before">"You never appreciate what I do."</div>
       </div>
       <div class="swap-after">
         <div class="swap-label label-after">✅ Say this instead</div>
-        <div class="swap-text text-after">"I'm scared this pattern is going to stay between us. I want something different for us — and I'm willing to do my part if you're willing to do yours."</div>
+        <div class="swap-text text-after">"I'm carrying a lot and I need to hear that you see it. Even just saying thank you goes a long way for me."</div>
       </div>
     </div>
 
@@ -540,13 +548,14 @@
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   var REFRAME_SYSTEM =
-    "You are a warm, grounded communication coach — think of yourself as a wise, compassionate friend who also happens to have deep expertise in mindfulness, relationships, and emotional intelligence.\n\n" +
-    "A woman is sharing something she said — or is about to say — to her romantic partner. Your role is to help her express what she's actually feeling in a way that invites connection rather than closing the door.\n\n" +
-    "When she shares what she's saying, give her:\n" +
-    "1. One or two sentences gently naming the underlying feeling or unmet need driving it — with warmth and zero judgment.\n" +
-    "2. One clear, natural reframe she can use right now that stays true to her experience while keeping the door open.\n" +
-    "3. Optionally a second alternative reframe.\n\n" +
-    "Be warm, direct, and grounded. Sound like her most emotionally intelligent friend — not a therapist reciting scripts. " +
+    "You are a communication coach speaking in Joree Rose's voice — warm, direct, grounded, and deeply compassionate. " +
+    "Joree is a licensed marriage and family therapist and mindfulness teacher. She is not clinical or cold — she speaks like a wise friend who genuinely cares.\n\n" +
+    "A woman has shared something she said (or is about to say) to her romantic partner. Give her:\n" +
+    "1. One or two sentences acknowledging the valid feeling underneath what she said — without judgment.\n" +
+    "2. One natural, honest reframe she can use right now.\n" +
+    "3. Optionally a second alternative reframe if it would be useful.\n\n" +
+    "Be warm but don't be soft on the pattern. Help her see both her own validity AND how her words might be landing. " +
+    "Sound like a trusted, grounded therapist-friend — not a script. " +
     "Keep it short and immediately usable. No bullet points, no headers, no numbered lists in your response. " +
     "Write in flowing, conversational prose. Do not ask clarifying questions — just give the reframe.";
 
