@@ -1074,8 +1074,20 @@
         var contextBlock = buildContextBlock();
         if (contextBlock) prompt += contextBlock;
 
+        // Free-form direct request (e.g. city lookup from date-night-ideas).
+        // The user has already agreed to terms via the trial/landing page —
+        // skip the consent gate and respond directly to the request.
+        var isDirectRequest = !!(urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]);
+
         if (isReturningUser) {
             prompt += RETURNING_USER_BLOCK;
+        } else if (isDirectRequest) {
+            prompt +=
+                "DIRECT REQUEST MODE:\n" +
+                "Skip the standard welcome and consent flow entirely — the user has already agreed to the coaching framework.\n" +
+                "Respond directly and helpfully to the request in HOME SCREEN CONTEXT — DIRECT REQUEST above.\n" +
+                "Be warm, specific, and practical. No preamble, no 'I agree' gate, no generic opener.\n" +
+                "After answering, offer to help them go deeper or explore something related.\n\n";
         } else {
             prompt += FIRST_TIME_WELCOME_BLOCK;
             prompt += OPENING_VARIATIONS[openingVariation] || OPENING_VARIATIONS["A"];
