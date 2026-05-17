@@ -698,17 +698,6 @@
     var pulseRel        = urlParams.get("pulse_rel");       // "1"–"5"
     var pulseChallenge  = urlParams.get("pulse_challenge"); // "1"–"5"
 
-    // ── TEMPORARY DEBUG STRIP (remove after testing) ─────────────────────────
-    (function() {
-        var strip = document.createElement("div");
-        strip.id = "debugStrip";
-        strip.style.cssText = "position:fixed;top:0;left:0;right:0;background:#ff0;color:#000;font-size:12px;padding:6px 10px;z-index:9999;word-break:break-all;";
-        strip.textContent = "DEBUG — mode:" + (urlParams.get("mode") || "NONE") + " | context:" + (urlParams.get("context") ? urlParams.get("context").substring(0,60)+"…" : "NONE");
-        document.body.appendChild(strip);
-        setTimeout(function(){ var el = document.getElementById("debugStrip"); if(el) el.remove(); }, 10000);
-    })();
-    // ─────────────────────────────────────────────────────────────────────────
-
     // =====================================================
     // STATE
     // =====================================================
@@ -1090,12 +1079,32 @@
         // and respond directly to the request.
         var isDirectRequest = !!(urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]);
 
+        var isChipContext = !!(urlMode === "rightnow" && urlContext && CONTEXT_LABELS[urlContext]);
+
         if (isDirectRequest) {
             prompt +=
                 "DIRECT REQUEST MODE:\n" +
                 "The user's first message contains a specific practical request. Respond to it directly.\n" +
                 "Skip ALL standard openers — no welcome, no consent gate, no 'what's on your mind?', no 'good to see you back'.\n" +
                 "Be warm, specific, and practical. Answer the request well, then offer to go deeper.\n\n";
+        } else if (isChipContext) {
+            // Chip selection: user already told you what they are dealing with.
+            // Skip ALL generic openers for BOTH new and returning users.
+            if (isReturningUser) {
+                prompt +=
+                    "RETURNING USER — CHIP MODE:\n" +
+                    "Skip the full welcome. His first message already names the topic. " +
+                    "Respond directly to it — do not ask what he wants to talk about, he just told you.\n\n";
+            } else {
+                // NEW user in chip mode: skip the consent/welcome script entirely.
+                prompt +=
+                    "NEW USER — CHIP MODE:\n" +
+                    "This user is new but has already told you what he is dealing with via his chip selection. " +
+                    "Do NOT deliver the full welcome/consent script. Do NOT say 'Type I understand' or pause for a response. " +
+                    "Instead: open with 1-2 warm sentences welcoming him, then flow DIRECTLY into addressing the chip topic from the context block above. " +
+                    "Name what he's experiencing, reflect it with directness, and ask ONE focused coaching question about it. " +
+                    "Keep your opener to 3-5 sentences total. The AI disclosure is already shown in the interface.\n\n";
+            }
         } else if (isReturningUser) {
             prompt += RETURNING_USER_BLOCK;
         } else {
@@ -1188,15 +1197,18 @@
         // If a free-form context was passed (e.g. city-specific request from date-night-ideas),
         // use it as the opening message so the coach responds directly to the request.
         var isDirectRequest = !!(urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]);
-        var triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
+        var isChipContext   = !!(urlMode === "rightnow" && urlContext && CONTEXT_LABELS[urlContext]);
+        var triggerMessage;
         if (isDirectRequest) {
             triggerMessage = urlContext;
+        } else if (isChipContext) {
+            triggerMessage = isReturningUser
+                ? "I'm back. Right now I'm dealing with " + CONTEXT_LABELS[urlContext] + "."
+                : "Hi — I'm here because I'm dealing with " + CONTEXT_LABELS[urlContext] + ".";
+        } else {
+            triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
         }
 
-        // ── TEMPORARY DEBUG (remove after testing) ───────────────────────────
-        var dbg = document.getElementById("debugStrip");
-        if (dbg) dbg.textContent = "DEBUG sendInitial — isDirectRequest:" + isDirectRequest + " | isReturningUser:" + isReturningUser + " | trigger:" + triggerMessage.substring(0,60);
-        // ─────────────────────────────────────────────────────────────────────
         conversationHistory.push({ role: "user", content: triggerMessage });
 
         try {
@@ -1598,10 +1610,7 @@
     // =====================================================
     // ENTER CHAT
     // =====================================================
-    function _dbg(msg) { var el = document.getElementById("debugStrip"); if (el) el.textContent = "DBG: " + msg; }
-
     async function enterChat() {
-        _dbg("enterChat called — enterChatCalled=" + enterChatCalled);
         if (enterChatCalled) return;
         enterChatCalled = true;
         document.getElementById("authScreen").style.display = "none";
@@ -1610,20 +1619,16 @@
 
         // ADDED: Show per-session AI disclosure banner (SB 243)
         showAIDisclosureBanner();
-        _dbg("after showAIDisclosureBanner — starting profile check");
 
         // Ensure profile exists
         try {
             var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
-            _dbg("profile check done — error=" + (profileResult.error ? profileResult.error.code : "none"));
             if (profileResult.error && profileResult.error.code === "PGRST116") {
                 await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false });
-                _dbg("profile inserted");
             }
-        } catch (e) { _dbg("profile check THREW: " + e.message); console.warn("Profile check error:", e); }
+        } catch (e) { console.warn("Profile check error:", e); }
 
         // Start a new session
-        _dbg("setting up session — about to call sendInitialMessage");
         sessionId = generateSessionId();
         conversationHistory = [];
         messageCount = 0;

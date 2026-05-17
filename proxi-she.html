@@ -865,18 +865,24 @@
                 "Skip ALL standard openers — no welcome, no consent gate, no 'what's on your heart?', no 'welcome back'.\n" +
                 "Be warm, specific, and practical. Answer the request well, then offer to explore more if she wants.\n\n";
         } else if (isChipContext) {
-            // Chip selection: the user already told you what she is dealing with.
-            // Do NOT append RETURNING_USER_BLOCK or OPENING_VARIATIONS — they would
-            // re-introduce generic openers that contradict the chip context above.
+            // Chip selection: user already told you what she is dealing with.
+            // Skip ALL generic openers for BOTH new and returning users.
+            // The AI Disclosure banner is shown in the UI — no need for the AI to deliver it.
             if (isReturningUserFlag) {
                 prompt +=
                     "RETURNING USER — CHIP MODE:\n" +
                     "Skip the full welcome. Her first message already names the topic. " +
                     "Respond directly to it — do not ask what she wants to talk about, she just told you.\n\n";
             } else {
-                // First-time user still needs the consent/welcome, but SKIP OPENING_VARIATIONS.
-                // After she acknowledges, open with the chip topic per the context block above.
-                prompt += FIRST_TIME_WELCOME_BLOCK;
+                // NEW user in chip mode: skip the consent/welcome script entirely.
+                // Give a 1-2 sentence warm acknowledgment, then go DIRECTLY into the chip topic.
+                prompt +=
+                    "NEW USER — CHIP MODE:\n" +
+                    "The user is new but has already told you what she is dealing with via her chip selection. " +
+                    "Do NOT deliver the full welcome/consent script. Do NOT say \'Type I understand\' or pause for a response. " +
+                    "Instead: open with 1-2 warm sentences welcoming her (e.g. \'Hi, I\'m so glad you\'re here.\'), then flow DIRECTLY into addressing the chip topic from the context block above. " +
+                    "Name what she\'s experiencing, reflect it with warmth, and ask ONE focused coaching question about it. " +
+                    "Keep your opener to 3-5 sentences total. The AI disclosure is already shown in the interface.\n\n";
             }
         } else if (isReturningUserFlag) {
             prompt += RETURNING_USER_BLOCK;

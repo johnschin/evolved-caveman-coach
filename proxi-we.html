@@ -853,9 +853,16 @@
                               "Do NOT ask 'What's present for you today?' or any generic opener. Open DIRECTLY on the chip topic above.\n" +
                               "PREVIOUS SESSION CONTEXT (background only):\n" + returningContext + "\n";
                 } else {
-                    // New user in chip mode: deliver welcome but skip consent block, go straight to chip topic
-                    prompt += FIRST_TIME_WELCOME_BLOCK;
-                    prompt += "\nCHIP MODE OVERRIDE: After the welcome, open DIRECTLY on the chip topic above. Do not use the standard opening variations.\n";
+                    // NEW user in chip mode: skip consent/welcome script entirely.
+                    // Go directly to chip topic. The AI Disclosure banner is shown in the UI.
+                    prompt +=
+                        "NEW USER — CHIP MODE:\n" +
+                        "This user is new but has already told you what they are dealing with via chip selection. " +
+                        "Do NOT deliver the full welcome/consent script. Do NOT say 'Type I agree' or pause for a response. " +
+                        "Instead: open with 1-2 warm sentences from John and/or Joree welcoming them, " +
+                        "then flow DIRECTLY into addressing the chip topic from the context block above. " +
+                        "Name what they're experiencing, reflect it warmly, and ask ONE focused coaching question. " +
+                        "Keep the entire opener to 3-5 sentences total. The AI disclosure is shown in the interface.\n\n";
                 }
             } else if (returningContext) {
                 prompt += RETURNING_USER_BLOCK;
