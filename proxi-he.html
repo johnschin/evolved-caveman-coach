@@ -1192,6 +1192,11 @@
         if (isDirectRequest) {
             triggerMessage = urlContext;
         }
+
+        // ── TEMPORARY DEBUG (remove after testing) ───────────────────────────
+        var dbg = document.getElementById("debugStrip");
+        if (dbg) dbg.textContent = "DEBUG sendInitial — isDirectRequest:" + isDirectRequest + " | isReturningUser:" + isReturningUser + " | trigger:" + triggerMessage.substring(0,60);
+        // ─────────────────────────────────────────────────────────────────────
         conversationHistory.push({ role: "user", content: triggerMessage });
 
         try {

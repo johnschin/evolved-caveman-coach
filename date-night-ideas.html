@@ -420,17 +420,17 @@
     <div class="local-form">
       <input type="text" id="cityInput" class="local-input" placeholder="Your city (e.g. San Francisco, Austin, Chicago)" autocomplete="off">
 
-      <div class="local-type-row">
-        <button class="local-type-btn selected" id="typeDate" onclick="switchTab('date'); window.scrollTo({top:0,behavior:'smooth'})">🕯️ Date night</button>
-        <button class="local-type-btn" id="typeGuys" onclick="switchTab('guys'); window.scrollTo({top:0,behavior:'smooth'})">🤝 With the guys</button>
-      </div>
-
       <button class="local-submit" id="localSubmit" onclick="findLocalIdeas()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         Ask Proxi He for ideas near me →
       </button>
+
+      <div class="local-type-row">
+        <button class="local-type-btn selected" id="typeDate" onclick="switchTab('date'); window.scrollTo({top:0,behavior:'smooth'})">🕯️ Date night</button>
+        <button class="local-type-btn" id="typeGuys" onclick="switchTab('guys'); window.scrollTo({top:0,behavior:'smooth'})">🤝 With the guys</button>
+      </div>
       <div class="local-msg" id="localMsg"></div>
     </div>
   </div>
