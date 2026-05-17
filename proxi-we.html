@@ -525,6 +525,57 @@
     "**Joree:** And before we dive in — just take a breath. Notice how you're arriving today. That awareness matters.\"\n" +
     "Keep it short and move into coaching.\n\n";
 
+    // =====================================================
+    // URL PARAMS — read chip/pulse context passed from home-we.html
+    // =====================================================
+    var _urlParams   = new URLSearchParams(window.location.search);
+    var _chipMode    = _urlParams.get("mode");       // "rightnow" | "pulse" | null
+    var _chipContext = _urlParams.get("context");    // e.g. "we-had-a-fight"
+    var _pulseConnected = _urlParams.get("pulse_connected");
+    var _pulseTension   = _urlParams.get("pulse_tension");
+    var _pulseReady     = _urlParams.get("pulse_ready");
+
+    // Human-readable chip labels (matches home-we.html chip context keys)
+    var _CHIP_LABELS = {
+        "we-had-a-fight":         "We had a fight",
+        "feeling-disconnected":   "I feel disconnected",
+        "shutting-down":          "I keep shutting down",
+        "said-something-i-regret":"I said something I regret",
+        "feeling-resentful":      "I'm feeling resentful",
+        "hard-conversation-ahead":"Hard conversation coming up",
+        "36-questions":           "Gottman 36 Questions"
+    };
+
+    function _getChipLabel(context) {
+        return _CHIP_LABELS[context] || context;
+    }
+
+    function buildContextBlock() {
+        if (!_chipMode && !_chipContext) return "";
+
+        var block = "\n\n=== SESSION CONTEXT — READ THIS FIRST. OVERRIDE ALL GENERIC OPENERS. ===\n";
+
+        if (_chipMode === "rightnow" && _chipContext) {
+            block += "MODE: RIGHT NOW — The user tapped a chip on the home screen and came here with a specific focus.\n";
+            block += "CHIP TOPIC: \"" + _getChipLabel(_chipContext) + "\"\n";
+            block += "INSTRUCTION: Do NOT deliver a generic welcome or ask 'what brings you here today.' Open by directly acknowledging this specific topic with warmth and one sharp coaching question about it.\n";
+        } else if (_chipMode === "pulse") {
+            block += "MODE: PULSE CHECK-IN — The user completed the Couples Pulse sliders and launched a session.\n";
+            block += "INSTRUCTION: Open by briefly acknowledging where they're arriving (based on the pulse data below), then invite them into the session.\n";
+        }
+
+        // Add pulse data if available
+        if (_pulseConnected || _pulseTension || _pulseReady) {
+            block += "\nBACKGROUND — COUPLES PULSE (use as context, not as the opening topic unless they're in pulse mode):\n";
+            if (_pulseConnected) block += "  Connection to partner: " + _pulseConnected + "/5 (1=Distant, 5=Close)\n";
+            if (_pulseTension)   block += "  Tension carrying in: " + _pulseTension + "/5 (1=None, 5=A lot)\n";
+            if (_pulseReady)     block += "  Readiness to engage: " + _pulseReady + "/5 (1=Need space, 5=Let's go)\n";
+        }
+
+        block += "=== END SESSION CONTEXT ===\n";
+        return block;
+    }
+
     // Mode-specific instructions appended dynamically
     var MODE_SOLO = "\nMODE: SOLO — One partner working individually.\n" +
     "- Focus on the user's patterns, not their partner's behavior\n" +
@@ -787,11 +838,26 @@
     }
 
     function getSystemPrompt(isFirst, returningContext) {
-        var modeBlock = currentMode === "couples" ? MODE_COUPLES : MODE_SOLO;
+        var modeBlock    = currentMode === "couples" ? MODE_COUPLES : MODE_SOLO;
+        var contextBlock = buildContextBlock();
+        var isChipContext = !!((_chipMode === "rightnow" && _chipContext) || _chipMode === "pulse");
+
         var prompt = SYSTEM_PROMPT + modeBlock;
 
         if (isFirst) {
-            if (returningContext) {
+            if (isChipContext) {
+                // CHIP/PULSE MODE: inject context block; skip generic welcome and returning-user opener entirely
+                prompt += contextBlock;
+                if (returningContext) {
+                    prompt += "\nRETURNING USER — CHIP MODE: This user has been here before. Do NOT deliver the full welcome or consent request. " +
+                              "Do NOT ask 'What's present for you today?' or any generic opener. Open DIRECTLY on the chip topic above.\n" +
+                              "PREVIOUS SESSION CONTEXT (background only):\n" + returningContext + "\n";
+                } else {
+                    // New user in chip mode: deliver welcome but skip consent block, go straight to chip topic
+                    prompt += FIRST_TIME_WELCOME_BLOCK;
+                    prompt += "\nCHIP MODE OVERRIDE: After the welcome, open DIRECTLY on the chip topic above. Do not use the standard opening variations.\n";
+                }
+            } else if (returningContext) {
                 prompt += RETURNING_USER_BLOCK;
                 prompt += "\nPREVIOUS SESSION CONTEXT:\n" + returningContext + "\n";
             } else {
@@ -821,10 +887,21 @@
             }
         } catch (e) { console.warn("Failed to fetch last summary:", e); }
 
-        // Build initial system prompt and send a blank "start" message
+        // Build initial system prompt and construct triggerMessage
         var systemPrompt = getSystemPrompt(true, returningContext);
 
-        conversationHistory.push({ role: "user", content: "Hello" });
+        // Chip mode: send the chip label so the coach opens on that topic
+        var triggerMessage = "Hello";
+        if (_chipMode === "rightnow" && _chipContext) {
+            var chipLabel = _getChipLabel(_chipContext);
+            triggerMessage = returningContext
+                ? "I'm back. Right now I'm dealing with: " + chipLabel + "."
+                : "Hi — I'm here because I'm dealing with: " + chipLabel + ".";
+        } else if (_chipMode === "pulse") {
+            triggerMessage = "Starting today's couples check-in.";
+        }
+
+        conversationHistory.push({ role: "user", content: triggerMessage });
         showTypingIndicator();
 
         try {

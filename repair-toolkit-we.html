@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repair Toolkit — Proxi We</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:       #F6F3EF;
+      --card:        #FFFFFF;
+      --plum:        #4e4a55;
+      --plum-deep:   #2e2b35;
+      --teal:        #afc9cf;
+      --teal-deep:   #7eadb5;
+      --teal-soft:   rgba(175, 201, 207, 0.12);
+      --mauve:       #998193;
+      --sand:        #e5ddd7;
+      --muted:       #8a8590;
+      --border:      #e5e0ea;
+      --before-bg:   #FFF5F5;
+      --before-label:#B84A4A;
+      --before-text: #6B3535;
+      --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--cream);
+      color: var(--plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--plum-deep);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep   { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--teal); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 36px 20px 80px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--plum);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .tip-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--teal-deep);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .tip-bar strong { color: var(--plum); }
+
+    /* ── STEP ── */
+    .step-block {
+      margin-bottom: 40px;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--plum-deep);
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title-block { flex: 1; }
+    .step-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--plum);
+      line-height: 1.2;
+    }
+    .step-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--plum);
+      line-height: 1.75;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+    .step-science {
+      background: var(--teal-soft);
+      border: 1px solid rgba(175, 201, 207, 0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--teal-deep);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .step-science::before { content: "📖 "; }
+
+    /* ── SCRIPT CARDS ── */
+    .scripts-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .scripts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .script-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .script-card:hover { border-color: var(--teal-deep); background: rgba(175, 201, 207, 0.04); }
+    .script-card:active { background: var(--teal-soft); }
+    .script-card.copied { border-color: var(--teal-deep); background: var(--teal-soft); }
+
+    .script-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--plum);
+      font-weight: 500;
+      flex: 1;
+    }
+    .script-copy-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--border);
+      transition: color 0.15s;
+    }
+    .script-card:hover  .script-copy-icon { color: var(--teal-deep); }
+    .script-card.copied .script-copy-icon { color: var(--teal-deep); }
+
+    /* ── DIVIDER ── */
+    .step-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    /* ── COACH CTA ── */
+    .coach-cta {
+      background: var(--plum-deep);
+      border-radius: 16px;
+      padding: 24px 22px;
+      margin-top: 8px;
+    }
+    .coach-cta-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .coach-cta-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+    .coach-cta-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 16px;
+      line-height: 1.55;
+    }
+    .coach-cta-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: #fff;
+      outline: none;
+      resize: none;
+      line-height: 1.5;
+      transition: border-color 0.15s;
+      margin-bottom: 10px;
+    }
+    .coach-cta-input::placeholder { color: rgba(255,255,255,0.35); }
+    .coach-cta-input:focus { border-color: var(--teal); }
+    .coach-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 22px;
+      background: var(--teal);
+      border: none;
+      border-radius: 9px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--plum-deep);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .coach-cta-btn:hover { opacity: 0.88; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/home-we" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Repair Toolkit</span>
+</header>
+
+<main>
+
+  <h1 class="page-title">Couples Repair Toolkit</h1>
+  <p class="page-sub">Every couple has ruptures. What separates thriving couples from struggling ones isn't whether they fight — it's how well they repair afterward. This toolkit walks you through the four steps.</p>
+
+  <div class="tip-bar">
+    <strong>Start here:</strong> Both partners need to be below a heart rate of 100 bpm before any meaningful repair is possible. If either of you is still flooded, skip to Step 1 first. The words below won't land until your nervous systems are regulated.
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- STEP 1: COOL DOWN -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-block">
+        <div class="step-title">Cool Down</div>
+        <div class="step-subtitle">Take a real break — at least 20 minutes</div>
+      </div>
+    </div>
+    <p class="step-desc">When a fight escalates, your heart rate climbs above 100 bpm and your prefrontal cortex — the part that reasons, empathizes, and problem-solves — effectively goes offline. Anything either of you says or hears at that point will be distorted by the threat response. You can't repair what you can't think clearly about.</p>
+    <p class="step-desc">The break needs to be at least 20 minutes — that's how long it takes for cortisol levels to begin returning to baseline. Both partners must agree to pause and commit to a specific time to return.</p>
+    <div class="step-science">John Gottman's research shows that physiological flooding is one of the strongest predictors of relationship decline. Couples who learn to take breaks and return to the conversation have dramatically better outcomes than those who push through when flooded.</div>
+    <div class="scripts-label">Scripts to call a break</div>
+    <div class="scripts-list">
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I'm getting flooded. I need 30 minutes to calm down so I can actually hear you. Can we come back to this at [specific time]?"</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I want to work through this with you, but I'm not in a good place to talk right now. I'm going to [take a walk / be alone for a bit]. Let's talk at [time]."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I'm not abandoning this conversation — I just need a pause. This matters to me and I want us to do it right."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <hr class="step-divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- STEP 2: ACKNOWLEDGE -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-block">
+        <div class="step-title">Acknowledge Each Other</div>
+        <div class="step-subtitle">Validate before you explain</div>
+      </div>
+    </div>
+    <p class="step-desc">Before either of you explains your side, both of you need to feel heard. Validation doesn't mean agreeing — it means saying "I can see why you felt that way" even if you see it differently. Most conversations collapse here because both partners are trying to be understood before they've tried to understand.</p>
+    <p class="step-desc">This step is not about who was right. It's about both of you saying: your feelings made sense given what you experienced.</p>
+    <div class="step-science">Sue Johnson's Emotionally Focused Therapy research shows that the primary drive in conflict is almost always an attachment signal — one partner feeling unseen, unsafe, or alone. When that signal gets acknowledged, the nervous system relaxes enough to actually connect.</div>
+    <div class="scripts-label">Scripts to open acknowledgment</div>
+    <div class="scripts-list">
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I want to understand your side before I share mine. What was going on for you when this started?"</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"What I heard you saying was [reflect back]. Is that right? I want to make sure I'm getting it."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I can see why that felt [hurtful / confusing / unfair] to you. I didn't intend it that way, and I'm sorry it landed like that."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I got reactive and it wasn't fair to you. Here's what was going on for me — not as an excuse, just so you understand."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <hr class="step-divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- STEP 3: REPAIR ATTEMPT -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-title-block">
+        <div class="step-title">Make a Repair Attempt</div>
+        <div class="step-subtitle">Reach toward each other — imperfectly is fine</div>
+      </div>
+    </div>
+    <p class="step-desc">A repair attempt is any gesture — verbal or physical — that says: "I want to stay connected with you through this." It doesn't have to be eloquent. It can be clumsy. What matters is the intent: I'm choosing us over being right.</p>
+    <p class="step-desc">The goal isn't to resolve every grievance right now. It's to say: I see you, I'm still here, and I'd rather repair than stay stuck.</p>
+    <div class="step-science">Gottman found that the success of a repair attempt has almost nothing to do with how skillful the attempt is — it depends on the emotional climate of the relationship. Couples who consistently show appreciation and affection are far more likely to accept a clumsy repair attempt than couples with a chronic negativity deficit.</div>
+    <div class="scripts-label">Repair attempt scripts</div>
+    <div class="scripts-list">
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I don't want to fight with you. I love you and I want us to figure this out together."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I'm sorry. Not the kind of sorry that ends the conversation — the kind that means I actually get what happened."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"Can I try again? I don't think I said what I actually meant, and I want to."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I know we're not fully resolved. I still want you to know I'm on your side, even when we disagree."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"What do you need from me right now to feel okay between us?"</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I hear you. Even if we see it differently, I understand why it hurt. That matters."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <hr class="step-divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- STEP 4: RECONNECT -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-number">4</div>
+      <div class="step-title-block">
+        <div class="step-title">Reconnect</div>
+        <div class="step-subtitle">Close the loop — restore safety and warmth</div>
+      </div>
+    </div>
+    <p class="step-desc">Repair isn't complete until you've re-established connection. That can be physical (a hug, a hand on the arm, sitting close) or verbal — a moment that signals to both of your nervous systems: we're okay. We're still us.</p>
+    <p class="step-desc">This step also includes acknowledging what the fight was actually about — not the surface argument, but the underlying need or fear. When you can name the deeper thing, you prevent the same fight from cycling back in a week.</p>
+    <div class="step-science">Joree Rose's mindfulness-based approach emphasizes that reconnection is a somatic process as much as a verbal one. Physical touch releases oxytocin, which directly counteracts cortisol and signals safety to the nervous system. Even a brief moment of physical closeness can shift the emotional climate faster than words.</div>
+    <div class="scripts-label">Scripts to close the loop</div>
+    <div class="scripts-list">
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I'm glad we talked. I love you. [Hug / hand / touch]."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I think what this was really about, for me, was [deeper need/fear]. Is that true for you too, or something different?"</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"I don't want to leave this with any residue between us. Are we okay?"</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"We don't have to solve everything today. What I want you to know is: I choose you, even in the hard parts."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <div class="script-card" onclick="copyScript(this)">
+        <div class="script-text">"Something I appreciate about how you handled this today: [specific thing]. I wanted you to know that."</div>
+        <svg class="script-copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- COACH CTA -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="coach-cta">
+    <div class="coach-cta-label">Want more help?</div>
+    <div class="coach-cta-title">Talk it through with Proxi We</div>
+    <div class="coach-cta-sub">Describe what happened and get specific coaching on your situation — together or on your own.</div>
+    <textarea id="ctaInput" class="coach-cta-input" rows="2" placeholder="e.g. We keep having the same fight about parenting and neither of us feels heard..."></textarea>
+    <button class="coach-cta-btn" onclick="goToCoach()">
+      Talk to Proxi We
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+
+</main>
+
+<script>
+  function copyScript(card) {
+    var text = card.querySelector(".script-text").textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      card.classList.add("copied");
+      setTimeout(function() { card.classList.remove("copied"); }, 1500);
+    }).catch(function() {
+      // fallback
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;opacity:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      card.classList.add("copied");
+      setTimeout(function() { card.classList.remove("copied"); }, 1500);
+    });
+  }
+
+  function goToCoach() {
+    var input = document.getElementById("ctaInput");
+    var text  = (input ? input.value.trim() : "");
+    var url   = "/proxi-we?mode=rightnow&context=repair-followup";
+    if (text) url += "&situation=" + encodeURIComponent(text);
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>

@@ -5,37 +5,40 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxi She — Home</title>
+    <title>Proxi We — Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0" integrity="sha384-JWPr1lzjf+jjJ71qGLw1lHMKUHv7yDav6u6Tj3N20nSHfNNxj7XuXL437qT48zOD" crossorigin="anonymous"></script>
     <style>
         /* =============================================
-           PROXIMITY BRAND VARIABLES — PROXI SHE
+           PROXIMITY BRAND VARIABLES — PROXI WE
            ============================================= */
         :root {
-            --linen:        #FAF8F5;
-            --slate-plum:   #3A3353;
-            --slate-deep:   #1C1A2E;
-            --mauve:        #9C8B9A;
-            --mauve-deep:   #6B5A70;
-            --mauve-soft:   rgba(156, 139, 154, 0.14);
-            --muted:        #7A7090;
-            --border:       #EAE6F0;
-            --card:         #FFFFFF;
-            --chip-idle:    #F0EBF8;
-            --chip-text:    #3A3353;
-            --error:        #c0392b;
-            --success:      #27ae60;
+            --cream:       #F6F3EF;
+            --card:        #FFFFFF;
+            --plum:        #4e4a55;
+            --plum-deep:   #2e2b35;
+            --teal:        #afc9cf;
+            --teal-deep:   #7eadb5;
+            --teal-soft:   rgba(175, 201, 207, 0.14);
+            --mauve:       #998193;
+            --mauve-soft:  rgba(153, 129, 147, 0.14);
+            --sand:        #e5ddd7;
+            --muted:       #8a8590;
+            --border:      #e5e0ea;
+            --chip-idle:   #f0f5f6;
+            --chip-text:   #4e4a55;
+            --error:       #c0392b;
+            --success:     #27ae60;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--linen);
-            color: var(--slate-plum);
+            background: var(--cream);
+            color: var(--plum);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -65,7 +68,7 @@
             font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--slate-plum);
+            color: var(--plum);
         }
         .auth-logo-sub {
             font-size: 12px;
@@ -81,12 +84,12 @@
             padding: 36px 32px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 4px 24px rgba(58, 51, 83, 0.08);
+            box-shadow: 0 4px 24px rgba(78, 74, 85, 0.08);
         }
         .auth-box h2 {
             font-size: 20px;
             font-weight: 700;
-            color: var(--slate-plum);
+            color: var(--plum);
             margin-bottom: 4px;
             text-align: center;
         }
@@ -109,21 +112,21 @@
         .form-group input {
             width: 100%;
             padding: 11px 14px;
-            background: var(--linen);
+            background: var(--cream);
             border: 1.5px solid var(--border);
             border-radius: 10px;
-            color: var(--slate-plum);
+            color: var(--plum);
             font-family: inherit;
             font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
         }
-        .form-group input:focus { border-color: var(--mauve); }
+        .form-group input:focus { border-color: var(--teal-deep); }
 
         .btn-primary {
             width: 100%;
             padding: 13px;
-            background: var(--mauve);
+            background: var(--plum);
             color: #FFFFFF;
             border: none;
             border-radius: 10px;
@@ -134,7 +137,7 @@
             transition: opacity 0.2s, transform 0.1s;
             margin-top: 8px;
         }
-        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:hover { opacity: 0.88; }
         .btn-primary:active { transform: scale(0.99); }
         .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -145,7 +148,7 @@
         }
         .auth-link {
             font-size: 12px;
-            color: var(--mauve-deep);
+            color: var(--teal-deep);
             background: none;
             border: none;
             cursor: pointer;
@@ -175,10 +178,10 @@
             width: 16px; height: 16px; min-width: 16px;
             margin-top: 2px;
             cursor: pointer;
-            accent-color: var(--mauve);
+            accent-color: var(--teal-deep);
         }
         .tos-label-text { flex: 1; }
-        .tos-link { color: var(--mauve-deep); text-decoration: none; }
+        .tos-link { color: var(--teal-deep); text-decoration: none; }
         .tos-link:hover { text-decoration: underline; }
 
         /* =============================================
@@ -214,7 +217,7 @@
             font-weight: 800;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: var(--slate-plum);
+            color: var(--plum);
             line-height: 1;
         }
         .header-role {
@@ -226,7 +229,7 @@
         .header-greeting {
             font-size: 13px;
             font-weight: 600;
-            color: var(--slate-plum);
+            color: var(--plum);
         }
         .header-signout {
             background: transparent;
@@ -240,7 +243,7 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .header-signout:hover { border-color: var(--mauve); color: var(--mauve-deep); }
+        .header-signout:hover { border-color: var(--teal-deep); color: var(--teal-deep); }
 
         /* --- TRIAL STATUS BANNER --- */
         .trial-banner {
@@ -248,12 +251,12 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            background: rgba(156, 139, 154, 0.10);
-            border-bottom: 1px solid rgba(156, 139, 154, 0.22);
+            background: rgba(175, 201, 207, 0.12);
+            border-bottom: 1px solid rgba(175, 201, 207, 0.28);
             padding: 9px 20px;
             font-size: 12.5px;
             font-weight: 600;
-            color: var(--mauve-deep);
+            color: var(--teal-deep);
         }
         .trial-banner.visible { display: flex; }
         .trial-banner-left {
@@ -265,13 +268,13 @@
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: var(--mauve);
+            background: var(--teal-deep);
             flex-shrink: 0;
         }
         .trial-banner-upgrade {
             font-size: 11.5px;
             font-weight: 600;
-            color: var(--mauve-deep);
+            color: var(--teal-deep);
             text-decoration: none;
             white-space: nowrap;
             opacity: 0.8;
@@ -292,7 +295,7 @@
         }
 
         /* =============================================
-           CARD: TALK TO PROXI SHE (primary CTA)
+           CARD: TALK TO PROXI WE (primary CTA)
            ============================================= */
         .coach-cta-card {
             background: var(--card);
@@ -306,11 +309,11 @@
             cursor: pointer;
             transition: box-shadow 0.2s, transform 0.15s;
             text-decoration: none;
-            color: var(--slate-plum);
-            box-shadow: 0 2px 12px rgba(58, 51, 83, 0.06);
+            color: var(--plum);
+            box-shadow: 0 2px 12px rgba(78, 74, 85, 0.06);
         }
         .coach-cta-card:hover {
-            box-shadow: 0 6px 24px rgba(58, 51, 83, 0.12);
+            box-shadow: 0 6px 24px rgba(78, 74, 85, 0.12);
             transform: translateY(-1px);
         }
         .coach-cta-card:active { transform: translateY(0); }
@@ -323,7 +326,7 @@
             width: 48px;
             height: 48px;
             border-radius: 12px;
-            background: var(--mauve);
+            background: var(--teal);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -332,7 +335,7 @@
         .coach-cta-label {
             font-size: 16px;
             font-weight: 700;
-            color: var(--slate-plum);
+            color: var(--plum);
             line-height: 1.2;
         }
         .coach-cta-sub {
@@ -341,15 +344,15 @@
             margin-top: 3px;
         }
         .coach-cta-arrow {
-            color: var(--mauve-deep);
+            color: var(--teal-deep);
             flex-shrink: 0;
         }
 
         /* =============================================
-           CARD: RIGHT NOW MODE (hero)
+           CARD: RIGHT NOW MODE
            ============================================= */
         .rightnow-card {
-            background: var(--slate-deep);
+            background: var(--plum-deep);
             border-radius: 16px;
             padding: 22px 20px 20px;
             position: relative;
@@ -362,7 +365,7 @@
             right: -40px;
             width: 160px;
             height: 160px;
-            background: radial-gradient(circle, rgba(156, 139, 154, 0.18) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(175, 201, 207, 0.15) 0%, transparent 70%);
             pointer-events: none;
         }
         .rightnow-header {
@@ -376,9 +379,9 @@
             font-weight: 700;
             letter-spacing: 1.2px;
             text-transform: uppercase;
-            color: var(--mauve);
-            background: rgba(156, 139, 154, 0.18);
-            border: 1px solid rgba(156, 139, 154, 0.32);
+            color: var(--teal);
+            background: rgba(175, 201, 207, 0.18);
+            border: 1px solid rgba(175, 201, 207, 0.32);
             padding: 3px 9px;
             border-radius: 20px;
         }
@@ -400,7 +403,7 @@
             gap: 8px;
         }
         .chip {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.07);
             border: 1.5px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             padding: 10px 12px;
@@ -418,27 +421,27 @@
             user-select: none;
         }
         .chip:hover {
-            background: rgba(156, 139, 154, 0.22);
-            border-color: var(--mauve);
+            background: rgba(175, 201, 207, 0.20);
+            border-color: var(--teal);
             color: #FFFFFF;
         }
         .chip.selected {
-            background: var(--mauve);
-            border-color: var(--mauve);
+            background: var(--teal-deep);
+            border-color: var(--teal-deep);
             color: #FFFFFF;
             transform: scale(0.97);
         }
         .chip-icon { font-size: 14px; }
 
         /* =============================================
-           CARD: DAILY PULSE
+           CARD: COUPLES PULSE
            ============================================= */
         .pulse-card {
             background: var(--card);
             border: 1.5px solid var(--border);
             border-radius: 16px;
             padding: 22px 20px;
-            box-shadow: 0 2px 12px rgba(58, 51, 83, 0.05);
+            box-shadow: 0 2px 12px rgba(78, 74, 85, 0.05);
         }
         .card-header {
             display: flex;
@@ -449,15 +452,15 @@
         .card-title {
             font-size: 15px;
             font-weight: 700;
-            color: var(--slate-plum);
+            color: var(--plum);
         }
         .card-badge {
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--mauve-deep);
-            background: var(--mauve-soft);
+            color: var(--teal-deep);
+            background: var(--teal-soft);
             padding: 3px 8px;
             border-radius: 20px;
         }
@@ -472,13 +475,13 @@
         .slider-name {
             font-size: 13px;
             font-weight: 600;
-            color: var(--slate-plum);
+            color: var(--plum);
         }
         .slider-value-badge {
             font-size: 12px;
             font-weight: 700;
-            color: var(--mauve-deep);
-            background: var(--mauve-soft);
+            color: var(--teal-deep);
+            background: var(--teal-soft);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -507,14 +510,14 @@
             height: 20px;
             border-radius: 50%;
             background: var(--card);
-            border: 2.5px solid var(--mauve);
-            box-shadow: 0 1px 4px rgba(58,51,83,0.2);
+            border: 2.5px solid var(--teal-deep);
+            box-shadow: 0 1px 4px rgba(78,74,85,0.2);
             margin-top: -7px;
             transition: transform 0.15s, box-shadow 0.15s;
         }
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.15);
-            box-shadow: 0 2px 8px rgba(156, 139, 154, 0.5);
+            box-shadow: 0 2px 8px rgba(126, 173, 181, 0.5);
         }
         input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.1); }
         input[type="range"]::-moz-range-track {
@@ -527,8 +530,8 @@
             height: 20px;
             border-radius: 50%;
             background: var(--card);
-            border: 2.5px solid var(--mauve);
-            box-shadow: 0 1px 4px rgba(58,51,83,0.2);
+            border: 2.5px solid var(--teal-deep);
+            box-shadow: 0 1px 4px rgba(78,74,85,0.2);
             cursor: pointer;
         }
         .slider-range-labels {
@@ -544,7 +547,7 @@
         .pulse-start-btn {
             width: 100%;
             padding: 14px;
-            background: var(--mauve);
+            background: var(--plum);
             color: #FFFFFF;
             border: none;
             border-radius: 12px;
@@ -559,7 +562,7 @@
             justify-content: center;
             gap: 8px;
         }
-        .pulse-start-btn:hover { opacity: 0.9; }
+        .pulse-start-btn:hover { opacity: 0.88; }
         .pulse-start-btn:active { transform: scale(0.99); }
 
         /* =============================================
@@ -579,14 +582,14 @@
             transition: box-shadow 0.2s, transform 0.15s;
             text-decoration: none;
             color: inherit;
-            box-shadow: 0 2px 10px rgba(58, 51, 83, 0.04);
+            box-shadow: 0 2px 10px rgba(78, 74, 85, 0.04);
             display: flex;
             flex-direction: column;
             gap: 10px;
             user-select: none;
         }
         .tile-card:hover {
-            box-shadow: 0 6px 20px rgba(58, 51, 83, 0.1);
+            box-shadow: 0 6px 20px rgba(78, 74, 85, 0.1);
             transform: translateY(-1px);
         }
         .tile-card:active { transform: translateY(0); }
@@ -594,7 +597,7 @@
             width: 40px;
             height: 40px;
             border-radius: 10px;
-            background: var(--mauve-soft);
+            background: var(--teal-soft);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -602,7 +605,7 @@
         .tile-label {
             font-size: 13px;
             font-weight: 700;
-            color: var(--slate-plum);
+            color: var(--plum);
             line-height: 1.3;
         }
         .tile-desc {
@@ -630,15 +633,15 @@
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 12px;
-            box-shadow: 0 2px 10px rgba(58, 51, 83, 0.04);
+            box-shadow: 0 2px 10px rgba(78, 74, 85, 0.04);
         }
         .explore-group-label {
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--mauve-deep);
-            background: var(--mauve-soft);
+            color: var(--teal-deep);
+            background: var(--teal-soft);
             padding: 8px 16px;
             border-bottom: 1px solid var(--border);
         }
@@ -654,13 +657,13 @@
             gap: 12px;
         }
         .explore-item:last-child { border-bottom: none; }
-        .explore-item:hover { background: var(--linen); }
-        .explore-item:active { background: var(--chip-idle); }
+        .explore-item:hover { background: var(--cream); }
+        .explore-item:active { background: var(--teal-soft); }
         .explore-item-icon {
             width: 34px;
             height: 34px;
             border-radius: 8px;
-            background: var(--mauve-soft);
+            background: var(--teal-soft);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -670,7 +673,7 @@
         .explore-item-name {
             font-size: 14px;
             font-weight: 600;
-            color: var(--slate-plum);
+            color: var(--plum);
         }
         .explore-item-desc {
             font-size: 12px;
@@ -680,13 +683,13 @@
         .explore-chevron { color: var(--border); flex-shrink: 0; }
 
         /* =============================================
-           5-MINUTE PRACTICE MODAL
+           COUPLES PRACTICE MODAL
            ============================================= */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(28, 26, 46, 0.6);
+            background: rgba(46, 43, 53, 0.6);
             z-index: 100;
             align-items: flex-end;
             justify-content: center;
@@ -714,33 +717,33 @@
             border-radius: 2px;
             margin: 0 auto 20px;
         }
-        .boost-label {
+        .practice-label {
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.2px;
             text-transform: uppercase;
-            color: var(--mauve-deep);
+            color: var(--teal-deep);
             margin-bottom: 4px;
         }
-        .boost-title {
+        .practice-title {
             font-size: 20px;
             font-weight: 700;
-            color: var(--slate-plum);
+            color: var(--plum);
             margin-bottom: 12px;
             line-height: 1.3;
         }
-        .boost-body {
+        .practice-body {
             font-size: 15px;
-            color: var(--slate-plum);
+            color: var(--plum);
             line-height: 1.7;
             opacity: 0.85;
             white-space: pre-wrap;
         }
-        .boost-close {
+        .practice-close {
             width: 100%;
             padding: 13px;
-            background: var(--mauve-soft);
-            color: var(--slate-plum);
+            background: var(--teal-soft);
+            color: var(--plum);
             border: none;
             border-radius: 10px;
             font-family: inherit;
@@ -750,7 +753,7 @@
             margin-top: 24px;
             transition: background 0.2s;
         }
-        .boost-close:hover { background: rgba(156, 139, 154, 0.28); }
+        .practice-close:hover { background: rgba(175, 201, 207, 0.28); }
 
         /* =============================================
            RESPONSIVE
@@ -770,21 +773,21 @@
          ============================================= -->
     <div id="authScreen" class="auth-screen">
         <div class="auth-logo">
-            <!-- Proxi She Logo: mauve tile + two slate-purple dots -->
+            <!-- Proxi We Logo: teal tile + two overlapping circles (couple) -->
             <svg class="auth-logo-mark" width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                <rect width="52" height="52" rx="14" fill="#9C8B9A"/>
-                <circle cx="17" cy="26" r="6" fill="#574A64"/>
-                <circle cx="35" cy="26" r="6" fill="#574A64"/>
+                <rect width="52" height="52" rx="14" fill="#afc9cf"/>
+                <circle cx="20" cy="26" r="7" fill="#4e4a55" opacity="0.9"/>
+                <circle cx="32" cy="26" r="7" fill="#2e2b35" opacity="0.75"/>
             </svg>
-            <span class="auth-logo-name">Proxi She</span>
-            <span class="auth-logo-sub">Women's Inner Journey Coach</span>
+            <span class="auth-logo-name">Proxi We</span>
+            <span class="auth-logo-sub">Elite Couples Coach</span>
         </div>
 
         <div class="auth-box">
             <!-- LOGIN -->
             <div id="loginForm">
                 <h2>Welcome back</h2>
-                <p class="auth-tagline">Sign in to continue your journey</p>
+                <p class="auth-tagline">Sign in to continue your work together</p>
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" id="loginEmail" autocomplete="email" placeholder="you@email.com">
@@ -804,18 +807,14 @@
             <!-- SIGNUP -->
             <div id="signupForm" style="display:none;">
                 <h2>Create account</h2>
-                <p class="auth-tagline">Set up your Proxi She access</p>
-                <div id="kajabiWelcome" style="display:none; text-align:center; margin-bottom:16px; padding:12px; background:var(--mauve-soft); border-radius:8px; border:1px solid rgba(156,139,154,0.3);">
-                    <div style="font-size:14px; font-weight:600; color:var(--mauve-deep); margin-bottom:4px;">Payment received — welcome.</div>
-                    <div style="font-size:12px; color:var(--muted);">Create your login to get started.</div>
-                </div>
+                <p class="auth-tagline">Set up your Proxi We access</p>
                 <div class="form-group">
                     <label>First Name</label>
-                    <input type="text" id="signupFirstName" autocomplete="given-name" placeholder="Jane">
+                    <input type="text" id="signupFirstName" autocomplete="given-name" placeholder="Alex">
                 </div>
                 <div class="form-group">
                     <label>Last Name</label>
-                    <input type="text" id="signupLastName" autocomplete="family-name" placeholder="Doe">
+                    <input type="text" id="signupLastName" autocomplete="family-name" placeholder="Smith">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
@@ -830,9 +829,9 @@
                         <input type="checkbox" id="tosCheckbox" class="tos-checkbox">
                         <span class="tos-label-text">
                             I agree to the
-                            <a href="/joree-terms" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
-                            <a href="/joree-privacy" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
-                            <a href="/joree-ai-disclosure" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
+                            <a href="/lie-terms" target="_blank" rel="noopener noreferrer" class="tos-link">Terms of Service</a>,
+                            <a href="/lie-privacy" target="_blank" rel="noopener noreferrer" class="tos-link">Privacy Policy</a>, and
+                            <a href="/lie-ai-disclosure" target="_blank" rel="noopener noreferrer" class="tos-link">AI Disclosure</a>.
                         </span>
                     </label>
                 </div>
@@ -881,13 +880,13 @@
         <header class="page-header">
             <div class="header-brand">
                 <svg width="32" height="32" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="52" height="52" rx="14" fill="#9C8B9A"/>
-                    <circle cx="17" cy="26" r="6" fill="#574A64"/>
-                    <circle cx="35" cy="26" r="6" fill="#574A64"/>
+                    <rect width="52" height="52" rx="14" fill="#afc9cf"/>
+                    <circle cx="20" cy="26" r="7" fill="#4e4a55" opacity="0.9"/>
+                    <circle cx="32" cy="26" r="7" fill="#2e2b35" opacity="0.75"/>
                 </svg>
                 <div class="header-wordmark">
-                    <span class="header-name">Proxi She</span>
-                    <span class="header-role">Inner Journey Coach</span>
+                    <span class="header-name">Proxi We</span>
+                    <span class="header-role">Elite Couples Coach</span>
                 </div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
@@ -902,25 +901,25 @@
                 <div class="trial-banner-dot"></div>
                 <span id="trialBannerText">Free trial</span>
             </div>
-            <a href="https://buy.stripe.com/fZu14p2XP0311zX3nZbMQ06" class="trial-banner-upgrade">Subscribe →</a>
+            <a href="https://buy.stripe.com/7sY9AV7e5031bax4s3bMQ07" class="trial-banner-upgrade">Subscribe →</a>
         </div>
 
         <!-- SCROLLABLE CONTENT -->
         <div class="home-content">
 
-            <!-- ── 1. TALK TO PROXI SHE (primary CTA) ── -->
-            <a class="coach-cta-card" href="/proxi-she" id="coachCtaCard">
+            <!-- ── 1. TALK TO PROXI WE (primary CTA) ── -->
+            <a class="coach-cta-card" href="/proxi-we" id="coachCtaCard">
                 <div class="coach-cta-left">
                     <div class="coach-avatar">
                         <svg width="28" height="28" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="52" height="52" rx="14" fill="#9C8B9A"/>
-                            <circle cx="17" cy="26" r="6" fill="#574A64"/>
-                            <circle cx="35" cy="26" r="6" fill="#574A64"/>
+                            <rect width="52" height="52" rx="14" fill="#afc9cf"/>
+                            <circle cx="20" cy="26" r="7" fill="#4e4a55" opacity="0.9"/>
+                            <circle cx="32" cy="26" r="7" fill="#2e2b35" opacity="0.75"/>
                         </svg>
                     </div>
                     <div class="coach-cta-text">
-                        <div class="coach-cta-label">Talk to Proxi She</div>
-                        <div class="coach-cta-sub">Start or continue your inner journey</div>
+                        <div class="coach-cta-label">Talk to Proxi We</div>
+                        <div class="coach-cta-sub">Start or continue a coaching session</div>
                     </div>
                 </div>
                 <div class="coach-cta-arrow">
@@ -935,76 +934,76 @@
                 <div class="rightnow-header">
                     <span class="rightnow-badge">Right Now Mode</span>
                 </div>
-                <div class="rightnow-title">What's on your heart right now?</div>
+                <div class="rightnow-title">What's happening between you right now?</div>
                 <div class="rightnow-sub">Tap to start a focused session</div>
                 <div class="chips-grid">
-                    <div class="chip" onclick="selectChip(this, 'overwhelm')">
-                        <span class="chip-icon">🌊</span> Overwhelm
+                    <div class="chip" onclick="selectChip(this, 'we-had-a-fight')">
+                        <span class="chip-icon">🔥</span> We had a fight
                     </div>
-                    <div class="chip" onclick="selectChip(this, 'anxiety-worry')">
-                        <span class="chip-icon">💭</span> Anxiety / worry
+                    <div class="chip" onclick="selectChip(this, 'feeling-disconnected')">
+                        <span class="chip-icon">💔</span> I feel disconnected
                     </div>
-                    <div class="chip" onclick="selectChip(this, 'relationship-tension')">
-                        <span class="chip-icon">🔁</span> Relationship tension
+                    <div class="chip" onclick="selectChip(this, 'shutting-down')">
+                        <span class="chip-icon">🔒</span> I keep shutting down
                     </div>
-                    <div class="chip" onclick="selectChip(this, 'feeling-stuck')">
-                        <span class="chip-icon">🧭</span> Feeling stuck
+                    <div class="chip" onclick="selectChip(this, 'said-something-i-regret')">
+                        <span class="chip-icon">😬</span> I said something I regret
                     </div>
-                    <div class="chip" onclick="selectChip(this, 'need-to-be-heard')">
-                        <span class="chip-icon">💜</span> Need to be heard
+                    <div class="chip" onclick="selectChip(this, 'feeling-resentful')">
+                        <span class="chip-icon">⚡</span> I'm feeling resentful
                     </div>
-                    <div class="chip" onclick="selectChip(this, 'hard-decision')">
-                        <span class="chip-icon">⚖️</span> Hard decision
+                    <div class="chip" onclick="selectChip(this, 'hard-conversation-ahead')">
+                        <span class="chip-icon">💭</span> Hard conversation coming
                     </div>
                 </div>
             </div>
 
-            <!-- ── 3. DAILY PULSE ── -->
+            <!-- ── 3. COUPLES PULSE ── -->
             <div class="pulse-card">
                 <div class="card-header">
-                    <span class="card-title">Daily Pulse</span>
-                    <span class="card-badge">How are you today?</span>
+                    <span class="card-title">Couples Pulse</span>
+                    <span class="card-badge">How are you right now?</span>
                 </div>
 
-                <!-- How full does your plate feel? -->
+                <!-- How connected do you feel to your partner? -->
                 <div class="slider-group">
                     <div class="slider-label-row">
-                        <span class="slider-name">How full does your plate feel?</span>
-                        <span class="slider-value-badge" id="stressVal">3</span>
+                        <span class="slider-name">How connected do you feel to your partner?</span>
+                        <span class="slider-value-badge" id="connectedVal">3</span>
                     </div>
-                    <input type="range" min="1" max="5" value="3" id="stressSlider"
-                           oninput="updateSlider('stress', this.value)">
+                    <input type="range" min="1" max="5" value="3" id="connectedSlider"
+                           oninput="updateSlider('connected', this.value)">
                     <div class="slider-range-labels">
-                        <span class="slider-range-label">Light</span>
-                        <span class="slider-range-label">Too much</span>
-                    </div>
-                </div>
-
-                <!-- How connected do you feel? -->
-                <div class="slider-group">
-                    <div class="slider-label-row">
-                        <span class="slider-name">How connected do you feel?</span>
-                        <span class="slider-value-badge" id="relVal">3</span>
-                    </div>
-                    <input type="range" min="1" max="5" value="3" id="relSlider"
-                           oninput="updateSlider('rel', this.value)">
-                    <div class="slider-range-labels">
-                        <span class="slider-range-label">Isolated</span>
-                        <span class="slider-range-label">Held</span>
+                        <span class="slider-range-label">Distant</span>
+                        <span class="slider-range-label">Close</span>
                     </div>
                 </div>
 
-                <!-- Energy for reflection -->
+                <!-- How much tension are you carrying? -->
                 <div class="slider-group">
                     <div class="slider-label-row">
-                        <span class="slider-name">Energy for reflection</span>
-                        <span class="slider-value-badge" id="challengeVal">3</span>
+                        <span class="slider-name">How much tension are you carrying into this?</span>
+                        <span class="slider-value-badge" id="tensionVal">3</span>
                     </div>
-                    <input type="range" min="1" max="5" value="3" id="challengeSlider"
-                           oninput="updateSlider('challenge', this.value)">
+                    <input type="range" min="1" max="5" value="3" id="tensionSlider"
+                           oninput="updateSlider('tension', this.value)">
                     <div class="slider-range-labels">
-                        <span class="slider-range-label">Go gentle</span>
-                        <span class="slider-range-label">I'm ready</span>
+                        <span class="slider-range-label">None</span>
+                        <span class="slider-range-label">A lot</span>
+                    </div>
+                </div>
+
+                <!-- How ready are you to engage? -->
+                <div class="slider-group">
+                    <div class="slider-label-row">
+                        <span class="slider-name">How ready are you to engage vs. shut down?</span>
+                        <span class="slider-value-badge" id="readyVal">3</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="3" id="readySlider"
+                           oninput="updateSlider('ready', this.value)">
+                    <div class="slider-range-labels">
+                        <span class="slider-range-label">Need space</span>
+                        <span class="slider-range-label">Let's go</span>
                     </div>
                 </div>
 
@@ -1019,10 +1018,23 @@
 
             <!-- ── 4. QUICK TILES ── -->
             <div class="tiles-row">
+                <!-- Relationship Reflection -->
+                <div class="tile-card" onclick="openPracticeModal()">
+                    <div class="tile-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="tile-label">5-Min Practice</div>
+                        <div class="tile-desc">Today's reflection for your relationship</div>
+                    </div>
+                </div>
+
                 <!-- Emotion Wheel -->
                 <a class="tile-card" href="/emotion_wheel">
                     <div class="tile-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/>
                             <circle cx="12" cy="12" r="4"/>
                             <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
@@ -1032,47 +1044,34 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="tile-label">Not Sure Where to Start?</div>
-                        <div class="tile-desc">Try the emotion wheel</div>
+                        <div class="tile-label">Name What You're Feeling</div>
+                        <div class="tile-desc">Emotion wheel</div>
                     </div>
                 </a>
-
-                <!-- 5-Min Practice -->
-                <div class="tile-card" onclick="openBoostModal()">
-                    <div class="tile-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="tile-label">5-Min Practice</div>
-                        <div class="tile-desc">Today's grounding exercise</div>
-                    </div>
-                </div>
             </div>
 
             <!-- ── 5. EXPLORE ── -->
             <div class="explore-section">
                 <div class="section-label">Explore</div>
 
-                <!-- Relationship group -->
+                <!-- Communication group -->
                 <div class="explore-group">
-                    <div class="explore-group-label">Relationship</div>
+                    <div class="explore-group-label">Communication</div>
 
                     <a class="explore-item" href="/conversation-starters">
                         <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                         <div class="explore-item-text">
                             <div class="explore-item-name">Conversation starters</div>
-                            <div class="explore-item-desc">Go deeper with the people you love</div>
+                            <div class="explore-item-desc">Go deeper with each other</div>
                         </div>
                         <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
 
-                    <a class="explore-item" href="/say-this-instead-she">
+                    <a class="explore-item" href="/say-this-instead">
                         <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                         </div>
                         <div class="explore-item-text">
                             <div class="explore-item-name">Say this instead</div>
@@ -1081,31 +1080,9 @@
                         <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
 
-                    <a class="explore-item" href="/date-night-ideas?coach=she">
+                    <a class="explore-item" href="/repair-toolkit-we">
                         <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                        </div>
-                        <div class="explore-item-text">
-                            <div class="explore-item-name">Date night ideas</div>
-                            <div class="explore-item-desc">Connection with intention</div>
-                        </div>
-                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </a>
-
-                    <a class="explore-item" href="/date-night-ideas?coach=she&tab=guys">
-                        <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 11c1.5 0 3 .5 3 2s-1.5 2-3 2"/><path d="M19 11v4"/></svg>
-                        </div>
-                        <div class="explore-item-text">
-                            <div class="explore-item-name">Hanging with the girls</div>
-                            <div class="explore-item-desc">55 ideas for real female friendship</div>
-                        </div>
-                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </a>
-
-                    <a class="explore-item" href="/repair-toolkit-she">
-                        <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                         </div>
                         <div class="explore-item-text">
                             <div class="explore-item-name">Repair toolkit</div>
@@ -1115,28 +1092,55 @@
                     </a>
                 </div>
 
-                <!-- Self & Growth group -->
+                <!-- Connection group -->
                 <div class="explore-group">
-                    <div class="explore-group-label">Self &amp; Growth</div>
+                    <div class="explore-group-label">Connection</div>
 
-                    <a class="explore-item" href="https://joreerose.com" target="_blank" rel="noopener noreferrer">
+                    <a class="explore-item" href="/date-night-ideas">
                         <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                         </div>
                         <div class="explore-item-text">
-                            <div class="explore-item-name">Journey Forward podcast</div>
-                            <div class="explore-item-desc">With Joree Rose</div>
+                            <div class="explore-item-name">Date night ideas</div>
+                            <div class="explore-item-desc">66 ideas to reconnect with intention</div>
                         </div>
                         <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
 
-                    <a class="explore-item" href="#" onclick="return comingSoon(event)">
+                    <a class="explore-item" href="/proxi-we?mode=rightnow&context=36-questions" id="36questionsLink">
                         <div class="explore-item-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5A70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                         </div>
                         <div class="explore-item-text">
-                            <div class="explore-item-name">Mindfulness practices</div>
-                            <div class="explore-item-desc">Tools for your inner life</div>
+                            <div class="explore-item-name">Gottman 36 Questions</div>
+                            <div class="explore-item-desc">Build closeness through guided questions</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <!-- Coaching & Learning group -->
+                <div class="explore-group">
+                    <div class="explore-group-label">Coaching &amp; Learning</div>
+
+                    <a class="explore-item" href="https://loveisntenough.net" target="_blank" rel="noopener noreferrer">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Love Isn't Enough</div>
+                            <div class="explore-item-desc">John &amp; Joree's podcast for couples</div>
+                        </div>
+                        <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+
+                    <a class="explore-item" href="https://loveisntenough.net/coaching" target="_blank" rel="noopener noreferrer">
+                        <div class="explore-item-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7eadb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="explore-item-text">
+                            <div class="explore-item-name">Work with John &amp; Joree</div>
+                            <div class="explore-item-desc">Live couples coaching sessions</div>
                         </div>
                         <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
@@ -1151,13 +1155,13 @@
     <!-- =============================================
          5-MIN PRACTICE MODAL
          ============================================= -->
-    <div class="modal-overlay" id="boostModal" onclick="closeBoostOnOverlay(event)">
+    <div class="modal-overlay" id="practiceModal" onclick="closePracticeOnOverlay(event)">
         <div class="modal-sheet">
             <div class="modal-handle"></div>
-            <div class="boost-label">5-Minute Practice</div>
-            <div class="boost-title" id="boostTitle"></div>
-            <div class="boost-body" id="boostBody"></div>
-            <button class="boost-close" onclick="closeBoostModal()">Got it — I'll sit with this</button>
+            <div class="practice-label">5-Minute Practice</div>
+            <div class="practice-title" id="practiceTitle"></div>
+            <div class="practice-body" id="practiceBody"></div>
+            <button class="practice-close" onclick="closePracticeModal()">Got it — I'll sit with this</button>
         </div>
     </div>
 
@@ -1167,48 +1171,43 @@
     // =====================================================
     var SUPABASE_URL      = "https://osywbzzvsfjdvjhjalju.supabase.co";
     var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeXdienp2c2ZqZHZqaGphbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODM4NjYsImV4cCI6MjA4OTI1OTg2Nn0.tk2YKaEmNoFljeR7BSx6OQZOcOwuMw2osUFSmtdjxAA";
-    var SIGNUP_PAID_URL   = SUPABASE_URL + "/functions/v1/signup-paid";
     var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     var urlParams        = new URLSearchParams(window.location.search);
-    var kajabiPlan       = urlParams.get("plan");
-    var kajabiKey        = urlParams.get("key");
-    var isKajabiRedirect = !!(kajabiPlan && kajabiKey);
-
-    var currentUser     = null;
-    var loginInProgress = false;
+    var currentUser      = null;
+    var loginInProgress  = false;
 
     // =====================================================
-    // 5-MINUTE PRACTICE EXERCISES — JOREE VOICE (7, rotates by day)
+    // 5-MINUTE PRACTICES — COUPLES REFLECTION (7, rotates by day)
     // =====================================================
-    var BOOSTS = [
+    var PRACTICES = [
         {
-            title: "The Breath Anchor",
-            body: "Right now, notice your breath without changing it. Where do you feel it — chest, belly, nostrils? Place one hand there. Take three slow, deliberate breaths.\n\nThis is not a productivity hack. This is coming home to your body, which is where your wisdom actually lives. You don't have to go anywhere or figure anything out. Just breathe, and let the breath remind you that you're here."
+            title: "The Unspoken Inventory",
+            body: "What haven't you said to your partner recently that they need to hear? Not an accusation, not a complaint — something true and important that's been sitting unsaid.\n\nWrite it down without editing yourself. You don't have to send it. The act of naming it gets it out of the background, where unexpressed things quietly build into resentment. The most damaging things in relationships are often the ones we never said."
         },
         {
-            title: "The Needs Inventory",
-            body: "Ask yourself: what do I actually need right now — not what I should do, not what others need from me — what do I need?\n\nWrite it down without editing. You're not required to act on it. Just the act of naming your own needs builds the muscle of self-awareness that real self-care depends on. Your needs are not too much. They are information."
+            title: "The Pattern Recognition",
+            body: "Think about your last real conflict. What was the trigger? What did you do next — withdraw, get louder, shut down, bring up the past? What happened after that?\n\nMost couples have one or two cycles they repeat — sometimes for years — without naming them. John Gottman calls it the 'absorbing negative affect' spiral. You can't change a pattern you haven't named. Name it first. That's the whole practice today."
         },
         {
-            title: "The Compassion Check",
-            body: "Think of something you're currently being hard on yourself about. Now ask: what would I say to a close friend dealing with the exact same thing?\n\nWrite those words down — and then say them to yourself. The gap between how we treat others and how we treat ourselves is often where suffering quietly lives. You deserve the same gentleness you give everyone else."
+            title: "The Appreciation Gap",
+            body: "When did you last genuinely express appreciation to your partner — not 'thanks for making dinner,' but the kind that lands? The kind that says: I see you.\n\nResearch by John Gottman shows that thriving couples maintain a 5:1 ratio of positive to negative interactions. Today, notice one specific thing your partner does or is — and tell them. Don't save it for the right moment. The right moment is now."
         },
         {
-            title: "The Boundary Scan",
-            body: "Think through your day. Where did you say yes when part of you wanted to say no? Name it out loud: 'I said yes to ___ when I actually needed ___.' \n\nNo action required right now. Just noticing is the first step. Awareness of a pattern is the beginning of changing it. Boundaries aren't walls — they're the honest expression of what you can and can't hold."
+            title: "The Bid Inventory",
+            body: "Think back over the last 48 hours. Did your partner make any small bids for connection — a glance, a question, a funny observation, reaching out in some small way — that you turned away from or missed entirely?\n\nGottman's research found that couples who divorce miss about 67% of their partner's bids. The bids are rarely dramatic. They're the small moments of reaching out. Your practice today: notice one bid your partner makes. Just one. And turn toward it."
         },
         {
-            title: "The Gratitude Anchor",
-            body: "Name three things that are true right now — not grand, not future-focused — just present-moment true. They can be tiny: the light, the coffee, your breath, the quiet.\n\nGratitude doesn't deny difficulty. It expands your window so difficulty doesn't fill the whole frame. Research by Robert Emmons shows that a regular gratitude practice measurably increases wellbeing — not by ignoring what's hard, but by also seeing what's good."
+            title: "The Repair Check",
+            body: "Is there any unresolved tension between you right now? Not the surface argument — the actual feeling underneath it.\n\nComplete this sentence: 'I'm feeling ___, and what I need is ___.' Not what they need to do differently. What you need. That's the beginning of a repair attempt. You don't have to have the whole conversation today — but name your part of it honestly, even just to yourself."
         },
         {
-            title: "The Values Compass",
-            body: "Pick one relationship or situation that's weighing on you. Ask: what matters most to me here — not what's easiest, not what keeps the peace — what do I actually value?\n\nWrite one sentence. When we know our values, decisions get clearer. When we're disconnected from them, we feel the drain even when we can't name why. Your values are your compass. They don't disappear — you just have to get quiet enough to hear them."
+            title: "The Vision Check",
+            body: "Describe your relationship when it's working well. Not perfect — just working. What does it look, feel, and sound like?\n\nNow honestly: are you closer to that vision right now, or further? What's one thing — one specific behavior or choice — you could shift that would move you even slightly toward it? The goal isn't a perfect relationship. It's a chosen, intentional one."
         },
         {
-            title: "The Emotional Weather Report",
-            body: "Right now, describe your inner state as weather. Stormy? Foggy? Partly cloudy with patches of sun? Give it a texture and a temperature.\n\nThis isn't silly — it's a research-backed way to create a little space between you and the emotion without suppressing it. You're not the storm. You're the sky that holds it. Name the weather. Notice that you're the one noticing."
+            title: "The Responsibility Scan",
+            body: "In your last disagreement, what was your part? Not theirs — yours. What did you contribute to the dynamic, even if it didn't feel like your fault at the time?\n\nThis isn't about self-blame. It's about self-leadership. John says that 70–80% of relational conflict is really projection from past wounds. The question isn't 'who started it.' It's 'what am I bringing that keeps this going?' Sit with that for five minutes without defending yourself — even internally."
         }
     ];
 
@@ -1277,41 +1276,16 @@
         showAuthMsg("signupMessage", "Creating account...", "");
 
         try {
-            if (isKajabiRedirect) {
-                var response = await fetch(SIGNUP_PAID_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ first_name: firstName, last_name: lastName, email: email, password: password, plan_type: kajabiPlan, signup_key: kajabiKey })
-                });
-                var data = await response.json();
-                if (!response.ok) {
-                    if (data.code === "EMAIL_EXISTS") {
-                        showAuthMsg("signupMessage", "Account exists — switching to sign in...", "error");
-                        document.getElementById("loginEmail").value = email;
-                        document.getElementById("signupBtn").disabled = !document.getElementById("tosCheckbox").checked;
-                        setTimeout(function() { showView("login"); document.getElementById("loginPassword").focus(); }, 1500);
-                        return;
-                    } else { throw new Error(data.error || "Signup failed"); }
-                }
-                loginInProgress = true;
-                var loginResult = await sb.auth.signInWithPassword({ email: email, password: password });
-                if (loginResult.error) { loginInProgress = false; throw loginResult.error; }
-                currentUser = loginResult.data.user;
-                history.replaceState(null, "", window.location.pathname);
+            var result = await sb.auth.signUp({
+                email: email, password: password,
+                options: { data: { first_name: firstName, last_name: lastName, display_name: [firstName, lastName].filter(Boolean).join(" ") } }
+            });
+            if (result.error) throw result.error;
+            if (result.data.user && !result.data.session) {
+                showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
+            } else if (result.data.session) {
+                currentUser = result.data.user;
                 showHome();
-                loginInProgress = false;
-            } else {
-                var result = await sb.auth.signUp({
-                    email: email, password: password,
-                    options: { data: { first_name: firstName, last_name: lastName, display_name: [firstName, lastName].filter(Boolean).join(" ") } }
-                });
-                if (result.error) throw result.error;
-                if (result.data.user && !result.data.session) {
-                    showAuthMsg("signupMessage", "Check your email for a confirmation link.", "success");
-                } else if (result.data.session) {
-                    currentUser = result.data.user;
-                    showHome();
-                }
             }
         } catch (err) {
             showAuthMsg("signupMessage", err.message || "Signup failed.", "error");
@@ -1363,7 +1337,7 @@
     }
 
     async function loadTrialBanner() {
-        var token = sessionStorage.getItem("prx_trial_joree");
+        var token = sessionStorage.getItem("prx_trial_couples");
         if (!token) return;
         var banner     = document.getElementById("trialBanner");
         var bannerText = document.getElementById("trialBannerText");
@@ -1371,7 +1345,7 @@
             var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "check_trial", trial_token: token, coach: "joree" })
+                body: JSON.stringify({ action: "check_trial", trial_token: token, coach: "couples" })
             });
             var data = await res.json();
             if (data.status === "active" || data.status === "session_complete") {
@@ -1420,15 +1394,15 @@
     // =====================================================
     // PULSE — SUPABASE SAVE (fire-and-forget; skipped for trial users)
     // =====================================================
-    async function savePulseToDb(plate, connected, energy, source) {
+    async function savePulseToDb(connected, tension, ready, source) {
         if (!currentUser) return; // trial users have no Supabase auth
         try {
             await sb.from("pulse_checkins").insert({
                 user_id:   currentUser.id,
-                coach:     "joree",
-                plate:     parseInt(plate, 10),
-                connected: parseInt(connected, 10),
-                energy:    parseInt(energy, 10),
+                coach:     "couples",
+                plate:     parseInt(connected, 10),   // reusing 'plate' col for connection score
+                connected: parseInt(tension, 10),     // reusing 'connected' col for tension score
+                energy:    parseInt(ready, 10),       // reusing 'energy' col for readiness score
                 source:    source || "pulse"
             });
         } catch (e) {
@@ -1442,20 +1416,20 @@
     function selectChip(el, context) {
         document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
         el.classList.add("selected");
-        var plate     = document.getElementById("stressSlider").value;
-        var connected = document.getElementById("relSlider").value;
-        var energy    = document.getElementById("challengeSlider").value;
-        savePulseToDb(plate, connected, energy, "chip"); // fire-and-forget before nav
+        var connected = document.getElementById("connectedSlider").value;
+        var tension   = document.getElementById("tensionSlider").value;
+        var ready     = document.getElementById("readySlider").value;
+        savePulseToDb(connected, tension, ready, "chip"); // fire-and-forget before nav
         setTimeout(function() {
-            window.location.href = "/proxi-she?mode=rightnow&context=" + encodeURIComponent(context)
-                + "&pulse_plate=" + plate
+            window.location.href = "/proxi-we?mode=rightnow&context=" + encodeURIComponent(context)
                 + "&pulse_connected=" + connected
-                + "&pulse_energy=" + energy;
+                + "&pulse_tension=" + tension
+                + "&pulse_ready=" + ready;
         }, 320);
     }
 
     // =====================================================
-    // DAILY PULSE — SLIDERS
+    // COUPLES PULSE — SLIDERS
     // =====================================================
     function updateSlider(type, value) {
         document.getElementById(type + "Val").textContent = value;
@@ -1464,72 +1438,63 @@
 
     function savePulse() {
         var pulse = {
-            stress:    document.getElementById("stressSlider").value,
-            rel:       document.getElementById("relSlider").value,
-            challenge: document.getElementById("challengeSlider").value,
+            connected: document.getElementById("connectedSlider").value,
+            tension:   document.getElementById("tensionSlider").value,
+            ready:     document.getElementById("readySlider").value,
             date:      new Date().toDateString()
         };
-        try { localStorage.setItem("proxi_she_pulse", JSON.stringify(pulse)); } catch(e) {}
+        try { localStorage.setItem("proxi_we_pulse", JSON.stringify(pulse)); } catch(e) {}
     }
 
     function loadSavedPulse() {
         try {
-            var saved = localStorage.getItem("proxi_she_pulse");
+            var saved = localStorage.getItem("proxi_we_pulse");
             if (!saved) return;
             var pulse = JSON.parse(saved);
             if (pulse.date !== new Date().toDateString()) return;
-            if (pulse.stress) {
-                document.getElementById("stressSlider").value = pulse.stress;
-                document.getElementById("stressVal").textContent = pulse.stress;
+            if (pulse.connected) {
+                document.getElementById("connectedSlider").value = pulse.connected;
+                document.getElementById("connectedVal").textContent = pulse.connected;
             }
-            if (pulse.rel) {
-                document.getElementById("relSlider").value = pulse.rel;
-                document.getElementById("relVal").textContent = pulse.rel;
+            if (pulse.tension) {
+                document.getElementById("tensionSlider").value = pulse.tension;
+                document.getElementById("tensionVal").textContent = pulse.tension;
             }
-            if (pulse.challenge) {
-                document.getElementById("challengeSlider").value = pulse.challenge;
-                document.getElementById("challengeVal").textContent = pulse.challenge;
+            if (pulse.ready) {
+                document.getElementById("readySlider").value = pulse.ready;
+                document.getElementById("readyVal").textContent = pulse.ready;
             }
         } catch(e) {}
     }
 
     function startPulseSession() {
-        var plate     = document.getElementById("stressSlider").value;
-        var connected = document.getElementById("relSlider").value;
-        var energy    = document.getElementById("challengeSlider").value;
+        var connected = document.getElementById("connectedSlider").value;
+        var tension   = document.getElementById("tensionSlider").value;
+        var ready     = document.getElementById("readySlider").value;
         savePulse();
-        savePulseToDb(plate, connected, energy, "pulse"); // fire-and-forget
-        window.location.href = "/proxi-she?mode=pulse&pulse_plate=" + plate + "&pulse_connected=" + connected + "&pulse_energy=" + energy;
+        savePulseToDb(connected, tension, ready, "pulse"); // fire-and-forget
+        window.location.href = "/proxi-we?mode=pulse&pulse_connected=" + connected + "&pulse_tension=" + tension + "&pulse_ready=" + ready;
     }
 
     // =====================================================
     // 5-MIN PRACTICE MODAL
     // =====================================================
-    function openBoostModal() {
+    function openPracticeModal() {
         var dayIndex = new Date().getDay();
-        var boost = BOOSTS[dayIndex % BOOSTS.length];
-        document.getElementById("boostTitle").textContent = boost.title;
-        document.getElementById("boostBody").textContent  = boost.body;
-        document.getElementById("boostModal").classList.add("active");
+        var practice = PRACTICES[dayIndex % PRACTICES.length];
+        document.getElementById("practiceTitle").textContent = practice.title;
+        document.getElementById("practiceBody").textContent  = practice.body;
+        document.getElementById("practiceModal").classList.add("active");
         document.body.style.overflow = "hidden";
     }
 
-    function closeBoostModal() {
-        document.getElementById("boostModal").classList.remove("active");
+    function closePracticeModal() {
+        document.getElementById("practiceModal").classList.remove("active");
         document.body.style.overflow = "";
     }
 
-    function closeBoostOnOverlay(e) {
-        if (e.target === document.getElementById("boostModal")) closeBoostModal();
-    }
-
-    // =====================================================
-    // COMING SOON
-    // =====================================================
-    function comingSoon(e) {
-        e.preventDefault();
-        alert("Coming soon — this section is in development.");
-        return false;
+    function closePracticeOnOverlay(e) {
+        if (e.target === document.getElementById("practiceModal")) closePracticeModal();
     }
 
     // =====================================================
@@ -1567,8 +1532,8 @@
             return;
         }
 
-        // Trial users
-        var trialToken = sessionStorage.getItem("prx_trial_joree");
+        // Trial users (no Supabase auth)
+        var trialToken = sessionStorage.getItem("prx_trial_couples");
         if (trialToken) {
             showHome();
             return;
@@ -1578,9 +1543,6 @@
         if (sessionResult.data.session) {
             currentUser = sessionResult.data.session.user;
             showHome();
-        } else if (isKajabiRedirect) {
-            showView("signup");
-            document.getElementById("kajabiWelcome").style.display = "block";
         }
     }
 
