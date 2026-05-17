@@ -421,8 +421,8 @@
       <input type="text" id="cityInput" class="local-input" placeholder="Your city (e.g. San Francisco, Austin, Chicago)" autocomplete="off">
 
       <div class="local-type-row">
-        <button class="local-type-btn selected" id="typeDate" onclick="switchTab('date')">🕯️ Date night</button>
-        <button class="local-type-btn" id="typeGuys" onclick="switchTab('guys')">🤝 With the guys</button>
+        <button class="local-type-btn selected" id="typeDate" onclick="switchTab('date'); window.scrollTo({top:0,behavior:'smooth'})">🕯️ Date night</button>
+        <button class="local-type-btn" id="typeGuys" onclick="switchTab('guys'); window.scrollTo({top:0,behavior:'smooth'})">🤝 With the guys</button>
       </div>
 
       <button class="local-submit" id="localSubmit" onclick="findLocalIdeas()">

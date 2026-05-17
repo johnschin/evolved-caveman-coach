@@ -1163,7 +1163,12 @@
 
         var systemPrompt = buildSystemPrompt(isReturningUser);
         showTyping(true);
+        // If a free-form context was passed (e.g. city-specific request from date-night-ideas),
+        // use it as the opening message so the coach responds directly to the request.
         var triggerMessage = isReturningUser ? "I'm back for another session." : "Hello";
+        if (!isReturningUser && urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]) {
+            triggerMessage = urlContext;
+        }
         conversationHistory.push({ role: "user", content: triggerMessage });
 
         try {
