@@ -1598,7 +1598,10 @@
     // =====================================================
     // ENTER CHAT
     // =====================================================
+    function _dbg(msg) { var el = document.getElementById("debugStrip"); if (el) el.textContent = "DBG: " + msg; }
+
     async function enterChat() {
+        _dbg("enterChat called — enterChatCalled=" + enterChatCalled);
         if (enterChatCalled) return;
         enterChatCalled = true;
         document.getElementById("authScreen").style.display = "none";
@@ -1607,16 +1610,20 @@
 
         // ADDED: Show per-session AI disclosure banner (SB 243)
         showAIDisclosureBanner();
+        _dbg("after showAIDisclosureBanner — starting profile check");
 
         // Ensure profile exists
         try {
             var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+            _dbg("profile check done — error=" + (profileResult.error ? profileResult.error.code : "none"));
             if (profileResult.error && profileResult.error.code === "PGRST116") {
                 await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false });
+                _dbg("profile inserted");
             }
-        } catch (e) { console.warn("Profile check error:", e); }
+        } catch (e) { _dbg("profile check THREW: " + e.message); console.warn("Profile check error:", e); }
 
         // Start a new session
+        _dbg("setting up session — about to call sendInitialMessage");
         sessionId = generateSessionId();
         conversationHistory = [];
         messageCount = 0;
