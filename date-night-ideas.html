@@ -415,21 +415,21 @@
   <div class="local-section">
     <p class="local-eyebrow">Nothing clicking?</p>
     <h2 class="local-title">Find ideas near you</h2>
-    <p class="local-sub">Enter your city and tell Proxi He what you're looking for. He'll suggest options specific to your area that you might not have thought of.</p>
+    <p class="local-sub">Enter your city and Proxi He will open with a prompt already loaded — he'll suggest options specific to your area that you might not have thought of.</p>
 
     <div class="local-form">
       <input type="text" id="cityInput" class="local-input" placeholder="Your city (e.g. San Francisco, Austin, Chicago)" autocomplete="off">
 
       <div class="local-type-row">
-        <button class="local-type-btn selected" id="typeDate" onclick="selectType('date')">🕯️ Date night</button>
-        <button class="local-type-btn" id="typeGuys" onclick="selectType('guys')">🤝 With the guys</button>
+        <button class="local-type-btn selected" id="typeDate" onclick="switchTab('date')">🕯️ Date night</button>
+        <button class="local-type-btn" id="typeGuys" onclick="switchTab('guys')">🤝 With the guys</button>
       </div>
 
       <button class="local-submit" id="localSubmit" onclick="findLocalIdeas()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        Find ideas near me
+        Ask Proxi He for ideas near me →
       </button>
       <div class="local-msg" id="localMsg"></div>
     </div>
