@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Toolkit — Proxi He</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --linen:      #FAF8F5;
+            --slate-plum: #3A3353;
+            --slate-deep: #1C1A2E;
+            --aqua:       #a3d0c9;
+            --aqua-deep:  #6bada3;
+            --aqua-soft:  rgba(163, 208, 201, 0.14);
+            --muted:      #7A7090;
+            --border:     #EAE6F0;
+            --card:       #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--linen);
+            color: var(--slate-plum);
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--linen);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 10px;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--slate-plum);
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .back-btn:hover { background: var(--border); }
+        .top-bar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--slate-plum);
+        }
+        .top-bar-badge {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            background: var(--aqua-soft);
+            padding: 3px 9px;
+            border-radius: 20px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: var(--slate-deep);
+            padding: 24px 20px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(163,208,201,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--aqua);
+            margin-bottom: 8px;
+        }
+        .hero-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+        .hero-sub {
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.6);
+            max-width: 340px;
+        }
+        .hero-science {
+            margin-top: 14px;
+            background: rgba(163,208,201,0.1);
+            border: 1px solid rgba(163,208,201,0.25);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.5;
+        }
+        .hero-science strong { color: var(--aqua); font-weight: 700; }
+
+        /* ── STEP TABS ── */
+        .step-tabs-wrap {
+            position: sticky;
+            top: 63px;
+            z-index: 40;
+            background: var(--linen);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .step-tabs-wrap::-webkit-scrollbar { display: none; }
+
+        .step-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 10px 0;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .step-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 24px;
+            border: 1.5px solid var(--border);
+            background: var(--card);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.18s;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .step-tab:hover {
+            border-color: var(--aqua);
+            color: var(--slate-plum);
+        }
+        .step-tab.active {
+            background: var(--slate-plum);
+            border-color: var(--slate-plum);
+            color: #FFFFFF;
+        }
+        .step-num {
+            font-size: 10px;
+            font-weight: 800;
+            opacity: 0.6;
+        }
+        .step-tab.active .step-num { opacity: 0.7; }
+
+        /* ── CONTENT ── */
+        .content {
+            padding: 20px 16px 120px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .step-panel { display: none; }
+        .step-panel.active { display: block; }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .step-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--aqua-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .step-header-text {}
+        .step-name {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--slate-plum);
+            line-height: 1.2;
+        }
+        .step-timing {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            margin-top: 4px;
+        }
+
+        .step-desc {
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .scripts-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .script-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 14px 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+        }
+        .script-card:hover {
+            border-color: var(--aqua);
+            box-shadow: 0 2px 12px rgba(163,208,201,0.2);
+        }
+        .script-card:active { transform: scale(0.99); }
+        .script-card.copied {
+            border-color: var(--aqua);
+            background: var(--aqua-soft);
+        }
+
+        .script-quote {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--slate-plum);
+            line-height: 1.55;
+            flex: 1;
+            font-style: italic;
+        }
+
+        .copy-btn {
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--linen);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            transition: all 0.15s;
+            margin-top: 1px;
+        }
+        .script-card:hover .copy-btn {
+            background: var(--aqua-soft);
+            border-color: var(--aqua);
+            color: var(--aqua-deep);
+        }
+        .copy-btn.done {
+            background: var(--aqua);
+            border-color: var(--aqua);
+            color: var(--slate-deep);
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            background: var(--slate-deep);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 24px;
+            z-index: 200;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            opacity: 0;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .step-note {
+            background: var(--aqua-soft);
+            border: 1px solid rgba(163,208,201,0.3);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--slate-plum);
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+        .step-note strong { color: var(--aqua-deep); }
+
+        /* ── SITUATION INPUT ── */
+        .situation-section {
+            margin-top: 32px;
+            background: var(--slate-deep);
+            border-radius: 18px;
+            padding: 22px 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .situation-section::before {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(163,208,201,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .situation-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--aqua);
+            margin-bottom: 6px;
+        }
+        .situation-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+        }
+        .situation-sub {
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .situation-textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 14px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            resize: none;
+            min-height: 110px;
+            transition: border-color 0.18s;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .situation-textarea::placeholder { color: rgba(255,255,255,0.3); }
+        .situation-textarea:focus { border-color: var(--aqua); }
+
+        .situation-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 12px;
+            background: var(--aqua);
+            color: var(--slate-deep);
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .situation-btn:hover {
+            background: #b8ddd7;
+            transform: translateY(-1px);
+        }
+        .situation-btn:active { transform: scale(0.98); }
+        .situation-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+            transform: none;
+        }
+
+        /* ── STEP PROGRESS ── */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        .step-dot {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            flex: 1;
+            transition: background 0.3s;
+        }
+        .step-dot.done { background: var(--aqua-deep); }
+        .step-dot.active { background: var(--aqua); }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <a href="/home-he" class="back-btn" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span class="top-bar-title">Repair Toolkit</span>
+    <span class="top-bar-badge">Relationship</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-eyebrow">After it goes sideways</div>
+    <div class="hero-title">How to repair after a fight</div>
+    <div class="hero-sub">Repair isn't about who was right. It's about who you want to be — and whether you choose the relationship over the argument.</div>
+    <div class="hero-science">
+        <strong>Research note:</strong> John Gottman found that the #1 predictor of relationship success isn't how often couples fight — it's how well they repair. Successful couples attempt repair constantly, even imperfectly.
+    </div>
+</div>
+
+<!-- STEP TABS -->
+<div class="step-tabs-wrap">
+    <div class="step-tabs" id="stepTabs">
+        <button class="step-tab active" data-step="0" onclick="switchStep(0)">
+            <span class="step-num">01</span> Cool Down
+        </button>
+        <button class="step-tab" data-step="1" onclick="switchStep(1)">
+            <span class="step-num">02</span> Acknowledge
+        </button>
+        <button class="step-tab" data-step="2" onclick="switchStep(2)">
+            <span class="step-num">03</span> Repair
+        </button>
+        <button class="step-tab" data-step="3" onclick="switchStep(3)">
+            <span class="step-num">04</span> Reconnect
+        </button>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+    <!-- PROGRESS DOTS -->
+    <div class="step-progress" id="progressDots">
+        <div class="step-dot active" id="dot-0"></div>
+        <div class="step-dot" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+    </div>
+
+    <!-- ── STEP 1: COOL DOWN ── -->
+    <div class="step-panel active" id="panel-0">
+        <div class="step-header">
+            <div class="step-icon">🧊</div>
+            <div class="step-header-text">
+                <div class="step-name">Cool Down</div>
+                <span class="step-timing">Use this first — before anything else</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            The heat of the moment is the worst time to repair. When you're flooded — heart racing, thoughts narrow, mouth moving faster than your brain — you cannot think, listen, or connect. You can only react.<br><br>
+            The goal here isn't to resolve the argument. It's to create space without abandoning the relationship. Saying you need a break is not the same as walking away.
+        </div>
+
+        <div class="step-note">
+            <strong>The 20-minute rule:</strong> It takes at least 20 minutes for your nervous system to return to baseline after flooding. Don't try to repair in that window. Set a timer and come back.
+        </div>
+
+        <div class="scripts-label">What to say when you need to pause</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I need 20 minutes to cool down. I'm coming back to this."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I'm not walking away from us — I'm walking away from the version of me that makes this worse."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I'm too activated right now to actually hear you. Give me a bit and I'll be ready."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Let's pause — not to avoid this, but so we can actually do it right."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I want to finish this conversation. I just need to be in a better headspace for it."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 2: ACKNOWLEDGE ── -->
+    <div class="step-panel" id="panel-1">
+        <div class="step-header">
+            <div class="step-icon">🤝</div>
+            <div class="step-header-text">
+                <div class="step-name">Acknowledge</div>
+                <span class="step-timing">Before you explain anything</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            Before you defend, explain, or clarify your intentions — acknowledge what they felt. This is the step most men skip, and it's why repairs fail.<br><br>
+            Acknowledgment doesn't mean you agree with everything. It means you're proving you understood the impact. Your partner needs to know their experience was real to you before they can hear anything else you have to say.
+        </div>
+
+        <div class="step-note">
+            <strong>Common mistake:</strong> "I'm sorry you felt that way." This is not acknowledgment — it puts the feeling on them. Try: "I can see why you felt that way" or "That makes sense."
+        </div>
+
+        <div class="scripts-label">What to say to show you get it</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I can see why that landed the way it did."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I hear that I hurt you. The intent doesn't erase the impact."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"That makes sense, from where you were standing."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I don't want to explain my way out of this. I just want you to know I get it."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"You were right to be upset. I would have felt the same way."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I made that harder, not easier. I see that now."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 3: REPAIR ── -->
+    <div class="step-panel" id="panel-2">
+        <div class="step-header">
+            <div class="step-icon">🔧</div>
+            <div class="step-header-text">
+                <div class="step-name">Repair</div>
+                <span class="step-timing">When you're ready to take responsibility</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            A repair attempt is any signal — big or small — that says: <em>I choose us over being right.</em> It doesn't have to be a perfect apology. It just has to be sincere and it has to come from a regulated place.<br><br>
+            The most powerful repairs are specific. They name what you did, what it cost the relationship, and what you're choosing differently — not just "I'm sorry."
+        </div>
+
+        <div class="step-note">
+            <strong>Gottman's finding:</strong> It's not whether couples fight that determines long-term satisfaction — it's whether repair attempts are received. Your job is to make the attempt genuine. Their job is to receive it. You can only control your part.
+        </div>
+
+        <div class="scripts-label">What to say when you're owning your part</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I'm sorry. That wasn't who I want to be with you."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I reacted from fear, not from how I actually feel about you."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I was protecting myself when I should have been protecting us."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I don't want to be right. I want to be close to you again."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"That reaction came from me — from my old stuff. You didn't deserve it."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Can we try this again? I think I can show up better."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I love you, and I hate that I said that."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 4: RECONNECT ── -->
+    <div class="step-panel" id="panel-3">
+        <div class="step-header">
+            <div class="step-icon">🌱</div>
+            <div class="step-header-text">
+                <div class="step-name">Reconnect</div>
+                <span class="step-timing">After the repair conversation</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            The repair conversation is done. Now the work is re-entry — returning to the relationship with intention. The transition back doesn't have to be dramatic. Small gestures close the loop faster than more words.<br><br>
+            Reconnection is about signaling: <em>we're still us.</em> Physical touch, humor, shared activity, or simply checking in — all of these re-establish the "we" after the storm.
+        </div>
+
+        <div class="step-note">
+            <strong>Watch for:</strong> "False repair" — saying the words but staying emotionally distant. Your partner can feel the difference between real re-entry and just ending the conflict. Stay present a little longer than feels comfortable.
+        </div>
+
+        <div class="scripts-label">What to say as you come back together</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Are we okay? I want to make sure we're actually okay."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Hey — I'm glad we got through that."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"What do you need from me right now?"</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I still choose you — even when it's hard."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I'm proud of us for working through that."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Can I hold you?" <em style="font-size:12px; opacity:0.7;">(physical reconnection often closes the loop faster than words)</em></div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SITUATION INPUT ── -->
+    <div class="situation-section">
+        <div class="situation-eyebrow">Your situation</div>
+        <div class="situation-title">Need help with what's actually happening?</div>
+        <div class="situation-sub">Describe the fight, the pattern, or where you're stuck — and Proxi He will coach you through it in real time.</div>
+        <textarea
+            class="situation-textarea"
+            id="situationText"
+            placeholder="We had a blowup last night over something small, but it feels like it's about something bigger. I don't know how to bring it up without starting another fight..."
+            maxlength="600"
+            rows="5"
+        ></textarea>
+        <button class="situation-btn" id="askProxiBtn" onclick="sendToProxi()" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Talk to Proxi He about this
+        </button>
+    </div>
+
+</div>
+
+<!-- COPY TOAST -->
+<div class="copy-toast" id="copyToast">Copied to clipboard</div>
+
+<script>
+    // ── STEP SWITCHING ──────────────────────────────────────────────
+    let currentStep = 0;
+
+    function switchStep(idx) {
+        // Update panels
+        document.querySelectorAll('.step-panel').forEach((p, i) => {
+            p.classList.toggle('active', i === idx);
+        });
+
+        // Update tabs
+        document.querySelectorAll('.step-tab').forEach((t, i) => {
+            t.classList.toggle('active', i === idx);
+        });
+
+        // Update progress dots
+        for (let i = 0; i < 4; i++) {
+            const dot = document.getElementById('dot-' + i);
+            dot.classList.remove('active', 'done');
+            if (i < idx) dot.classList.add('done');
+            if (i === idx) dot.classList.add('active');
+        }
+
+        currentStep = idx;
+
+        // Scroll active tab into view
+        const activeTab = document.querySelector('.step-tab.active');
+        if (activeTab) {
+            activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+
+        // Scroll content to top
+        window.scrollTo({ top: 63, behavior: 'smooth' });
+    }
+
+    // ── COPY SCRIPTS ────────────────────────────────────────────────
+    let toastTimer;
+
+    function copyScript(card) {
+        const text = card.querySelector('.script-quote').textContent.trim();
+        const copyBtn = card.querySelector('.copy-btn');
+
+        navigator.clipboard.writeText(text).then(() => {
+            copyBtn.classList.add('done');
+            copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+            showToast();
+
+            setTimeout(() => {
+                copyBtn.classList.remove('done');
+                copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+            }, 2000);
+        }).catch(() => {
+            // Fallback for older browsers
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast();
+        });
+    }
+
+    function showToast() {
+        const toast = document.getElementById('copyToast');
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ── SITUATION INPUT ─────────────────────────────────────────────
+    const situationTextarea = document.getElementById('situationText');
+    const askProxiBtn = document.getElementById('askProxiBtn');
+
+    situationTextarea.addEventListener('input', () => {
+        const hasText = situationTextarea.value.trim().length > 10;
+        askProxiBtn.disabled = !hasText;
+    });
+
+    function sendToProxi() {
+        const situation = situationTextarea.value.trim();
+        if (!situation) return;
+
+        const stepLabels = ['Cool Down', 'Acknowledge', 'Repair', 'Reconnect'];
+        const currentStepLabel = stepLabels[currentStep];
+
+        const context = `I just had a fight with my partner and need help with repair. I'm currently working on step: ${currentStepLabel}. Here's what's going on: ${situation}`;
+
+        const encoded = encodeURIComponent(context);
+        window.location.href = `/proxi-he?mode=rightnow&context=${encoded}`;
+    }
+
+    // Allow Cmd/Ctrl+Enter to submit
+    situationTextarea.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            if (!askProxiBtn.disabled) sendToProxi();
+        }
+    });
+</script>
+
+</body>
+</html>
