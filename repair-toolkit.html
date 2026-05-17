@@ -463,13 +463,19 @@
             <span class="step-num">01</span> Cool Down
         </button>
         <button class="step-tab" data-step="1" onclick="switchStep(1)">
-            <span class="step-num">02</span> Acknowledge
+            <span class="step-num">02</span> Listen
         </button>
         <button class="step-tab" data-step="2" onclick="switchStep(2)">
-            <span class="step-num">03</span> Repair
+            <span class="step-num">03</span> Validate
         </button>
         <button class="step-tab" data-step="3" onclick="switchStep(3)">
-            <span class="step-num">04</span> Reconnect
+            <span class="step-num">04</span> Acknowledge
+        </button>
+        <button class="step-tab" data-step="4" onclick="switchStep(4)">
+            <span class="step-num">05</span> Repair
+        </button>
+        <button class="step-tab" data-step="5" onclick="switchStep(5)">
+            <span class="step-num">06</span> Reconnect
         </button>
     </div>
 </div>
@@ -483,6 +489,8 @@
         <div class="step-dot" id="dot-1"></div>
         <div class="step-dot" id="dot-2"></div>
         <div class="step-dot" id="dot-3"></div>
+        <div class="step-dot" id="dot-4"></div>
+        <div class="step-dot" id="dot-5"></div>
     </div>
 
     <!-- ── STEP 1: COOL DOWN ── -->
@@ -538,8 +546,126 @@
         </div>
     </div>
 
-    <!-- ── STEP 2: ACKNOWLEDGE ── -->
+    <!-- ── STEP 2: NON-DEFENSIVE LISTENING ── -->
     <div class="step-panel" id="panel-1">
+        <div class="step-header">
+            <div class="step-icon">👂</div>
+            <div class="step-header-text">
+                <div class="step-name">Non-Defensive Listening</div>
+                <span class="step-timing">Before you say a single word in your defense</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            Most men listen to respond — scanning for the inaccuracy, the unfair part, the opening to explain. Non-defensive listening means something different: staying open to their experience even when it's uncomfortable, even when it feels unfair, even when your nervous system is screaming to push back.<br><br>
+            Your partner doesn't need you to agree with everything they say. They need to feel heard before they can hear you. This step is about creating that opening.
+        </div>
+
+        <div class="step-note">
+            <strong>The trap:</strong> The moment you start composing your rebuttal, you've stopped listening. You can't do both at once. When you notice yourself building a case, that's the cue to exhale and come back to what they're actually saying.
+        </div>
+
+        <div class="scripts-label">What to say to keep the conversation open</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Tell me more about that."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"What was that like for you?"</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"I'm listening. Keep going."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Help me understand what you needed from me in that moment."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"What I'm hearing is [restate what they said]. Am I getting that right?"</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Is there more? I want to make sure I'm hearing all of it."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 3: VALIDATE ── -->
+    <div class="step-panel" id="panel-2">
+        <div class="step-header">
+            <div class="step-icon">🪞</div>
+            <div class="step-header-text">
+                <div class="step-name">Validate Their Feelings</div>
+                <span class="step-timing">After you've fully heard them</span>
+            </div>
+        </div>
+
+        <div class="step-desc">
+            Validation is not agreement. You're not saying they were right about every fact or that you deserved everything they said. You're communicating something more important: that given what they experienced, their emotional response makes complete sense.<br><br>
+            This is the step that tells your partner their inner world is real to you — that you're not going to argue them out of how they felt. It's one of the most disarming things you can do in a repair conversation.
+        </div>
+
+        <div class="step-note">
+            <strong>The difference that matters:</strong> "I understand why you feel that way" (slightly distancing) vs. "Of course you felt that way" (landing with full weight). The second one actually lands. Lead with their experience, not your comprehension of it.
+        </div>
+
+        <div class="scripts-label">What to say to make their feelings feel real</div>
+
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Of course you felt that way. That makes complete sense."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"If I were in your shoes, I'd feel the exact same way."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"That hurt. I get why it hurt."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Anyone in that situation would have felt [hurt / dismissed / scared]."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"Your feelings are valid. I'm not going to argue you out of them."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+        <div class="script-card" onclick="copyScript(this)">
+            <div class="script-quote">"You don't have to convince me that it mattered. It mattered."</div>
+            <div class="copy-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 4: ACKNOWLEDGE ── (id stays panel-3) -->
+    <div class="step-panel" id="panel-3">
         <div class="step-header">
             <div class="step-icon">🤝</div>
             <div class="step-header-text">
@@ -597,8 +723,8 @@
         </div>
     </div>
 
-    <!-- ── STEP 3: REPAIR ── -->
-    <div class="step-panel" id="panel-2">
+    <!-- ── STEP 5: REPAIR ── -->
+    <div class="step-panel" id="panel-4">
         <div class="step-header">
             <div class="step-icon">🔧</div>
             <div class="step-header-text">
@@ -662,8 +788,8 @@
         </div>
     </div>
 
-    <!-- ── STEP 4: RECONNECT ── -->
-    <div class="step-panel" id="panel-3">
+    <!-- ── STEP 6: RECONNECT ── -->
+    <div class="step-panel" id="panel-5">
         <div class="step-header">
             <div class="step-icon">🌱</div>
             <div class="step-header-text">
@@ -760,7 +886,7 @@
         });
 
         // Update progress dots
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
             const dot = document.getElementById('dot-' + i);
             dot.classList.remove('active', 'done');
             if (i < idx) dot.classList.add('done');
@@ -830,7 +956,7 @@
         const situation = situationTextarea.value.trim();
         if (!situation) return;
 
-        const stepLabels = ['Cool Down', 'Acknowledge', 'Repair', 'Reconnect'];
+        const stepLabels = ['Cool Down', 'Non-Defensive Listening', 'Validate', 'Acknowledge', 'Repair', 'Reconnect'];
         const currentStepLabel = stepLabels[currentStep];
 
         const context = `I just had a fight with my partner and need help with repair. I'm currently working on step: ${currentStepLabel}. Here's what's going on: ${situation}`;
