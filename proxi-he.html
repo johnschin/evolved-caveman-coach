@@ -1040,6 +1040,13 @@
                 "question about " + label + ". No preamble.\n" +
                 "— For a FIRST-TIME user: after they agree to the framework, open with a response " +
                 "tailored to " + label + " instead of the generic opener in OPENING_VARIATIONS.\n\n";
+        } else if (urlMode === "rightnow" && urlContext && !CONTEXT_LABELS[urlContext]) {
+            // Free-form context string (e.g. city-specific request from date-night-ideas page)
+            block +=
+                "HOME SCREEN CONTEXT — DIRECT REQUEST:\n" +
+                "The user arrived with this specific request already loaded: \"" + urlContext + "\"\n" +
+                "Skip the generic session opener entirely. Respond directly and helpfully to this request as your opening message.\n" +
+                "Be warm, specific, and practical. This is not a deep coaching prompt — it's a practical question. Answer it well, then offer to go deeper if they want.\n\n";
         }
 
         if (urlMode === "pulse" && (pulseStress || pulseRel || pulseChallenge)) {
