@@ -698,6 +698,17 @@
     var pulseRel        = urlParams.get("pulse_rel");       // "1"–"5"
     var pulseChallenge  = urlParams.get("pulse_challenge"); // "1"–"5"
 
+    // ── TEMPORARY DEBUG STRIP (remove after testing) ─────────────────────────
+    (function() {
+        var strip = document.createElement("div");
+        strip.id = "debugStrip";
+        strip.style.cssText = "position:fixed;top:0;left:0;right:0;background:#ff0;color:#000;font-size:12px;padding:6px 10px;z-index:9999;word-break:break-all;";
+        strip.textContent = "DEBUG — mode:" + (urlParams.get("mode") || "NONE") + " | context:" + (urlParams.get("context") ? urlParams.get("context").substring(0,60)+"…" : "NONE");
+        document.body.appendChild(strip);
+        setTimeout(function(){ var el = document.getElementById("debugStrip"); if(el) el.remove(); }, 10000);
+    })();
+    // ─────────────────────────────────────────────────────────────────────────
+
     // =====================================================
     // STATE
     // =====================================================
