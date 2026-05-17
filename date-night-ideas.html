@@ -197,6 +197,9 @@
     .cat-experiences{ background: #F3EEFB; color: #8B54C2; }
     .cat-depth      { background: var(--aqua-soft); color: var(--aqua-deep); }
 
+    /* Girls category colors */
+    .cat-nurturing  { background: #FEF0F3; color: #C0547A; }
+
     .idea-title {
       font-size: 15px;
       font-weight: 700;
@@ -441,7 +444,8 @@
 // ─────────────────────────────────────────────
 // CONFIG
 // ─────────────────────────────────────────────
-var PROXI_HE_URL = '/proxi-he';
+var COACH_MODE   = 'he';   // set by init — 'he' | 'she'
+var COACH_URL    = '/proxi-he';
 var currentTab   = 'date';
 var dateFilter   = 'all';
 var guysFilter   = 'all';
@@ -797,6 +801,187 @@ var GUYS_IDEAS = [
 ];
 
 // ─────────────────────────────────────────────
+// WITH THE GIRLS IDEAS  (shown when ?coach=she)
+// ─────────────────────────────────────────────
+var GIRLS_IDEAS = [
+
+  /* NURTURING */
+  { cat:'nurturing', label:'Nurturing',
+    title:'Plan a spa evening — at home or out',
+    body:'Draw the baths, get the face masks, make the tea. Do this for each other, not just at the same time. The care you extend is as nourishing as the care you receive.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Cook a nourishing meal for each other',
+    body:'One person cooks while the other rests. Then switch nights. The act of feeding someone you love — really cooking with intention — is one of the oldest forms of care there is.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Give each other a real foot or shoulder massage',
+    body:'Twenty minutes, real attention, phones off. Touch communicates care that words can\'t always reach. This one is simple and almost always forgotten in adult friendships.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Walk in nature together with no agenda',
+    body:'No destination, no pace requirement, no fitness goal. Just move together in something bigger than yourselves. Conversations in nature go places they don\'t go indoors.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Create a simple gratitude ritual together',
+    body:'Three things each. Say them out loud, to each other. Not as a checklist — as a real exchange. Shared gratitude is one of the fastest routes to feeling genuinely connected.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Help each other with something real',
+    body:'The form you can\'t figure out. The email you\'ve been avoiding. The decision you\'re circling. Showing up for someone\'s actual life — not just their fun life — is what friendship really is.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Write each other letters and actually send them',
+    body:'Handwritten. Specific. Not "you\'re such a great friend" — the particular things. The moment she showed up. The way she said the thing that landed. Specific love is the most felt kind.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Make a playlist that captures your friendship',
+    body:'The songs from that trip. The anthem from that hard year. The one that came on at exactly the right moment. Send it before you explain what it is.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Plant something together — herbs, flowers, a garden box',
+    body:'Something that needs tending. Something you\'ll both watch grow. Good friendships and good plants have the same requirement: regular, intentional attention.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Plan an evening of pure rest — no agenda, no obligations',
+    body:'Not Netflix as a default. Intentional rest: tea, blankets, something beautiful to look at. Give each other full permission to do nothing — and actually mean it.' },
+  { cat:'nurturing', label:'Nurturing',
+    title:'Do a face mask and decompress — fully, intentionally',
+    body:'Not the rushed version. Set aside a whole evening for it. Shared rest — really resting together — is something most women almost never give themselves.' },
+
+  /* CREATIVE */
+  { cat:'creative', label:'Creative',
+    title:'Take a pottery or ceramics class together',
+    body:'You\'ll make bad things. You\'ll laugh the entire time. Shared beginner incompetence creates something real between people — and you might end up with a bowl worth keeping.' },
+  { cat:'creative', label:'Creative',
+    title:'Paint together — watercolors at home or a guided class',
+    body:'Pick a subject that means something to you both. Let the process be messy. The side-by-side quality of painting together is where the real conversations happen.' },
+  { cat:'creative', label:'Creative',
+    title:'Make fresh floral arrangements together',
+    body:'Find a local flower market. Let each other choose. Arranging flowers is slower and more satisfying than it looks — and the result will live in your home for a week.' },
+  { cat:'creative', label:'Creative',
+    title:'Build a shared vision board for the year',
+    body:'Magazines, scissors, glue, big paper. What do you each want this year to feel like? The conversation while making it matters more than anything that ends up on the board.' },
+  { cat:'creative', label:'Creative',
+    title:'Cook a full meal from a country you both want to visit',
+    body:'Research it together, shop for the ingredients, make an evening of the cooking. The meal is almost secondary to the shared project — and the conversation it opens up.' },
+  { cat:'creative', label:'Creative',
+    title:'Learn a craft together — candle-making, macramé, or embroidery',
+    body:'Pick something neither of you has tried. Something hands-busy and slow. Crafts create the kind of relaxed, unfocused conversation that is actually deeply focused on what matters.' },
+  { cat:'creative', label:'Creative',
+    title:'Take intentional portraits of each other',
+    body:'Not quick snaps. Real portraits — think about light, setting, what you want to capture. Looking at someone that carefully is its own form of love.' },
+  { cat:'creative', label:'Creative',
+    title:'Bake something ambitious from scratch',
+    body:'Pick something that takes real effort — bread, pastry, a labor-intensive recipe. The waiting, the mess, the kneading. Process-forward cooking is meditative and communal in ways delivery never will be.' },
+  { cat:'creative', label:'Creative',
+    title:'Create a shared photo album of your friendship',
+    body:'Physical or digital. Go back through the years. Name what you find. The act of curating a friendship\'s history is also the act of honoring it.' },
+  { cat:'creative', label:'Creative',
+    title:'Write a poem or short piece together, taking turns',
+    body:'One line each. No plan. See where it goes. Creative play between people who trust each other produces things neither could produce alone — and is usually more fun than it sounds.' },
+  { cat:'creative', label:'Creative',
+    title:'Design a space in your home together',
+    body:'Bring your tastes together on something one of you will actually keep — a wall gallery, a reading corner, a rearranged room. The collaboration of aesthetic preferences is oddly revealing.' },
+
+  /* ADVENTURE */
+  { cat:'adventure', label:'Adventure',
+    title:'Take a day trip somewhere neither of you has been',
+    body:'Pick a town within two hours and go with no fixed agenda. Shared novelty — discovering something new together for the first time — creates closeness quickly.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Try a yoga or barre class you\'ve never done before',
+    body:'First-timer energy creates a different kind of shared experience than your regular practice. Being equally new to something is equalizing in the best way.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Try something physically new — paddleboarding, climbing, or archery',
+    body:'Shared beginner experiences create a kind of playful vulnerability most adult friendships lose over time. Being bad at something together is its own form of bonding.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Explore a farmers\' market in a different part of town',
+    body:'Browse slowly, taste things, buy one great ingredient, cook with it that night. The meal will mean more because you found it together.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Attend a live performance — dance, theater, or live music',
+    body:'Shared aesthetic experience creates a shared reference point — something to return to in conversation for years. "Remember that show" is a small but lasting thread.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Take a cooking or baking class together',
+    body:'Something specific: pasta from scratch, sushi, a regional cuisine you both love. Learning something together, then eating it, is hard to beat.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Spend a full day in a neighborhood you\'ve never explored',
+    body:'Walk every block. Try the coffee shop. Look in the windows. Exploring an unfamiliar place together is low-stakes adventure with a high intimacy return.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Go on an early morning hike and watch the sunrise',
+    body:'Set an alarm. Find a good trail. Go. Most people talk about doing this. The ones who actually do it never regret it — and it will come up in conversation for years.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Book a night at a nearby inn or B&B',
+    body:'Same weekend, completely different context. Even one night away resets the usual dynamic and lets you both settle into something slower and more spacious.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Attend a workshop — ceramics, calligraphy, florals, or movement',
+    body:'A single-session workshop is low-commitment and high-return. You leave with a new skill and a new memory. The shared learning is the point.' },
+  { cat:'adventure', label:'Adventure',
+    title:'Take a scenic drive with a destination worth the drive',
+    body:'A viewpoint, a bakery, a waterfall, an overlook. Plan the destination, let the drive unfold. The journey format gives you time together without agenda.' },
+
+  /* MEANINGFUL */
+  { cat:'meaningful', label:'Meaningful',
+    title:'Do the 36 Questions together',
+    body:'The research-backed list designed to create intimacy fast. Google "36 questions that lead to love." Do all of them. Don\'t skip the uncomfortable ones — those are the whole point.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Share what you love and appreciate most about each other',
+    body:'Five minutes each. The listener stays quiet the whole time. Most friendships almost never do this explicitly. The receiving is as important as the giving.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Talk about what you each want the next five years to look like',
+    body:'Not what you think you\'re supposed to want. What do you actually want — for yourself, your life, your relationships? This conversation, done with honesty, is rare and worth having.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Share something you\'re genuinely struggling with — the real version',
+    body:'Not the managed version you share with most people. The actual fear, doubt, or thing you don\'t say out loud. One person going first almost always creates permission for the other.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Ask: "What\'s something you\'ve wanted but haven\'t given yourself permission to want?"',
+    body:'Simple question. Almost never asked. It often unlocks something the other person has been sitting with for months. Sit with whatever answer comes.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Talk about your friendship — what\'s working, what you want more of',
+    body:'Not a grievance session — an honest appreciation of what\'s good and what you\'re both hungry for. The friendships that last are the ones that can have this conversation.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Share a childhood memory you haven\'t told many people',
+    body:'Go deep. Not the polished, funny version. The one that actually shaped something. Let her in somewhere new. Being witnessed in your history is its own form of healing.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Write 10 things you love about each other — then read them aloud',
+    body:'Handwritten. Specific, not generic. Exchange them at the table. Read them out loud, slowly. Don\'t rush it. Most people almost never receive this kind of deliberate love.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Talk about your relationship with rest, your body, and what you\'re learning',
+    body:'Where are you with yourself right now — really? Most women are running on empty and nobody\'s asking. Ask your person. Then ask yourself the same question.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Do a friendship review — what you love, what you need, what you\'re grateful for',
+    body:'Relationships need tending, not just enjoying. Taking twenty minutes to name what\'s working and what you each need more of is one of the most loving things you can do.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Ask: "Where are you right now — really?" and wait for the honest answer',
+    body:'Not "how are you" as a greeting. The real version. Then stay quiet long enough for the honest answer to show up. Most people are starving to be asked — and actually waited for.' },
+
+  /* LOW-KEY */
+  { cat:'lowkey', label:'Low-Key',
+    title:'Wine, tea, or mocktail night with real conversation',
+    body:'Make something special to drink. Sit down without an agenda. No show, no podcast, no distraction. Just the conversation that\'s been waiting to happen.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Watch a show you both actually care about — phones off, fully present',
+    body:'No multitasking. Treat it like you mean it. The show matters less than being present for it together. The conversation after is where the evening actually happens.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Play a card game or board game you both love',
+    body:'Competitive enough to be interesting. Games reveal personality. Something about low-stakes competition brings out sides of people that polite conversation doesn\'t.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Read to each other from a book you\'re both interested in',
+    body:'Same book, take turns reading aloud. Slower than it sounds. Better than it sounds. There\'s something about hearing someone\'s voice read something meaningful that is quietly intimate.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Look through old photos together',
+    body:'Pull out a box or scroll back through a year you both remember. You\'ll laugh at things you\'d forgotten. You\'ll feel the time. Both are worth feeling.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Make a fire or light a lot of candles and sit with it',
+    body:'Something about warmth and light slows everything down. Fire pit, fireplace, or a tableful of candles. Humans have been doing this together for 400,000 years for good reason.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Spend the whole evening with phones in another room',
+    body:'Obvious. Rarely done. Try it for a full evening. Notice what happens to the quality of your attention — and your conversation — when the option to escape isn\'t available.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Do a puzzle together',
+    body:'One that takes more than a single night. A low-stakes reason to sit close for hours and talk without pressure. The puzzle is almost irrelevant. The sitting together is the point.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Watch a documentary and talk about it after',
+    body:'Pick something you\'re both genuinely curious about. The conversation afterward is the real event. Good documentaries raise the kinds of questions that open things up.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Cook dinner together slowly, with music and no rush',
+    body:'Both of you in the kitchen, one good playlist, no shortcuts. The process is the point. Some of the best conversations happen when your hands are busy and there\'s nowhere else to be.' },
+  { cat:'lowkey', label:'Low-Key',
+    title:'Order your favorite food, eat it with zero guilt, and actually talk',
+    body:'No cooking, no cleaning, just the food you love and the person you love. The absence of effort is sometimes exactly the right choice — especially when paired with full presence.' }
+];
+
+// ─────────────────────────────────────────────
 // RENDER
 // ─────────────────────────────────────────────
 function catClass(cat) { return 'cat-' + cat; }
@@ -865,13 +1050,16 @@ function findLocalIdeas() {
 
   msg.textContent = '';
 
-  var contextMap = {
-    date: 'I\'m in ' + city + ' and looking for date night ideas specific to my area — things to do with my partner that would be interesting or memorable in this location. What are some options I might not have thought of?',
-    guys: 'I\'m in ' + city + ' and looking for activities to do with male friends in my area — something that gets us out of the usual routine and actually creates connection. What are some good options near me?'
-  };
+  var context;
+  if (localType === 'date') {
+    context = 'I\'m in ' + city + ' and looking for date night ideas specific to my area — things to do with my partner that would be interesting or memorable in this location. What are some options I might not have thought of?';
+  } else if (COACH_MODE === 'she') {
+    context = 'I\'m in ' + city + ' and looking for activities to do with my girlfriends in my area — something that gets us out of the usual routine and creates real connection. What are some good options near me?';
+  } else {
+    context = 'I\'m in ' + city + ' and looking for activities to do with male friends in my area — something that gets us out of the usual routine and actually creates connection. What are some good options near me?';
+  }
 
-  var context = contextMap[localType];
-  window.location.href = '/proxi-he?mode=rightnow&context=' + encodeURIComponent(context);
+  window.location.href = COACH_URL + '?mode=rightnow&context=' + encodeURIComponent(context);
 }
 
 document.getElementById('cityInput').addEventListener('keydown', function(e) {
@@ -879,13 +1067,58 @@ document.getElementById('cityInput').addEventListener('keydown', function(e) {
 });
 
 // ─────────────────────────────────────────────
-// INIT — check ?tab= param to open correct tab
+// INIT — detect ?coach=she and ?tab= params
 // ─────────────────────────────────────────────
 renderGrid('date');
 renderGrid('guys');
 
 (function() {
   var params = new URLSearchParams(window.location.search);
+  COACH_MODE = params.get('coach') === 'she' ? 'she' : 'he';
+  COACH_URL  = COACH_MODE === 'she' ? '/proxi-she' : '/proxi-he';
+
+  if (COACH_MODE === 'she') {
+    // ── Back button
+    document.querySelector('.back-btn').href = '/home-she';
+
+    // ── Page title (in head) + header label are already generic ("Ideas") — leave as-is
+
+    // ── Tab label
+    document.getElementById('tab-guys').innerHTML = '<span class="tab-icon">🌿</span> With the Girls';
+
+    // ── Panel: title, sub, how-to
+    var panel = document.getElementById('panel-guys');
+    panel.querySelector('.page-title').textContent = 'With the Girls';
+    panel.querySelector('.page-sub').textContent = '55 ideas for nourishing female friendships — showing up for each other the way women know how.';
+    panel.querySelector('.how-to').innerHTML = '<strong>A note on this:</strong> Women\'s friendships are a profound source of resilience, healing, and joy — and yet they\'re often the first thing sacrificed to the demands of life. These ideas are for the friendships that deserve more than the occasional text. Invest in them.';
+
+    // ── Filter pills
+    document.getElementById('guys-pills').innerHTML =
+      '<button class="filter-pill active" data-cat="all"         onclick="setFilter(\'guys\',\'all\')">All ideas</button>' +
+      '<button class="filter-pill" data-cat="nurturing"           onclick="setFilter(\'guys\',\'nurturing\')">Nurturing</button>' +
+      '<button class="filter-pill" data-cat="creative"            onclick="setFilter(\'guys\',\'creative\')">Creative</button>' +
+      '<button class="filter-pill" data-cat="adventure"           onclick="setFilter(\'guys\',\'adventure\')">Adventure</button>' +
+      '<button class="filter-pill" data-cat="meaningful"          onclick="setFilter(\'guys\',\'meaningful\')">Meaningful</button>' +
+      '<button class="filter-pill" data-cat="lowkey"              onclick="setFilter(\'guys\',\'lowkey\')">Low-Key</button>';
+
+    // ── Tip (Joree-voiced)
+    panel.querySelector('.dr-john-tip').innerHTML =
+      '<strong>Joree:</strong> There is research that consistently shows that close female friendships are one of the strongest predictors of wellbeing, resilience, and even longevity. And yet most women I work with tell me their friendships are the first thing they let slip. These ideas are an invitation: don\'t wait for the right moment. Create it. The people who matter to you deserve more than a text. <em>So do you.</em>';
+
+    // ── Local discovery section
+    document.querySelector('.local-sub').textContent =
+      'Enter your city and Proxi She will open with a prompt already loaded — she\'ll suggest options specific to your area that you might not have thought of.';
+    document.getElementById('localSubmit').innerHTML =
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+      'Ask Proxi She for ideas near me →';
+    document.getElementById('typeGuys').textContent = '🌿 With the girls';
+
+    // ── Swap ideas data and re-render
+    GUYS_IDEAS = GIRLS_IDEAS;
+    guysFilter = 'all';
+    renderGrid('guys');
+  }
+
   var tab = params.get('tab');
   if (tab === 'guys') switchTab('guys');
 })();
