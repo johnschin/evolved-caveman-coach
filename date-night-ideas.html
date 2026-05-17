@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideas — Proxi He</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --aqua:        #a3d0c9;
+      --aqua-deep:   #6bada3;
+      --aqua-soft:   rgba(163,208,201,0.14);
+      --slate-plum:  #3A3353;
+      --slate-light: #5A5270;
+      --linen:       #FAF8F5;
+      --card:        #FFFFFF;
+      --muted:       #7A7090;
+      --border:      #EAE6F0;
+      --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--linen);
+      color: var(--slate-plum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--slate-plum);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.12s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-sep   { color: rgba(255,255,255,0.25); font-size: 13px; }
+    .header-label { font-size: 13px; font-weight: 600; color: var(--aqua); }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 32px 24px 72px;
+    }
+
+    /* ── TAB SWITCHER ── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      background: var(--card);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 13px 16px;
+      background: transparent;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.15s;
+      border-right: 1.5px solid var(--border);
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn.active {
+      background: var(--slate-plum);
+      color: #fff;
+    }
+    .tab-btn:not(.active):hover {
+      background: var(--aqua-soft);
+      color: var(--slate-plum);
+    }
+    .tab-icon { font-size: 15px; }
+
+    /* ── PAGE HEADER ── */
+    .page-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .how-to {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 26px;
+    }
+    .how-to strong { color: var(--slate-plum); }
+
+    /* ── FILTER PILLS ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-pill {
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill:hover { border-color: var(--aqua-deep); color: var(--slate-plum); }
+    .filter-pill.active { background: var(--slate-plum); border-color: var(--slate-plum); color: #fff; }
+
+    /* ── COUNT ── */
+    .count-row { margin-bottom: 14px; }
+    .count-text { font-size: 12px; color: var(--muted); }
+
+    /* ── IDEA CARDS ── */
+    .ideas-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .idea-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 17px 20px;
+    }
+    .idea-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .idea-cat {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 9px;
+      border-radius: 99px;
+    }
+
+    /* Date Night category colors */
+    .cat-romantic   { background: #FDEEF3; color: #C2547A; }
+    .cat-adventure  { background: #EBF5EC; color: #4A9459; }
+    .cat-lowkey     { background: #EEF2FB; color: #5567C2; }
+    .cat-free       { background: #FEF6E4; color: #C27B2A; }
+    .cat-creative   { background: #F3EEFB; color: #8B54C2; }
+    .cat-meaningful { background: var(--aqua-soft); color: var(--aqua-deep); }
+
+    /* Guys category colors */
+    .cat-active     { background: #EBF5EC; color: #4A9459; }
+    .cat-social     { background: #FEF6E4; color: #C27B2A; }
+    .cat-projects   { background: #EEF2FB; color: #5567C2; }
+    .cat-experiences{ background: #F3EEFB; color: #8B54C2; }
+    .cat-depth      { background: var(--aqua-soft); color: var(--aqua-deep); }
+
+    .idea-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .idea-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ── DR JOHN TIP ── */
+    .dr-john-tip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--aqua);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .dr-john-tip strong { color: var(--slate-plum); }
+
+    /* ── LOCAL DISCOVERY ── */
+    .local-section {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .local-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--aqua-deep);
+      margin-bottom: 6px;
+    }
+    .local-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--slate-plum);
+      margin-bottom: 6px;
+    }
+    .local-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .local-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .local-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      color: var(--slate-plum);
+      background: var(--linen);
+      transition: border-color 0.2s;
+    }
+    .local-input:focus { outline: none; border-color: var(--aqua-deep); }
+    .local-type-row {
+      display: flex;
+      gap: 10px;
+    }
+    .local-type-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .local-type-btn.selected {
+      border-color: var(--slate-plum);
+      background: var(--slate-plum);
+      color: #fff;
+    }
+    .local-type-btn:not(.selected):hover {
+      border-color: var(--aqua-deep);
+      color: var(--slate-plum);
+    }
+    .local-submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--aqua);
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-plum);
+      cursor: pointer;
+      transition: opacity 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .local-submit:hover { opacity: 0.85; }
+    .local-submit:disabled { opacity: 0.45; cursor: default; }
+    .local-msg {
+      font-size: 12px;
+      color: #c0392b;
+      text-align: center;
+      min-height: 16px;
+    }
+
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/home-he" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+  <span class="header-sep">/</span>
+  <span class="header-label">Ideas</span>
+</header>
+
+<main>
+
+  <!-- ── TAB SWITCHER ── -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-date" onclick="switchTab('date')">
+      <span class="tab-icon">🕯️</span> Date Night
+    </button>
+    <button class="tab-btn" id="tab-guys" onclick="switchTab('guys')">
+      <span class="tab-icon">🤝</span> With the Guys
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: DATE NIGHT
+  ════════════════════════════════════════ -->
+  <div class="tab-panel active" id="panel-date">
+    <h1 class="page-title">Date Night Ideas</h1>
+    <p class="page-sub">66 ideas for showing up intentionally — not because you have to, because you chose to.</p>
+
+    <div class="how-to">
+      <strong>How to use these:</strong> Don't pick what's easiest for you. Pick what she'd actually enjoy. The best date isn't the most impressive one — it's the one that signals you were paying attention when you planned it.
+    </div>
+
+    <p class="section-label">Filter by type</p>
+    <div class="filter-pills" id="date-pills">
+      <button class="filter-pill active" data-cat="all"        onclick="setFilter('date','all')">All ideas</button>
+      <button class="filter-pill" data-cat="romantic"          onclick="setFilter('date','romantic')">Romantic</button>
+      <button class="filter-pill" data-cat="adventure"         onclick="setFilter('date','adventure')">Adventure</button>
+      <button class="filter-pill" data-cat="lowkey"            onclick="setFilter('date','lowkey')">Low-Key</button>
+      <button class="filter-pill" data-cat="free"              onclick="setFilter('date','free')">Free</button>
+      <button class="filter-pill" data-cat="creative"          onclick="setFilter('date','creative')">Creative</button>
+      <button class="filter-pill" data-cat="meaningful"        onclick="setFilter('date','meaningful')">Meaningful</button>
+    </div>
+
+    <div class="count-row"><span class="count-text" id="date-count"></span></div>
+    <div class="ideas-grid" id="date-grid"></div>
+
+    <div class="dr-john-tip">
+      <strong>Dr. John:</strong> The research on relationship satisfaction is clear: it's not grand gestures that build lasting connection — it's consistent, small acts of intentional attention. A date night isn't about impressing her. It's about the signal: <em>I thought about you. I made space for us.</em> That signal, repeated over time, is what love actually looks like.
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: WITH THE GUYS
+  ════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-guys">
+    <h1 class="page-title">With the Guys</h1>
+    <p class="page-sub">55 ideas for building real male friendships — not just hanging out, actually showing up.</p>
+
+    <div class="how-to">
+      <strong>A note on this:</strong> Men's friendships are one of the most underinvested areas of adult life. Research consistently links strong male friendships to better health, lower stress, and longer life. These aren't just hangout ideas — they're investments in your own resilience.
+    </div>
+
+    <p class="section-label">Filter by type</p>
+    <div class="filter-pills" id="guys-pills">
+      <button class="filter-pill active" data-cat="all"        onclick="setFilter('guys','all')">All ideas</button>
+      <button class="filter-pill" data-cat="active"            onclick="setFilter('guys','active')">Active &amp; Sport</button>
+      <button class="filter-pill" data-cat="social"            onclick="setFilter('guys','social')">Social</button>
+      <button class="filter-pill" data-cat="experiences"       onclick="setFilter('guys','experiences')">Experiences</button>
+      <button class="filter-pill" data-cat="projects"          onclick="setFilter('guys','projects')">Build &amp; Create</button>
+      <button class="filter-pill" data-cat="depth"             onclick="setFilter('guys','depth')">Go Deeper</button>
+    </div>
+
+    <div class="count-row"><span class="count-text" id="guys-count"></span></div>
+    <div class="ideas-grid" id="guys-grid"></div>
+
+    <div class="dr-john-tip">
+      <strong>Dr. John:</strong> The research is stark: after 30, most men's friendships shrink dramatically — and most men don't notice until they're in a crisis with no one to call. The guys you want in your corner in five years are the ones you're investing in now. Pick an idea. Send the text. Don't overthink it.
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       LOCAL DISCOVERY (shared between tabs)
+  ════════════════════════════════════════ -->
+  <div class="local-section">
+    <p class="local-eyebrow">Nothing clicking?</p>
+    <h2 class="local-title">Find ideas near you</h2>
+    <p class="local-sub">Enter your city and tell Proxi He what you're looking for. He'll suggest options specific to your area that you might not have thought of.</p>
+
+    <div class="local-form">
+      <input type="text" id="cityInput" class="local-input" placeholder="Your city (e.g. San Francisco, Austin, Chicago)" autocomplete="off">
+
+      <div class="local-type-row">
+        <button class="local-type-btn selected" id="typeDate" onclick="selectType('date')">🕯️ Date night</button>
+        <button class="local-type-btn" id="typeGuys" onclick="selectType('guys')">🤝 With the guys</button>
+      </div>
+
+      <button class="local-submit" id="localSubmit" onclick="findLocalIdeas()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Find ideas near me
+      </button>
+      <div class="local-msg" id="localMsg"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+var PROXI_HE_URL = '/proxi-he';
+var currentTab   = 'date';
+var dateFilter   = 'all';
+var guysFilter   = 'all';
+var localType    = 'date';
+
+// ─────────────────────────────────────────────
+// DATE NIGHT IDEAS
+// ─────────────────────────────────────────────
+var DATE_IDEAS = [
+
+  /* ROMANTIC */
+  { cat:'romantic',   label:'Romantic',
+    title:'Recreate your first date',
+    body:'Go back to where it started, or as close as you can get. Talk about what you each remember. Notice how much has changed — and what hasn\'t.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Write her a letter',
+    body:'Not a text. A handwritten letter. Leave it somewhere unexpected — in her bag, on the mirror, next to the coffee maker.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Candlelit dinner at home',
+    body:'Turn off the overhead lights. Set the table. Make it an actual event. The effort signals something takeout never will.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Watch a sunset together',
+    body:'Find a good spot ahead of time. Bring something to drink. No phones. Just show up and be present for thirty minutes.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Book one night at a local hotel',
+    body:'Same city, completely different context. Even one night away resets the dynamic and lets you see each other fresh.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Make her a playlist',
+    body:'Songs that remind you of her. Songs from early on. Songs that feel like how you feel about her. Send it before you explain what it is.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Cook a new recipe together',
+    body:'Pick something neither of you has made before — something ambitious. Let the mess and problem-solving be part of the evening.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Watch the sunrise',
+    body:'Set an alarm. Find a good spot. Go. Most couples talk about doing this. The ones who actually do it never regret it.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Slow dance in the kitchen',
+    body:'No occasion needed. Pick a song that means something. Hold her close. Actually dance. The smallness of it is the whole point.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Give her a real massage',
+    body:'Not a two-minute backrub. Set aside real time. Be fully present. Touch is connection. Most men underinvest in it.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Take a bath together',
+    body:'Candles, no phones, no agenda. The ritual of slowing down together, with intention, is harder to find than it should be.' },
+  { cat:'romantic',   label:'Romantic',
+    title:'Make breakfast for dinner',
+    body:'Her favorite breakfast food, made from scratch, on a random weeknight. Small and specific. The specificity is what makes it land.' },
+
+  /* ADVENTURE */
+  { cat:'adventure',  label:'Adventure',
+    title:'Take a day trip somewhere neither of you has been',
+    body:'Pick a town within two hours and go with no fixed agenda. Shared novelty — discovering something for the first time together — creates closeness fast.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Try something physically new together',
+    body:'Paddleboarding, kayaking, climbing, archery. Shared beginner experiences create a kind of playful vulnerability most couples lose over time.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Go to a live sporting event',
+    body:'Pick a team, get decent seats, be loud together. Shared intensity — even about something outside the relationship — builds connection.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Take a cooking class',
+    body:'Something specific: pasta from scratch, sushi, a regional cuisine you both love. Learning something together, then eating it, is hard to beat.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Visit a new city for a weekend',
+    body:'Even one night somewhere new resets the dynamic. Different environment, no routines, just the two of you navigating something together.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Go to a live comedy show',
+    body:'Shared laughter is one of the most underrated tools in a relationship. Find a club, grab a drink, see someone live.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Take a dance class',
+    body:'Salsa, swing, bachata. You\'ll be terrible at first. Being bad at something together and laughing through it is the whole point.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Go wine or brewery tasting',
+    body:'Find a route, taste things you wouldn\'t normally order, walk slowly. Unhurried and wandering is its own form of intimacy.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Do an escape room',
+    body:'You\'ll learn something real about how you problem-solve together under pressure. Either way it\'s data — and usually funny afterward.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Scenic drive with no destination',
+    body:'Fill the tank, pick a direction, follow curiosity. Stop when something looks interesting. Trust the wander.' },
+  { cat:'adventure',  label:'Adventure',
+    title:'Hike a trail that challenges you both',
+    body:'Find something neither of you has done. Hard enough to feel like an accomplishment. Shared effort followed by shared rest is a deeply bonding sequence.' },
+
+  /* LOW-KEY */
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Watch a documentary and talk after',
+    body:'Pick something you\'re both genuinely curious about. The conversation afterward is the real date.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Cook dinner together at home',
+    body:'Both of you in the kitchen, one good playlist, no shortcuts. The process is the point, not just the result.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Read to each other',
+    body:'Same book, take turns reading aloud. Slower than it sounds. Better than it sounds. Surprisingly intimate.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Do a puzzle together',
+    body:'One that takes more than a single night. A low-stakes reason to sit close for hours and talk without pressure.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Look through old photos together',
+    body:'Pull out a box or scroll back through a year you both remember. You\'ll laugh at things you\'d forgotten. You\'ll feel the time. Both are worth feeling.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Board game night, just the two of you',
+    body:'Pick something competitive enough to be interesting. Games reveal personality. That\'s the fun of it.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Sleep with the phones in another room',
+    body:'Obvious. Rarely done. Actually try it for one full evening. Notice what replaces the scrolling.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Plant something together',
+    body:'A garden box, a single plant — anything that needs care over time. Good metaphor. Nice ritual. Something to check on together.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Watch a series you both actually care about',
+    body:'No phones, full attention, lights low. Treat it like you mean it. The show matters less than being present for it together.' },
+  { cat:'lowkey',     label:'Low-Key',
+    title:'Make a fire and sit with it',
+    body:'Fire pit, fireplace, even candles. It slows everything down. Humans have been doing this for 400,000 years for a reason.' },
+
+  /* FREE */
+  { cat:'free',       label:'Free',
+    title:'Hike a trail you\'ve never done',
+    body:'Research it together. Pack real snacks. Go. The return trip is usually when the best conversations happen.' },
+  { cat:'free',       label:'Free',
+    title:'Visit a museum on a free day',
+    body:'Most cities have them. Make it a real visit, not a walk-through. Pick one exhibit and actually read about it. Curiosity is attractive.' },
+  { cat:'free',       label:'Free',
+    title:'Pack a picnic and find a great spot',
+    body:'Invest in the food. Invest in the location. Make it feel intentional rather than improvised.' },
+  { cat:'free',       label:'Free',
+    title:'Drive to a lookout point at night',
+    body:'Find the best view within an hour of home. Bring something warm to drink. Sit there longer than you planned to.' },
+  { cat:'free',       label:'Free',
+    title:'Go stargazing',
+    body:'Get away from city lights. Lie on the hood of the car or a blanket. Look up. Perspective is free.' },
+  { cat:'free',       label:'Free',
+    title:'Walk along water',
+    body:'Ocean, lake, river, creek. Water changes the pace of a conversation. Something about it opens people up.' },
+  { cat:'free',       label:'Free',
+    title:'Library date',
+    body:'Go together. Each pick a book for the other based on what you know about them. Read the first chapter aloud over coffee.' },
+  { cat:'free',       label:'Free',
+    title:'Farmer\'s market in a different town',
+    body:'Browse slowly, taste things, buy one great ingredient, cook with it that night. The meal will mean more because you found it together.' },
+
+  /* CREATIVE */
+  { cat:'creative',   label:'Creative',
+    title:'Take a pottery or ceramics class',
+    body:'You\'ll make bad things. You\'ll laugh the entire time. The shared incompetence is the point. The mug you keep is just a bonus.' },
+  { cat:'creative',   label:'Creative',
+    title:'Sign up for a painting class together',
+    body:'Low pressure, hands busy, real conversation. You\'ll end up with something to hang on the wall and a good memory of how it got made.' },
+  { cat:'creative',   label:'Creative',
+    title:'Take intentional portraits of each other',
+    body:'Not snapshots. Real portraits. Think about light, setting, what you want to capture. Looking at someone that carefully is a form of intimacy.' },
+  { cat:'creative',   label:'Creative',
+    title:'Build something together',
+    body:'A piece of furniture, a raised garden bed, a bookshelf. Something that requires both of you and stays in the house.' },
+  { cat:'creative',   label:'Creative',
+    title:'Cook a full meal from a country you want to visit',
+    body:'Research it together, shop for the ingredients, make an evening of the cooking. The meal is almost secondary to the shared project.' },
+  { cat:'creative',   label:'Creative',
+    title:'Make a vision board for your next year together',
+    body:'Magazines, scissors, glue, big paper. What do you want this year to look and feel like — together? The conversation while making it matters more than the result.' },
+  { cat:'creative',   label:'Creative',
+    title:'Interview each other on video',
+    body:'Ask real questions. Film it on your phone. Watch it together years from now. You\'ll see things in each other you\'d forgotten were there.' },
+
+  /* MEANINGFUL */
+  { cat:'meaningful', label:'Meaningful',
+    title:'Do the 36 Questions',
+    body:'The research-backed list designed to create intimacy fast. Google \'36 questions that lead to love.\' Do all of them. Don\'t skip the hard ones.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Take turns sharing what you love about each other',
+    body:'Five minutes each. The listener stays quiet the whole time. No interrupting — just receive it. Then switch. Most couples almost never do this.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Plan your next trip together',
+    body:'Sit with a map, a budget, places you\'ve both wanted to go. Dream out loud. Even trips that never happen matter — the wanting together is the point.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Talk about where you each want to be in five years',
+    body:'Separately and together. What does each of you want? Where do those overlap? Where do they diverge? This conversation, done well, is worth more than most therapy sessions.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Share a childhood memory she\'s never heard',
+    body:'Go deep. Not the polished, funny version. The one that actually shaped something. Let her in somewhere new.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Do a relationship review',
+    body:'What\'s working well. What you want more of. What you appreciate but haven\'t said. Not a complaint session — an honest accounting of what\'s good and what you\'re both hungry for.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Write 10 things you love about each other — then read them aloud',
+    body:'Handwritten. Specific, not generic. Exchange them at the table. Read them out loud, slowly. Don\'t rush it.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Do something she\'s always wanted but never asked for',
+    body:'Ask her first. Then plan it. Make it happen within the week. The asking is part of the point — it says: I want to know what you want, and I\'ll actually act on it.' },
+  { cat:'meaningful', label:'Meaningful',
+    title:'Watch your wedding video or look through early photos together',
+    body:'Go back to the beginning. Watch how you looked at each other. Let it remind you what you\'re building on.' }
+];
+
+// ─────────────────────────────────────────────
+// WITH THE GUYS IDEAS
+// ─────────────────────────────────────────────
+var GUYS_IDEAS = [
+
+  /* ACTIVE & SPORT */
+  { cat:'active',      label:'Active & Sport',
+    title:'Sign up for a rec league sport together',
+    body:'Doesn\'t matter what — basketball, soccer, softball, volleyball. A recurring commitment with a shared goal is the structure most adult friendships are missing.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Commit to a lifting program together',
+    body:'Pick a 12-week program. Show up for each other. Shared physical commitment, tracked over time, builds a kind of accountability that transfers.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Play golf — even if you\'re bad at it',
+    body:'Four hours walking and talking. The game gives you something to focus on so the conversation can go wherever it wants.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Try a combat sports gym together',
+    body:'Boxing, jiu-jitsu, Muay Thai. Take a trial class. The shared vulnerability of being a beginner together creates fast trust.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Run a 5K together',
+    body:'Pick one, train loosely together, show up on race day. It\'s not about the time — it\'s about the shared finish line.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Play pickleball',
+    body:'Easier to pick up than tennis, deeply competitive, and almost impossible to play without laughing. Courts are everywhere now.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Mountain bike a new trail',
+    body:'Find a trail that pushes both of you. Shared physical challenge where failure is visible and consequence is real builds genuine respect.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Basketball pickup game',
+    body:'Find a court, find a game. The competitive pressure reveals character in a useful way. You\'ll know something about each other after an hour.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Plan a hiking trip that\'s harder than usual',
+    body:'Not a stroll. Something that takes real effort. The conversation at the top is different from any conversation you\'d have at sea level.' },
+  { cat:'active',      label:'Active & Sport',
+    title:'Play disc golf',
+    body:'Easy to learn, genuinely fun, free or cheap, and long enough to have a real conversation. One of the better casual sport options for adult men.' },
+
+  /* SOCIAL */
+  { cat:'social',      label:'Social',
+    title:'Poker night you actually plan well',
+    body:'Buy-in, decent snacks, rule that phones stay face-down. What makes a good poker night isn\'t the cards — it\'s the deliberate structure that creates space for real talk.' },
+  { cat:'social',      label:'Social',
+    title:'Fantasy sports draft in person',
+    body:'Do it in person, not on an app. The draft itself isn\'t the point. The hours spent arguing and giving each other hell is.' },
+  { cat:'social',      label:'Social',
+    title:'Cook a serious meal for each other',
+    body:'Pick a night, one person cooks for the group. No takeout. The care that goes into feeding people is a form of respect that doesn\'t go unnoticed.' },
+  { cat:'social',      label:'Social',
+    title:'Go to a live sporting event together',
+    body:'Pick a team you both care about. Get good seats. Be loud. Shared intensity creates bonds that polite conversation doesn\'t.' },
+  { cat:'social',      label:'Social',
+    title:'Bourbon or whiskey tasting',
+    body:'Pick a flight, taste slowly, compare notes. The slowing-down that comes with deliberate tasting creates real conversation.' },
+  { cat:'social',      label:'Social',
+    title:'Fire pit night',
+    body:'Backyard fire, good drinks, no agenda. One of the oldest and most reliable contexts for men to talk honestly. Don\'t underestimate it.' },
+  { cat:'social',      label:'Social',
+    title:'Watch a fight or big game together — in person',
+    body:'Your place, their place, a bar. The communal experience of high-stakes sport is one of the few arenas where men freely show emotion together. Use it.' },
+  { cat:'social',      label:'Social',
+    title:'Comedy show',
+    body:'Shared laughter is bonding. Men laugh differently with each other than they do elsewhere. Find a show, go together.' },
+  { cat:'social',      label:'Social',
+    title:'Start a regular monthly dinner',
+    body:'Same guys, same general day each month. No special occasion needed. The regularity is the point — it says this matters enough to protect.' },
+  { cat:'social',      label:'Social',
+    title:'Go to a brewery or distillery tour together',
+    body:'Built-in conversation starter, slow pace, unhurried. The tour format gives you something to react to together.' },
+
+  /* EXPERIENCES */
+  { cat:'experiences', label:'Experiences',
+    title:'Camping trip — just the guys',
+    body:'No itinerary, no wifi. Men talk differently outside, at night, around fire. Things come up that wouldn\'t come up anywhere else.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Road trip with no fixed plan',
+    body:'Pick a direction, fill the tank, stop when something looks interesting. The unstructured time together is the point.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Golf trip to somewhere new',
+    body:'Two or three days, different course, everyone slightly out of their normal context. Travel strips away routine and lets you see people differently.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Attend something important to each other',
+    body:'A work milestone, a recital, a presentation, a race. Showing up for each other\'s significant moments is what separates real friends from people you just know.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Do an escape room',
+    body:'You\'ll learn something real about how you each solve problems under pressure. Useful data. Usually hilarious.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Try axe throwing or archery',
+    body:'Ridiculous and surprisingly competitive. The shared absurdity of learning something slightly dangerous together creates fast camaraderie.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Take a day trip somewhere none of you have been',
+    body:'Pick a town, go with no plan. Return same day. The shared novelty of discovering something new together is underrated.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Go to a car or air show',
+    body:'Shared appreciation for things that are built well is its own form of connection. Give yourself permission to be interested.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Volunteer together on a one-day project',
+    body:'Habitat for Humanity, a food bank, trail maintenance. Shared purpose and physical work alongside someone reveals character quickly.' },
+  { cat:'experiences', label:'Experiences',
+    title:'Go to a concert for a band you both grew up with',
+    body:'Nostalgia plus live music is a remarkably efficient route to real conversation about where you\'ve both been and where you\'re going.' },
+
+  /* BUILD & CREATE */
+  { cat:'projects',    label:'Build & Create',
+    title:'Help each other with a home project',
+    body:'Spend a day working on something at each other\'s house. Men work well side by side. Some of the best conversations happen when your hands are busy.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Build a piece of furniture together',
+    body:'Pick something real — a table, a bench, a shelf. The shared project with a visible result creates a different kind of bond than socializing does.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Work on each other\'s vehicles',
+    body:'Oil change, detailing, a repair you\'ve been putting off. The mechanic\'s code: working side by side in companionable silence is its own form of friendship.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Start a garden or raised bed together',
+    body:'Build it together. Tend it across a season. Things that require ongoing attention give you a reason to keep showing up.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Build a fire pit from scratch',
+    body:'Dig it, ring it, build it. Then use it. The project is the excuse. The fire pit is the long-term return on the investment.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Smoke or grill a serious cut of meat together',
+    body:'A brisket, a whole bird, a proper rack of ribs. Something that takes planning, time, and attention. Process-focused cooking is deeply satisfying and deeply social.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Record a podcast episode or video together',
+    body:'Pick a topic you\'re both opinionated about. Record it. Listen back. The exercise of articulating what you actually think together is more valuable than the output.' },
+  { cat:'projects',    label:'Build & Create',
+    title:'Restore something together',
+    body:'An old piece of furniture, a tool, a piece of gear. Restoration work is patient, methodical, and deeply satisfying — and it gives you something to show for the time.' },
+
+  /* GO DEEPER */
+  { cat:'depth',       label:'Go Deeper',
+    title:'Actually ask how things are going — and wait for the real answer',
+    body:'Not "how are you" as a greeting. "How are things actually going?" Then stay quiet long enough for the honest answer to show up. Most men never get asked. Most men are starving for it.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Share something you\'re genuinely struggling with',
+    body:'Not the complaint version. The real thing — the fear, the doubt, the thing you don\'t say out loud. One person going first almost always creates permission for the other.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Take a long walk, just the two of you',
+    body:'Side by side, no destination, no phones. Men often talk more honestly when they\'re moving and not making direct eye contact. Use that.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Watch something meaningful and talk about it after',
+    body:'A documentary, a film, something that raises real questions. Shared reactions to serious content is a reliable route to real conversation.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Read the same book and meet to discuss it',
+    body:'Pick something neither of you would normally read. One book, one meeting, no agenda. The disagreements are where the good conversation lives.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Talk about what the next five years look like for you',
+    body:'Not small talk. What do you actually want? What are you working toward? What are you afraid of? Most men never have this conversation with another man.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Thank a friend directly for something specific',
+    body:'Not "thanks man." One specific thing they did that mattered to you. Men rarely receive this from other men. It takes about 15 seconds and has a longer half-life than you\'d expect.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Commit to a standing monthly check-in',
+    body:'Same guys, same cadence, protected on the calendar. Not dependent on a reason. The regularity is a statement: this relationship is worth maintaining deliberately.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Share a failure or regret you haven\'t talked about',
+    body:'The work you didn\'t do. The relationship you let fall apart. The version of yourself you\'re not proud of. Vulnerability between men doesn\'t require a crisis to happen.' },
+  { cat:'depth',       label:'Go Deeper',
+    title:'Ask: "What\'s one thing in your life that isn\'t working right now?"',
+    body:'Simple question. Almost never asked. Most men will answer honestly if someone actually asks and actually waits. Be the one who asks.' }
+];
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function catClass(cat) { return 'cat-' + cat; }
+
+function renderGrid(tab) {
+  var ideas  = tab === 'date' ? DATE_IDEAS : GUYS_IDEAS;
+  var filter = tab === 'date' ? dateFilter  : guysFilter;
+  var gridId = tab + '-grid';
+  var countId= tab + '-count';
+
+  var filtered = filter === 'all' ? ideas : ideas.filter(function(i){ return i.cat === filter; });
+  document.getElementById(countId).textContent = filtered.length + ' idea' + (filtered.length !== 1 ? 's' : '');
+
+  document.getElementById(gridId).innerHTML = filtered.map(function(idea) {
+    return '<div class="idea-card">' +
+      '<div class="idea-meta"><span class="idea-cat ' + catClass(idea.cat) + '">' + idea.label + '</span></div>' +
+      '<div class="idea-title">' + idea.title + '</div>' +
+      '<div class="idea-body">' + idea.body + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function setFilter(tab, cat) {
+  if (tab === 'date') dateFilter = cat;
+  else guysFilter = cat;
+
+  var pillContainer = document.getElementById(tab + '-pills');
+  pillContainer.querySelectorAll('.filter-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.cat === cat);
+  });
+
+  renderGrid(tab);
+}
+
+// ─────────────────────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-date').classList.toggle('active', tab === 'date');
+  document.getElementById('tab-guys').classList.toggle('active', tab === 'guys');
+  document.getElementById('panel-date').classList.toggle('active', tab === 'date');
+  document.getElementById('panel-guys').classList.toggle('active', tab === 'guys');
+
+  // Sync the local discovery type selector to the active tab
+  selectType(tab);
+}
+
+// ─────────────────────────────────────────────
+// LOCAL DISCOVERY
+// ─────────────────────────────────────────────
+function selectType(type) {
+  localType = type;
+  document.getElementById('typeDate').classList.toggle('selected', type === 'date');
+  document.getElementById('typeGuys').classList.toggle('selected', type === 'guys');
+}
+
+function findLocalIdeas() {
+  var city = document.getElementById('cityInput').value.trim();
+  var msg  = document.getElementById('localMsg');
+
+  if (!city) {
+    msg.textContent = 'Please enter your city first.';
+    return;
+  }
+
+  msg.textContent = '';
+
+  var contextMap = {
+    date: 'I\'m in ' + city + ' and looking for date night ideas specific to my area — things to do with my partner that would be interesting or memorable in this location. What are some options I might not have thought of?',
+    guys: 'I\'m in ' + city + ' and looking for activities to do with male friends in my area — something that gets us out of the usual routine and actually creates connection. What are some good options near me?'
+  };
+
+  var context = contextMap[localType];
+  window.location.href = '/proxi-he?mode=rightnow&context=' + encodeURIComponent(context);
+}
+
+document.getElementById('cityInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); findLocalIdeas(); }
+});
+
+// ─────────────────────────────────────────────
+// INIT — check ?tab= param to open correct tab
+// ─────────────────────────────────────────────
+renderGrid('date');
+renderGrid('guys');
+
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var tab = params.get('tab');
+  if (tab === 'guys') switchTab('guys');
+})();
+</script>
+</body>
+</html>
