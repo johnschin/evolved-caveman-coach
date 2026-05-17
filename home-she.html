@@ -1418,15 +1418,35 @@
     }
 
     // =====================================================
+    // PULSE — SUPABASE SAVE (fire-and-forget; skipped for trial users)
+    // =====================================================
+    async function savePulseToDb(plate, connected, energy, source) {
+        if (!currentUser) return; // trial users have no Supabase auth
+        try {
+            await sb.from("pulse_checkins").insert({
+                user_id:   currentUser.id,
+                coach:     "joree",
+                plate:     parseInt(plate, 10),
+                connected: parseInt(connected, 10),
+                energy:    parseInt(energy, 10),
+                source:    source || "pulse"
+            });
+        } catch (e) {
+            console.warn("Pulse DB save failed:", e);
+        }
+    }
+
+    // =====================================================
     // RIGHT NOW MODE — CHIP SELECTION
     // =====================================================
     function selectChip(el, context) {
         document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
         el.classList.add("selected");
+        var plate     = document.getElementById("stressSlider").value;
+        var connected = document.getElementById("relSlider").value;
+        var energy    = document.getElementById("challengeSlider").value;
+        savePulseToDb(plate, connected, energy, "chip"); // fire-and-forget before nav
         setTimeout(function() {
-            var plate     = document.getElementById("stressSlider").value;
-            var connected = document.getElementById("relSlider").value;
-            var energy    = document.getElementById("challengeSlider").value;
             window.location.href = "/proxi-she?mode=rightnow&context=" + encodeURIComponent(context)
                 + "&pulse_plate=" + plate
                 + "&pulse_connected=" + connected
@@ -1478,6 +1498,7 @@
         var connected = document.getElementById("relSlider").value;
         var energy    = document.getElementById("challengeSlider").value;
         savePulse();
+        savePulseToDb(plate, connected, energy, "pulse"); // fire-and-forget
         window.location.href = "/proxi-she?mode=pulse&pulse_plate=" + plate + "&pulse_connected=" + connected + "&pulse_energy=" + energy;
     }
 
