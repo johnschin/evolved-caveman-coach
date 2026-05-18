@@ -582,7 +582,7 @@
     // URL PARAMS — read chip/pulse context passed from home-we.html
     // =====================================================
     var _urlParams   = new URLSearchParams(window.location.search);
-    var _chipMode    = _urlParams.get("mode");       // "rightnow" | "pulse" | null
+    var _chipMode    = _urlParams.get("mode");       // "rightnow" | "pulse" | "chat" | null
     var _chipContext = _urlParams.get("context");    // e.g. "we-had-a-fight"
     var _pulseConnected = _urlParams.get("pulse_connected");
     var _pulseTension   = _urlParams.get("pulse_tension");
@@ -604,7 +604,9 @@
     }
 
     function buildContextBlock() {
-        if (!_chipMode && !_chipContext) return "";
+        // "chat" is a plain direct-entry mode — no chip or pulse context to inject
+        if (!_chipMode || _chipMode === "chat") return "";
+        if (!_chipContext && _chipMode !== "pulse") return "";
 
         var block = "\n\n=== SESSION CONTEXT — READ THIS FIRST. OVERRIDE ALL GENERIC OPENERS. ===\n";
 
