@@ -756,6 +756,101 @@
         .practice-close:hover { background: rgba(175, 201, 207, 0.28); }
 
         /* =============================================
+           COUPLES PULSE — DUAL PARTNER
+           ============================================= */
+        .pulse-status-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .pulse-status-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            background: var(--cream);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: all 0.25s;
+        }
+        .pulse-status-chip.confirmed {
+            color: var(--teal-deep);
+            background: var(--teal-soft);
+            border-color: var(--teal-deep);
+        }
+        .pulse-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: background 0.25s;
+        }
+        .pulse-status-chip.confirmed .pulse-status-dot { background: var(--teal-deep); }
+
+        .partner-section {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            transition: border-color 0.25s, background 0.25s;
+        }
+        .partner-section.him  { border-color: rgba(78, 74, 85, 0.25); }
+        .partner-section.her  { border-color: rgba(153, 129, 147, 0.35); }
+        .partner-section.confirmed { border-color: var(--teal-deep); background: rgba(175, 201, 207, 0.05); }
+
+        .partner-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--plum);
+        }
+        .partner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .partner-dot.him { background: var(--plum); }
+        .partner-dot.her { background: var(--mauve); }
+
+        .pulse-confirm-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: var(--plum);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .pulse-confirm-btn:hover:not(:disabled) {
+            border-color: var(--teal-deep);
+            color: var(--teal-deep);
+            background: var(--teal-soft);
+        }
+        .pulse-confirm-btn:disabled {
+            color: var(--teal-deep);
+            border-color: var(--teal-deep);
+            background: var(--teal-soft);
+            cursor: default;
+        }
+
+        /* =============================================
            RESPONSIVE
            ============================================= */
         @media (max-width: 400px) {
@@ -962,49 +1057,121 @@
             <div class="pulse-card">
                 <div class="card-header">
                     <span class="card-title">Couples Pulse</span>
-                    <span class="card-badge">How are you right now?</span>
+                    <span class="card-badge">How are you both right now?</span>
                 </div>
 
-                <!-- How connected do you feel to your partner? -->
-                <div class="slider-group">
-                    <div class="slider-label-row">
-                        <span class="slider-name">How connected do you feel to your partner?</span>
-                        <span class="slider-value-badge" id="connectedVal">3</span>
+                <!-- Confirmation status indicators -->
+                <div class="pulse-status-row">
+                    <div class="pulse-status-chip" id="himStatusChip">
+                        <div class="pulse-status-dot"></div>
+                        <span>His check-in</span>
                     </div>
-                    <input type="range" min="1" max="5" value="3" id="connectedSlider"
-                           oninput="updateSlider('connected', this.value)">
-                    <div class="slider-range-labels">
-                        <span class="slider-range-label">Distant</span>
-                        <span class="slider-range-label">Close</span>
-                    </div>
-                </div>
-
-                <!-- How much tension are you carrying? -->
-                <div class="slider-group">
-                    <div class="slider-label-row">
-                        <span class="slider-name">How much tension are you carrying into this?</span>
-                        <span class="slider-value-badge" id="tensionVal">3</span>
-                    </div>
-                    <input type="range" min="1" max="5" value="3" id="tensionSlider"
-                           oninput="updateSlider('tension', this.value)">
-                    <div class="slider-range-labels">
-                        <span class="slider-range-label">None</span>
-                        <span class="slider-range-label">A lot</span>
+                    <div class="pulse-status-chip" id="herStatusChip">
+                        <div class="pulse-status-dot"></div>
+                        <span>Her check-in</span>
                     </div>
                 </div>
 
-                <!-- How ready are you to engage? -->
-                <div class="slider-group">
-                    <div class="slider-label-row">
-                        <span class="slider-name">How ready are you to engage vs. shut down?</span>
-                        <span class="slider-value-badge" id="readyVal">3</span>
+                <!-- ─── HIS CHECK-IN ─── -->
+                <div class="partner-section him" id="himSection">
+                    <div class="partner-section-header">
+                        <div class="partner-dot him"></div>
+                        His Check-In
                     </div>
-                    <input type="range" min="1" max="5" value="3" id="readySlider"
-                           oninput="updateSlider('ready', this.value)">
-                    <div class="slider-range-labels">
-                        <span class="slider-range-label">Need space</span>
-                        <span class="slider-range-label">Let's go</span>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How connected do you feel to your partner?</span>
+                            <span class="slider-value-badge" id="himConnectedVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="himConnectedSlider"
+                               oninput="updateSlider('himConnected', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">Distant</span>
+                            <span class="slider-range-label">Close</span>
+                        </div>
                     </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How much tension are you carrying into this?</span>
+                            <span class="slider-value-badge" id="himTensionVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="himTensionSlider"
+                               oninput="updateSlider('himTension', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">None</span>
+                            <span class="slider-range-label">A lot</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How ready are you to engage vs. shut down?</span>
+                            <span class="slider-value-badge" id="himReadyVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="himReadySlider"
+                               oninput="updateSlider('himReady', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">Need space</span>
+                            <span class="slider-range-label">Let's go</span>
+                        </div>
+                    </div>
+
+                    <button class="pulse-confirm-btn" id="himConfirmBtn" onclick="confirmPartner('him')">
+                        Confirm his check-in →
+                    </button>
+                </div>
+
+                <!-- ─── HER CHECK-IN ─── -->
+                <div class="partner-section her" id="herSection">
+                    <div class="partner-section-header">
+                        <div class="partner-dot her"></div>
+                        Her Check-In
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How connected do you feel to your partner?</span>
+                            <span class="slider-value-badge" id="herConnectedVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="herConnectedSlider"
+                               oninput="updateSlider('herConnected', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">Distant</span>
+                            <span class="slider-range-label">Close</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How much tension are you carrying into this?</span>
+                            <span class="slider-value-badge" id="herTensionVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="herTensionSlider"
+                               oninput="updateSlider('herTension', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">None</span>
+                            <span class="slider-range-label">A lot</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="slider-name">How ready are you to engage vs. shut down?</span>
+                            <span class="slider-value-badge" id="herReadyVal">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" id="herReadySlider"
+                               oninput="updateSlider('herReady', this.value)">
+                        <div class="slider-range-labels">
+                            <span class="slider-range-label">Need space</span>
+                            <span class="slider-range-label">Let's go</span>
+                        </div>
+                    </div>
+
+                    <button class="pulse-confirm-btn" id="herConfirmBtn" onclick="confirmPartner('her')">
+                        Confirm her check-in →
+                    </button>
                 </div>
 
                 <button class="pulse-start-btn" onclick="startPulseSession()">
@@ -1176,6 +1343,8 @@
     var urlParams        = new URLSearchParams(window.location.search);
     var currentUser      = null;
     var loginInProgress  = false;
+    var himConfirmed     = false;
+    var herConfirmed     = false;
 
     // =====================================================
     // 5-MINUTE PRACTICES — COUPLES REFLECTION (7, rotates by day)
@@ -1393,20 +1562,52 @@
 
     // =====================================================
     // PULSE — SUPABASE SAVE (fire-and-forget; skipped for trial users)
+    // Saves one row per partner (source tagged _him / _her)
     // =====================================================
-    async function savePulseToDb(connected, tension, ready, source) {
+    async function savePulseToDb(himConnected, himTension, himReady, herConnected, herTension, herReady, source) {
         if (!currentUser) return; // trial users have no Supabase auth
         try {
-            await sb.from("pulse_checkins").insert({
-                user_id:   currentUser.id,
-                coach:     "couples",
-                plate:     parseInt(connected, 10),   // reusing 'plate' col for connection score
-                connected: parseInt(tension, 10),     // reusing 'connected' col for tension score
-                energy:    parseInt(ready, 10),       // reusing 'energy' col for readiness score
-                source:    source || "pulse"
-            });
+            await sb.from("pulse_checkins").insert([
+                {
+                    user_id:   currentUser.id,
+                    coach:     "couples",
+                    plate:     parseInt(himConnected, 10),
+                    connected: parseInt(himTension,   10),
+                    energy:    parseInt(himReady,     10),
+                    source:    (source || "pulse") + "_him"
+                },
+                {
+                    user_id:   currentUser.id,
+                    coach:     "couples",
+                    plate:     parseInt(herConnected, 10),
+                    connected: parseInt(herTension,   10),
+                    energy:    parseInt(herReady,     10),
+                    source:    (source || "pulse") + "_her"
+                }
+            ]);
         } catch (e) {
             console.warn("Pulse DB save failed:", e);
+        }
+    }
+
+    // =====================================================
+    // CONFIRM PARTNER CHECK-IN
+    // =====================================================
+    function confirmPartner(who) {
+        if (who === "him") {
+            himConfirmed = true;
+            var btn = document.getElementById("himConfirmBtn");
+            btn.textContent = "✓ His check-in confirmed";
+            btn.disabled = true;
+            document.getElementById("himSection").classList.add("confirmed");
+            document.getElementById("himStatusChip").classList.add("confirmed");
+        } else {
+            herConfirmed = true;
+            var btn = document.getElementById("herConfirmBtn");
+            btn.textContent = "✓ Her check-in confirmed";
+            btn.disabled = true;
+            document.getElementById("herSection").classList.add("confirmed");
+            document.getElementById("herStatusChip").classList.add("confirmed");
         }
     }
 
@@ -1416,15 +1617,23 @@
     function selectChip(el, context) {
         document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
         el.classList.add("selected");
-        var connected = document.getElementById("connectedSlider").value;
-        var tension   = document.getElementById("tensionSlider").value;
-        var ready     = document.getElementById("readySlider").value;
-        savePulseToDb(connected, tension, ready, "chip"); // fire-and-forget before nav
+        var himConnected = document.getElementById("himConnectedSlider").value;
+        var himTension   = document.getElementById("himTensionSlider").value;
+        var himReady     = document.getElementById("himReadySlider").value;
+        var herConnected = document.getElementById("herConnectedSlider").value;
+        var herTension   = document.getElementById("herTensionSlider").value;
+        var herReady     = document.getElementById("herReadySlider").value;
+        var who = himConfirmed && herConfirmed ? "both" : himConfirmed ? "him" : herConfirmed ? "her" : "both";
+        savePulseToDb(himConnected, himTension, himReady, herConnected, herTension, herReady, "chip"); // fire-and-forget
         setTimeout(function() {
             window.location.href = "/proxi-we?mode=rightnow&context=" + encodeURIComponent(context)
-                + "&pulse_connected=" + connected
-                + "&pulse_tension=" + tension
-                + "&pulse_ready=" + ready;
+                + "&pulse_him_connected=" + himConnected
+                + "&pulse_him_tension="   + himTension
+                + "&pulse_him_ready="     + himReady
+                + "&pulse_her_connected=" + herConnected
+                + "&pulse_her_tension="   + herTension
+                + "&pulse_her_ready="     + herReady
+                + "&pulse_who="           + who;
         }, 320);
     }
 
@@ -1432,16 +1641,22 @@
     // COUPLES PULSE — SLIDERS
     // =====================================================
     function updateSlider(type, value) {
+        // type is e.g. "himConnected", "herTension" — badge ID is type + "Val"
         document.getElementById(type + "Val").textContent = value;
         savePulse();
     }
 
     function savePulse() {
         var pulse = {
-            connected: document.getElementById("connectedSlider").value,
-            tension:   document.getElementById("tensionSlider").value,
-            ready:     document.getElementById("readySlider").value,
-            date:      new Date().toDateString()
+            himConnected: document.getElementById("himConnectedSlider").value,
+            himTension:   document.getElementById("himTensionSlider").value,
+            himReady:     document.getElementById("himReadySlider").value,
+            herConnected: document.getElementById("herConnectedSlider").value,
+            herTension:   document.getElementById("herTensionSlider").value,
+            herReady:     document.getElementById("herReadySlider").value,
+            himConfirmed: himConfirmed,
+            herConfirmed: herConfirmed,
+            date:         new Date().toDateString()
         };
         try { localStorage.setItem("proxi_we_pulse", JSON.stringify(pulse)); } catch(e) {}
     }
@@ -1452,28 +1667,41 @@
             if (!saved) return;
             var pulse = JSON.parse(saved);
             if (pulse.date !== new Date().toDateString()) return;
-            if (pulse.connected) {
-                document.getElementById("connectedSlider").value = pulse.connected;
-                document.getElementById("connectedVal").textContent = pulse.connected;
-            }
-            if (pulse.tension) {
-                document.getElementById("tensionSlider").value = pulse.tension;
-                document.getElementById("tensionVal").textContent = pulse.tension;
-            }
-            if (pulse.ready) {
-                document.getElementById("readySlider").value = pulse.ready;
-                document.getElementById("readyVal").textContent = pulse.ready;
-            }
+            // Restore slider values
+            var keys = ["himConnected","himTension","himReady","herConnected","herTension","herReady"];
+            keys.forEach(function(k) {
+                if (pulse[k]) {
+                    document.getElementById(k + "Slider").value = pulse[k];
+                    document.getElementById(k + "Val").textContent = pulse[k];
+                }
+            });
+            // Restore confirmed states
+            if (pulse.himConfirmed) confirmPartner("him");
+            if (pulse.herConfirmed) confirmPartner("her");
         } catch(e) {}
     }
 
     function startPulseSession() {
-        var connected = document.getElementById("connectedSlider").value;
-        var tension   = document.getElementById("tensionSlider").value;
-        var ready     = document.getElementById("readySlider").value;
+        var himConnected = document.getElementById("himConnectedSlider").value;
+        var himTension   = document.getElementById("himTensionSlider").value;
+        var himReady     = document.getElementById("himReadySlider").value;
+        var herConnected = document.getElementById("herConnectedSlider").value;
+        var herTension   = document.getElementById("herTensionSlider").value;
+        var herReady     = document.getElementById("herReadySlider").value;
+        var who = himConfirmed && herConfirmed ? "both"
+                : himConfirmed ? "him"
+                : herConfirmed ? "her"
+                : "both"; // default to both if neither explicitly confirmed
         savePulse();
-        savePulseToDb(connected, tension, ready, "pulse"); // fire-and-forget
-        window.location.href = "/proxi-we?mode=pulse&pulse_connected=" + connected + "&pulse_tension=" + tension + "&pulse_ready=" + ready;
+        savePulseToDb(himConnected, himTension, himReady, herConnected, herTension, herReady, "pulse"); // fire-and-forget
+        window.location.href = "/proxi-we?mode=pulse"
+            + "&pulse_him_connected=" + himConnected
+            + "&pulse_him_tension="   + himTension
+            + "&pulse_him_ready="     + himReady
+            + "&pulse_her_connected=" + herConnected
+            + "&pulse_her_tension="   + herTension
+            + "&pulse_her_ready="     + herReady
+            + "&pulse_who="           + who;
     }
 
     // =====================================================

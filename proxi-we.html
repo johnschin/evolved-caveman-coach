@@ -584,6 +584,17 @@
     var _urlParams   = new URLSearchParams(window.location.search);
     var _chipMode    = _urlParams.get("mode");       // "rightnow" | "pulse" | "chat" | null
     var _chipContext = _urlParams.get("context");    // e.g. "we-had-a-fight"
+
+    // Dual-partner pulse params (new format)
+    var _pulseHimConnected = _urlParams.get("pulse_him_connected");
+    var _pulseHimTension   = _urlParams.get("pulse_him_tension");
+    var _pulseHimReady     = _urlParams.get("pulse_him_ready");
+    var _pulseHerConnected = _urlParams.get("pulse_her_connected");
+    var _pulseHerTension   = _urlParams.get("pulse_her_tension");
+    var _pulseHerReady     = _urlParams.get("pulse_her_ready");
+    var _pulseWho          = _urlParams.get("pulse_who"); // "him" | "her" | "both"
+
+    // Legacy single-partner params (backward compat)
     var _pulseConnected = _urlParams.get("pulse_connected");
     var _pulseTension   = _urlParams.get("pulse_tension");
     var _pulseReady     = _urlParams.get("pulse_ready");
@@ -611,20 +622,49 @@
         var block = "\n\n=== SESSION CONTEXT — READ THIS FIRST. OVERRIDE ALL GENERIC OPENERS. ===\n";
 
         if (_chipMode === "rightnow" && _chipContext) {
-            block += "MODE: RIGHT NOW — The user tapped a chip on the home screen and came here with a specific focus.\n";
+            block += "MODE: RIGHT NOW — One or both partners tapped a chip on the home screen.\n";
             block += "CHIP TOPIC: \"" + _getChipLabel(_chipContext) + "\"\n";
             block += "INSTRUCTION: Do NOT deliver a generic welcome or ask 'what brings you here today.' Open by directly acknowledging this specific topic with warmth and one sharp coaching question about it.\n";
         } else if (_chipMode === "pulse") {
-            block += "MODE: PULSE CHECK-IN — The user completed the Couples Pulse sliders and launched a session.\n";
-            block += "INSTRUCTION: Open by briefly acknowledging where they're arriving (based on the pulse data below), then invite them into the session.\n";
+            block += "MODE: PULSE CHECK-IN — The Couples Pulse sliders were filled in and a session was started.\n";
+            block += "INSTRUCTION: Open by acknowledging where they're arriving based on the pulse data and presence info below, then invite them into the session.\n";
         }
 
-        // Add pulse data if available
-        if (_pulseConnected || _pulseTension || _pulseReady) {
-            block += "\nBACKGROUND — COUPLES PULSE (use as context, not as the opening topic unless they're in pulse mode):\n";
+        // Presence — who confirmed their check-in
+        if (_chipMode === "pulse" && _pulseWho) {
+            if (_pulseWho === "both") {
+                block += "PRESENCE: BOTH PARTNERS — Both him and her filled in their pulse check-ins. Both are likely present. Address both partners in your opening.\n";
+            } else if (_pulseWho === "him") {
+                block += "PRESENCE: HIM ONLY — Only he filled in the pulse check-in. Start by warmly asking whether he's joining solo today or if his partner will be joining him, then proceed based on his answer.\n";
+            } else if (_pulseWho === "her") {
+                block += "PRESENCE: HER ONLY — Only she filled in the pulse check-in. Start by warmly asking whether she's joining solo today or if her partner will be joining her, then proceed based on her answer.\n";
+            }
+        }
+
+        // Add pulse data — dual-partner format (new)
+        var hasNewPulse = _pulseHimConnected || _pulseHimTension || _pulseHimReady || _pulseHerConnected || _pulseHerTension || _pulseHerReady;
+        if (hasNewPulse) {
+            var label = _chipMode === "pulse" ? "\nCOUPLES PULSE DATA:\n" : "\nBACKGROUND — COUPLES PULSE (use as context, not the main opening topic):\n";
+            block += label;
+            if (_pulseHimConnected || _pulseHimTension || _pulseHimReady) {
+                block += "  HIS state right now:\n";
+                if (_pulseHimConnected) block += "    Connection to partner: " + _pulseHimConnected + "/5 (1=Distant, 5=Close)\n";
+                if (_pulseHimTension)   block += "    Tension carrying in:   " + _pulseHimTension   + "/5 (1=None, 5=A lot)\n";
+                if (_pulseHimReady)     block += "    Readiness to engage:   " + _pulseHimReady     + "/5 (1=Need space, 5=Let's go)\n";
+            }
+            if (_pulseHerConnected || _pulseHerTension || _pulseHerReady) {
+                block += "  HER state right now:\n";
+                if (_pulseHerConnected) block += "    Connection to partner: " + _pulseHerConnected + "/5 (1=Distant, 5=Close)\n";
+                if (_pulseHerTension)   block += "    Tension carrying in:   " + _pulseHerTension   + "/5 (1=None, 5=A lot)\n";
+                if (_pulseHerReady)     block += "    Readiness to engage:   " + _pulseHerReady     + "/5 (1=Need space, 5=Let's go)\n";
+            }
+            block += "  Note: Use these readings to calibrate your opening and inform your coaching — not as definitive diagnoses.\n";
+        } else if (_pulseConnected || _pulseTension || _pulseReady) {
+            // Legacy backward-compat single-partner params
+            block += "\nBACKGROUND — COUPLES PULSE (use as context, not the main opening topic):\n";
             if (_pulseConnected) block += "  Connection to partner: " + _pulseConnected + "/5 (1=Distant, 5=Close)\n";
-            if (_pulseTension)   block += "  Tension carrying in: " + _pulseTension + "/5 (1=None, 5=A lot)\n";
-            if (_pulseReady)     block += "  Readiness to engage: " + _pulseReady + "/5 (1=Need space, 5=Let's go)\n";
+            if (_pulseTension)   block += "  Tension carrying in:   " + _pulseTension   + "/5 (1=None, 5=A lot)\n";
+            if (_pulseReady)     block += "  Readiness to engage:   " + _pulseReady     + "/5 (1=Need space, 5=Let's go)\n";
         }
 
         block += "=== END SESSION CONTEXT ===\n";
@@ -955,25 +995,47 @@
                 prompt += contextBlock;
                 var isPulseMode = _chipMode === "pulse";
                 if (isPulseMode) {
-                    // PULSE SESSION: user filled in check-in sliders — acknowledge their readings specifically
+                    // PULSE SESSION: couple filled in He/Her sliders — acknowledge readings and handle presence
+                    var presenceNote = "";
+                    if (_pulseWho === "him") {
+                        presenceNote =
+                            "PRESENCE CHECK REQUIRED: Only he confirmed his pulse check-in. " +
+                            "Your very first line must warmly ask: 'Are you joining us on your own today, or will your partner be joining you?' " +
+                            "Then adapt: if solo — treat as a solo session focused on his side of the dynamic. " +
+                            "If both present — acknowledge both and proceed with couples coaching.\n";
+                    } else if (_pulseWho === "her") {
+                        presenceNote =
+                            "PRESENCE CHECK REQUIRED: Only she confirmed her pulse check-in. " +
+                            "Your very first line must warmly ask: 'Are you joining us on your own today, or will your partner be joining you?' " +
+                            "Then adapt: if solo — treat as a solo session focused on her side of the dynamic. " +
+                            "If both present — acknowledge both and proceed with couples coaching.\n";
+                    } else {
+                        presenceNote =
+                            "BOTH PARTNERS PRESENT: Both him and her filled in the Couples Pulse. " +
+                            "Address both partners in your opening. Notice any gap or alignment between His and Her readings — " +
+                            "that contrast is coaching gold. Speak to where each of them is arriving.\n";
+                    }
+
                     if (returningContext) {
                         prompt +=
                             "RETURNING USER — PULSE CHECK-IN MODE:\n" +
-                            "This couple is returning and has filled in the daily pulse check-in. Skip the full welcome.\n" +
-                            "Greet them briefly (one sentence from John or Joree), then immediately acknowledge their current state " +
-                            "from the pulse readings in the context block above (Connection, Tension, Readiness).\n" +
-                            "Do NOT ask a generic opener — the pulse already tells you where they are. Speak directly to those readings.\n" +
-                            "Your opening should feel like: 'I see where you two are right now. Let's start there.' — then ask ONE question.\n" +
+                            "This couple is returning and has filled in the Couples Pulse check-in. Skip the full welcome.\n" +
+                            presenceNote +
+                            "After handling presence, greet them briefly (one sentence from John or Joree), then immediately acknowledge " +
+                            "their His/Her state from the pulse readings in the context block above (Connection, Tension, Readiness for each).\n" +
+                            "Do NOT ask a generic opener — the pulse tells you where they are. Speak directly to those readings.\n" +
+                            "Your opening should feel like: 'I see where you two are right now. Let’s start there.' — then ask ONE question.\n" +
                             "PREVIOUS SESSION CONTEXT (background only):\n" + returningContext + "\n";
                     } else {
                         prompt +=
                             "NEW USER — PULSE CHECK-IN MODE:\n" +
-                            "This couple is new and has just filled in the daily pulse check-in. Skip the full welcome/consent script.\n" +
-                            "Open with 1-2 warm welcoming sentences from John and/or Joree, then flow DIRECTLY into acknowledging " +
-                            "their pulse readings (Connection, Tension, Readiness from the context block above).\n" +
+                            "This couple is new and has filled in the Couples Pulse check-in. Skip the full welcome/consent script.\n" +
+                            presenceNote +
+                            "After handling presence, open with 1-2 warm sentences from John and/or Joree, then flow DIRECTLY into " +
+                            "acknowledging the His/Her pulse readings from the context block above.\n" +
                             "Do NOT deliver the consent gate or say 'Type I agree'. The AI disclosure is shown in the interface.\n" +
-                            "Speak to where they are as a couple right now — name it, reflect it, and ask ONE focused coaching question.\n" +
-                            "Keep the entire opener to 3-5 sentences total.\n\n";
+                            "Name where each of them is, reflect it, and ask ONE focused coaching question.\n" +
+                            "Keep the entire opener to 3-5 sentences total (not counting the presence question if needed).\n\n";
                     }
                 } else if (returningContext) {
                     prompt += "\nRETURNING USER — CHIP MODE: This user has been here before. Do NOT deliver the full welcome or consent request. " +
