@@ -728,6 +728,13 @@
         var result = await sb.auth.getSession();
         if (result.data.session) {
             currentUser = result.data.session.user;
+            // If user arrived without a mode param (not from home-we.html),
+            // send them to the home screen so they go through the proper entry flow.
+            var mode = new URLSearchParams(window.location.search).get("mode");
+            if (!mode) {
+                window.location.replace("/home-we");
+                return;
+            }
             enterChat();
         }
     }
