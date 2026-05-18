@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion Wheel — Proxi We</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent:      #afc9cf;
+      --accent-deep: #7eadb5;
+      --accent-soft: rgba(175, 201, 207, 0.14);
+      --linen:       #F6F3EF;
+      --card:        #FFFFFF;
+      --slate-plum:  #4e4a55;
+      --slate-deep:  #2e2b35;
+      --muted:       #8a8590;
+      --dim:         #998193;
+      --border:      #e5e0ea;
+      --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-sans); background: var(--linen); color: var(--slate-plum); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* HEADER */
+    header { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; background: var(--slate-plum); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .back-btn { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.12s; }
+    .back-btn:hover { color: #fff; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .brand h1 { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.8px; text-transform: uppercase; }
+    .header-tag { font-size: 10px; background: rgba(175,201,207,0.2); color: var(--accent); padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .header-count { font-size: 12px; color: rgba(255,255,255,0.45); }
+
+    /* MAIN */
+    main { flex: 1; max-width: 1000px; margin: 0 auto; width: 100%; padding: 28px 28px 48px; display: flex; flex-direction: column; gap: 24px; }
+    .page-intro { text-align: center; }
+    .page-intro h2 { font-size: 22px; font-weight: 700; color: var(--slate-plum); margin-bottom: 8px; }
+    .page-intro p { font-size: 14px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+    /* LAYOUT */
+    .wheel-layout { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: start; }
+
+    /* SIDEBAR */
+    .sidebar { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .sidebar-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); padding: 10px 12px 5px; }
+    .sidebar-divider { height: 1px; background: var(--border); margin: 6px 0; }
+    .cat-row { display: flex; align-items: center; width: 100%; padding: 0 8px; gap: 0; }
+    .cat-btn { display: flex; align-items: center; gap: 8px; flex: 1; text-align: left; padding: 7px 6px; border: none; background: transparent; cursor: pointer; font-family: var(--font-sans); font-size: 12px; font-weight: 600; color: var(--muted); border-radius: 6px; transition: all 0.12s; }
+    .cat-btn:hover { background: var(--accent-soft); color: var(--slate-plum); }
+    .cat-btn.selected { background: var(--accent-soft); color: var(--slate-plum); }
+    .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .toggle-btn { width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: var(--dim); font-size: 10px; flex-shrink: 0; transition: all 0.12s; }
+    .toggle-btn:hover { background: var(--accent-soft); color: var(--muted); }
+    .toggle-btn.open { color: var(--muted); }
+    .sub-list { display: none; flex-direction: column; padding: 2px 8px 4px 28px; gap: 1px; }
+    .sub-list.open { display: flex; }
+    .sub-btn { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left; padding: 5px 8px; border: none; background: transparent; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--muted); border-radius: 5px; transition: all 0.12s; }
+    .sub-btn:hover { background: var(--accent-soft); color: var(--slate-plum); }
+    .sub-btn.selected { color: var(--slate-plum); }
+    .sub-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; opacity: 0.6; }
+
+    /* DETAIL PANEL */
+    .detail-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 28px; min-height: 380px; display: flex; align-items: center; justify-content: center; }
+    .detail-empty { text-align: center; }
+    .detail-empty p { font-size: 13px; color: var(--dim); line-height: 1.6; }
+    .detail-content { width: 100%; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+    .breadcrumb-parent { font-size: 11px; color: var(--dim); font-weight: 500; }
+    .breadcrumb-sep { font-size: 11px; color: var(--dim); }
+    .breadcrumb-current { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .detail-header { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .detail-icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .detail-icon-inner { width: 15px; height: 15px; border-radius: 50%; }
+    .detail-name { font-size: 20px; font-weight: 700; color: var(--slate-plum); margin-bottom: 3px; }
+    .detail-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; }
+    .sub-pills-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; }
+    .sub-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+    .sub-pill { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 999px; border: 1px solid; cursor: pointer; transition: opacity 0.12s; }
+    .sub-pill:hover { opacity: 0.8; }
+    .insight-block { border-left: 2.5px solid var(--accent-deep); padding-left: 16px; }
+    .insight-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--accent-deep); text-transform: uppercase; margin-bottom: 8px; }
+    .insight-text { font-size: 15px; color: var(--slate-plum); line-height: 1.78; }
+
+    /* COACHING PROMPT */
+    .coach-prompt { margin-top: 24px; background: var(--accent-soft); border: 1px solid rgba(175,201,207,0.35); border-radius: 10px; padding: 18px 20px; }
+    .coach-prompt-q { font-size: 14px; font-weight: 600; color: var(--slate-plum); margin-bottom: 14px; line-height: 1.5; }
+    .coach-prompt-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .coach-prompt-yes { font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--slate-plum); background: var(--accent); border: none; border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: opacity 0.15s; }
+    .coach-prompt-yes:hover { opacity: 0.85; }
+    .coach-prompt-no { font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--muted); background: transparent; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: all 0.15s; }
+    .coach-prompt-no:hover { border-color: var(--muted); color: var(--slate-plum); }
+
+    /* FOOTER */
+    footer { padding: 14px 28px; background: var(--card); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .back-link { font-size: 13px; color: var(--dim); text-decoration: none; font-weight: 500; transition: color 0.12s; }
+    .back-link:hover { color: var(--slate-plum); }
+    .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--slate-plum); background: var(--accent); border: none; border-radius: 8px; padding: 9px 18px; cursor: pointer; text-decoration: none; transition: opacity 0.15s; }
+    .cta-btn:hover { opacity: 0.85; }
+
+    @media (max-width: 700px) { .wheel-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="/home-we" class="back-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <h1>Proximity Coaching</h1>
+      <span class="header-tag">Emotion Wheel</span>
+    </div>
+  </div>
+  <span class="header-count">11 categories · 50 emotions</span>
+</header>
+
+<main>
+  <div class="page-intro">
+    <h2>What are you actually feeling?</h2>
+    <p>In any close relationship, what you feel and what you say are two very different things — and both matter. Use this wheel to find the right words for what's happening inside you, so you can bring it into the conversation with your partner.</p>
+  </div>
+
+  <div class="wheel-layout">
+    <div class="sidebar" id="sidebar">
+      <p class="sidebar-section-label">Uncomfortable</p>
+    </div>
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-empty">
+        <p>Select a category or specific emotion<br>from the list on the left</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <a href="/home-we" class="back-link">← Back to home</a>
+  <a href="/proxi-we?mode=chat" class="cta-btn">Talk to Proxi We →</a>
+</footer>
+
+<script>
+const COACH_CONFIG = {
+  name: 'Proxi We',
+  url: '/proxi-we',
+  promptQ: 'Is this a good starting point for your session with Proxi We?'
+};
+
+function coachPromptHTML(emotionName) {
+  const safe = emotionName.replace(/'/g, "\\'");
+  return `<div class="coach-prompt">
+    <p class="coach-prompt-q">${COACH_CONFIG.promptQ}</p>
+    <div class="coach-prompt-btns">
+      <button class="coach-prompt-yes" onclick="goToCoach('${safe}')">Yes, let's explore it →</button>
+      <button class="coach-prompt-no" onclick="this.closest('.coach-prompt').style.display='none'">Not yet</button>
+    </div>
+  </div>`;
+}
+
+function goToCoach(emotion) {
+  window.location.href = COACH_CONFIG.url + '?mode=rightnow&context=' + encodeURIComponent(emotion);
+}
+
+const EMOTIONS = [
+  {
+    name:"Afraid", type:"u", color:"#8875e0",
+    insight:"Fear tends to wear disguises — it shows up as busyness, control, irritability, or shutdown. In a relationship, unexpressed fear often looks like anger or distance to your partner. Before you can share it, you have to name it. What specifically feels threatening right now?",
+    sub:[
+      {name:"Stressed", insight:"Stress is the gap between what's demanded of you and what you believe you can handle. When you carry it alone, it leaks into the relationship as irritability or withdrawal. What's the single demand weighing most on you right now?"},
+      {name:"Overwhelmed", insight:"Overwhelm is what happens when too many things feel equally urgent. The brain can't prioritize under threat — so everything feels like a fire. What one thing, if handled, would make the rest feel more manageable?"},
+      {name:"Powerless", insight:"Powerlessness is one of the most painful emotional states — it signals that you believe you have no agency. In a relationship, it can show up as passive withdrawal or explosive reactivity. What small thing can you actually influence right now?"},
+      {name:"Anxious", insight:"Anxiety is fear about the future — specifically, a future you believe you can't handle. Your brain is running threat simulations. Grounding yourself in what's actually true right now, not the simulation, is the first move."},
+      {name:"Ashamed", insight:"Shame says 'I am bad.' Guilt says 'I did something bad.' Those are very different signals. Shame needs compassion, not punishment. If someone you love felt this way, what would you tell them?"}
+    ]
+  },
+  {
+    name:"Embarrassed", type:"u", color:"#6b5bd6",
+    insight:"Embarrassment is the gap between who you want to be and how you just showed up. It's often loudest in close relationships, where the people who matter most are watching. That intensity is a signal worth listening to.",
+    sub:[
+      {name:"Guilty", insight:"Guilt is actually healthy when it's proportionate — it signals that you've violated your own values. In a relationship, proportionate guilt motivates repair. The question is: what do you need to do to address it? Guilt that doesn't lead to action becomes resentment on both sides."},
+      {name:"Humiliated", insight:"Humiliation is shame that was inflicted by someone else — the experience of being diminished. When it happens inside a partnership, the damage to trust runs deep. What do you need right now to restore your sense of dignity?"}
+    ]
+  },
+  {
+    name:"Angry", type:"u", color:"#4a7fd4",
+    insight:"Anger is almost never the primary emotion — it's the bodyguard. It rides on top of something else: hurt, fear, or injustice. In relationship conflict, the partner who leads with anger rarely gets what they actually need. If you can name what's underneath it, you have something you can both work with.",
+    sub:[
+      {name:"Resentful", insight:"Resentment is anger that's been stored. It builds when you feel wronged and haven't addressed it — or when you've said yes to things you wanted to say no to. What is the resentment actually about, and have you said it out loud to your partner?"},
+      {name:"Remorseful", insight:"Remorse is grief over something you did. Unlike guilt (which is problem-focused), remorse carries emotional weight. It's healthy when it motivates repair — corrosive when it becomes a permanent identity that your partner is expected to manage."},
+      {name:"Bored", insight:"Boredom in a relationship is rarely about the other person — it's usually a signal that novelty, challenge, or meaning has drained out somewhere. What would 'genuinely engaged together' actually look like right now?"},
+      {name:"Offended", insight:"Offense is the signal that something crossed a value or a boundary. In a partnership, it's worth asking: what specifically was crossed — and have I communicated that clearly, or have I expected my partner to know?"},
+      {name:"Jealous", insight:"Jealousy is a signal, not a character flaw. It's telling you something you want — something you fear losing or fear you can't have. What does the jealousy point to that you actually care about in this relationship?"}
+    ]
+  },
+  {
+    name:"Sad", type:"u", color:"#2a9a85",
+    insight:"Sadness signals that something that mattered to you got lost — a version of your relationship, a future you were counting on, a moment of connection that passed. It asks to be acknowledged, not managed away. What are you grieving?",
+    sub:[
+      {name:"Depressed", insight:"Depression isn't sadness amplified — it's often sadness that's been cut off from its source. If you're feeling emotionally flat or hollow, it's worth asking: what am I not letting myself grieve? And is there something in this relationship that needs to be spoken?"},
+      {name:"Deflated", insight:"Deflation happens when hope meets disappointment. Something you were counting on didn't come through. That's a real loss — even if your partner doesn't fully see it yet."},
+      {name:"Discouraged", insight:"Discouragement is what happens when effort meets sustained resistance. In a relationship, it often sounds like 'what's the point?' That's not giving up — it's an important signal that something needs to change. What would you need to see to feel hopeful again?"},
+      {name:"Hurt", insight:"Hurt almost always involves someone you care about — you can't be deeply hurt by someone who doesn't matter to you. The hurt is proof that the connection matters. What do you need to say, or hear, right now?"}
+    ]
+  },
+  {
+    name:"Alone", type:"u", color:"#1aaa90",
+    insight:"Loneliness isn't about being by yourself — it's about being unseen. You can be in a relationship and feel completely alone. That's data about connection quality, not quantity. Does your partner know you're feeling this way?",
+    sub:[
+      {name:"Lonely", insight:"Loneliness inside a relationship is one of the most painful experiences — because it combines disconnection with the feeling that something is wrong with you or the relationship. It's treatable. But it requires saying the thing: 'I feel alone, even with you.'"},
+      {name:"Excluded", insight:"Exclusion activates the same neural pathways as physical pain — your brain registers being left out as a genuine threat. What story are you telling yourself about why you were excluded, and how accurate is it?"},
+      {name:"Isolated", insight:"Isolation in a relationship is often a protection strategy — withdrawing before you can get hurt. But it cuts off the very connection you actually need. What would it cost you to reach toward your partner right now?"},
+      {name:"Abandoned", insight:"Abandonment fear often has roots that predate the current relationship. When it gets activated, it's worth asking: is this about what's actually happening now, or is an older wound being triggered? Both deserve care — but they need different responses."}
+    ]
+  },
+  {
+    name:"Dislike", type:"u", color:"#4a9040",
+    insight:"Contempt is the single strongest predictor of relationship breakdown — Gottman's research is definitive on this. If contempt or disgust has become a regular presence in how you experience your partner, that's the most important flag to address.",
+    sub:[
+      {name:"Disgusted", insight:"Disgust is one of the most ancient emotional responses — it evolved to protect us from harm. In relationships, it often signals a deep values violation. What specifically crossed a line for you?"},
+      {name:"Sickened", insight:"Being sickened goes deeper than disgust — it's a stronger visceral rejection. When something feels morally wrong, your body often registers it before your mind catches up. Trust that signal enough to examine what it's pointing at."},
+      {name:"Contemptuous", insight:"Contempt is the most corrosive emotion in close relationships — Gottman called it 'sulfuric acid for love.' It positions you as superior to your partner. The antidote isn't fake warmth — it's genuine curiosity about what's driving the contempt, and what needs underneath it have gone unmet."},
+      {name:"Critical", insight:"There's a real difference between criticism and feedback. Criticism attacks the person; feedback addresses the behavior. Gottman found that criticism is one of the four horsemen of relationship breakdown. Ask: what am I actually frustrated about — and have I said it as a need rather than an attack?"}
+    ]
+  },
+  {
+    name:"Accepted", type:"c", color:"#c03578",
+    insight:"Being seen and accepted by your partner is one of the deepest needs in a relationship. It's what makes the difference between a roommate and a true partner. When it's present, let it land — don't deflect or minimize it.",
+    sub:[
+      {name:"Loved", insight:"Feeling genuinely loved — not earned, not performed, just received — is what most people are actually looking for in a relationship. We often confuse love with approval. Approval is conditional. Love isn't. When it's there, let it land."},
+      {name:"Honored", insight:"Being honored means your partner recognized something real in you and chose to acknowledge it. Don't deflect it, minimize it, or redirect to their needs. Let it register."},
+      {name:"Appreciated", insight:"Gottman's research shows that thriving relationships require at least a 5:1 ratio of positive to negative interactions. Noticing when you feel appreciated — and actually letting it in — matters more than it might seem."},
+      {name:"Respected", insight:"Respect inside a relationship is earned and renewable. It's different from approval (which is conditional) — respect signals that your partner genuinely values who you are. What did you do to earn it — and can you receive it without deflecting?"}
+    ]
+  },
+  {
+    name:"Confident", type:"c", color:"#a02858",
+    insight:"Confidence rooted in genuine self-knowledge is durable. In a relationship, it shows up as the ability to hear hard feedback, disagree without defensiveness, and stay present in conflict. Which type of confidence are you running on right now?",
+    sub:[
+      {name:"Positive", insight:"A positive emotional state expands what psychologists call your 'action repertoire' — you literally see more options when you feel good. In a relationship, this is the state where repair is easiest. Use it."},
+      {name:"Powerful", insight:"The feeling of power isn't about domination — it's about agency and effectiveness. In a partnership, real power is collaborative. What's worth directing your energy toward together right now?"},
+      {name:"Brave", insight:"Courage in a relationship often looks like saying the hard thing — expressing a need, admitting a mistake, or staying present when you'd rather withdraw. If you're feeling brave right now, that's a signal worth acting on."},
+      {name:"Proud", insight:"Healthy pride is tied to effort and growth. In a relationship, it might be pride in how you handled something difficult, or how you've grown. Don't dismiss it. Let it reinforce what you want to keep doing."}
+    ]
+  },
+  {
+    name:"Interested", type:"c", color:"#c04828",
+    insight:"Curiosity is the antidote to defensiveness. When you're genuinely curious about your partner — not strategically, but actually interested in their inner world — the relationship shifts. What would it mean to be truly curious about what's happening for them right now?",
+    sub:[
+      {name:"Attracted", insight:"Attraction is information — it tells you where your energy naturally wants to go. In a long-term relationship, noticing attraction toward your partner is worth celebrating and expressing. What are you drawn toward right now?"},
+      {name:"Curious", insight:"Curiosity is the direct antidote to defensiveness. When you're genuinely curious about your partner's experience — not looking for evidence of wrongdoing — something opens. What's one thing about your partner you haven't asked about lately?"},
+      {name:"Inspired", insight:"Feeling inspired by your partner — by their strength, their growth, their perspective — is one of the quiet gifts of a good relationship. What is it about them right now that's inspiring you?"},
+      {name:"Creative", insight:"Creativity in a relationship shows up as playfulness, problem-solving together, finding new ways to connect. When the threat response is low, both partners can access it. What's one thing you could try together that you haven't done before?"}
+    ]
+  },
+  {
+    name:"Excited", type:"c", color:"#b07010",
+    insight:"Excitement is your aliveness signal — in yourself and in a relationship. When's the last time you felt genuinely lit up about something together? If you can't answer quickly, that gap is worth examining.",
+    sub:[
+      {name:"Passionate", insight:"Passion in a relationship isn't just physical — it's the feeling that this person and this life together matter deeply to you. What are you most passionate about in this partnership right now?"},
+      {name:"Surprised", insight:"Surprise in a relationship can be a gift — when your partner does or says something that breaks the expected pattern in a good way. What's something your partner has done recently that surprised you?"},
+      {name:"Eager", insight:"Eagerness is energy moving toward something. In a relationship, it's the feeling of wanting more — more connection, more time, more depth. What are you eager to explore or experience together?"}
+    ]
+  },
+  {
+    name:"Loving", type:"c", color:"#608018",
+    insight:"Gratitude, awe, and love are 'self-transcendent emotions' — they shift attention from self to something larger. In a relationship, these are the states that create lasting connection. They're also the states most easily crowded out by busyness.",
+    sub:[
+      {name:"Peaceful", insight:"Peace in a relationship is the felt sense of safety with another person — the quiet knowing that you can be yourself here. When you feel it, notice it. Savor it. Positive psychology research shows that intentionally registering positive states helps wire them in neurologically."},
+      {name:"Committed", insight:"Commitment is love expressed through consistency — the daily choice to show up, even when it's inconvenient. What are you most committed to in this relationship right now, and is your behavior actually aligned with that?"},
+      {name:"Friendly", insight:"Warmth and friendliness toward your partner — the kind you might show a good friend — is the social baseline that makes real connection possible. Gottman found that couples who like each other (not just love each other) tend to weather hard times better."},
+      {name:"Grateful", insight:"Gratitude toward your partner is one of the most well-researched positive relationship practices. Robert Emmons' research shows that specific, expressed gratitude — not just felt gratitude — strengthens relationships measurably. What's one thing you're grateful for about your partner right now?"},
+      {name:"Awed", insight:"Awe — the feeling of encountering something vast or remarkable — can be directed toward your partner. The fact that two people find each other, build something together, and keep choosing each other is not small. Dacher Keltner's research shows awe increases generosity and reduces self-focus. Where do you find it in your relationship?"}
+    ]
+  }
+];
+
+function hexRgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)].join(','); }
+
+const sidebar = document.getElementById('sidebar');
+const panel = document.getElementById('detail-panel');
+let selected = null;
+
+function setSelected(el) {
+  if (selected) selected.classList.remove('selected');
+  el.classList.add('selected');
+  selected = el;
+}
+function addLabel(text) {
+  const p = document.createElement('p');
+  p.className = 'sidebar-section-label';
+  p.textContent = text;
+  sidebar.appendChild(p);
+}
+function addDivider() {
+  const d = document.createElement('div');
+  d.className = 'sidebar-divider';
+  sidebar.appendChild(d);
+}
+
+function showCatDetail(e) {
+  const rgb = hexRgb(e.color);
+  panel.style.alignItems = 'flex-start';
+  panel.innerHTML = `
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-icon" style="background:rgba(${rgb},0.18);">
+          <div class="detail-icon-inner" style="background:${e.color};"></div>
+        </div>
+        <div>
+          <p class="detail-name">${e.name}</p>
+          <p class="detail-meta">${e.type==='u'?'Uncomfortable':'Comfortable'} · ${e.sub.length} specific emotions</p>
+        </div>
+      </div>
+      <p class="sub-pills-label">Specific emotions in this category</p>
+      <div class="sub-pills">
+        ${e.sub.map(s=>`<span class="sub-pill" style="background:rgba(${rgb},0.12);color:${e.color};border-color:rgba(${rgb},0.35);" data-name="${s.name}">${s.name}</span>`).join('')}
+      </div>
+      <div class="insight-block">
+        <p class="insight-label">Coaching insight</p>
+        <p class="insight-text">${e.insight}</p>
+      </div>
+      ${coachPromptHTML(e.name)}
+    </div>`;
+  panel.querySelectorAll('.sub-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const sub = e.sub.find(s=>s.name===pill.dataset.name);
+      if (sub) {
+        showSubDetail(e, sub);
+        const subBtn = sidebar.querySelector(`.sub-btn[data-cat="${e.name}"][data-name="${sub.name}"]`);
+        if (subBtn) setSelected(subBtn);
+      }
+    });
+  });
+}
+
+function showSubDetail(cat, sub) {
+  const rgb = hexRgb(cat.color);
+  panel.style.alignItems = 'flex-start';
+  panel.innerHTML = `
+    <div class="detail-content">
+      <div class="breadcrumb">
+        <span class="breadcrumb-parent">${cat.name}</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">${sub.name}</span>
+      </div>
+      <div class="detail-header">
+        <div class="detail-icon" style="background:rgba(${rgb},0.18);">
+          <div class="detail-icon-inner" style="background:${cat.color};"></div>
+        </div>
+        <div>
+          <p class="detail-name">${sub.name}</p>
+          <p class="detail-meta">${cat.type==='u'?'Uncomfortable':'Comfortable'} emotion</p>
+        </div>
+      </div>
+      <div class="insight-block">
+        <p class="insight-label">Coaching insight</p>
+        <p class="insight-text">${sub.insight}</p>
+      </div>
+      ${coachPromptHTML(sub.name)}
+    </div>`;
+}
+
+function renderCategory(e) {
+  const row = document.createElement('div');
+  row.className = 'cat-row';
+  const catBtn = document.createElement('button');
+  catBtn.className = 'cat-btn';
+  catBtn.dataset.cat = e.name;
+  catBtn.innerHTML = `<span class="cat-dot" style="background:${e.color};"></span>${e.name}`;
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'toggle-btn';
+  toggleBtn.innerHTML = '▶';
+  toggleBtn.setAttribute('aria-label', `Expand ${e.name}`);
+  row.appendChild(catBtn);
+  row.appendChild(toggleBtn);
+  sidebar.appendChild(row);
+  const subList = document.createElement('div');
+  subList.className = 'sub-list';
+  e.sub.forEach(sub => {
+    const subBtn = document.createElement('button');
+    subBtn.className = 'sub-btn';
+    subBtn.dataset.name = sub.name;
+    subBtn.dataset.cat = e.name;
+    subBtn.innerHTML = `<span class="sub-dot" style="background:${e.color};"></span>${sub.name}`;
+    subBtn.addEventListener('click', () => { setSelected(subBtn); showSubDetail(e, sub); });
+    subList.appendChild(subBtn);
+  });
+  sidebar.appendChild(subList);
+  catBtn.addEventListener('click', () => {
+    setSelected(catBtn);
+    showCatDetail(e);
+    if (!subList.classList.contains('open')) { subList.classList.add('open'); toggleBtn.classList.add('open'); toggleBtn.innerHTML = '▼'; }
+  });
+  toggleBtn.addEventListener('click', () => {
+    const isOpen = subList.classList.toggle('open');
+    toggleBtn.classList.toggle('open', isOpen);
+    toggleBtn.innerHTML = isOpen ? '▼' : '▶';
+  });
+}
+
+EMOTIONS.filter(e=>e.type==='u').forEach(renderCategory);
+addDivider();
+addLabel('Comfortable');
+EMOTIONS.filter(e=>e.type==='c').forEach(renderCategory);
+addDivider();
+</script>
+</body>
+</html>
