@@ -862,13 +862,12 @@
 
         showAIDisclosureBanner();
 
-        // Ensure profile exists
-        try {
-            var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+        // Ensure profile exists — fire and forget so it never blocks the opener
+        sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single().then(function(profileResult) {
             if (profileResult.error && profileResult.error.code === "PGRST116") {
-                await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false, product: "couples" });
+                sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false, product: "couples" }).catch(function(e) { console.warn("Profile insert error:", e); });
             }
-        } catch (e) { console.warn("Profile check error:", e); }
+        }).catch(function(e) { console.warn("Profile check error:", e); });
 
         sessionId = generateSessionId();
         conversationHistory = [];
@@ -945,7 +944,29 @@
             if (isChipContext) {
                 // CHIP/PULSE MODE: inject context block; skip generic welcome and returning-user opener entirely
                 prompt += contextBlock;
-                if (returningContext) {
+                var isPulseMode = _chipMode === "pulse";
+                if (isPulseMode) {
+                    // PULSE SESSION: user filled in check-in sliders — acknowledge their readings specifically
+                    if (returningContext) {
+                        prompt +=
+                            "RETURNING USER — PULSE CHECK-IN MODE:\n" +
+                            "This couple is returning and has filled in the daily pulse check-in. Skip the full welcome.\n" +
+                            "Greet them briefly (one sentence from John or Joree), then immediately acknowledge their current state " +
+                            "from the pulse readings in the context block above (Connection, Tension, Readiness).\n" +
+                            "Do NOT ask a generic opener — the pulse already tells you where they are. Speak directly to those readings.\n" +
+                            "Your opening should feel like: 'I see where you two are right now. Let's start there.' — then ask ONE question.\n" +
+                            "PREVIOUS SESSION CONTEXT (background only):\n" + returningContext + "\n";
+                    } else {
+                        prompt +=
+                            "NEW USER — PULSE CHECK-IN MODE:\n" +
+                            "This couple is new and has just filled in the daily pulse check-in. Skip the full welcome/consent script.\n" +
+                            "Open with 1-2 warm welcoming sentences from John and/or Joree, then flow DIRECTLY into acknowledging " +
+                            "their pulse readings (Connection, Tension, Readiness from the context block above).\n" +
+                            "Do NOT deliver the consent gate or say 'Type I agree'. The AI disclosure is shown in the interface.\n" +
+                            "Speak to where they are as a couple right now — name it, reflect it, and ask ONE focused coaching question.\n" +
+                            "Keep the entire opener to 3-5 sentences total.\n\n";
+                    }
+                } else if (returningContext) {
                     prompt += "\nRETURNING USER — CHIP MODE: This user has been here before. Do NOT deliver the full welcome or consent request. " +
                               "Do NOT ask 'What's present for you today?' or any generic opener. Open DIRECTLY on the chip topic above.\n" +
                               "PREVIOUS SESSION CONTEXT (background only):\n" + returningContext + "\n";
@@ -979,14 +1000,19 @@
         try {
             var token = (await sb.auth.getSession()).data.session?.access_token;
             if (token) {
-                var res = await fetch(SUPABASE_URL + "/functions/v1/chat", {
+                // 4-second timeout prevents a slow/cold edge function from stalling the opener
+                var timeoutPromise = new Promise(function(resolve) { setTimeout(resolve, 4000); });
+                var fetchPromise   = fetch(SUPABASE_URL + "/functions/v1/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
                     body: JSON.stringify({ action: "get_last_summary", coach: "couples" })
                 });
-                var data = await res.json();
-                if (data.summary) {
-                    returningContext = data.summary.summary + "\nPillar: " + data.summary.pillar + "\nTopics: " + (data.summary.topics || []).join(", ");
+                var res = await Promise.race([fetchPromise, timeoutPromise]);
+                if (res && res.ok) {
+                    var data = await res.json();
+                    if (data.summary) {
+                        returningContext = data.summary.summary + "\nPillar: " + data.summary.pillar + "\nTopics: " + (data.summary.topics || []).join(", ");
+                    }
                 }
             }
         } catch (e) { console.warn("Failed to fetch last summary:", e); }

@@ -794,6 +794,24 @@
         "\"Welcome back. I'm glad you're here again. [Brief natural reference to context if provided.] What's present for you today?\"\n" +
         "Keep it brief and move into the work.\n\n";
 
+    // Pulse-mode specific openers — replace OPENING_VARIATIONS for daily check-in sessions
+    var PULSE_FIRST_TIME_OPENER_BLOCK =
+        "AFTER USER RESPONDS TO WELCOME/CONSENT — PULSE CHECK-IN MODE:\n" +
+        "This user came directly from the daily pulse check-in. Do NOT use the standard OPENING_VARIATIONS.\n" +
+        "Instead, acknowledge what they shared in the pulse check-in — speak to their current state directly and warmly.\n" +
+        "Reference the pulse values naturally (do not read numbers back robotically). Examples:\n" +
+        "- High plate + low energy: 'You've got a lot on your plate and not much in the tank right now. Let's go gently. What's the heaviest thing you're carrying?'\n" +
+        "- Low plate + high energy: 'It sounds like you have some breathing room today and you're ready to go deeper. What's been calling for your attention?'\n" +
+        "- Low connection: 'I'm noticing you marked feeling less connected — I want to make sure we tend to that today. What's that loneliness or distance about?'\n" +
+        "Keep your response to 2–3 sentences, warm and specific to her readings. Then ask ONE focused question.\n\n";
+
+    var PULSE_RETURNING_BLOCK =
+        "RETURNING USER — PULSE CHECK-IN MODE:\n" +
+        "This user is returning and has filled in the daily pulse check-in. Skip the full welcome.\n" +
+        "Greet her briefly (one sentence), then immediately acknowledge her current state from the pulse readings in the context block above.\n" +
+        "Do NOT ask 'What's present for you today?' — the pulse already tells you where she is. Speak directly to what she entered.\n" +
+        "Your opening should feel like: 'I see where you are right now. Let's meet you there.' — then ask ONE question.\n\n";
+
     // =====================================================
     // URL PARAM HANDLING
     // =====================================================
@@ -884,6 +902,11 @@
                     "Name what she\'s experiencing, reflect it with warmth, and ask ONE focused coaching question about it. " +
                     "Keep your opener to 3-5 sentences total. The AI disclosure is already shown in the interface.\n\n";
             }
+        } else if (urlMode === "pulse" && isReturningUserFlag) {
+            prompt += PULSE_RETURNING_BLOCK;
+        } else if (urlMode === "pulse" && !isReturningUserFlag) {
+            prompt += FIRST_TIME_WELCOME_BLOCK;
+            prompt += PULSE_FIRST_TIME_OPENER_BLOCK;
         } else if (isReturningUserFlag) {
             prompt += RETURNING_USER_BLOCK;
         } else {
@@ -1122,12 +1145,15 @@
         isReturningUser = false;
         if (accessToken) {
             try {
-                var checkRes = await fetch(EDGE_FUNCTION_URL, {
+                // 4-second timeout prevents a slow/cold edge function from stalling the opener
+                var timeoutPromise = new Promise(function(resolve) { setTimeout(resolve, 4000); });
+                var fetchPromise   = fetch(EDGE_FUNCTION_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + accessToken },
                     body: JSON.stringify({ action: "get_last_summary" })
                 });
-                if (checkRes.ok) {
+                var checkRes = await Promise.race([fetchPromise, timeoutPromise]);
+                if (checkRes && checkRes.ok) {
                     var checkData = await checkRes.json();
                     if (checkData.summary) { isReturningUser = true; }
                 }
@@ -1467,13 +1493,12 @@
         document.getElementById("hamburgerBtn").style.display = "flex";
         showAIDisclosureBanner();
 
-        // Ensure profile exists
-        try {
-            var profileResult = await sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single();
+        // Ensure profile exists — fire and forget so it never blocks the opener
+        sb.from("profiles").select("id, disclaimer_accepted").eq("id", currentUser.id).single().then(function(profileResult) {
             if (profileResult.error && profileResult.error.code === "PGRST116") {
-                await sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false });
+                sb.from("profiles").insert({ id: currentUser.id, email: currentUser.email, disclaimer_accepted: false }).catch(function(e) { console.warn("Profile insert error:", e); });
             }
-        } catch (e) { console.warn("Profile check error:", e); }
+        }).catch(function(e) { console.warn("Profile check error:", e); });
 
         sessionId = generateSessionId();
         conversationHistory = [];
