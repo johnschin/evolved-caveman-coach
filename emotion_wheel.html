@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emotion Wheel — The Evolved Caveman</title>
+  <title>Emotion Wheel — Proxi He</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --aqua:        #a3d0c9;
-      --aqua-deep:   #6bada3;
-      --aqua-soft:   rgba(163, 208, 201, 0.14);
+      --accent:      #a3d0c9;
+      --accent-deep: #6bada3;
+      --accent-soft: rgba(163, 208, 201, 0.14);
       --linen:       #FAF8F5;
       --card:        #FFFFFF;
       --slate-plum:  #3A3353;
@@ -22,279 +22,150 @@
       --font-sans:   'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: var(--font-sans);
-      background: var(--linen);
-      color: var(--slate-plum);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { font-family: var(--font-sans); background: var(--linen); color: var(--slate-plum); min-height: 100vh; display: flex; flex-direction: column; }
 
     /* HEADER */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 28px;
-      background: var(--slate-plum);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; background: var(--slate-plum); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .back-btn { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.12s; }
+    .back-btn:hover { color: #fff; }
     .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--aqua); }
-    .brand h1 { font-size: 13px; font-weight: 700; color: var(--aqua); letter-spacing: 0.8px; text-transform: uppercase; }
-    .header-tag { font-size: 10px; background: rgba(163,208,201,0.2); color: var(--aqua); padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .brand h1 { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.8px; text-transform: uppercase; }
+    .header-tag { font-size: 10px; background: rgba(163,208,201,0.2); color: var(--accent); padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .header-count { font-size: 12px; color: rgba(255,255,255,0.45); }
 
     /* MAIN */
-    main {
-      flex: 1;
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 28px 28px 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
+    main { flex: 1; max-width: 1000px; margin: 0 auto; width: 100%; padding: 28px 28px 48px; display: flex; flex-direction: column; gap: 24px; }
     .page-intro { text-align: center; }
     .page-intro h2 { font-size: 22px; font-weight: 700; color: var(--slate-plum); margin-bottom: 8px; }
     .page-intro p { font-size: 14px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.65; }
 
     /* LAYOUT */
-    .wheel-layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 18px;
-      align-items: start;
-    }
+    .wheel-layout { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: start; }
 
     /* SIDEBAR */
-    .sidebar {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .sidebar-section-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dim);
-      padding: 10px 12px 5px;
-    }
+    .sidebar { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .sidebar-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); padding: 10px 12px 5px; }
     .sidebar-divider { height: 1px; background: var(--border); margin: 6px 0; }
-
-    .cat-row {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      padding: 0 8px;
-      gap: 0;
-    }
-    .cat-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      text-align: left;
-      padding: 7px 6px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      border-radius: 6px;
-      transition: all 0.12s;
-    }
-    .cat-btn:hover { background: var(--aqua-soft); color: var(--slate-plum); }
-    .cat-btn.selected { background: var(--aqua-soft); color: var(--slate-plum); }
+    .cat-row { display: flex; align-items: center; width: 100%; padding: 0 8px; gap: 0; }
+    .cat-btn { display: flex; align-items: center; gap: 8px; flex: 1; text-align: left; padding: 7px 6px; border: none; background: transparent; cursor: pointer; font-family: var(--font-sans); font-size: 12px; font-weight: 600; color: var(--muted); border-radius: 6px; transition: all 0.12s; }
+    .cat-btn:hover { background: var(--accent-soft); color: var(--slate-plum); }
+    .cat-btn.selected { background: var(--accent-soft); color: var(--slate-plum); }
     .cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-    .toggle-btn {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      color: var(--dim);
-      font-size: 10px;
-      flex-shrink: 0;
-      transition: all 0.12s;
-    }
-    .toggle-btn:hover { background: var(--aqua-soft); color: var(--muted); }
+    .toggle-btn { width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: var(--dim); font-size: 10px; flex-shrink: 0; transition: all 0.12s; }
+    .toggle-btn:hover { background: var(--accent-soft); color: var(--muted); }
     .toggle-btn.open { color: var(--muted); }
-
-    .sub-list {
-      display: none;
-      flex-direction: column;
-      padding: 2px 8px 4px 28px;
-      gap: 1px;
-    }
+    .sub-list { display: none; flex-direction: column; padding: 2px 8px 4px 28px; gap: 1px; }
     .sub-list.open { display: flex; }
-
-    .sub-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      width: 100%;
-      text-align: left;
-      padding: 5px 8px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      border-radius: 5px;
-      transition: all 0.12s;
-    }
-    .sub-btn:hover { background: var(--aqua-soft); color: var(--slate-plum); }
+    .sub-btn { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left; padding: 5px 8px; border: none; background: transparent; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--muted); border-radius: 5px; transition: all 0.12s; }
+    .sub-btn:hover { background: var(--accent-soft); color: var(--slate-plum); }
     .sub-btn.selected { color: var(--slate-plum); }
     .sub-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; opacity: 0.6; }
 
     /* DETAIL PANEL */
-    .detail-panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 28px;
-      min-height: 380px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .detail-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 28px; min-height: 380px; display: flex; align-items: center; justify-content: center; }
     .detail-empty { text-align: center; }
     .detail-empty p { font-size: 13px; color: var(--dim); line-height: 1.6; }
-
     .detail-content { width: 100%; }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-    .breadcrumb-parent {
-      font-size: 11px;
-      color: var(--dim);
-      font-weight: 500;
-    }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+    .breadcrumb-parent { font-size: 11px; color: var(--dim); font-weight: 500; }
     .breadcrumb-sep { font-size: 11px; color: var(--dim); }
     .breadcrumb-current { font-size: 11px; color: var(--muted); font-weight: 600; }
-
-    .detail-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
-    .detail-icon {
-      width: 42px; height: 42px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
+    .detail-header { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .detail-icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .detail-icon-inner { width: 15px; height: 15px; border-radius: 50%; }
     .detail-name { font-size: 20px; font-weight: 700; color: var(--slate-plum); margin-bottom: 3px; }
     .detail-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; }
-
     .sub-pills-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; }
     .sub-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
-    .sub-pill {
-      font-size: 12px; font-weight: 500;
-      padding: 4px 12px; border-radius: 999px;
-      border: 1px solid; cursor: pointer;
-      transition: opacity 0.12s;
-    }
+    .sub-pill { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 999px; border: 1px solid; cursor: pointer; transition: opacity 0.12s; }
     .sub-pill:hover { opacity: 0.8; }
-
-    .insight-block { border-left: 2.5px solid var(--aqua); padding-left: 16px; }
-    .insight-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--aqua-deep); text-transform: uppercase; margin-bottom: 8px; }
+    .insight-block { border-left: 2.5px solid var(--accent); padding-left: 16px; }
+    .insight-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--accent-deep); text-transform: uppercase; margin-bottom: 8px; }
     .insight-text { font-size: 15px; color: var(--slate-plum); line-height: 1.78; }
 
+    /* COACHING PROMPT */
+    .coach-prompt { margin-top: 24px; background: var(--accent-soft); border: 1px solid rgba(163,208,201,0.35); border-radius: 10px; padding: 18px 20px; }
+    .coach-prompt-q { font-size: 14px; font-weight: 600; color: var(--slate-plum); margin-bottom: 14px; line-height: 1.5; }
+    .coach-prompt-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .coach-prompt-yes { font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--slate-plum); background: var(--accent); border: none; border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: opacity 0.15s; }
+    .coach-prompt-yes:hover { opacity: 0.85; }
+    .coach-prompt-no { font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--muted); background: transparent; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: all 0.15s; }
+    .coach-prompt-no:hover { border-color: var(--muted); color: var(--slate-plum); }
+
     /* FOOTER */
-    footer {
-      padding: 14px 28px;
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    footer p { font-size: 12px; color: var(--dim); }
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--slate-plum);
-      background: var(--aqua);
-      border: none;
-      border-radius: 8px;
-      padding: 9px 18px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
+    footer { padding: 14px 28px; background: var(--card); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .back-link { font-size: 13px; color: var(--dim); text-decoration: none; font-weight: 500; transition: color 0.12s; }
+    .back-link:hover { color: var(--slate-plum); }
+    .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--slate-plum); background: var(--accent); border: none; border-radius: 8px; padding: 9px 18px; cursor: pointer; text-decoration: none; transition: opacity 0.15s; }
     .cta-btn:hover { opacity: 0.85; }
 
-    @media (max-width: 700px) {
-      .wheel-layout { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 700px) { .wheel-layout { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">
-    <div class="brand-dot"></div>
-    <h1>Proximity Coaching</h1>
-    <span class="header-tag">Emotion Wheel</span>
+  <div class="header-left">
+    <a href="/home-he" class="back-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <h1>Proximity Coaching</h1>
+      <span class="header-tag">Emotion Wheel</span>
+    </div>
   </div>
   <span class="header-count">11 categories · 50 emotions</span>
 </header>
 
 <main>
-
   <div class="page-intro">
     <h2>What are you actually feeling?</h2>
     <p>Most men operate with a three-word emotional vocabulary: good, bad, fine. This wheel builds granularity — because the more precisely you can name what's happening inside, the more you can actually do with it.</p>
   </div>
 
   <div class="wheel-layout">
-
     <div class="sidebar" id="sidebar">
       <p class="sidebar-section-label">Uncomfortable</p>
     </div>
-
     <div class="detail-panel" id="detail-panel">
       <div class="detail-empty">
         <p>Select a category or specific emotion<br>from the list on the left</p>
       </div>
     </div>
-
   </div>
-
 </main>
 
 <footer>
-  <p>Proxi He — Emotion Wheel</p>
-  <a href="/proxi-he" class="cta-btn">Talk to Proxi He →</a>
+  <a href="/home-he" class="back-link">← Back to home</a>
+  <a href="/proxi-he?mode=chat" class="cta-btn">Talk to Proxi He →</a>
 </footer>
 
 <script>
+const COACH_CONFIG = {
+  name: 'Proxi He',
+  url: '/proxi-he',
+  promptQ: 'Is this a good starting point for your session with Proxi He?'
+};
+
+function coachPromptHTML(emotionName) {
+  const safe = emotionName.replace(/'/g, "\\'");
+  return `<div class="coach-prompt">
+    <p class="coach-prompt-q">${COACH_CONFIG.promptQ}</p>
+    <div class="coach-prompt-btns">
+      <button class="coach-prompt-yes" onclick="goToCoach('${safe}')">Yes, let's explore it →</button>
+      <button class="coach-prompt-no" onclick="this.closest('.coach-prompt').style.display='none'">Not yet</button>
+    </div>
+  </div>`;
+}
+
+function goToCoach(emotion) {
+  window.location.href = COACH_CONFIG.url + '?mode=rightnow&context=' + encodeURIComponent(emotion);
+}
+
 const EMOTIONS = [
   {
     name:"Afraid", type:"u", color:"#8875e0",
@@ -419,7 +290,6 @@ function setSelected(el) {
   el.classList.add('selected');
   selected = el;
 }
-
 function addLabel(text) {
   const p = document.createElement('p');
   p.className = 'sidebar-section-label';
@@ -454,6 +324,7 @@ function showCatDetail(e) {
         <p class="insight-label">Coaching insight</p>
         <p class="insight-text">${e.insight}</p>
       </div>
+      ${coachPromptHTML(e.name)}
     </div>`;
   panel.querySelectorAll('.sub-pill').forEach(pill => {
     pill.addEventListener('click', () => {
@@ -490,54 +361,41 @@ function showSubDetail(cat, sub) {
         <p class="insight-label">Coaching insight</p>
         <p class="insight-text">${sub.insight}</p>
       </div>
+      ${coachPromptHTML(sub.name)}
     </div>`;
 }
 
 function renderCategory(e) {
   const row = document.createElement('div');
   row.className = 'cat-row';
-
   const catBtn = document.createElement('button');
   catBtn.className = 'cat-btn';
   catBtn.dataset.cat = e.name;
   catBtn.innerHTML = `<span class="cat-dot" style="background:${e.color};"></span>${e.name}`;
-
   const toggleBtn = document.createElement('button');
   toggleBtn.className = 'toggle-btn';
   toggleBtn.innerHTML = '▶';
   toggleBtn.setAttribute('aria-label', `Expand ${e.name}`);
-
   row.appendChild(catBtn);
   row.appendChild(toggleBtn);
   sidebar.appendChild(row);
-
   const subList = document.createElement('div');
   subList.className = 'sub-list';
-
   e.sub.forEach(sub => {
     const subBtn = document.createElement('button');
     subBtn.className = 'sub-btn';
     subBtn.dataset.name = sub.name;
     subBtn.dataset.cat = e.name;
     subBtn.innerHTML = `<span class="sub-dot" style="background:${e.color};"></span>${sub.name}`;
-    subBtn.addEventListener('click', () => {
-      setSelected(subBtn);
-      showSubDetail(e, sub);
-    });
+    subBtn.addEventListener('click', () => { setSelected(subBtn); showSubDetail(e, sub); });
     subList.appendChild(subBtn);
   });
   sidebar.appendChild(subList);
-
   catBtn.addEventListener('click', () => {
     setSelected(catBtn);
     showCatDetail(e);
-    if (!subList.classList.contains('open')) {
-      subList.classList.add('open');
-      toggleBtn.classList.add('open');
-      toggleBtn.innerHTML = '▼';
-    }
+    if (!subList.classList.contains('open')) { subList.classList.add('open'); toggleBtn.classList.add('open'); toggleBtn.innerHTML = '▼'; }
   });
-
   toggleBtn.addEventListener('click', () => {
     const isOpen = subList.classList.toggle('open');
     toggleBtn.classList.toggle('open', isOpen);
@@ -551,6 +409,5 @@ addLabel('Comfortable');
 EMOTIONS.filter(e=>e.type==='c').forEach(renderCategory);
 addDivider();
 </script>
-
 </body>
 </html>
