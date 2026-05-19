@@ -982,12 +982,94 @@
         });
     }
 
+    // =====================================================
+    // CHALLENGE LEVEL CALIBRATION (We — uses _pulseReady)
+    // =====================================================
+    var CHALLENGE_LEVELS_WE = {
+        "1": {
+            label: "Go gently — low readiness",
+            instructions:
+                "One or both partners is not ready to engage deeply. Lead with safety and warmth — do not push.\n" +
+                "Prioritize making both people feel seen before attempting any reframe or pattern-naming.\n" +
+                "Ask only one soft, non-threatening question. If either partner pulls back, follow their lead.\n" +
+                "No accountability framing, no cycle-naming unless they invite it. Create safety first.\n" +
+                "Keep responses shorter. More space, less structure."
+        },
+        "2": {
+            label: "Support first, then gently explore",
+            instructions:
+                "Acknowledge both partners' experience fully before offering any observation.\n" +
+                "Offer reframes as gentle possibilities: 'One way to hold this together might be…'\n" +
+                "Ask one soft reflective question. If they resist, let it go — don't return to it.\n" +
+                "Name a cycle at most once, lightly. Keep forward movement minimal."
+        },
+        "3": {
+            label: "Standard couples coaching depth (default)",
+            instructions:
+                "Follow the standard structure: acknowledge what's present → name the cycle (not the person) → ask one question → offer a reframe.\n" +
+                "Brief warmth, then move the conversation forward. Don't linger in empathy at the expense of movement.\n" +
+                "Hold both partners accountable to the cycle they're in — release if they push back once.\n" +
+                "Tone: warm, steady, balanced. The default Proxi We voice."
+        },
+        "4": {
+            label: "Don't let us stay comfortable",
+            instructions:
+                "Brief acknowledgment, then move directly to naming the cycle and asking the key question.\n" +
+                "Name avoidance or deflection when you observe it — from either partner, with care and without sides.\n" +
+                "Return to the accountability question once if they sidestep it — then release.\n" +
+                "Reframes are specific and honest, not soft options.\n" +
+                "Pace is brisker, questions are sharper, but warmth stays constant."
+        },
+        "5": {
+            label: "Push us — we're ready",
+            instructions:
+                "They've signaled readiness for real depth. Lead with naming the cycle — minimal preamble.\n" +
+                "If either partner deflects, name it once and stay: 'I notice we moved away from that — let's return.'\n" +
+                "Ask harder questions: what is each protecting, what is the real cost to the relationship, what do they both actually need.\n" +
+                "Be direct without taking sides or assigning blame. Both partners are part of the cycle.\n" +
+                "Warmth is always present — what changes is how honestly you reflect what you see in the dynamic.\n" +
+                "Never shame either partner, criticize character, or abandon care."
+        }
+    };
+
+    function buildChallengeBlock() {
+        // Determine readiness level from available pulse params.
+        // Pace to the LOWER of the two partners — never push harder than the least ready person.
+        var rawLevel = "3"; // default
+        var him = parseInt(_pulseHimReady) || 0;
+        var her = parseInt(_pulseHerReady) || 0;
+        if (him > 0 && her > 0) {
+            rawLevel = String(Math.min(him, her));
+        } else if (him > 0) {
+            rawLevel = String(him);
+        } else if (her > 0) {
+            rawLevel = String(her);
+        } else if (_pulseReady && ["1","2","3","4","5"].includes(String(_pulseReady))) {
+            rawLevel = String(_pulseReady); // legacy fallback
+        }
+        var level = ["1","2","3","4","5"].includes(rawLevel) ? rawLevel : "3";
+        var def = CHALLENGE_LEVELS_WE[level];
+        return (
+            "CHALLENGE LEVEL FOR THIS SESSION: " + level + " — " + def.label + "\n\n" +
+            "The user(s) have indicated their readiness to engage today. Apply this calibration to your tone, " +
+            "depth of questioning, and how directly you reflect the dynamic — throughout this entire session, " +
+            "including chip sessions, Right Now Mode, and all follow-up exchanges.\n\n" +
+            def.instructions + "\n\n" +
+            "Hard limits that never change regardless of challenge level:\n" +
+            "- Never shame, criticize character, or take sides\n" +
+            "- Never diagnose, label, or pathologize either partner\n" +
+            "- Never abandon warmth or care entirely\n" +
+            "- If either partner shows signs of genuine crisis, pause challenge calibration immediately and shift to grounding and referral\n\n"
+        );
+    }
+
     function getSystemPrompt(isFirst, returningContext) {
         var modeBlock    = currentMode === "couples" ? MODE_COUPLES : MODE_SOLO;
         var contextBlock = buildContextBlock();
         var isChipContext = !!((_chipMode === "rightnow" && _chipContext) || _chipMode === "pulse");
 
-        var prompt = SYSTEM_PROMPT + modeBlock;
+        // Always inject challenge level (defaults to Level 3 if _pulseReady not set).
+        var prompt = SYSTEM_PROMPT + modeBlock + buildChallengeBlock();
 
         if (isFirst) {
             if (isChipContext) {
@@ -1451,6 +1533,12 @@
         messagesEl.insertBefore(bannerDiv, messagesEl.firstChild);
 
         showAIDisclosureBanner();
+
+        // Clear home-screen context so new session doesn't inherit stale challenge/chip params
+        _chipMode = null; _chipContext = null;
+        _pulseHimConnected = null; _pulseHimTension = null; _pulseHimReady = null;
+        _pulseHerConnected = null; _pulseHerTension = null; _pulseHerReady = null;
+        _pulseWho = null; _pulseConnected = null; _pulseTension = null; _pulseReady = null;
 
         sessionId = generateSessionId();
         conversationHistory = [];

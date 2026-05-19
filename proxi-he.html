@@ -1041,6 +1041,78 @@
         "big-decision":         "a big decision they are navigating"
     };
 
+    // =====================================================
+    // CHALLENGE LEVEL CALIBRATION
+    // =====================================================
+    var CHALLENGE_LEVELS = {
+        "1": {
+            label: "Hold me gently",
+            instructions:
+                "Lead with empathy and validation. Do not rush to reframe, fix, or move forward.\n" +
+                "Ask only one soft, open question per exchange. Avoid questions that imply failure, avoidance, or accountability.\n" +
+                "If the user deflects or closes down, follow their lead — do not press or name it.\n" +
+                "Do not use accountability framing ('what’s your part in this?') today.\n" +
+                "Keep responses shorter. Give more space. Less structure, more presence.\n" +
+                "No pattern-naming unless the user explicitly invites it."
+        },
+        "2": {
+            label: "Support first, then nudge",
+            instructions:
+                "Validate fully before offering any reframe — never open with a challenge or observation.\n" +
+                "Offer reframes as possibilities, not directives. Use language like 'one way to look at this…' or 'I wonder if…'\n" +
+                "Ask one gentle accountability question per exchange. If the user resists, let it go — don’t return to it.\n" +
+                "Name a pattern at most once, lightly — do not repeat or emphasize it.\n" +
+                "Responses can be slightly longer, but keep the forward pressure minimal."
+        },
+        "3": {
+            label: "Standard coaching mode (default)",
+            instructions:
+                "Follow the standard structure: name the pattern → ask one question → offer a reframe → suggest a next step.\n" +
+                "Brief validation first, then move forward. Don’t linger too long in empathy.\n" +
+                "Hold accountability gently — release if the user pushes back once.\n" +
+                "Tone: warm, direct, slightly irreverent. The default John voice.\n" +
+                "Responses are full and complete. All four structural elements present."
+        },
+        "4": {
+            label: "Don’t let me off the hook",
+            instructions:
+                "Brief validation only — move quickly to naming the pattern and asking the key question.\n" +
+                "Name avoidance or deflection directly when you observe it. Don’t smooth it over.\n" +
+                "Return to the accountability question once if the user sidesteps it — then release.\n" +
+                "Reframes are specific and pointed — not soft options or gentle possibilities.\n" +
+                "Less cushioning. Move toward forward motion quickly.\n" +
+                "Tone stays warm, but the pace is faster and the questions are sharper."
+        },
+        "5": {
+            label: "Push me, no excuses",
+            instructions:
+                "Lead with the pattern — minimal preamble or cushioning.\n" +
+                "If the user deflects, name it and stay with it once: 'That’s not quite the answer — what’s really going on?'\n" +
+                "Ask harder questions: values misalignment, behavioral gaps, cost of staying stuck, what they’re protecting.\n" +
+                "Be direct without being harsh. Warmth stays present — what changes is how quickly you move past comfort toward truth.\n" +
+                "Do not shame, criticize character, or abandon care. The goal is accountability, not confrontation.\n" +
+                "Tone: firm, grounded, unsentimental — the most direct version of the John voice."
+        }
+    };
+
+    function buildChallengeBlock() {
+        var level = (pulseChallenge && ["1","2","3","4","5"].includes(String(pulseChallenge)))
+            ? String(pulseChallenge) : "3";
+        var def = CHALLENGE_LEVELS[level];
+        return (
+            "CHALLENGE LEVEL FOR THIS SESSION: " + level + " — " + def.label + "\n\n" +
+            "The user has set their willingness to be challenged today. Apply this calibration to your tone, " +
+            "accountability pressure, deflection handling, and response structure throughout this entire session — " +
+            "including Right Now Mode, chip sessions, and all follow-up exchanges.\n\n" +
+            def.instructions + "\n\n" +
+            "Hard limits that never change regardless of challenge level:\n" +
+            "- Never shame or criticize the user’s character\n" +
+            "- Never diagnose, label, or pathologize\n" +
+            "- Never abandon warmth or care entirely\n" +
+            "- If the user shows signs of genuine crisis, pause challenge calibration immediately and shift to grounding and referral\n\n"
+        );
+    }
+
     // Builds an optional context block injected into the system prompt
     // when the user arrives from the home screen with mode/pulse params.
     function buildContextBlock() {
@@ -1067,9 +1139,12 @@
                 "Be warm, specific, and practical. This is not a deep coaching prompt — it's a practical question. Answer it well, then offer to go deeper if they want.\n\n";
         }
 
-        if (urlMode === "pulse" && (pulseStress || pulseRel || pulseChallenge)) {
+        if (pulseStress || pulseRel || pulseChallenge) {
+            var pulseLabel = urlMode === "pulse"
+                ? "HOME SCREEN CONTEXT — DAILY PULSE (user self-report)"
+                : "BACKGROUND STATE — user's current energy (from home screen sliders)";
             block +=
-                "HOME SCREEN CONTEXT — DAILY PULSE (user self-report):\n" +
+                pulseLabel + ":\n" +
                 (pulseStress    ? "- Stress level:                  " + pulseStress    + " / 5  (1 = calm, 5 = overwhelmed)\n" : "") +
                 (pulseRel       ? "- Relationship energy:           " + pulseRel       + " / 5  (1 = disconnected, 5 = connected)\n" : "") +
                 (pulseChallenge ? "- Willingness to be challenged:  " + pulseChallenge + " / 5  (1 = ease up, 5 = push me)\n" : "") +
@@ -1086,6 +1161,10 @@
 
     function buildSystemPrompt(isReturningUser) {
         var prompt = SYSTEM_PROMPT;
+
+        // Always inject challenge level calibration (defaults to Level 3 if not set).
+        // Must come before context and opener blocks so it frames everything that follows.
+        prompt += buildChallengeBlock();
 
         // Inject home-screen context (Right Now Mode or Pulse) before the
         // session-type block so the coach knows the context when it opens.

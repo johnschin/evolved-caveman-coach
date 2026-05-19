@@ -1682,9 +1682,17 @@
         document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("selected"); });
         el.classList.add("selected");
 
+        // Capture current pulse slider values so proxi-he can calibrate challenge level
+        var stress    = document.getElementById("stressSlider").value;
+        var rel       = document.getElementById("relSlider").value;
+        var challenge = document.getElementById("challengeSlider").value;
+
         // Navigate after brief visual feedback
         setTimeout(function() {
-            window.location.href = "/proxi-he?mode=rightnow&context=" + encodeURIComponent(context);
+            window.location.href = "/proxi-he?mode=rightnow&context=" + encodeURIComponent(context)
+                + "&pulse_stress="    + stress
+                + "&pulse_rel="       + rel
+                + "&pulse_challenge=" + challenge;
         }, 320);
     }
 
