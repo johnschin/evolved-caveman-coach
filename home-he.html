@@ -716,6 +716,115 @@
         .explore-chevron { color: var(--border); flex-shrink: 0; }
 
         /* =============================================
+           INNER BOARD MEETING ONBOARDING MODAL
+           ============================================= */
+        .ibm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(28, 26, 46, 0.72);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 20px;
+            backdrop-filter: blur(3px);
+            animation: ibmFadeIn 0.25s ease;
+        }
+        .ibm-overlay.active { display: flex; }
+        @keyframes ibmFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        .ibm-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 32px 28px 28px;
+            width: 100%;
+            max-width: 360px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(28, 26, 46, 0.25);
+            animation: ibmCardIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes ibmCardIn {
+            from { transform: scale(0.92) translateY(12px); opacity: 0; }
+            to   { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .ibm-skip {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 12px;
+            color: var(--muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            padding: 4px 0;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .ibm-dots {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 28px;
+        }
+        .ibm-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: background 0.25s, transform 0.25s;
+        }
+        .ibm-dot.active {
+            background: var(--aqua);
+            transform: scale(1.25);
+        }
+        .ibm-icon {
+            width: 54px; height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .ibm-role {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--aqua-deep);
+            margin-bottom: 6px;
+        }
+        .ibm-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--slate-plum);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .ibm-body {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+        .ibm-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--aqua);
+            color: var(--slate-plum);
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .ibm-btn:hover { opacity: 0.9; }
+        .ibm-btn:active { transform: scale(0.99); }
+
+        /* =============================================
            5-MINUTE BOOST MODAL
            ============================================= */
         .modal-overlay {
@@ -1198,6 +1307,33 @@
         </div>
     </div>
 
+    <!-- =============================================
+         INNER BOARD MEETING ONBOARDING MODAL
+         ============================================= -->
+    <div class="ibm-overlay" id="ibmOverlay">
+        <div class="ibm-card" id="ibmCard">
+            <button class="ibm-skip" onclick="dismissIBMIntro()">Skip</button>
+
+            <!-- Progress dots -->
+            <div class="ibm-dots">
+                <div class="ibm-dot active" id="ibmDot0"></div>
+                <div class="ibm-dot" id="ibmDot1"></div>
+                <div class="ibm-dot" id="ibmDot2"></div>
+            </div>
+
+            <!-- Icon -->
+            <div class="ibm-icon" id="ibmIcon"></div>
+
+            <!-- Text -->
+            <div class="ibm-role" id="ibmRole"></div>
+            <div class="ibm-name" id="ibmName"></div>
+            <div class="ibm-body" id="ibmBodyText"></div>
+
+            <!-- CTA -->
+            <button class="ibm-btn" id="ibmBtn" onclick="ibmNextCard()">Next →</button>
+        </div>
+    </div>
+
     <script>
     // =====================================================
     // CONFIGURATION — matches proxi-he.html exactly
@@ -1397,6 +1533,86 @@
         setGreeting();
         loadSavedPulse();
         loadTrialBanner();
+        // Show Inner Board Meeting intro on first visit only
+        if (!localStorage.getItem("prx_ibm_seen")) {
+            setTimeout(showIBMIntro, 450);
+        }
+    }
+
+    // =====================================================
+    // INNER BOARD MEETING ONBOARDING
+    // =====================================================
+    var ibmCurrentCard = 0;
+    var ibmCards = [
+        {
+            role: "Board Member 1 of 3",
+            name: "Your Inner CEO",
+            body: "The grounded, values-driven version of you. He doesn't react — he decides. When he's running things, you show up with intention instead of impulse.",
+            iconBg: "#a3d0c9",
+            icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1C1A2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+        },
+        {
+            role: "Board Member 2 of 3",
+            name: "The Director of Defense",
+            body: "He protects you through anger, control, or withdrawal. He's not the enemy — he's running old software. Most guys' default when stress hits.",
+            iconBg: "#EAE6F0",
+            icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A3353" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+        },
+        {
+            role: "Board Member 3 of 3",
+            name: "The VP of Emotions",
+            body: "Carries your vulnerability, needs, and relational signals. Often the most suppressed voice in the room. Getting to know him is where the real shifts happen.",
+            iconBg: "#fde8e8",
+            icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        }
+    ];
+
+    function showIBMIntro() {
+        ibmCurrentCard = 0;
+        renderIBMCard();
+        document.getElementById("ibmOverlay").classList.add("active");
+    }
+
+    function renderIBMCard() {
+        var c = ibmCards[ibmCurrentCard];
+        // Update dots
+        for (var i = 0; i < 3; i++) {
+            document.getElementById("ibmDot" + i).classList.toggle("active", i === ibmCurrentCard);
+        }
+        // Update icon
+        var iconEl = document.getElementById("ibmIcon");
+        iconEl.style.background = c.iconBg;
+        iconEl.innerHTML = c.icon;
+        // Update text
+        document.getElementById("ibmRole").textContent = c.role;
+        document.getElementById("ibmName").textContent = c.name;
+        document.getElementById("ibmBodyText").textContent = c.body;
+        // Update button
+        var btn = document.getElementById("ibmBtn");
+        btn.textContent = ibmCurrentCard < 2 ? "Next →" : "Got it — let's go";
+    }
+
+    function ibmNextCard() {
+        if (ibmCurrentCard < 2) {
+            ibmCurrentCard++;
+            // Brief card refresh animation
+            var card = document.getElementById("ibmCard");
+            card.style.opacity = "0";
+            card.style.transform = "scale(0.96)";
+            card.style.transition = "opacity 0.15s ease, transform 0.15s ease";
+            setTimeout(function() {
+                renderIBMCard();
+                card.style.opacity = "1";
+                card.style.transform = "scale(1)";
+            }, 150);
+        } else {
+            dismissIBMIntro();
+        }
+    }
+
+    function dismissIBMIntro() {
+        try { localStorage.setItem("prx_ibm_seen", "1"); } catch(e) {}
+        document.getElementById("ibmOverlay").classList.remove("active");
     }
 
     async function loadTrialBanner() {
